@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">HSTest</string>
+
+    <string name="title_activity_user_profile">User Profile</string>
+
+    <!-- Preferences Keys -->
+    <string name="id_pref">ID_PREFERENCE</string>
+    <string name="name_pref">NAME_PREFERENCE</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <string-array name="search_options">
+        <item>Hospital</item>
+        <item>Status</item>
+        <item>Type</item>
+    </string-array>
+</resources>

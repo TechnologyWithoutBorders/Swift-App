@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/not_available" />
+
+    <Button
+        android:id="@+id/pictureButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Picture"
+        android:onClick="dispatchTakePictureIntent"/>
+
+    <EditText
+        android:id="@+id/nameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/typeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/serialNumberText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Serial Number"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/manufacturerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Manufacturer"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/wardText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ward"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/hospitalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Hospital"
+        android:inputType="text" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/createButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:onClick="createDevice"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+</LinearLayout>
