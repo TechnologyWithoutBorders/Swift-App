@@ -3,12 +3,9 @@ package ngo.teog.hstest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,23 +18,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import ngo.teog.hstest.comm.VolleySingleton;
+import ngo.teog.hstest.comm.CreateDeviceRequest;
+import ngo.teog.hstest.comm.VolleyManager;
 
 public class NewDeviceActivity extends AppCompatActivity {
 
@@ -88,47 +73,9 @@ public class NewDeviceActivity extends AppCompatActivity {
         createButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-        String url = "https://teog.virlep.de/create_device.php";
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressBar.setVisibility(View.INVISIBLE);
-                createButton.setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressBar.setVisibility(View.INVISIBLE);
-                createButton.setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-
-                /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageBytes = baos.toByteArray();
-                String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
-
-                Map<String, String> params = new HashMap<>();
-                params.put("name", "bla");
-                params.put("type", "bla");
-                params.put("manufacturer", "bla");
-                params.put("serialNumber", "bla");
-                params.put("ward", "bla");
-                params.put("hospital", "bla");
-                params.put("isWorking", "bla");
-                params.put("due", "bla");
-                params.put("image", "dummy");
-
-                return params;
-            }
-        };
-
+        StringRequest request = new CreateDeviceRequest(this, progressBar, createButton);
         queue.add(request);
     }
 
