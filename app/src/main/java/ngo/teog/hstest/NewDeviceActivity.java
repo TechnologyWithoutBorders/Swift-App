@@ -7,12 +7,19 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -29,6 +36,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import ngo.teog.hstest.comm.VolleySingleton;
 
 public class NewDeviceActivity extends AppCompatActivity {
 
@@ -76,7 +85,51 @@ public class NewDeviceActivity extends AppCompatActivity {
     }
 
     public void createDevice(View view) {
-        new CreateTask().execute(null, null);
+        createButton.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+
+        String url = "https://teog.virlep.de/create_device.php";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                createButton.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressBar.setVisibility(View.INVISIBLE);
+                createButton.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                /*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);*/
+
+                Map<String, String> params = new HashMap<>();
+                params.put("name", "bla");
+                params.put("type", "bla");
+                params.put("manufacturer", "bla");
+                params.put("serialNumber", "bla");
+                params.put("ward", "bla");
+                params.put("hospital", "bla");
+                params.put("isWorking", "bla");
+                params.put("due", "bla");
+                params.put("image", "dummy");
+
+                return params;
+            }
+        };
+
+        queue.add(request);
     }
 
     @Override
@@ -85,80 +138,6 @@ public class NewDeviceActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             bitmap = (Bitmap)extras.get("data");
             imageView.setImageBitmap(bitmap);
-        }
-    }
-
-    private class CreateTask extends AsyncTask<URL, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-            createButton.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(URL... urls) {
-            try {
-                URL url = new URL("https://teog.virlep.de/create_device.php");
-                URLConnection urlConn = url.openConnection();
-
-                HttpsURLConnection httpsConn = (HttpsURLConnection)urlConn;
-                httpsConn.setDoOutput(true);
-                httpsConn.setDoInput(true);
-                httpsConn.setRequestMethod("POST");
-
-                httpsConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                httpsConn.connect();
-
-                OutputStream out = httpsConn.getOutputStream();
-
-                out.write(("name=bla&type=bla&manufacturer=bla&serialNumber=bla&ward=bla&hospital=bla&isWorking=true&due=0000-00-00&image=bla").getBytes("UTF-8"));
-
-                // Send a binary file
-                /*out.writeBytes("Content-Disposition: form-data; name=\"param3\";filename=\"test_file.dat\"" + lineEnd);
-                out.writeBytes("Content-Type: application/octet-stream" + lineEnd);
-                out.writeBytes("Content-Transfer-Encoding: binary" + lineEnd);
-                out.writeBytes(lineEnd);
-
-                int size = bitmap.getRowBytes() * bitmap.getHeight();
-                ByteBuffer byteBuffer = ByteBuffer.allocate(size);
-                bitmap.copyPixelsToBuffer(byteBuffer);
-
-                out.write(byteBuffer.array());
-                out.writeBytes(lineEnd);*/
-
-                out.flush();
-
-                String result = "";
-
-                InputStream is = httpsConn.getInputStream();
-                byte[] b = new byte[1024];
-                while ( is.read(b) != -1)
-                    result += new String(b);
-
-                httpsConn.disconnect();
-
-                return result;
-            } catch (Exception e) {
-                Log.e("ERROR", e.getMessage(), e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.INVISIBLE);
-            createButton.setVisibility(View.VISIBLE);
-
-            /*if(result != null) {
-                Intent intent = new Intent(NewDeviceActivity.this, DeviceInfoActivity.class);
-                intent.putExtra("device", result);
-                startActivity(intent);
-            } else {*/
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-            //}
         }
     }
 }
