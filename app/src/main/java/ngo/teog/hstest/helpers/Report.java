@@ -3,10 +3,9 @@ package ngo.teog.hstest.helpers;
 import java.io.Serializable;
 import java.util.Date;
 
-import ngo.teog.hstest.HospitalDevice;
-import ngo.teog.hstest.User;
-
 /**
+ * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
+ * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
  * Created by Julian on 08.11.2017.
  */
 

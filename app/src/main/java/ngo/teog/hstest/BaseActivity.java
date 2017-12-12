@@ -10,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 
 /**
+ * Überklasse für alle Activities. Hier können Funktionen implementiert werden,
+ * die wir immer wieder verwenden. Z.B. wird in jeder Activity ein BroadcastReceiver implementiert,
+ * der bei einer Änderung des Internetstatus die Methode onInternetStatusChanged() aufruft.
+ * Eine Activity, die diese Funktion nutzt, muss also lediglich diese Methode überschreiben.
  * Created by Julian on 17.11.2017.
  */
 

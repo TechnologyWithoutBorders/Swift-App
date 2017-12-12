@@ -1,21 +1,19 @@
 package ngo.teog.hstest.helpers;
 
 import android.util.JsonReader;
-import android.util.JsonToken;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import ngo.teog.hstest.HospitalDevice;
-
 /**
+ * Hilfsklasse, die JSON-Devicelisten aus der HTPPS-Schnittstelle
+ * parsen kann.
  * Created by Julian on 18.11.2017.
  */
 

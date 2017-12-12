@@ -12,9 +12,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.InputStream;
+
+import ngo.teog.hstest.helpers.HospitalDevice;
 
 public class DeviceInfoActivity extends AppCompatActivity {
 

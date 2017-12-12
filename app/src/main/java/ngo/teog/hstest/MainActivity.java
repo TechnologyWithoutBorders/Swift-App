@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ngo.teog.hstest.comm.DeviceListFetchTask;
+import ngo.teog.hstest.helpers.Defaults;
+import ngo.teog.hstest.helpers.HospitalDevice;
 
 public class MainActivity extends BaseActivity {
 

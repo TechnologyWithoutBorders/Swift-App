@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Schnittstelle für die Volley-Request-Queue. Ist ein Singleton, weil es pro Anwendung
+ * nur eine Request-Queue geben soll.
  * Created by Julian on 24.11.2017.
  */
 

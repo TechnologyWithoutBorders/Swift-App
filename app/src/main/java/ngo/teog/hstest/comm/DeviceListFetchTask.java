@@ -18,14 +18,16 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 import ngo.teog.hstest.DeviceInfoActivity;
-import ngo.teog.hstest.HospitalDevice;
+import ngo.teog.hstest.helpers.HospitalDevice;
 import ngo.teog.hstest.helpers.DeviceFilter;
 import ngo.teog.hstest.helpers.DeviceParser;
 
 /**
+ * Tasks werden zukünftig auf Volley-Requests umgestellt.
  * Created by Julian on 17.11.2017.
  */
 
+@Deprecated
 public class DeviceListFetchTask extends AsyncTask<DeviceFilter, Integer, ArrayList<HospitalDevice>> {
 
     private Context context;

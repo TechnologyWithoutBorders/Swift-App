@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ngo.teog.hstest.comm.DeviceListFetchTask;
+import ngo.teog.hstest.helpers.HospitalDevice;
 
 public class TodoActivity extends BaseActivity {
 

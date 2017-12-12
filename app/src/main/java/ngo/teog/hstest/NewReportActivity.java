@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import ngo.teog.hstest.helpers.Defaults;
+import ngo.teog.hstest.helpers.HospitalDevice;
+
 public class NewReportActivity extends AppCompatActivity {
 
     @Override

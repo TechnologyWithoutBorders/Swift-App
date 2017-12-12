@@ -17,13 +17,15 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 
 import ngo.teog.hstest.DeviceInfoActivity;
-import ngo.teog.hstest.User;
+import ngo.teog.hstest.helpers.User;
 import ngo.teog.hstest.helpers.UserFilter;
 
 /**
+ * Tasks werden zukünftig auf Volley-Requests umgestellt.
  * Created by Julian on 17.11.2017.
  */
 
+@Deprecated
 public class UserListFetchTask extends AsyncTask<UserFilter, Integer, ArrayList<User>> {
 
     private Context context;

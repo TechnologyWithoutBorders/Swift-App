@@ -1,9 +1,11 @@
-package ngo.teog.hstest;
+package ngo.teog.hstest.helpers;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
+ * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
  * Created by Julian on 01.11.2017.
  */
 

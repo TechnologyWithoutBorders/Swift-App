@@ -1,4 +1,4 @@
-package ngo.teog.hstest;
+package ngo.teog.hstest.helpers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import ngo.teog.hstest.helpers.Report;
 
 /**
+ * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
+ * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
  * Created by Julian on 07.11.2017.
  */
 
