@@ -1,9 +1,16 @@
 package ngo.teog.hstest.helpers;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+
+import ngo.teog.hstest.MainActivity;
+import ngo.teog.hstest.R;
 
 /**
  * Globaler Receiver, der getriggert wird, wenn das Android-Gerät gebootet hat.
@@ -27,6 +34,24 @@ public class BootReceiver extends BroadcastReceiver {
 
                 //TODO Geräte prüfen und Benachrichtigungen erstellen.
             }
+
+            //Test Benachrichtigung
+            int mNotificationId = 0;
+            String CHANNEL_ID = "dummy_channel";
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.logo72x72)
+                            .setContentTitle("Notification Test")
+                            .setContentText("Swift App hast detected a device reboot.");
+            Intent resultIntent = new Intent(context, MainActivity.class);
+
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.notify(mNotificationId, mBuilder.build());
         }
     }
 }
