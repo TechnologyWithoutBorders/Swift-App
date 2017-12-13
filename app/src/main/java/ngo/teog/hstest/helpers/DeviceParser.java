@@ -2,6 +2,10 @@ package ngo.teog.hstest.helpers;
 
 import android.util.JsonReader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,7 +17,7 @@ import java.util.Date;
 
 /**
  * Hilfsklasse, die JSON-Devicelisten aus der HTPPS-Schnittstelle
- * parsen kann.
+ * parsen kann. Die Struktur wird sich noch deutlich ändern. Einige Methoden sind veraltet.
  * Created by Julian on 18.11.2017.
  */
 
@@ -22,9 +26,12 @@ public class DeviceParser {
     private JsonReader reader;
 
     public DeviceParser(InputStream in) {
-        reader = new JsonReader(new InputStreamReader(in));
+        if(in != null) {
+            reader = new JsonReader(new InputStreamReader(in));
+        }
     }
 
+    @Deprecated
     public ArrayList<HospitalDevice> parse() throws IOException {
         ArrayList<HospitalDevice> result = new ArrayList<>();
 
@@ -45,6 +52,38 @@ public class DeviceParser {
         return result;
     }
 
+    public ArrayList<HospitalDevice> parseDeviceList(JSONArray raw) throws JSONException {
+        ArrayList<HospitalDevice> result = new ArrayList<>();
+
+        for(int i = 0; i < raw.length(); i++) {
+            JSONObject deviceObject = raw.getJSONObject(i);
+
+            int id = deviceObject.getInt("id");
+            String name = deviceObject.getString("name");
+            String type = deviceObject.getString("type");
+            String manufacturer = deviceObject.getString("manufacturer");
+            String serialNumber = deviceObject.getString("serialNumber");
+            String ward = deviceObject.getString("ward");
+            String hospital = deviceObject.getString("hospital");
+            boolean isWorking = deviceObject.getBoolean("isWorking");
+            String dateString = deviceObject.getString("due");
+
+            Date date = null;
+            DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+            try {
+                date = format.parse(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            HospitalDevice device = new HospitalDevice(id, name, type, manufacturer, serialNumber, ward, hospital, isWorking, date);
+            result.add(device);
+        }
+
+        return result;
+    }
+
+    @Deprecated
     private HospitalDevice parseDevice() throws IOException {
         int id = -1;
         String deviceName = null;

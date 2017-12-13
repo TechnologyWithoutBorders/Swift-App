@@ -17,12 +17,16 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import ngo.teog.hstest.comm.DeviceListFetchTask;
+import ngo.teog.hstest.comm.RequestFactory;
+import ngo.teog.hstest.comm.VolleyManager;
 import ngo.teog.hstest.helpers.Defaults;
 import ngo.teog.hstest.helpers.HospitalDevice;
 
@@ -66,12 +70,24 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        new DeviceListFetchTask(this, listView, progressBar, adapter).execute(null, null);
+        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, listView, null, adapter);
+
+        listView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        queue.add(request);
     }
 
     @Override
     public void onInternetStatusChanged() {
-        new DeviceListFetchTask(this, listView, progressBar, adapter).execute(null, null);
+        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, listView, null, adapter);
+
+        listView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        queue.add(request);
     }
 
     @Override
