@@ -1,10 +1,12 @@
 package ngo.teog.hstest.helpers;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -13,35 +15,28 @@ import ngo.teog.hstest.R;
 
 /**
  * Globaler Receiver, der getriggert wird, wenn das Android-Gerät gebootet hat.
- * Der Receiver erstmal nur eine Testbenachrichtigung. Da die wiederkehrende Prüfung auf abgelaufene
- * Deadlines mithilfe der JobScheduler-API laufen wird, bin ich mir noch nocht sicher, ob dieser
- * Receiver bestehen bleibt.
+ * Erstellt einen AlarmManager (JobScheduler ist erst ab API-Level 21 möglich),
+ * der immer im Hintergrund läuft (auch wenn die App geschlossen ist) und zyklisch einen Alarm
+ * auslöst, wenn die Geräte-Deadlines geprüft werden sollen.
  *
  * Created by Julian on 12.12.2017.
  */
 
 public class BootReceiver extends BroadcastReceiver {
 
+    private AlarmManager alarmManager = null;
+    private PendingIntent pendingIntent;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            //Test Benachrichtigung
-            int mNotificationId = 0;
-            String CHANNEL_ID = "dummy_channel";
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.logo72x72)
-                            .setContentTitle("Notification Test")
-                            .setContentText("Swift App hast detected a device reboot.");
-            Intent resultIntent = new Intent(context, MainActivity.class);
+            if(alarmManager == null) {
+                alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+                pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
 
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addParentStack(MainActivity.class);
-            stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.setContentIntent(resultPendingIntent);
-            NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            mNotificationManager.notify(mNotificationId, mBuilder.build());
+                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
+            }
         }
     }
 }
