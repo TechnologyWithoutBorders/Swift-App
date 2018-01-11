@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity {
         }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.logo72x72);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         listView = (ListView)findViewById(R.id.maintenanceList);

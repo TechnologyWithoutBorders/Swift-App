@@ -26,7 +26,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         int mNotificationId = id;
         String CHANNEL_ID = "dummy_channel";
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.logo72x72)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Notification Test")
                 .setContentText("Swift App has just checked for device that need maintenance.");
         Intent resultIntent = new Intent(context, MainActivity.class);
