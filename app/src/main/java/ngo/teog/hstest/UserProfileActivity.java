@@ -65,11 +65,7 @@ public class UserProfileActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        String userName = preferences.getString(getString(R.string.name_pref), null);
         TextView nameView = findViewById(R.id.nameView);
-        nameView.setText(userName);
 
         telephoneView = findViewById(R.id.phoneView);
         mailView = findViewById(R.id.mailView);
@@ -99,7 +95,6 @@ public class UserProfileActivity extends BaseActivity {
 
         imageView = findViewById(R.id.imageView);
 
-        new FetchTask().execute(preferences.getString(getString(R.string.name_pref), null), null);
         new DownloadImageTask().execute("https://teog.virlep.de/users/0.jpg", null);
     }
 
@@ -107,7 +102,6 @@ public class UserProfileActivity extends BaseActivity {
     public void onInternetStatusChanged() {
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        new FetchTask().execute(preferences.getString(getString(R.string.name_pref), null), null);
         new DownloadImageTask().execute("https://teog.virlep.de/users/0.jpg", null);
     }
 
@@ -125,7 +119,7 @@ public class UserProfileActivity extends BaseActivity {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.row_maintenance, parent, false);
             TextView nameView = (TextView) rowView.findViewById(R.id.nameView);
-            nameView.setText(this.getItem(position).getDevice().getName());
+            nameView.setText(this.getItem(position).getDevice().getAssetNumber());
 
             TextView dateView = (TextView) rowView.findViewById(R.id.dateView);
 
@@ -136,154 +130,6 @@ public class UserProfileActivity extends BaseActivity {
             dateView.setText(format.format(this.getItem(position).getDate()));
 
             return rowView;
-        }
-    }
-
-    private class FetchTask extends AsyncTask<String, Integer, Combi> {
-
-        private XmlPullParser parser = Xml.newPullParser();
-
-        @Override
-        protected void onPreExecute() {
-            rootLayout.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        protected Combi doInBackground(String... userIDs) {
-            int resCode;
-            InputStream in;
-            try {
-                URL url = new URL("https://teog.virlep.de/users.php?username=" + userIDs[0]);
-                URLConnection urlConn = url.openConnection();
-
-                HttpsURLConnection httpsConn = (HttpsURLConnection) urlConn;
-                httpsConn.setAllowUserInteraction(false);
-                httpsConn.setInstanceFollowRedirects(true);
-                httpsConn.setRequestMethod("GET");
-                httpsConn.connect();
-                resCode = httpsConn.getResponseCode();
-
-                if(resCode == HttpsURLConnection.HTTP_OK) {
-                    in = httpsConn.getInputStream();
-
-                    parser.setInput(in, null);
-
-                    int event = parser.getEventType();
-                    String userName = null;
-                    String telephoneNumber = null;
-                    String eMail = null;
-                    String hospital = null;
-                    String position = null;
-                    String qualifications = null;
-
-                    User user = null;
-
-                    int id = -1;
-                    HospitalDevice device = null;
-                    ArrayList<Report> reports = new ArrayList<Report>();
-
-                    while(event != XmlPullParser.END_DOCUMENT)  {
-                        String name = parser.getName();
-                        switch (event){
-                            case XmlPullParser.START_TAG:
-                                if(name.equals("username")) {
-                                    userName = parser.nextText();
-                                }
-
-                                if(name.equals("telephone")) {
-                                    telephoneNumber = parser.nextText();
-                                }
-
-                                if(name.equals("email")) {
-                                    eMail = parser.nextText();
-                                }
-
-                                if(name.equals("hospital")) {
-                                    hospital = parser.nextText();
-                                }
-
-                                if(name.equals("position")) {
-                                    position = parser.nextText();
-                                }
-
-                                if(name.equals("qualifications")) {
-                                    qualifications = parser.nextText();
-
-                                    user = new User(userName, telephoneNumber, eMail, hospital, position, qualifications);
-                                }
-
-                                if(name.equals("reportNumber")) {
-                                    id = Integer.parseInt(parser.nextText());
-                                }
-
-                                if(name.equals("deviceNumber")) {
-                                    String dummy = parser.nextText();
-                                }
-
-                                if(name.equals("deviceName")) {
-                                    device = new HospitalDevice(-1, parser.nextText(), null, null, null, null, null, false, new Date());
-                                }
-
-                                if(name.equals("date")) {
-                                    String dateString = parser.nextText();
-                                    Date date = new Date();
-
-                                    reports.add(new Report(id, user, device, date));
-                                }
-                                break;
-                            case XmlPullParser.END_TAG:
-                                break;
-                        }
-
-                        event = parser.next();
-                    }
-
-                    in.close();
-
-                    return new Combi(reports, user);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Combi result) {
-            User user = result.getUser();
-            ArrayList<Report> reports = result.getReports();
-
-            adapter.clear();
-            adapter.addAll(reports);
-
-            telephoneView.setText(user.getTelephone());
-            mailView.setText(user.getEMail());
-            hospitalView.setText(user.getHospital());
-            positionView.setText(user.getPosition());
-            qualificationsView.setText(user.getQualifications());
-
-            progressBar.setVisibility(View.INVISIBLE);
-            rootLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private class Combi {
-        private ArrayList<Report> reports;
-        private User user;
-
-        public Combi(ArrayList<Report> reports, User user) {
-            this.reports = reports;
-            this.user = user;
-        }
-
-        public ArrayList<Report> getReports() {
-            return reports;
-        }
-
-        public User getUser() {
-            return user;
         }
     }
 

@@ -12,40 +12,36 @@ import ngo.teog.hstest.helpers.Report;
  */
 
 public class User implements Serializable {
-    private String name;
-    private String telephone;
-    private String eMail;
-    private String hospital;
-    private String position;
+    private int id;
+    private String userName;
+    private String phone;
+    private String mail;
+    private String fullName;
     private String qualifications;
 
-    public User(String name, String telephone, String eMail, String hospital, String position, String qualifications) {
-        this.name = name;
-        this.telephone = telephone;
-        this.eMail = eMail;
-        this.hospital = hospital;
-        this.position = position;
+    public User(int id, String userName, String phone, String mail, String fullName, String qualifications) {
+        this.id = id;
+        this.userName = userName;
+        this.phone = phone;
+        this.mail = mail;
+        this.fullName = fullName;
         this.qualifications = qualifications;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getPhone() {
+        return phone;
     }
 
-    public String getEMail() {
-        return eMail;
+    public String getMail() {
+        return mail;
     }
 
-    public String getHospital() {
-        return hospital;
-    }
-
-    public String getPosition() {
-        return position;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getQualifications() {

@@ -8,8 +8,12 @@ package ngo.teog.hstest.helpers;
  */
 
 public class DeviceFilter {
-    public static final String ID = "id";
-    public static final String NAME = "name";
+    public static final String ID = "ID";
+    public static final String ASSET_NUMBER = "asset_no";
+    public static final String TYPE = "type";
+    public static final String SERVICE_NUMBER = "service_no";
+    public static final String MANUFACTURER = "manufacturer";
+    public static final String IMAGE_PATH = "image_path";
 
     private String type;
     private String value;

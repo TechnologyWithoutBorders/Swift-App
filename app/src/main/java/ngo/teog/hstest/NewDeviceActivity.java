@@ -8,21 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import ngo.teog.hstest.comm.CreateDeviceRequest;
+import ngo.teog.hstest.comm.RequestFactory;
 import ngo.teog.hstest.comm.VolleyManager;
+import ngo.teog.hstest.helpers.HospitalDevice;
 
 public class NewDeviceActivity extends AppCompatActivity {
 
@@ -31,6 +26,12 @@ public class NewDeviceActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private Button createButton;
     private ProgressBar progressBar;
+
+    private EditText assetNumberField;
+    private EditText typeField;
+    private EditText serviceNumberField;
+    private EditText manufacturerField;
+    private EditText wardField;
 
     public final static char CR  = (char) 0x0D;
     public final static char LF  = (char) 0x0A;
@@ -42,6 +43,12 @@ public class NewDeviceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_device);
 
         imageView = findViewById(R.id.imageView);
+
+        assetNumberField = findViewById(R.id.assetNumberText);
+        typeField = findViewById(R.id.typeText);
+        serviceNumberField = findViewById(R.id.serviceNumberText);
+        manufacturerField = findViewById(R.id.manufacturerText);
+        wardField = findViewById(R.id.wardText);
 
         if(savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable("IMAGE");
@@ -73,9 +80,14 @@ public class NewDeviceActivity extends AppCompatActivity {
         createButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
+        HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
+                typeField.getText().toString(), serviceNumberField.getText().toString(), manufacturerField.getText().toString(), null);
+
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-        StringRequest request = new CreateDeviceRequest(this, progressBar, createButton);
+        RequestFactory factory = new RequestFactory();
+        RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, createButton, device, bitmap, -1, wardField.getText().toString());
+
         queue.add(request);
     }
 

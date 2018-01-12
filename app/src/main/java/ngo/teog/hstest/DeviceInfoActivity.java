@@ -36,19 +36,11 @@ public class DeviceInfoActivity extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        if(device.isWorking()) {
-            statusView.setBackgroundColor(Color.GREEN);
-            statusView.setText("Status: working");
-        } else {
-            statusView.setBackgroundColor(Color.RED);
-            statusView.setText("Status: not working");
-        }
-
         TextView nameView = (TextView)findViewById(R.id.nameValueView);
-        nameView.setText(device.getName());
+        nameView.setText(device.getAssetNumber());
 
         TextView serialNumberView = (TextView)findViewById(R.id.serialNumberView);
-        serialNumberView.setText(device.getSerialNumber());
+        serialNumberView.setText(device.getServiceNumber());
 
         new DownloadImageTask(imageView, progressBar).execute("https://teog.virlep.de/graphics/" + device.getID() + ".png", null);
     }

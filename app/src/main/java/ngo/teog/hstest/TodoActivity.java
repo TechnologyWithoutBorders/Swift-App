@@ -13,12 +13,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-import ngo.teog.hstest.comm.DeviceListFetchTask;
 import ngo.teog.hstest.helpers.HospitalDevice;
 
 public class TodoActivity extends BaseActivity {
@@ -50,13 +46,11 @@ public class TodoActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-        new DeviceListFetchTask(this, listView, progressBar, adapter).execute(null, null);
     }
 
     @Override
     public void onInternetStatusChanged() {
-        new DeviceListFetchTask(this, listView, progressBar, adapter).execute(null, null);
+
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
@@ -77,16 +71,7 @@ public class TodoActivity extends BaseActivity {
             TextView dateView = rowView.findViewById(R.id.dateView);
 
             if(this.getItem(position) != null) {
-                nameView.setText(this.getItem(position).getName());
-
-                DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-
-                Date due = this.getItem(position).getDue();
-
-                if(due.before(new Date())) {
-                    dateView.setTextColor(Color.RED);
-                }
-                dateView.setText(format.format(this.getItem(position).getDue()));
+                nameView.setText(this.getItem(position).getAssetNumber());
             } else {
                 nameView.setText("no internet connection");
                 nameView.setTextColor(Color.RED);

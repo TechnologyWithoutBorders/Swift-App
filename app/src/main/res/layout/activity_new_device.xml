@@ -24,10 +24,10 @@
         android:onClick="dispatchTakePictureIntent"/>
 
     <EditText
-        android:id="@+id/nameText"
+        android:id="@+id/assetNumberText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="Asset Number"
         android:inputType="text" />
 
     <EditText
@@ -38,10 +38,10 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/serialNumberText"
+        android:id="@+id/serviceNumberText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Serial Number"
+        android:hint="Service Number"
         android:inputType="text" />
 
     <EditText
@@ -56,13 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Ward"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/hospitalText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Hospital"
         android:inputType="text" />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

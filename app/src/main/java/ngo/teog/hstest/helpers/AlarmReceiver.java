@@ -22,7 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Test Benachrichtigung
+        /*//Test Benachrichtigung
         int mNotificationId = id;
         String CHANNEL_ID = "dummy_channel";
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -40,6 +40,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         mNotificationManager.notify(mNotificationId, mBuilder.build());
 
-        id++;
+        id++;*/
     }
 }

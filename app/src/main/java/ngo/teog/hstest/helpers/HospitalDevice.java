@@ -11,48 +11,42 @@ import java.util.Date;
 
 public class HospitalDevice implements Serializable {
     private int id;
-    private String name;
+    private String assetNumber;
     private String type;
+    private String serviceNumber;
     private String manufacturer;
-    private String serialNumber;
-    private String ward;
-    private String hospital;
-    private boolean isWorking;
-    private Date due;
+    private String imagePath;
 
-    public HospitalDevice(int id, String name, String type, String manufacturer, String serialNumber, String ward, String hospital, boolean isWorking, Date due) {
+    public HospitalDevice(int id, String assetNumber, String type, String serviceNumber, String manufacturer, String imagePath) {
         this.id = id;
-        this.name = name;
+        this.assetNumber = assetNumber;
         this.type = type;
+        this.serviceNumber = serviceNumber;
         this.manufacturer = manufacturer;
-        this.serialNumber = serialNumber;
-        this.ward = ward;
-        this.hospital = hospital;
-        this.isWorking = isWorking;
-        this.due = due;
+        this.imagePath = imagePath;
     }
 
     public int getID() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getAssetNumber() {
+        return assetNumber;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getServiceNumber() {
+        return serviceNumber;
     }
 
-    public boolean isWorking() {
-        return isWorking;
+    public String getManufacturer() {
+        return manufacturer;
     }
 
-    public Date getDue() {
-        return due;
+    public String getImagePath() {
+        return imagePath;
     }
 }

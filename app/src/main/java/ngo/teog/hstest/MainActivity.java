@@ -19,12 +19,8 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-import ngo.teog.hstest.comm.DeviceListFetchTask;
 import ngo.teog.hstest.comm.RequestFactory;
 import ngo.teog.hstest.comm.VolleyManager;
 import ngo.teog.hstest.helpers.Defaults;
@@ -40,13 +36,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        if(!preferences.contains(getString(R.string.name_pref))) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(getString(R.string.name_pref), "Test.User");
-            editor.commit();
-        }
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
@@ -109,32 +98,32 @@ public class MainActivity extends BaseActivity {
     }
 
     public void startAboutActivity() {
-        Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
+        Intent intent = new Intent(MainActivity.this, AboutActivity.class);
         startActivity(intent);
     }
 
     public void startQRActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), QRActivity.class);
+        Intent intent = new Intent(MainActivity.this, QRActivity.class);
         startActivity(intent);
     }
 
     public void startUserProfileActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), UserProfileActivity.class);
+        Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
         startActivity(intent);
     }
 
     public void startTodoActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), TodoActivity.class);
+        Intent intent = new Intent(MainActivity.this, TodoActivity.class);
         startActivity(intent);
     }
 
     public void startSearchActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 
     public void startNewDeviceActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), NewDeviceActivity.class);
+        Intent intent = new Intent(MainActivity.this, NewDeviceActivity.class);
         startActivity(intent);
     }
 
@@ -156,16 +145,7 @@ public class MainActivity extends BaseActivity {
             TextView dateView = rowView.findViewById(R.id.dateView);
 
             if(this.getItem(position) != null) {
-                nameView.setText(this.getItem(position).getName());
-
-                DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-
-                Date due = this.getItem(position).getDue();
-
-                if(due.before(new Date())) {
-                    dateView.setTextColor(Color.RED);
-                }
-                dateView.setText(format.format(this.getItem(position).getDue()));
+                nameView.setText(this.getItem(position).getAssetNumber());
             } else {
                 nameView.setText("no internet connection");
                 nameView.setTextColor(Color.RED);
