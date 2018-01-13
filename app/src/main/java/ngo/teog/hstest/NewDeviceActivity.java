@@ -51,7 +51,7 @@ public class NewDeviceActivity extends AppCompatActivity {
         wardField = findViewById(R.id.wardText);
 
         if(savedInstanceState != null) {
-            Bitmap bitmap = savedInstanceState.getParcelable("IMAGE");
+            bitmap = savedInstanceState.getParcelable("IMAGE");
             imageView.setImageBitmap(bitmap);
         }
 
