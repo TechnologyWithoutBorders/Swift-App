@@ -75,6 +75,14 @@ public class LoginActivity extends AppCompatActivity {
             e1.printStackTrace();
         }
         digest.reset();
-        return new String(digest.digest(password.getBytes()));
+
+        byte[] result = digest.digest(password.getBytes());
+
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < result.length; i++) {
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString();
     }
 }
