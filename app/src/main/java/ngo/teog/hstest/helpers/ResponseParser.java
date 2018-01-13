@@ -34,7 +34,7 @@ public class ResponseParser {
 
                 ArrayList<HospitalDevice> result = new ArrayList<>();
 
-                for(int i = 0; i < raw.length(); i++) {
+                for(int i = 0; i < deviceList.length(); i++) {
                     JSONObject deviceObject = deviceList.getJSONObject(i);
 
                     int id = deviceObject.getInt(DeviceFilter.ID);
