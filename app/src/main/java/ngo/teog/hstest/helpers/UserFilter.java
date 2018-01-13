@@ -10,6 +10,8 @@ package ngo.teog.hstest.helpers;
 public class UserFilter {
     public static final String ID = "ID";
     public static final String FULL_NAME = "fullName";
+    public static final String MAIL = "mail";
+    public static final String PASSWORD = "password";
 
     private String type;
     private String value;

@@ -7,18 +7,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import ngo.teog.hstest.comm.RequestFactory;
+import ngo.teog.hstest.comm.VolleyManager;
 import ngo.teog.hstest.helpers.Defaults;
 
 public class LoginActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private Button loginButton;
+    private EditText mailField;
+    private EditText passwordField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         loginButton = findViewById(R.id.loginButton);
+        mailField = findViewById(R.id.mailText);
+        passwordField = findViewById(R.id.pwText);
 
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         if(preferences.contains(getString(R.string.id_pref)) && preferences.contains(getString(R.string.pw_pref))) {
@@ -44,20 +51,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
+        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, progressBar, loginButton, mailField.getText().toString(), getHash(passwordField.getText().toString()), preferences);
+
         progressBar.setVisibility(View.VISIBLE);
         loginButton.setVisibility(View.INVISIBLE);
 
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(getString(R.string.id_pref), -1);
-        editor.putString(getString(R.string.pw_pref), "dummyPW");
-        editor.commit();
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-
-        //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
-        LoginActivity.this.finish();
+        VolleyManager.getInstance(this).getRequestQueue().add(request);
     }
 
     /**
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param password zu verschlüsselndes Passwort
      * @return Hash
      */
-    private byte[] getHash(String password) {
+    private String getHash(String password) {
         MessageDigest digest = null;
         try {
             digest = MessageDigest.getInstance("SHA-256");
@@ -74,6 +75,6 @@ public class LoginActivity extends AppCompatActivity {
             e1.printStackTrace();
         }
         digest.reset();
-        return digest.digest(password.getBytes());
+        return new String(digest.digest(password.getBytes()));
     }
 }

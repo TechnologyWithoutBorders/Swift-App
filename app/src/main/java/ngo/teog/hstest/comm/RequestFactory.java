@@ -1,6 +1,9 @@
 package ngo.teog.hstest.comm;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Base64;
 import android.view.View;
@@ -10,20 +13,23 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ngo.teog.hstest.LoginActivity;
+import ngo.teog.hstest.MainActivity;
+import ngo.teog.hstest.R;
 import ngo.teog.hstest.helpers.DeviceFilter;
-import ngo.teog.hstest.helpers.DeviceParser;
+import ngo.teog.hstest.helpers.ResponseParser;
 import ngo.teog.hstest.helpers.HospitalDevice;
+import ngo.teog.hstest.helpers.UserFilter;
+import ngo.teog.hstest.helpers.ResponseException;
 
 /**
  * Created by Julian on 13.12.2017.
@@ -36,27 +42,26 @@ public class RequestFactory {
 
         if(filters != null) {
             for (DeviceFilter filter : filters) {
-                //TODO beachten, dass hier schon ein Fragezeichen drinsteht!
-                url += "&" + filter.getType() + "=" + filter.getValue();
+                url = appendGETParameter(url, filter.getType(), filter.getValue());
             }
         }
 
         return new DeviceListRequest(context, disable, enable, url, adapter);
     }
 
-    public class DeviceListRequest extends JsonArrayRequest {
+    public class DeviceListRequest extends JsonObjectRequest {
 
         public static final String BASE_URL = "https://teog.virlep.de/devices.php?action=fetch";
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, final ArrayAdapter<HospitalDevice> adapter) {
-            super(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
+            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
-                public void onResponse(JSONArray response) {
+                public void onResponse(JSONObject response) {
                     adapter.clear();
 
                     try {
-                        adapter.addAll(new DeviceParser(null).parseDeviceList(response));
-                    } catch(JSONException e) {
+                        adapter.addAll(new ResponseParser().parseDeviceList(response));
+                    } catch(Exception e) {
                         Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                     }
 
@@ -68,6 +73,57 @@ public class RequestFactory {
                 public void onErrorResponse(VolleyError error) {
                     adapter.clear();
 
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public LoginRequest createLoginRequest(Activity context, View disable, View enable, String mail, String password, SharedPreferences preferences) {
+        String url = LoginRequest.BASE_URL;
+
+        url = appendGETParameter(url, UserFilter.MAIL, mail);
+        url = appendGETParameter(url, UserFilter.PASSWORD, password);
+
+        return new LoginRequest(context, disable, enable, url, preferences);
+    }
+
+    public class LoginRequest extends JsonObjectRequest {
+
+        public static final String BASE_URL = "https://teog.virlep.de/users.php?action=login";
+
+        //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
+        public LoginRequest(final Activity context, final View disable, final View enable, final String url, final SharedPreferences preferences) {
+            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        new ResponseParser().parseLoginResponse(response);
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt(context.getString(R.string.id_pref), -1);
+                        editor.putString(context.getString(R.string.pw_pref), "dummyPW");
+                        editor.commit();
+
+                        Intent intent = new Intent(context, MainActivity.class);
+                        context.startActivity(intent);
+
+                        //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
+                        context.finish();
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
@@ -120,5 +176,9 @@ public class RequestFactory {
                 }
             });
         }
+    }
+
+    private String appendGETParameter(String url, String parameter, String value) {
+        return url + "&" + parameter + "=" + value;
     }
 }
