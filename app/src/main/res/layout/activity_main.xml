@@ -33,6 +33,7 @@
             android:layout_column="1"
             android:layout_row="0"
             android:text="User-Profile"
+            android:enabled="false"
             android:onClick="startUserProfileActivity"/>
 
         <Button
@@ -42,6 +43,7 @@
             android:layout_column="0"
             android:layout_row="1"
             android:text="Todo"
+            android:enabled="false"
             android:onClick="startTodoActivity"/>
 
         <Button
@@ -51,6 +53,7 @@
             android:layout_column="1"
             android:layout_row="1"
             android:text="Search"
+            android:enabled="false"
             android:onClick="startSearchActivity"/>
     </GridLayout>
 
