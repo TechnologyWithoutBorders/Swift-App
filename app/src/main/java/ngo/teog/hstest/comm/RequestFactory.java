@@ -14,7 +14,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 
@@ -22,7 +21,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import ngo.teog.hstest.LoginActivity;
 import ngo.teog.hstest.MainActivity;
 import ngo.teog.hstest.R;
 import ngo.teog.hstest.helpers.DeviceFilter;
@@ -100,7 +98,7 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        new ResponseParser().parseLoginResponse(response);
+                        new ResponseParser().parseDefaultResponse(response);
 
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt(context.getString(R.string.id_pref), -1);
@@ -174,9 +172,16 @@ public class RequestFactory {
             super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+                    try {
+                        new ResponseParser().parseDefaultResponse(response);
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
-                    //Toast.makeText(context.getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override

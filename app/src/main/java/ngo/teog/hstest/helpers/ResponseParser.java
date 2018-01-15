@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ResponseParser {
 
-    public void parseLoginResponse(JSONObject raw) throws Exception {
+    public void parseDefaultResponse(JSONObject raw) throws Exception {
         int responseCode = raw.getInt("response_code");
         switch(responseCode) {
             case ResponseCode.OK:
