@@ -13,6 +13,7 @@ public class DeviceFilter {
     public static final String TYPE = "type";
     public static final String SERVICE_NUMBER = "service_no";
     public static final String MANUFACTURER = "manufacturer";
+    public static final String MODEL = "model";
     public static final String IMAGE_PATH = "image_path";
 
     private String type;

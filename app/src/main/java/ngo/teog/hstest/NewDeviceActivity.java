@@ -29,8 +29,9 @@ public class NewDeviceActivity extends AppCompatActivity {
 
     private EditText assetNumberField;
     private EditText typeField;
-    private EditText serviceNumberField;
+    private EditText serialNumberField;
     private EditText manufacturerField;
+    private EditText modelField;
     private EditText wardField;
 
     public final static char CR  = (char) 0x0D;
@@ -46,8 +47,9 @@ public class NewDeviceActivity extends AppCompatActivity {
 
         assetNumberField = findViewById(R.id.assetNumberText);
         typeField = findViewById(R.id.typeText);
-        serviceNumberField = findViewById(R.id.serviceNumberText);
+        serialNumberField = findViewById(R.id.serialNumberText);
         manufacturerField = findViewById(R.id.manufacturerText);
+        modelField = findViewById(R.id.modelText);
         wardField = findViewById(R.id.wardText);
 
         if(savedInstanceState != null) {
@@ -81,7 +83,7 @@ public class NewDeviceActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
-                typeField.getText().toString(), serviceNumberField.getText().toString(), manufacturerField.getText().toString(), null);
+                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), null);
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

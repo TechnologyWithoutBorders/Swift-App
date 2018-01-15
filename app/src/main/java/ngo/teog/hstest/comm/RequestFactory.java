@@ -133,7 +133,18 @@ public class RequestFactory {
     }
 
     public DeviceCreationRequest createDeviceCreationRequest(Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, int hospital, String ward) {
-        return new DeviceCreationRequest(context, disable, enable) {
+
+        String url = DeviceCreationRequest.BASE_URL;
+
+        url = appendGETParameter(url, DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
+        url = appendGETParameter(url, DeviceFilter.TYPE, device.getType());
+        url = appendGETParameter(url, DeviceFilter.SERVICE_NUMBER, device.getServiceNumber());
+        url = appendGETParameter(url, DeviceFilter.MANUFACTURER, device.getManufacturer());
+        url = appendGETParameter(url, DeviceFilter.MODEL, device.getModel());
+        url = appendGETParameter(url, "hospital_id", Integer.toString(hospital));
+        url = appendGETParameter(url, "ward", ward);
+
+        return new DeviceCreationRequest(context, url, disable, enable) {
             @Override
             protected Map<String, String> getParams() {
 
@@ -155,17 +166,17 @@ public class RequestFactory {
         };
     }
 
-    public class DeviceCreationRequest extends StringRequest {
+    public class DeviceCreationRequest extends JsonObjectRequest {
 
-        private static final String URL = "https://teog.virlep.de/devices.php?action=create";
+        private static final String BASE_URL = "https://teog.virlep.de/devices.php?action=create";
 
-        public DeviceCreationRequest(final Context context, final View disable, final View enable) {
-            super(Request.Method.POST, URL, new Response.Listener<String>() {
+        public DeviceCreationRequest(final Context context, final String url, final View disable, final View enable) {
+            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
-                public void onResponse(String response) {
+                public void onResponse(JSONObject response) {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context.getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                 }
             }, new Response.ErrorListener() {
                 @Override

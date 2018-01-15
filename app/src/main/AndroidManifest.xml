@@ -41,7 +41,7 @@
         <activity android:name=".NewReportActivity" />
         <activity
             android:name=".AboutActivity"
-            android:label="About HSTest"
+            android:label="About Swift"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".LoginActivity">
         <intent-filter>
