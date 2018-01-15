@@ -42,9 +42,10 @@ public class ResponseParser {
                     String type = deviceObject.getString(DeviceFilter.TYPE);
                     String serviceNumber = deviceObject.getString(DeviceFilter.SERVICE_NUMBER);
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
+                    String model = deviceObject.getString(DeviceFilter.MODEL);
                     String imagePath = deviceObject.getString(DeviceFilter.IMAGE_PATH);
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serviceNumber, manufacturer, imagePath);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serviceNumber, manufacturer, model, imagePath);
                     result.add(device);
                 }
 
