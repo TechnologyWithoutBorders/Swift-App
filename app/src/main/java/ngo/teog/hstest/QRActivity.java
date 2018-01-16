@@ -10,12 +10,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.List;
+
+import ngo.teog.hstest.comm.RequestFactory;
+import ngo.teog.hstest.comm.VolleyManager;
+import ngo.teog.hstest.helpers.DeviceFilter;
 
 public class QRActivity extends AppCompatActivity {
 
@@ -39,13 +44,15 @@ public class QRActivity extends AppCompatActivity {
             try {
                 int deviceNumber = Integer.parseInt(result.getText());
 
+                QRActivity.this.invokeFetchRequest(deviceNumber);
             } catch(NumberFormatException e) {
-
+                //ignore
             }
         }
 
         @Override
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
+            //ignore
         }
     };
 
@@ -61,11 +68,10 @@ public class QRActivity extends AppCompatActivity {
         barcodeScannerView = findViewById(R.id.barcodeScannerView);
         barcodeScannerView.decodeContinuous(callback);
 
-        searchButton = (Button)findViewById(R.id.search_button);
-        searchField = (EditText) findViewById(R.id.search_field);
+        searchButton = findViewById(R.id.search_button);
+        searchField = findViewById(R.id.search_field);
 
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar = findViewById(R.id.progressBar);
     }
 
     @Override
@@ -91,8 +97,21 @@ public class QRActivity extends AppCompatActivity {
 
         try {
             int deviceNumber = Integer.parseInt(searchString);
+
+            this.invokeFetchRequest(deviceNumber);
         } catch(NumberFormatException e) {
             Toast.makeText(getApplicationContext(), "invalid device number", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void invokeFetchRequest(int id) {
+        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+        DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.ID, Integer.toString(id))};
+
+        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, searchButton, filters, null);
+
+        searchButton.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        queue.add(request);
     }
 }

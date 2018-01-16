@@ -13,16 +13,16 @@ public class HospitalDevice implements Serializable {
     private int id;
     private String assetNumber;
     private String type;
-    private String serviceNumber;
+    private String serialNumber;
     private String manufacturer;
     private String model;
     private String imagePath;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serviceNumber, String manufacturer, String model, String imagePath) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String imagePath) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
-        this.serviceNumber = serviceNumber;
+        this.serialNumber = serialNumber;
         this.manufacturer = manufacturer;
         this.model = model;
         this.imagePath = imagePath;
@@ -40,8 +40,8 @@ public class HospitalDevice implements Serializable {
         return type;
     }
 
-    public String getServiceNumber() {
-        return serviceNumber;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
     public String getManufacturer() {

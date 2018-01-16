@@ -40,12 +40,12 @@ public class ResponseParser {
                     int id = deviceObject.getInt(DeviceFilter.ID);
                     String assetNumber = deviceObject.getString(DeviceFilter.ASSET_NUMBER);
                     String type = deviceObject.getString(DeviceFilter.TYPE);
-                    String serviceNumber = deviceObject.getString(DeviceFilter.SERVICE_NUMBER);
+                    String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
                     String imagePath = deviceObject.getString(DeviceFilter.IMAGE_PATH);
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serviceNumber, manufacturer, model, imagePath);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, imagePath);
                     result.add(device);
                 }
 

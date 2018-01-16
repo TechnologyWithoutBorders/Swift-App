@@ -8,13 +8,13 @@ package ngo.teog.hstest.helpers;
  */
 
 public class DeviceFilter {
-    public static final String ID = "ID";
-    public static final String ASSET_NUMBER = "asset_no";
-    public static final String TYPE = "type";
-    public static final String SERVICE_NUMBER = "service_no";
-    public static final String MANUFACTURER = "manufacturer";
-    public static final String MODEL = "model";
-    public static final String IMAGE_PATH = "image_path";
+    public static final String ID = "D.ID";
+    public static final String ASSET_NUMBER = "D.asset_no";
+    public static final String TYPE = "D.type";
+    public static final String SERIAL_NUMBER = "D.serial_no";
+    public static final String MANUFACTURER = "D.manufacturer";
+    public static final String MODEL = "D.model";
+    public static final String IMAGE_PATH = "D.image_path";
 
     private String type;
     private String value;
