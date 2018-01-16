@@ -108,8 +108,7 @@ public class QRActivity extends AppCompatActivity {
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
         DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.ID, Integer.toString(id))};
 
-        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, searchButton, filters, null);
-        //TODO deviceRequest mit Öffnen
+        RequestFactory.DeviceOpenRequest request = new RequestFactory().createDeviceOpenRequest(this, progressBar, searchButton, filters);
 
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);

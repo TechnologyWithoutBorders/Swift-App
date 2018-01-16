@@ -13,8 +13,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/not_available" />
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/pictureButton"

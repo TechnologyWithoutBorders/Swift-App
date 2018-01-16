@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ngo.teog.hstest.comm.RequestFactory;
@@ -31,6 +32,9 @@ public class MainActivity extends BaseActivity {
     private MySimpleArrayAdapter adapter;
     private ListView listView;
     private ProgressBar progressBar;
+
+    //TODO Die Konstante muss natürlich hier weg
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,8 +148,13 @@ public class MainActivity extends BaseActivity {
             TextView nameView = rowView.findViewById(R.id.nameView);
             TextView dateView = rowView.findViewById(R.id.dateView);
 
-            if(this.getItem(position) != null) {
-                nameView.setText(this.getItem(position).getAssetNumber());
+            HospitalDevice device = this.getItem(position);
+
+            if(device != null) {
+                nameView.setText(device.getType());
+
+                String dateString = DATE_FORMAT.format(device.getNextMaintenance());
+                dateView.setText(dateString);
             } else {
                 nameView.setText("no internet connection");
                 nameView.setTextColor(Color.RED);

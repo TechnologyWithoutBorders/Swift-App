@@ -26,6 +26,7 @@ import ngo.teog.hstest.DeviceInfoActivity;
 import ngo.teog.hstest.MainActivity;
 import ngo.teog.hstest.NewDeviceActivity;
 import ngo.teog.hstest.R;
+import ngo.teog.hstest.helpers.Defaults;
 import ngo.teog.hstest.helpers.DeviceFilter;
 import ngo.teog.hstest.helpers.ResponseParser;
 import ngo.teog.hstest.helpers.HospitalDevice;
@@ -38,8 +39,68 @@ import ngo.teog.hstest.helpers.ResponseException;
 
 //TODO könnte auch ein Singleton werden
 public class RequestFactory {
+    public DeviceOpenRequest createDeviceOpenRequest(Context context, View disable, View enable, DeviceFilter[] filters) {
+        String url = DeviceOpenRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        url = appendGETParameter(url, UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        url = appendGETParameter(url, UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+
+        if(filters != null) {
+            for (DeviceFilter filter : filters) {
+                url = appendGETParameter(url, filter.getType(), filter.getValue());
+            }
+        }
+
+        return new DeviceOpenRequest(context, disable, enable, url);
+    }
+
+    public class DeviceOpenRequest extends JsonObjectRequest {
+
+        public static final String BASE_URL = "https://teog.virlep.de/devices.php?action=fetch";
+
+        public DeviceOpenRequest(final Context context, final View disable, final View enable, final String url) {
+            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
+
+                        if(deviceList.size() > 0) {
+                            Intent intent = new Intent(context, DeviceInfoActivity.class);
+                            intent.putExtra("device", deviceList.get(0));
+                            context.startActivity(intent);
+                        } else {
+                            throw new ResponseException("device not found");
+                        }
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, DeviceFilter[] filters, ArrayAdapter<HospitalDevice> adapter) {
         String url = DeviceListRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        url = appendGETParameter(url, UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        url = appendGETParameter(url, UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
 
         if(filters != null) {
             for (DeviceFilter filter : filters) {
@@ -86,8 +147,10 @@ public class RequestFactory {
         }
     }
 
-    public LoginRequest createLoginRequest(Activity context, View disable, View enable, String mail, String password, SharedPreferences preferences) {
+    public LoginRequest createLoginRequest(Activity context, View disable, View enable, String mail, String password) {
         String url = LoginRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         url = appendGETParameter(url, UserFilter.MAIL, mail);
         url = appendGETParameter(url, UserFilter.PASSWORD, password);
@@ -137,16 +200,20 @@ public class RequestFactory {
         }
     }
 
-    public DeviceCreationRequest createDeviceCreationRequest(Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, int hospital, String ward) {
+    public DeviceCreationRequest createDeviceCreationRequest(Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
 
         String url = DeviceCreationRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        url = appendGETParameter(url, UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        url = appendGETParameter(url, UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
 
         url = appendGETParameter(url, DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
         url = appendGETParameter(url, DeviceFilter.TYPE, device.getType());
         url = appendGETParameter(url, DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
         url = appendGETParameter(url, DeviceFilter.MANUFACTURER, device.getManufacturer());
         url = appendGETParameter(url, DeviceFilter.MODEL, device.getModel());
-        url = appendGETParameter(url, "hospital_id", Integer.toString(hospital));
         url = appendGETParameter(url, "ward", ward);
 
         return new DeviceCreationRequest(context, url, disable, enable) {

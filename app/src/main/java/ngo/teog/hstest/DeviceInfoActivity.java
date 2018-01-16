@@ -29,17 +29,27 @@ public class DeviceInfoActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         device = (HospitalDevice)intent.getSerializableExtra("device");
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        ImageView imageView = findViewById(R.id.imageView);
 
-        TextView statusView = (TextView)findViewById(R.id.statusView);
+        TextView statusView = findViewById(R.id.statusView);
+        if(device.isWorking()) {
+            statusView.setText("working");
+            statusView.setBackgroundColor(Color.GREEN);
+        } else {
+            statusView.setText("not working");
+            statusView.setBackgroundColor(Color.RED);
+        }
 
-        ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        TextView nameView = (TextView)findViewById(R.id.nameValueView);
-        nameView.setText(device.getAssetNumber());
+        TextView assetNumberView = findViewById(R.id.assetNumberView);
+        assetNumberView.setText(device.getAssetNumber());
 
-        TextView serialNumberView = (TextView)findViewById(R.id.serialNumberView);
+        TextView nameView = findViewById(R.id.nameValueView);
+        nameView.setText(device.getType());
+
+        TextView serialNumberView = findViewById(R.id.serialNumberView);
         serialNumberView.setText(device.getSerialNumber());
 
         new DownloadImageTask(imageView, progressBar).execute("https://teog.virlep.de/graphics/" + device.getID() + ".jpg", null);

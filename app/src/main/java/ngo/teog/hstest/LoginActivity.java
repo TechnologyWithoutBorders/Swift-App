@@ -51,9 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, progressBar, loginButton, mailField.getText().toString(), getHash(passwordField.getText().toString()), preferences);
+        RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, progressBar, loginButton, mailField.getText().toString(), getHash(passwordField.getText().toString()));
 
         progressBar.setVisibility(View.VISIBLE);
         loginButton.setVisibility(View.INVISIBLE);

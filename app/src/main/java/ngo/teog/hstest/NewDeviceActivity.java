@@ -90,7 +90,7 @@ public class NewDeviceActivity extends AppCompatActivity {
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
         RequestFactory factory = new RequestFactory();
-        RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, createButton, device, bitmap, -1, wardField.getText().toString());
+        RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, createButton, device, bitmap, wardField.getText().toString());
 
         queue.add(request);
     }
