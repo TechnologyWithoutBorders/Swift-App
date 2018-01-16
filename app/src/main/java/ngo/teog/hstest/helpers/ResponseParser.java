@@ -14,11 +14,11 @@ import java.util.Date;
 
 public class ResponseParser {
 
-    public void parseDefaultResponse(JSONObject raw) throws Exception {
+    public int parseLoginResponse(JSONObject raw) throws Exception {
         int responseCode = raw.getInt("response_code");
         switch(responseCode) {
             case ResponseCode.OK:
-                break;
+                return raw.getInt("data");
             case ResponseCode.FAILED_VISIBLE:
                 throw new ResponseException(raw.getString("data"));
             case ResponseCode.FAILED_HIDDEN:

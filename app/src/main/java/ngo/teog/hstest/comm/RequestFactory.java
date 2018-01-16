@@ -24,7 +24,6 @@ import java.util.Map;
 
 import ngo.teog.hstest.DeviceInfoActivity;
 import ngo.teog.hstest.MainActivity;
-import ngo.teog.hstest.NewDeviceActivity;
 import ngo.teog.hstest.R;
 import ngo.teog.hstest.helpers.Defaults;
 import ngo.teog.hstest.helpers.DeviceFilter;
@@ -155,7 +154,7 @@ public class RequestFactory {
         url = appendGETParameter(url, UserFilter.MAIL, mail);
         url = appendGETParameter(url, UserFilter.PASSWORD, password);
 
-        return new LoginRequest(context, disable, enable, url, preferences);
+        return new LoginRequest(context, disable, enable, url, preferences, password);
     }
 
     public class LoginRequest extends JsonObjectRequest {
@@ -163,16 +162,16 @@ public class RequestFactory {
         public static final String BASE_URL = "https://teog.virlep.de/users.php?action=login";
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final View disable, final View enable, final String url, final SharedPreferences preferences) {
+        public LoginRequest(final Activity context, final View disable, final View enable, final String url, final SharedPreferences preferences, final String password) {
             super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        new ResponseParser().parseDefaultResponse(response);
+                        int id = new ResponseParser().parseLoginResponse(response);
 
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt(context.getString(R.string.id_pref), -1);
-                        editor.putString(context.getString(R.string.pw_pref), "dummyPW");
+                        editor.putInt(context.getString(R.string.id_pref), id);
+                        editor.putString(context.getString(R.string.pw_pref), password);
                         editor.commit();
 
                         Intent intent = new Intent(context, MainActivity.class);
