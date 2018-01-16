@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
+import java.util.Date;
+
 import ngo.teog.hstest.comm.RequestFactory;
 import ngo.teog.hstest.comm.VolleyManager;
 import ngo.teog.hstest.helpers.HospitalDevice;
@@ -83,7 +85,7 @@ public class NewDeviceActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
-                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), null);
+                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), null, true, new Date());
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

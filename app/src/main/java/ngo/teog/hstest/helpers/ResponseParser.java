@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Hilfsklasse, die JSON-Responses aus der HTPPS-Schnittstelle
@@ -44,8 +45,12 @@ public class ResponseParser {
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
                     String imagePath = deviceObject.getString(DeviceFilter.IMAGE_PATH);
+                    boolean isWorking = deviceObject.getBoolean(DeviceFilter.WORKING);
+                    String dateString = deviceObject.getString(DeviceFilter.NEXT_MAINTENANCE);
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, imagePath);
+                    Date nextMaintenance = new Date();//TODO
+
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, imagePath, isWorking, nextMaintenance);
                     result.add(device);
                 }
 

@@ -15,6 +15,8 @@ public class DeviceFilter {
     public static final String MANUFACTURER = "D.manufacturer";
     public static final String MODEL = "D.model";
     public static final String IMAGE_PATH = "D.image_path";
+    public static final String WORKING = "D.working";
+    public static final String NEXT_MAINTENANCE = "D.next_maintenance";
 
     private String type;
     private String value;

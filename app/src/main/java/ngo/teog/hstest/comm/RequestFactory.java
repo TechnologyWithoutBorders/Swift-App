@@ -21,7 +21,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import ngo.teog.hstest.DeviceInfoActivity;
 import ngo.teog.hstest.MainActivity;
+import ngo.teog.hstest.NewDeviceActivity;
 import ngo.teog.hstest.R;
 import ngo.teog.hstest.helpers.DeviceFilter;
 import ngo.teog.hstest.helpers.ResponseParser;
@@ -136,7 +138,7 @@ public class RequestFactory {
 
         url = appendGETParameter(url, DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
         url = appendGETParameter(url, DeviceFilter.TYPE, device.getType());
-        url = appendGETParameter(url, DeviceFilter.SERVICE_NUMBER, device.getServiceNumber());
+        url = appendGETParameter(url, DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
         url = appendGETParameter(url, DeviceFilter.MANUFACTURER, device.getManufacturer());
         url = appendGETParameter(url, DeviceFilter.MODEL, device.getModel());
         url = appendGETParameter(url, "hospital_id", Integer.toString(hospital));
@@ -155,7 +157,7 @@ public class RequestFactory {
                 params.put(DeviceFilter.ID, Integer.toString(device.getID()));
                 params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
                 params.put(DeviceFilter.TYPE, device.getType());
-                params.put(DeviceFilter.SERVICE_NUMBER, device.getServiceNumber());
+                params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
                 params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
                 params.put("image", encodedImage);//TODO die Identifier anders organisieren
 

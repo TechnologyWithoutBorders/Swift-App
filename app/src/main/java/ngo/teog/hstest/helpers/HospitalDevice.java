@@ -17,8 +17,10 @@ public class HospitalDevice implements Serializable {
     private String manufacturer;
     private String model;
     private String imagePath;
+    private boolean isWorking;
+    private Date nextMaintenance;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String imagePath) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String imagePath, boolean isWorking, Date nextMaintenance) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -26,6 +28,8 @@ public class HospitalDevice implements Serializable {
         this.manufacturer = manufacturer;
         this.model = model;
         this.imagePath = imagePath;
+        this.isWorking =  isWorking;
+        this.nextMaintenance = nextMaintenance;
     }
 
     public int getID() {
@@ -54,5 +58,13 @@ public class HospitalDevice implements Serializable {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public boolean isWorking() {
+        return isWorking;
+    }
+
+    public Date getNextMaintenance() {
+        return nextMaintenance;
     }
 }
