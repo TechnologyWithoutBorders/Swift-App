@@ -109,6 +109,7 @@ public class QRActivity extends AppCompatActivity {
         DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.ID, Integer.toString(id))};
 
         RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, searchButton, filters, null);
+        //TODO deviceRequest mit Öffnen
 
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);

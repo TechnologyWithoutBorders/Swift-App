@@ -45,7 +45,11 @@ public class ResponseParser {
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
                     String imagePath = deviceObject.getString(DeviceFilter.IMAGE_PATH);
-                    boolean isWorking = deviceObject.getBoolean(DeviceFilter.WORKING);
+                    String workingString = deviceObject.getString(DeviceFilter.WORKING);
+                    boolean isWorking = false;
+                    if(workingString.equals("1")) {
+                        isWorking = true;
+                    }
                     String dateString = deviceObject.getString(DeviceFilter.NEXT_MAINTENANCE);
 
                     Date nextMaintenance = new Date();//TODO

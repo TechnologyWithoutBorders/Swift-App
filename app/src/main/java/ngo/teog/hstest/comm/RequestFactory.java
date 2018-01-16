@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,10 +58,14 @@ public class RequestFactory {
             super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    adapter.clear();
+                    if(adapter != null) {
+                        adapter.clear();
+                    }
 
                     try {
-                        adapter.addAll(new ResponseParser().parseDeviceList(response));
+                        if(adapter != null) {
+                            adapter.addAll(new ResponseParser().parseDeviceList(response));
+                        }
                     } catch(Exception e) {
                         Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                     }
@@ -175,7 +180,11 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        new ResponseParser().parseDefaultResponse(response);
+                        ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
+
+                        Intent intent = new Intent(context, DeviceInfoActivity.class);
+                        intent.putExtra("device", deviceList.get(0));
+                        context.startActivity(intent);
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {

@@ -8,15 +8,15 @@ package ngo.teog.hstest.helpers;
  */
 
 public class DeviceFilter {
-    public static final String ID = "D.ID";
-    public static final String ASSET_NUMBER = "D.asset_no";
-    public static final String TYPE = "D.type";
-    public static final String SERIAL_NUMBER = "D.serial_no";
-    public static final String MANUFACTURER = "D.manufacturer";
-    public static final String MODEL = "D.model";
-    public static final String IMAGE_PATH = "D.image_path";
-    public static final String WORKING = "D.working";
-    public static final String NEXT_MAINTENANCE = "D.next_maintenance";
+    public static final String ID = "d_ID";
+    public static final String ASSET_NUMBER = "d_asset_no";
+    public static final String TYPE = "d_type";
+    public static final String SERIAL_NUMBER = "d_serial_no";
+    public static final String MANUFACTURER = "d_manufacturer";
+    public static final String MODEL = "d_model";
+    public static final String IMAGE_PATH = "d_image_path";
+    public static final String WORKING = "d_working";
+    public static final String NEXT_MAINTENANCE = "d_next_maintenance";
 
     private String type;
     private String value;
