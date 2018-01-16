@@ -36,9 +36,6 @@ public class NewDeviceActivity extends AppCompatActivity {
     private EditText modelField;
     private EditText wardField;
 
-    public final static char CR  = (char) 0x0D;
-    public final static char LF  = (char) 0x0A;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,8 +52,10 @@ public class NewDeviceActivity extends AppCompatActivity {
         wardField = findViewById(R.id.wardText);
 
         if(savedInstanceState != null) {
-            bitmap = savedInstanceState.getParcelable("IMAGE");
-            imageView.setImageBitmap(bitmap);
+            if(savedInstanceState.containsKey("IMAGE")) {
+                bitmap = savedInstanceState.getParcelable("IMAGE");
+                imageView.setImageBitmap(bitmap);
+            }
         }
 
         createButton = findViewById(R.id.createButton);
@@ -68,14 +67,16 @@ public class NewDeviceActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-        outState.putParcelable("IMAGE", bitmap);
+        if(drawable != null) {
+            Bitmap bitmap = drawable.getBitmap();
+            outState.putParcelable("IMAGE", bitmap);
+        }
         super.onSaveInstanceState(outState);
     }
 
     public void dispatchTakePictureIntent(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -97,7 +98,7 @@ public class NewDeviceActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             bitmap = (Bitmap)extras.get("data");
             imageView.setImageBitmap(bitmap);

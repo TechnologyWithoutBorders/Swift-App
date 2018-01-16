@@ -199,7 +199,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceCreationRequest createDeviceCreationRequest(Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
+    public DeviceCreationRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
 
         String url = DeviceCreationRequest.BASE_URL;
 
@@ -213,6 +213,8 @@ public class RequestFactory {
         url = appendGETParameter(url, DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
         url = appendGETParameter(url, DeviceFilter.MANUFACTURER, device.getManufacturer());
         url = appendGETParameter(url, DeviceFilter.MODEL, device.getModel());
+        url = appendGETParameter(url, DeviceFilter.WORKING, Boolean.toString(device.isWorking()));
+        url = appendGETParameter(url, DeviceFilter.NEXT_MAINTENANCE, MainActivity.DATE_FORMAT.format(device.getNextMaintenance()));
         url = appendGETParameter(url, "ward", ward);
 
         return new DeviceCreationRequest(context, url, disable, enable) {
@@ -225,11 +227,6 @@ public class RequestFactory {
                 String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
                 Map<String, String> params = new HashMap<>();
-                params.put(DeviceFilter.ID, Integer.toString(device.getID()));
-                params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
-                params.put(DeviceFilter.TYPE, device.getType());
-                params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
-                params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
                 params.put("image", encodedImage);//TODO die Identifier anders organisieren
 
                 return params;
