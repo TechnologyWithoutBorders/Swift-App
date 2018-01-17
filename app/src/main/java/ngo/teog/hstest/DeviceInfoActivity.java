@@ -52,7 +52,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView serialNumberView = findViewById(R.id.serialNumberView);
         serialNumberView.setText(device.getSerialNumber());
 
-        new DownloadImageTask(imageView, progressBar).execute("https://teog.virlep.de/graphics/" + device.getID() + ".jpg", null);
+        new DownloadImageTask(imageView, progressBar).execute("https://teog.virlep.de/device_graphics/" + device.getID() + ".jpg", null);
     }
 
     public void startReportActivity(View view) {

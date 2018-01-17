@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -43,24 +44,28 @@ public class RequestFactory {
 
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        url = appendGETParameter(url, UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        url = appendGETParameter(url, UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "fetch");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
 
         if(filters != null) {
             for (DeviceFilter filter : filters) {
-                url = appendGETParameter(url, filter.getType(), filter.getValue());
+                params.put(filter.getType(), filter.getValue());
             }
         }
 
-        return new DeviceOpenRequest(context, disable, enable, url);
+        JSONObject request = new JSONObject(params);
+
+        return new DeviceOpenRequest(context, disable, enable, url, request);
     }
 
     public class DeviceOpenRequest extends JsonObjectRequest {
 
-        public static final String BASE_URL = "https://teog.virlep.de/devices.php?action=fetch";
+        public static final String BASE_URL = "https://teog.virlep.de/devices.php";
 
-        public DeviceOpenRequest(final Context context, final View disable, final View enable, final String url) {
-            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        public DeviceOpenRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
@@ -98,24 +103,28 @@ public class RequestFactory {
 
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        url = appendGETParameter(url, UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        url = appendGETParameter(url, UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "fetch");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
 
         if(filters != null) {
             for (DeviceFilter filter : filters) {
-                url = appendGETParameter(url, filter.getType(), filter.getValue());
+                params.put(filter.getType(), filter.getValue());
             }
         }
 
-        return new DeviceListRequest(context, disable, enable, url, adapter);
+        JSONObject request = new JSONObject(params);
+
+        return new DeviceListRequest(context, disable, enable, url, request, adapter);
     }
 
     public class DeviceListRequest extends JsonObjectRequest {
 
-        public static final String BASE_URL = "https://teog.virlep.de/devices.php?action=fetch";
+        public static final String BASE_URL = "https://teog.virlep.de/devices.php";
 
-        public DeviceListRequest(final Context context, final View disable, final View enable, final String url, final ArrayAdapter<HospitalDevice> adapter) {
-            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     if(adapter != null) {
@@ -151,19 +160,23 @@ public class RequestFactory {
 
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        url = appendGETParameter(url, UserFilter.MAIL, mail);
-        url = appendGETParameter(url, UserFilter.PASSWORD, password);
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "login");
+        params.put(UserFilter.MAIL, mail);
+        params.put(UserFilter.PASSWORD, password);
 
-        return new LoginRequest(context, disable, enable, url, preferences, password);
+        JSONObject request = new JSONObject(params);
+
+        return new LoginRequest(context, disable, enable, url, request, preferences, password);
     }
 
     public class LoginRequest extends JsonObjectRequest {
 
-        public static final String BASE_URL = "https://teog.virlep.de/users.php?action=login";
+        public static final String BASE_URL = "https://teog.virlep.de/users.php";
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final View disable, final View enable, final String url, final SharedPreferences preferences, final String password) {
-            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        public LoginRequest(final Activity context, final View disable, final View enable, final String url, JSONObject request, final SharedPreferences preferences, final String password) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
@@ -205,41 +218,39 @@ public class RequestFactory {
 
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        url = appendGETParameter(url, UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        url = appendGETParameter(url, UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "create");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
 
-        url = appendGETParameter(url, DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
-        url = appendGETParameter(url, DeviceFilter.TYPE, device.getType());
-        url = appendGETParameter(url, DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
-        url = appendGETParameter(url, DeviceFilter.MANUFACTURER, device.getManufacturer());
-        url = appendGETParameter(url, DeviceFilter.MODEL, device.getModel());
-        url = appendGETParameter(url, DeviceFilter.WORKING, Boolean.toString(device.isWorking()));
-        url = appendGETParameter(url, DeviceFilter.NEXT_MAINTENANCE, MainActivity.DATE_FORMAT.format(device.getNextMaintenance()));
-        url = appendGETParameter(url, "ward", ward);
+        params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
+        params.put(DeviceFilter.TYPE, device.getType());
+        params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
+        params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
+        params.put(DeviceFilter.MODEL, device.getModel());
+        params.put(DeviceFilter.WORKING, Boolean.toString(device.isWorking()));
+        params.put(DeviceFilter.NEXT_MAINTENANCE, MainActivity.DATE_FORMAT.format(device.getNextMaintenance()));
+        params.put("ward", ward);
 
-        return new DeviceCreationRequest(context, url, disable, enable) {
-            @Override
-            protected Map<String, String> getParams() {
+        if(bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] imageBytes = stream.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            params.put("image", encodedImage);//TODO die Identifier anders organisieren
+        }
 
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] imageBytes = stream.toByteArray();
-                String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        JSONObject request = new JSONObject(params);
 
-                Map<String, String> params = new HashMap<>();
-                params.put("image", encodedImage);//TODO die Identifier anders organisieren
-
-                return params;
-            }
-        };
+        return new DeviceCreationRequest(context, url, request, disable, enable);
     }
 
     public class DeviceCreationRequest extends JsonObjectRequest {
 
-        private static final String BASE_URL = "https://teog.virlep.de/devices.php?action=create";
+        private static final String BASE_URL = "https://teog.virlep.de/devices.php";
 
-        public DeviceCreationRequest(final Context context, final String url, final View disable, final View enable) {
-            super(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        public DeviceCreationRequest(final Context context, final String url, JSONObject request, final View disable, final View enable) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
@@ -266,9 +277,5 @@ public class RequestFactory {
                 }
             });
         }
-    }
-
-    private String appendGETParameter(String url, String parameter, String value) {
-        return url + "&" + parameter + "=" + value;
     }
 }
