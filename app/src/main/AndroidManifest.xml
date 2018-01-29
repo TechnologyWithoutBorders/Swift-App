@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ngo.teog.hstest">
+    package="ngo.teog.swift">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,12 +24,14 @@
             android:name=".QRActivity"
             android:label="Scan Barcode"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SearchActivity"
+        <activity
+            android:name=".SearchActivity"
             android:label="Search"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".TodoActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".TodoActivity"
             android:label="TODO"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".NewDeviceActivity"
             android:label="Create Device"
@@ -44,22 +46,22 @@
             android:label="About Swift"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".LoginActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ReportInfoActivity"></activity>
+        <activity android:name=".ReportInfoActivity" />
 
-        <receiver
-            android:name=".helpers.BootReceiver">
+        <receiver android:name=".helpers.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".helpers.AlarmReceiver" />
 
-        <receiver android:name=".helpers.AlarmReceiver"></receiver>
+        <activity android:name=".StatisticsActivity"></activity>
     </application>
 
 </manifest>

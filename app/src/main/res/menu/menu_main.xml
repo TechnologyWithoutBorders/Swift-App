@@ -6,6 +6,9 @@
         android:title="log out"
         android:enabled="false">
     </item>
+    <item android:id="@+id/statsItem"
+        android:title="statistics">
+    </item>
     <item android:id="@+id/aboutItem"
         android:title="about">
     </item>
