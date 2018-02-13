@@ -5,6 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,58 +37,64 @@ import ngo.teog.swift.helpers.HospitalDevice;
 
 public class MainActivity extends BaseActivity {
 
-    private MySimpleArrayAdapter adapter;
     private ListView listView;
     private ProgressBar progressBar;
-
-    //TODO Die Konstante muss natürlich hier weg
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+
+        DemoCollectionPagerAdapter mDemoCollectionPagerAdapter =
+                new DemoCollectionPagerAdapter(
+                        getSupportFragmentManager());
+        final ViewPager mViewPager = findViewById(R.id.pager);
+        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        mViewPager.setCurrentItem(1);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
-        listView = (ListView)findViewById(R.id.maintenanceList);
-        ArrayList<HospitalDevice> values = new ArrayList<HospitalDevice>();
-
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
-
-        adapter = new MySimpleArrayAdapter(this, values);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), DeviceInfoActivity.class);
-                intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
-                startActivity(intent);
-            }
-        });
-
-        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, listView, null, adapter);
-
-        listView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-        queue.add(request);
+        for (int i = 0; i < 3; i++) {
+            tabLayout.addTab(
+                    tabLayout.newTab()
+                            .setText("Tab " + (i + 1)));
+        }
     }
 
-    @Override
-    public void onInternetStatusChanged() {
-        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+    public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
+        public DemoCollectionPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(this, progressBar, listView, null, adapter);
+        @Override
+        public Fragment getItem(int i) {
+            switch(i) {
+                case 0:
+                    return new QRActivity();
+                case 1:
+                    return new TodoActivity();
+                case 2:
+                    return new SearchActivity();
+                default:
+                    return null;
+            }
+        }
 
-        listView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-        queue.add(request);
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            String[] names = {"Scanner", "Todo", "Search"};
+
+            return names[position];
+        }
     }
 
     @Override
@@ -113,18 +128,8 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void startQRActivity(View view) {
-        Intent intent = new Intent(MainActivity.this, QRActivity.class);
-        startActivity(intent);
-    }
-
     public void startUserProfileActivity(View view) {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-        startActivity(intent);
-    }
-
-    public void startTodoActivity(View view) {
-        Intent intent = new Intent(MainActivity.this, TodoActivity.class);
         startActivity(intent);
     }
 
@@ -136,39 +141,5 @@ public class MainActivity extends BaseActivity {
     public void startNewDeviceActivity(View view) {
         Intent intent = new Intent(MainActivity.this, NewDeviceActivity.class);
         startActivity(intent);
-    }
-
-    private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
-        private final Context context;
-
-        public MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
-            super(context, -1, values);
-            this.context = context;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.row_maintenance, parent, false);
-
-            TextView nameView = rowView.findViewById(R.id.nameView);
-            TextView dateView = rowView.findViewById(R.id.dateView);
-
-            HospitalDevice device = this.getItem(position);
-
-            if(device != null) {
-                nameView.setText(device.getType());
-
-                String dateString = DATE_FORMAT.format(device.getNextMaintenance());
-                dateView.setText(dateString);
-            } else {
-                nameView.setText("no internet connection");
-                nameView.setTextColor(Color.RED);
-                dateView.setText(null);
-            }
-
-            return rowView;
-        }
     }
 }
