@@ -1,44 +1,33 @@
 package ngo.teog.swift;
 
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.android.volley.RequestQueue;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
-import ngo.teog.swift.comm.RequestFactory;
-import ngo.teog.swift.comm.VolleyManager;
-import ngo.teog.swift.helpers.HospitalDevice;
 
 public class MainActivity extends BaseActivity {
 
     private ListView listView;
     private ProgressBar progressBar;
+
+    private ViewPager mViewPager;
+    private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
+
+    private BarcodeFragment codeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +36,10 @@ public class MainActivity extends BaseActivity {
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
 
-        DemoCollectionPagerAdapter mDemoCollectionPagerAdapter =
+        mDemoCollectionPagerAdapter =
                 new DemoCollectionPagerAdapter(
                         getSupportFragmentManager());
-        final ViewPager mViewPager = findViewById(R.id.pager);
+        mViewPager = findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setCurrentItem(1);
 
@@ -63,6 +52,10 @@ public class MainActivity extends BaseActivity {
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
         }
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
+        }
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
@@ -74,9 +67,13 @@ public class MainActivity extends BaseActivity {
         public Fragment getItem(int i) {
             switch(i) {
                 case 0:
-                    return new QRActivity();
+                    if(codeFragment == null) {
+                        codeFragment = new BarcodeFragment();
+                    }
+
+                    return codeFragment;
                 case 1:
-                    return new TodoActivity();
+                    return new TodoFragment();
                 case 2:
                     return new SearchActivity();
                 default:
@@ -105,6 +102,15 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(mViewPager.getCurrentItem() == 0) {
+            return ((BarcodeFragment)mDemoCollectionPagerAdapter.getItem(0)).onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.statsItem:
@@ -130,11 +136,6 @@ public class MainActivity extends BaseActivity {
 
     public void startUserProfileActivity(View view) {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-        startActivity(intent);
-    }
-
-    public void startSearchActivity(View view) {
-        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 

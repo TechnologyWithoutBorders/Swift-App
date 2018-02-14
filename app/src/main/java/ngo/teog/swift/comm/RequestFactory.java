@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -26,7 +25,7 @@ import java.util.Map;
 import ngo.teog.swift.DeviceInfoActivity;
 import ngo.teog.swift.MainActivity;
 import ngo.teog.swift.R;
-import ngo.teog.swift.TodoActivity;
+import ngo.teog.swift.TodoFragment;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
 import ngo.teog.swift.helpers.ResponseParser;
@@ -230,7 +229,7 @@ public class RequestFactory {
         params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
         params.put(DeviceFilter.MODEL, device.getModel());
         params.put(DeviceFilter.WORKING, Boolean.toString(device.isWorking()));
-        params.put(DeviceFilter.NEXT_MAINTENANCE, TodoActivity.DATE_FORMAT.format(device.getNextMaintenance()));
+        params.put(DeviceFilter.NEXT_MAINTENANCE, TodoFragment.DATE_FORMAT.format(device.getNextMaintenance()));
         params.put("ward", ward);
 
         if(bitmap != null) {

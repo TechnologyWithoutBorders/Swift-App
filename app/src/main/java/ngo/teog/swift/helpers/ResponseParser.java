@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ngo.teog.swift.TodoFragment;
+
 /**
  * Hilfsklasse, die JSON-Responses aus der HTPPS-Schnittstelle
  * parsen kann. Könnte man zum Singleton ausbauen.
@@ -52,7 +54,7 @@ public class ResponseParser {
                     }
                     String dateString = deviceObject.getString(DeviceFilter.NEXT_MAINTENANCE);
 
-                    Date nextMaintenance = new Date();//TODO
+                    Date nextMaintenance = TodoFragment.DATE_FORMAT.parse(dateString);
 
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, imagePath, isWorking, nextMaintenance);
                     result.add(device);

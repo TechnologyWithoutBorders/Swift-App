@@ -23,7 +23,7 @@ import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class TodoActivity extends Fragment {
+public class TodoFragment extends Fragment {
 
     private MySimpleArrayAdapter adapter;
     private ListView listView;
@@ -34,13 +34,12 @@ public class TodoActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_todo, container, false);
+        View view = inflater.inflate(R.layout.activity_todo, container, false);
 
-        listView = rootView.findViewById(R.id.maintenanceList);
+        listView = view.findViewById(R.id.maintenanceList);
         ArrayList<HospitalDevice> values = new ArrayList<HospitalDevice>();
 
-        progressBar = rootView.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar = view.findViewById(R.id.progressBar);
 
         adapter = new MySimpleArrayAdapter(getContext(), values);
         listView.setAdapter(adapter);
@@ -71,7 +70,7 @@ public class TodoActivity extends Fragment {
             }
         });
 
-        return rootView;
+        return view;
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {

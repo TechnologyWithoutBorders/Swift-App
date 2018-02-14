@@ -10,8 +10,6 @@
     <string name="title_activity_login">Sign in</string>
 
     <string-array name="search_options">
-        <item>Hospital</item>
-        <item>Status</item>
-        <item>Type</item>
+        <item>Device</item>
     </string-array>
 </resources>

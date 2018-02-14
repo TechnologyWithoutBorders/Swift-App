@@ -1,12 +1,6 @@
 package ngo.teog.swift;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,7 +23,7 @@ import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.DeviceFilter;
 
-public class QRActivity extends Fragment {
+public class BarcodeFragment extends Fragment {
 
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
@@ -51,7 +45,7 @@ public class QRActivity extends Fragment {
             try {
                 int deviceNumber = Integer.parseInt(result.getText());
 
-                QRActivity.this.invokeFetchRequest(deviceNumber);
+                BarcodeFragment.this.invokeFetchRequest(deviceNumber);
             } catch(NumberFormatException e) {
                 //ignore
             }
@@ -65,21 +59,23 @@ public class QRActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_qr, container, false);
+        View view = inflater.inflate(R.layout.activity_qr, container, false);
 
-        barcodeScannerView = rootView.findViewById(R.id.barcodeScannerView);
+        barcodeScannerView = view.findViewById(R.id.barcodeScannerView);
         barcodeScannerView.decodeContinuous(callback);
 
-        searchButton = rootView.findViewById(R.id.search_button);
-        searchField = rootView.findViewById(R.id.search_field);
+        searchButton = view.findViewById(R.id.search_button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search();
+            }
+        });
+        searchField = view.findViewById(R.id.code_search_text);
 
-        progressBar = rootView.findViewById(R.id.progressBar);
+        progressBar = view.findViewById(R.id.progressBar);
 
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
-        }
-
-        return rootView;
+        return view;
     }
 
     @Override
@@ -95,24 +91,7 @@ public class QRActivity extends Fragment {
         barcodeScannerView.pause();
     }
 
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return barcodeScannerView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
-    }*/
-
-    public void search(View view) {
-        String searchString = searchField.getText().toString();
-
-        try {
-            int deviceNumber = Integer.parseInt(searchString);
-
-            this.invokeFetchRequest(deviceNumber);
-        } catch(NumberFormatException e) {
-            Toast.makeText(getActivity().getApplicationContext(), "invalid device number", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void invokeFetchRequest(int id) {
+    public void invokeFetchRequest(int id) {
         RequestQueue queue = VolleyManager.getInstance(getActivity()).getRequestQueue();
         DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.ID, Integer.toString(id))};
 
@@ -121,5 +100,21 @@ public class QRActivity extends Fragment {
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         queue.add(request);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return barcodeScannerView.onKeyDown(keyCode, event);
+    }
+
+    public void search() {
+        String searchString = searchField.getText().toString();
+
+        try {
+            int deviceNumber = Integer.parseInt(searchString);
+
+            this.invokeFetchRequest(deviceNumber);
+        } catch(NumberFormatException e) {
+            Toast.makeText(this.getContext().getApplicationContext(), "invalid device number", Toast.LENGTH_SHORT).show();
+        }
     }
 }
