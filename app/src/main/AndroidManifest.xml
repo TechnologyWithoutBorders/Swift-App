@@ -21,18 +21,6 @@
             android:label="@string/title_activity_user_profile"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".BarcodeFragment"
-            android:label="Scan Barcode"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".SearchActivity"
-            android:label="Search"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".TodoFragment"
-            android:label="TODO"
-            android:parentActivityName=".MainActivity" />
-        <activity
             android:name=".NewDeviceActivity"
             android:label="Create Device"
             android:parentActivityName=".MainActivity" />
