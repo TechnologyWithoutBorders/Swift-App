@@ -97,8 +97,6 @@ public class BarcodeFragment extends Fragment {
 
         RequestFactory.DeviceOpenRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, filters);
 
-        searchButton.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
         queue.add(request);
     }
 

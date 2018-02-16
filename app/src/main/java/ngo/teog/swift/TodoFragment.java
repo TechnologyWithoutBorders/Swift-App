@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class TodoFragment extends Fragment {
+public class TodoFragment extends BaseFragment {
 
     private MySimpleArrayAdapter adapter;
     private ListView listView;
@@ -36,6 +35,11 @@ public class TodoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_todo, container, false);
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.maintenanceList);
         ArrayList<HospitalDevice> values = new ArrayList<HospitalDevice>();
 
@@ -47,30 +51,22 @@ public class TodoFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), DeviceInfoActivity.class);
-                intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
-                startActivity(intent);
-            }
-        });
-
-        RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
-
-        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(getContext(), progressBar, listView, null, adapter);
-
-        listView.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-        queue.add(request);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
                 intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
         });
 
-        return view;
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+
+            RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(getContext(), progressBar, listView, null, adapter);
+
+            progressBar.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.INVISIBLE);
+
+            queue.add(request);
+        }
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
@@ -83,12 +79,14 @@ public class TodoFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.row_maintenance, parent, false);
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+            }
 
-            TextView nameView = rowView.findViewById(R.id.nameView);
-            TextView dateView = rowView.findViewById(R.id.dateView);
+            TextView nameView = convertView.findViewById(R.id.nameView);
+            TextView dateView = convertView.findViewById(R.id.dateView);
 
             HospitalDevice device = this.getItem(position);
 
@@ -103,7 +101,7 @@ public class TodoFragment extends Fragment {
                 dateView.setText(null);
             }
 
-            return rowView;
+            return convertView;
         }
     }
 }

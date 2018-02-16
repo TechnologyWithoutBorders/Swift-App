@@ -155,6 +155,27 @@ public class RequestFactory {
         }
     }
 
+    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, DeviceFilter[] filters, ArrayAdapter<HospitalDevice> adapter) {
+        String url = DeviceListRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "search");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+
+        if(filters != null) {
+            for (DeviceFilter filter : filters) {
+                params.put(filter.getType(), filter.getValue());
+            }
+        }
+
+        JSONObject request = new JSONObject(params);
+
+        return new DeviceListRequest(context, disable, enable, url, request, adapter);
+    }
+
     public LoginRequest createLoginRequest(Activity context, View disable, View enable, String mail, String password) {
         String url = LoginRequest.BASE_URL;
 

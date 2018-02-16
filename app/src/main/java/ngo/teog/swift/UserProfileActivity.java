@@ -8,8 +8,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,24 +21,16 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.Report;
 
-public class UserProfileActivity extends BaseActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     private MySimpleArrayAdapter adapter;
 
@@ -92,13 +84,6 @@ public class UserProfileActivity extends BaseActivity {
         });
 
         imageView = findViewById(R.id.imageView);
-
-        new DownloadImageTask().execute("https://teog.virlep.de/users/0.jpg", null);
-    }
-
-    @Override
-    public void onInternetStatusChanged() {
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         new DownloadImageTask().execute("https://teog.virlep.de/users/0.jpg", null);
     }

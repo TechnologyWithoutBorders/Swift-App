@@ -20,12 +20,25 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/button22"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            android:onClick="startNewDeviceActivity"/>
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:onClick="startNewDeviceActivity"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -35,24 +48,9 @@
         android:layout_height="wrap_content"
         android:text="Sort by" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/maintenanceList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/maintenanceList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:layout_centerHorizontal="true"/>
-
-    </RelativeLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>
