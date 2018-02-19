@@ -93,9 +93,11 @@ public class BarcodeFragment extends Fragment {
 
     public void invokeFetchRequest(int id) {
         RequestQueue queue = VolleyManager.getInstance(getActivity()).getRequestQueue();
-        DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.ID, Integer.toString(id))};
 
-        RequestFactory.DeviceOpenRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, filters);
+        RequestFactory.DeviceOpenRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, id);
+
+        searchButton.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
 
         queue.add(request);
     }

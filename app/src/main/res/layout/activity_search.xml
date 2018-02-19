@@ -51,6 +51,13 @@
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/maintenanceList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_weight="1"
+        android:layout_height="0dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="Advanced Search"/>
 
 </LinearLayout>

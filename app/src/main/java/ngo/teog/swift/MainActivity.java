@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.profileItem:
+                startUserProfileActivity();
+                return true;
             case R.id.logoutItem:
                 logout();
                 return true;
@@ -147,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         this.finish();
     }
 
-    public void startUserProfileActivity(View view) {
+    public void startUserProfileActivity() {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
         startActivity(intent);
     }

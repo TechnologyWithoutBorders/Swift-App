@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,10 +27,12 @@ import ngo.teog.swift.DeviceInfoActivity;
 import ngo.teog.swift.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.TodoFragment;
+import ngo.teog.swift.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.UserFilter;
 import ngo.teog.swift.helpers.ResponseException;
 
@@ -39,7 +42,7 @@ import ngo.teog.swift.helpers.ResponseException;
 
 //TODO könnte auch ein Singleton werden
 public class RequestFactory {
-    public DeviceOpenRequest createDeviceOpenRequest(Context context, View disable, View enable, DeviceFilter[] filters) {
+    public DeviceOpenRequest createDeviceOpenRequest(Context context, View disable, View enable, int id) {
         String url = DeviceOpenRequest.BASE_URL;
 
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -48,12 +51,7 @@ public class RequestFactory {
         params.put("action", "fetch");
         params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
         params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
-
-        if(filters != null) {
-            for (DeviceFilter filter : filters) {
-                params.put(filter.getType(), filter.getValue());
-            }
-        }
+        params.put(DeviceFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
 
@@ -78,6 +76,53 @@ public class RequestFactory {
                         } else {
                             throw new ResponseException("device not found");
                         }
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public ProfileOpenRequest createProfileOpenRequest(Context context, View disable, View enable, TextView nameView) {
+        String url = ProfileOpenRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "profile");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+
+        JSONObject request = new JSONObject(params);
+
+        return new ProfileOpenRequest(context, disable, enable, nameView, url, request);
+    }
+
+    public class ProfileOpenRequest extends JsonObjectRequest {
+
+        public static final String BASE_URL = "https://teog.virlep.de/users.php";
+
+        public ProfileOpenRequest(final Context context, final View disable, final View enable, final TextView nameView, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        User user = new ResponseParser().parseProfile(response);
+
+                        nameView.setText(user.getFullName());
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {

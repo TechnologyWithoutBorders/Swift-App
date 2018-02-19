@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -19,7 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -27,12 +32,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ngo.teog.swift.comm.RequestFactory;
+import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.Report;
 
 public class UserProfileActivity extends AppCompatActivity {
-
-    private MySimpleArrayAdapter adapter;
 
     private TextView telephoneView;
     private TextView mailView;
@@ -40,12 +45,10 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView positionView;
     private TextView qualificationsView;
 
-    private ProgressBar progressBar;
-    private LinearLayout rootLayout;
+    private ProgressBar progressBar2;
+    private TableLayout tableLayout;
 
     private ImageView imageView;
-
-    private ListView reportList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,86 +66,32 @@ public class UserProfileActivity extends AppCompatActivity {
         positionView = findViewById(R.id.positionView);
         qualificationsView = findViewById(R.id.qualificationsView);
 
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar2 = findViewById(R.id.progressBar2);
 
-        rootLayout = findViewById(R.id.rootLayout);
-
-        reportList = (ListView)findViewById(R.id.reportList);
-        ArrayList<Report> values = new ArrayList<Report>();
-
-        adapter = new MySimpleArrayAdapter(this, values);
-        reportList.setAdapter(adapter);
-
-        reportList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), ReportInfoActivity.class);
-                intent.putExtra("REPORT", (Report)adapterView.getItemAtPosition(i));
-                startActivity(intent);
-            }
-        });
-
+        tableLayout = findViewById(R.id.tableLayout);
         imageView = findViewById(R.id.imageView);
 
-        new DownloadImageTask().execute("https://teog.virlep.de/users/0.jpg", null);
-    }
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-    private class MySimpleArrayAdapter extends ArrayAdapter<Report> {
-        private final Context context;
+            RequestFactory.ProfileOpenRequest request = new RequestFactory().createProfileOpenRequest(this, progressBar2, tableLayout, nameView);
 
-        public MySimpleArrayAdapter(Context context, ArrayList<Report> values) {
-            super(context, -1, values);
-            this.context = context;
-        }
+            progressBar2.setVisibility(View.VISIBLE);
+            tableLayout.setVisibility(View.INVISIBLE);
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.row_maintenance, parent, false);
-            TextView nameView = (TextView) rowView.findViewById(R.id.nameView);
-            nameView.setText(this.getItem(position).getDevice().getAssetNumber());
-
-            TextView dateView = (TextView) rowView.findViewById(R.id.dateView);
-
-            DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-
-            Date date = this.getItem(position).getDate();
-
-            dateView.setText(format.format(this.getItem(position).getDate()));
-
-            return rowView;
+            queue.add(request);
         }
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private boolean checkForInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        @Override
-        protected void onPreExecute() {
-            imageView.setVisibility(View.INVISIBLE);
-        }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if(result != null) {
-                imageView.setImageBitmap(result);
-            }
-            imageView.setVisibility(View.VISIBLE);
+        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

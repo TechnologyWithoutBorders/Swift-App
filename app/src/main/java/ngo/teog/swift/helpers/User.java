@@ -11,23 +11,17 @@ import java.util.ArrayList;
 
 public class User implements Serializable {
     private int id;
-    private String userName;
     private String phone;
     private String mail;
     private String fullName;
     private String qualifications;
 
-    public User(int id, String userName, String phone, String mail, String fullName, String qualifications) {
+    public User(int id, String phone, String mail, String fullName, String qualifications) {
         this.id = id;
-        this.userName = userName;
         this.phone = phone;
         this.mail = mail;
         this.fullName = fullName;
         this.qualifications = qualifications;
-    }
-
-    public String getUserName() {
-        return userName;
     }
 
     public String getPhone() {
