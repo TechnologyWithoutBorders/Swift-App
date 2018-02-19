@@ -121,20 +121,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.logoutItem:
                 logout();
                 return true;
-            case R.id.statsItem:
-                startStatisticsActivity();
-                return true;
             case R.id.aboutItem:
                 startAboutActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void startStatisticsActivity() {
-        Intent intent = new Intent(MainActivity.this, StatisticsActivity.class);
-        startActivity(intent);
     }
 
     public void startAboutActivity() {

@@ -48,8 +48,6 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".helpers.AlarmReceiver" />
-
-        <activity android:name=".StatisticsActivity"></activity>
     </application>
 
 </manifest>

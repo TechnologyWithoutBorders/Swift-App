@@ -5,9 +5,6 @@
     <item android:id="@+id/logoutItem"
         android:title="log out">
     </item>
-    <item android:id="@+id/statsItem"
-        android:title="statistics">
-    </item>
     <item android:id="@+id/aboutItem"
         android:title="about">
     </item>
