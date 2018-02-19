@@ -96,53 +96,6 @@ public class RequestFactory {
         }
     }
 
-    public ProfileOpenRequest createProfileOpenRequest(Context context, View disable, View enable, TextView nameView) {
-        String url = ProfileOpenRequest.BASE_URL;
-
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "profile");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
-
-        JSONObject request = new JSONObject(params);
-
-        return new ProfileOpenRequest(context, disable, enable, nameView, url, request);
-    }
-
-    public class ProfileOpenRequest extends JsonObjectRequest {
-
-        public static final String BASE_URL = "https://teog.virlep.de/users.php";
-
-        public ProfileOpenRequest(final Context context, final View disable, final View enable, final TextView nameView, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        User user = new ResponseParser().parseProfile(response);
-
-                        nameView.setText(user.getFullName());
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
     public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, DeviceFilter[] filters, ArrayAdapter<HospitalDevice> adapter) {
         String url = DeviceListRequest.BASE_URL;
 

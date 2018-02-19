@@ -23,19 +23,32 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.ResponseException;
+import ngo.teog.swift.helpers.ResponseParser;
+import ngo.teog.swift.helpers.User;
+import ngo.teog.swift.helpers.UserFilter;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -44,6 +57,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView hospitalView;
     private TextView positionView;
     private TextView qualificationsView;
+    private TextView nameView;
 
     private ProgressBar progressBar2;
     private TableLayout tableLayout;
@@ -58,7 +72,7 @@ public class UserProfileActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        TextView nameView = findViewById(R.id.nameView);
+        nameView = findViewById(R.id.nameView);
 
         telephoneView = findViewById(R.id.phoneView);
         mailView = findViewById(R.id.mailView);
@@ -74,7 +88,7 @@ public class UserProfileActivity extends AppCompatActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.ProfileOpenRequest request = new RequestFactory().createProfileOpenRequest(this, progressBar2, tableLayout, nameView);
+            ProfileOpenRequest request = createProfileOpenRequest(this, progressBar2, tableLayout);
 
             progressBar2.setVisibility(View.VISIBLE);
             tableLayout.setVisibility(View.INVISIBLE);
@@ -92,6 +106,56 @@ public class UserProfileActivity extends AppCompatActivity {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public ProfileOpenRequest createProfileOpenRequest(Context context, View disable, View enable) {
+        String url = ProfileOpenRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "profile");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+
+        JSONObject request = new JSONObject(params);
+
+        return new ProfileOpenRequest(context, disable, enable, url, request);
+    }
+
+    public class ProfileOpenRequest extends JsonObjectRequest {
+
+        public static final String BASE_URL = "https://teog.virlep.de/users.php";
+
+        public ProfileOpenRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        User user = new ResponseParser().parseProfile(response);
+
+                        nameView.setText(user.getFullName());
+                        telephoneView.setText(user.getPhone());
+                        mailView.setText(user.getMail());
+                        qualificationsView.setText(user.getQualifications());
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

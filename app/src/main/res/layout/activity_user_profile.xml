@@ -90,7 +90,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="E-Mail" />
+                    android:text="Hospital" />
 
                 <TextView
                     android:id="@+id/locationView"
