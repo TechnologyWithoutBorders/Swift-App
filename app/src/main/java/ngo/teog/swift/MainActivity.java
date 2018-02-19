@@ -1,7 +1,9 @@
 package ngo.teog.swift;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import ngo.teog.swift.helpers.Defaults;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -114,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.logoutItem:
+                logout();
+                return true;
             case R.id.statsItem:
                 startStatisticsActivity();
                 return true;
@@ -133,6 +140,19 @@ public class MainActivity extends AppCompatActivity {
     public void startAboutActivity() {
         Intent intent = new Intent(MainActivity.this, AboutActivity.class);
         startActivity(intent);
+    }
+
+    public void logout() {
+        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(getString(R.string.id_pref));
+        editor.remove(getString(R.string.pw_pref));
+        editor.commit();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+        this.finish();
     }
 
     public void startUserProfileActivity(View view) {
