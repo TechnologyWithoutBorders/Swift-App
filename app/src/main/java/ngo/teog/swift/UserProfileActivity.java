@@ -147,16 +147,20 @@ public class UserProfileActivity extends AppCompatActivity {
                                 String mail = userObject.getString(UserFilter.MAIL);
                                 String fullName = userObject.getString(UserFilter.FULL_NAME);
                                 String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
-                                String imageData = userObject.getString("picture");
-
-                                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                                 nameView.setText(fullName);
                                 telephoneView.setText(phone);
                                 mailView.setText(mail);
                                 qualificationsView.setText(qualifications);
-                                imageView.setImageBitmap(bitmap);
+
+                                if(userObject.has("picture")) {
+                                    String imageData = userObject.getString("picture");
+
+                                    byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                    imageView.setImageBitmap(bitmap);
+                                }
 
                                 break;
                             case ResponseCode.FAILED_VISIBLE:
