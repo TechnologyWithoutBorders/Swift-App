@@ -1,5 +1,6 @@
 package ngo.teog.swift;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,9 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -20,6 +23,7 @@ import ngo.teog.swift.helpers.HospitalDevice;
 public class DeviceInfoActivity extends AppCompatActivity {
 
     private HospitalDevice device;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,18 @@ public class DeviceInfoActivity extends AppCompatActivity {
         device = (HospitalDevice)intent.getSerializableExtra("device");
 
         ImageView imageView = findViewById(R.id.imageView);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog settingsDialog = new Dialog(DeviceInfoActivity.this);
+                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                View dialogView = getLayoutInflater().inflate(R.layout.image_dialog, null);
+                ImageView imageView = dialogView.findViewById(R.id.imageView);
+                imageView.setImageBitmap(bitmap);
+                settingsDialog.setContentView(dialogView);
+                settingsDialog.show();
+            }
+        });
 
         TextView statusView = findViewById(R.id.statusView);
         if(device.isWorking()) {
@@ -94,6 +110,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap result) {
             if(result != null) {
+                bitmap = result;
                 imageView.setImageBitmap(result);
             }
             progressBar.setVisibility(View.INVISIBLE);

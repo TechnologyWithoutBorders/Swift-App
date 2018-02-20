@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Swift</string>
 
-    <string name="title_activity_user_profile">User Profile</string>
+    <string name="title_activity_user_profile">My Profile</string>
 
     <!-- Preferences Keys -->
     <string name="id_pref">ID_PREFERENCE</string>

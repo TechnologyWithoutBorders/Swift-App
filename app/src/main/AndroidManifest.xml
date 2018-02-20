@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -48,6 +49,17 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".helpers.AlarmReceiver" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="ngo.teog.swift.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
     </application>
 
 </manifest>

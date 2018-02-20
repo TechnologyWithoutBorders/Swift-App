@@ -1,5 +1,6 @@
 package ngo.teog.swift;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,10 +12,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -33,6 +36,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,6 +49,7 @@ import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.ResponseCode;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.User;
@@ -133,12 +138,33 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        User user = new ResponseParser().parseProfile(response);
+                        int responseCode = response.getInt("response_code");
+                        switch(responseCode) {
+                            case ResponseCode.OK:
+                                JSONObject userObject = response.getJSONObject("data");
 
-                        nameView.setText(user.getFullName());
-                        telephoneView.setText(user.getPhone());
-                        mailView.setText(user.getMail());
-                        qualificationsView.setText(user.getQualifications());
+                                String phone = userObject.getString(UserFilter.PHONE);
+                                String mail = userObject.getString(UserFilter.MAIL);
+                                String fullName = userObject.getString(UserFilter.FULL_NAME);
+                                String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
+                                String imageData = userObject.getString("picture");
+
+                                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                nameView.setText(fullName);
+                                telephoneView.setText(phone);
+                                mailView.setText(mail);
+                                qualificationsView.setText(qualifications);
+                                imageView.setImageBitmap(bitmap);
+
+                                break;
+                            case ResponseCode.FAILED_VISIBLE:
+                                throw new ResponseException(response.getString("data"));
+                            case ResponseCode.FAILED_HIDDEN:
+                            default:
+                                throw new Exception(response.getString("data"));
+                        }
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {
@@ -147,6 +173,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
                 }
             }, new Response.ErrorListener() {
                 @Override

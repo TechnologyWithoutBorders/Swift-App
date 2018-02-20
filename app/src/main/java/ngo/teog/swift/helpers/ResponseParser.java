@@ -68,27 +68,4 @@ public class ResponseParser {
                 throw new Exception(raw.getString("data"));
         }
     }
-
-    public User parseProfile(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt("response_code");
-        switch(responseCode) {
-            case ResponseCode.OK:
-                JSONObject userObject = raw.getJSONObject("data");
-
-                int id = userObject.getInt(UserFilter.ID);
-                String phone = userObject.getString(UserFilter.PHONE);
-                String mail = userObject.getString(UserFilter.MAIL);
-                String fullName = userObject.getString(UserFilter.FULL_NAME);
-                String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
-
-                User user = new User(id, phone, mail, fullName, qualifications);
-
-                return user;
-            case ResponseCode.FAILED_VISIBLE:
-                throw new ResponseException(raw.getString("data"));
-            case ResponseCode.FAILED_HIDDEN:
-            default:
-                throw new Exception(raw.getString("data"));
-        }
-    }
 }
