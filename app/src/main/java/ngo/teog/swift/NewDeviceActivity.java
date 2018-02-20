@@ -66,8 +66,8 @@ public class NewDeviceActivity extends AppCompatActivity {
 
         if(savedInstanceState != null) {
             if(savedInstanceState.containsKey("IMAGE")) {
-                bitmap = savedInstanceState.getParcelable("IMAGE");
-                imageView.setImageBitmap(bitmap);
+                String path = savedInstanceState.getString("IMAGE");
+                imageView.setImageBitmap(decode(path, imageView.getHeight(), imageView.getWidth()));
             }
         }
 
@@ -83,10 +83,8 @@ public class NewDeviceActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
-        if(drawable != null) {
-            Bitmap bitmap = drawable.getBitmap();
-            outState.putParcelable("IMAGE", bitmap);
+        if(mCurrentPhotoPath != null) {
+            outState.putString("IMAGE", mCurrentPhotoPath);
         }
         super.onSaveInstanceState(outState);
     }
