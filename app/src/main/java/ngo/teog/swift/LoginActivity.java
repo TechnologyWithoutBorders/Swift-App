@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -46,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
             //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
             LoginActivity.this.finish();
         } else {
-
+            //TODO
         }
     }
 
@@ -65,22 +64,21 @@ public class LoginActivity extends AppCompatActivity {
      * @return Hash
      */
     private String getHash(String password) {
-        MessageDigest digest = null;
         try {
-            digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            digest.reset();
+
+            byte[] result = digest.digest(password.getBytes());
+
+            StringBuilder sb = new StringBuilder();
+            for(byte b :  result) {
+                sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
         } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            return null;
         }
-        digest.reset();
-
-        byte[] result = digest.digest(password.getBytes());
-
-        StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < result.length; i++) {
-            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
-        }
-
-        return sb.toString();
     }
 }

@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 
@@ -49,10 +48,10 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
         TextView statusView = findViewById(R.id.statusView);
         if(device.isWorking()) {
-            statusView.setText("working");
+            statusView.setText(R.string.device_status_working);
             statusView.setBackgroundColor(Color.GREEN);
         } else {
-            statusView.setText("not working");
+            statusView.setText(R.string.device_status_broken);
             statusView.setBackgroundColor(Color.RED);
         }
 

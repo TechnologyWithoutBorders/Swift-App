@@ -1,13 +1,25 @@
 <resources>
+    <!-- General information -->
     <string name="app_name">Swift</string>
+    <string name="about_text">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
 
+    <!-- Activity names -->
     <string name="title_activity_user_profile">My Profile</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_create_device">Create device</string>
+    <string name="title_activity_device_info">Device info</string>
+    <string name="title_activity_about">About Swift</string>
+
+    <!-- Device states -->
+    <string name="device_status_working">working</string>
+    <string name="device_status_broken">broken</string>
+
+    <!-- Error messages -->
+    <string name="error_no_internet_connection">no internet connection</string>
 
     <!-- Preferences Keys -->
     <string name="id_pref">ID_PREFERENCE</string>
     <string name="pw_pref">PW_PREFERENCE</string>
-
-    <string name="title_activity_login">Sign in</string>
 
     <string-array name="search_options">
         <item>Device</item>

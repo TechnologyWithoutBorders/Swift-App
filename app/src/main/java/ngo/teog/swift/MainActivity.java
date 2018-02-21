@@ -1,33 +1,25 @@
 package ngo.teog.swift;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import ngo.teog.swift.helpers.Defaults;
 
 public class MainActivity extends AppCompatActivity {
-
-    private ListView listView;
-    private ProgressBar progressBar;
 
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
@@ -48,18 +40,20 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setCurrentItem(1);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher_round);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        try {
+            ActionBar actionBar = getSupportActionBar();
 
-        for (int i = 0; i < 3; i++) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setLogo(R.mipmap.ic_launcher_round);
+            actionBar.setDisplayUseLogoEnabled(true);
+        } catch(NullPointerException e) {
+            //ignore
+        }
+
+        for(int i = 0; i < 3; i++) {
             tabLayout.addTab(
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
-        }
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
         }
     }
 
@@ -80,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return new TodoFragment();
                 case 2:
-                    return new SearchActivity();
+                    return new SearchFragment();
                 default:
                     return null;
             }
