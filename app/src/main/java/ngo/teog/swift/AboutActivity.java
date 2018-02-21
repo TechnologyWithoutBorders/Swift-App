@@ -11,9 +11,7 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        TextView aboutText = (TextView)findViewById(R.id.aboutText);
-        aboutText.setText("Was hier her soll:\n" +
-                "- Infos zu den AGB, zum Datenschutz usw.\n" +
-                "außerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)");
+        TextView aboutText = findViewById(R.id.aboutText);
+        aboutText.setText(R.string.about_text);
     }
 }

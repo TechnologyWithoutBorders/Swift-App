@@ -34,15 +34,13 @@ public class TodoFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_todo, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.activity_todo, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.maintenanceList);
-        ArrayList<HospitalDevice> values = new ArrayList<HospitalDevice>();
+        ArrayList<HospitalDevice> values = new ArrayList<>();
 
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -89,7 +87,7 @@ public class TodoFragment extends BaseFragment {
     private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
         private final Context context;
 
-        public MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
+        private MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -113,7 +111,7 @@ public class TodoFragment extends BaseFragment {
                 String dateString = DATE_FORMAT.format(device.getNextMaintenance());
                 dateView.setText(dateString);
             } else {
-                nameView.setText("no internet connection");
+                nameView.setText(R.string.error_no_internet_connection);
                 nameView.setTextColor(Color.RED);
                 dateView.setText(null);
             }

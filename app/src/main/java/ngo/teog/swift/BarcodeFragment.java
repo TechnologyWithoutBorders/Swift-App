@@ -1,7 +1,11 @@
 package ngo.teog.swift;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +25,6 @@ import java.util.List;
 
 import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
-import ngo.teog.swift.helpers.DeviceFilter;
 
 public class BarcodeFragment extends Fragment {
 
@@ -59,8 +62,11 @@ public class BarcodeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_qr, container, false);
+        return inflater.inflate(R.layout.activity_qr, container, false);
+    }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         barcodeScannerView = view.findViewById(R.id.barcodeScannerView);
         barcodeScannerView.decodeContinuous(callback);
 
@@ -75,7 +81,9 @@ public class BarcodeFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        return view;
+        if(ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
+        }
     }
 
     @Override

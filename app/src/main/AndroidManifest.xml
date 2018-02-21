@@ -14,8 +14,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            android:label="Swift App"
+        <activity android:name=".MainActivity"
+            android:label="@string/app_name">
         </activity>
         <activity
             android:name=".UserProfileActivity"
@@ -23,16 +23,16 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".NewDeviceActivity"
-            android:label="Create Device"
+            android:label="@string/title_activity_create_device"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".DeviceInfoActivity"
-            android:label="Device Info"
+            android:label="@string/title_activity_device_info"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".NewReportActivity" />
         <activity
             android:name=".AboutActivity"
-            android:label="About Swift"
+            android:label="@string/title_activity_about"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -57,7 +57,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths"/>
         </provider>
 
     </application>

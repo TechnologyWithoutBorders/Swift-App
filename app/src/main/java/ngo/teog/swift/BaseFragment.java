@@ -1,16 +1,9 @@
 package ngo.teog.swift;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-
-import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 
 /**
  * Überklasse für alle Activities. Hier können Funktionen implementiert werden,
@@ -24,10 +17,10 @@ public class BaseFragment extends Fragment {
     protected boolean checkForInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager)this.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if(cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            return true;
+            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
         } else {
             return false;
         }

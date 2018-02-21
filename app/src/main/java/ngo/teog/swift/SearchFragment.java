@@ -3,10 +3,7 @@ package ngo.teog.swift;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,27 +15,24 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class SearchActivity extends BaseFragment {
+public class SearchFragment extends BaseFragment {
 
     private MySimpleArrayAdapter adapter;
     private ProgressBar progressBar;
-    private ListView listView;
     private EditText searchField;
     private Button searchButton;
-
-    //TODO Die Konstante muss natürlich hier weg
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,8 +48,8 @@ public class SearchActivity extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        listView = view.findViewById(R.id.maintenanceList);
-        ArrayList<HospitalDevice> values = new ArrayList<HospitalDevice>();
+        ListView listView = view.findViewById(R.id.maintenanceList);
+        ArrayList<HospitalDevice> values = new ArrayList<>();
 
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -83,18 +77,23 @@ public class SearchActivity extends BaseFragment {
     }
 
     private void search() {
-        String searchString = searchField.getText().toString();
-        DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.TYPE, searchString)};
+        if(searchField.getText().length() > 0) {
+            String searchString = searchField.getText().toString();
 
-        if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+            DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.TYPE, searchString)};
 
-            RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, filters, adapter);
+            if(this.checkForInternetConnection()) {
+                RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            progressBar.setVisibility(View.VISIBLE);
-            searchButton.setVisibility(View.INVISIBLE);
+                RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, filters, adapter);
 
-            queue.add(request);
+                progressBar.setVisibility(View.VISIBLE);
+                searchButton.setVisibility(View.INVISIBLE);
+
+                queue.add(request);
+            }
+        } else {
+            Toast.makeText(this.getContext().getApplicationContext(), "invalid search value", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -122,7 +121,7 @@ public class SearchActivity extends BaseFragment {
             if(device != null) {
                 nameView.setText(device.getType());
 
-                String dateString = DATE_FORMAT.format(device.getNextMaintenance());
+                String dateString = Defaults.DATE_FORMAT.format(device.getNextMaintenance());
                 dateView.setText(dateString);
             } else {
                 nameView.setText("no internet connection");
