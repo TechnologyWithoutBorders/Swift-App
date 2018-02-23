@@ -68,4 +68,31 @@ public class ResponseParser {
                 throw new Exception(raw.getString("data"));
         }
     }
+
+    public ArrayList<NewsItem> parseNewsList(JSONObject raw) throws Exception {
+        int responseCode = raw.getInt("response_code");
+        switch(responseCode) {
+            case ResponseCode.OK:
+                JSONArray newsList = raw.getJSONArray("data");
+
+                ArrayList<NewsItem> result = new ArrayList<>();
+
+                for(int i = 0; i < newsList.length(); i++) {
+                    JSONObject newsObject = newsList.getJSONObject(i);
+
+                    int id = newsObject.getInt("n_ID");
+                    Date date = Defaults.DATE_FORMAT.parse(newsObject.getString("n_date"));
+                    String value = newsObject.getString("n_value");
+
+                    result.add(new NewsItem(id, date, value));
+                }
+
+                return result;
+            case ResponseCode.FAILED_VISIBLE:
+                throw new ResponseException(raw.getString("data"));
+            case ResponseCode.FAILED_HIDDEN:
+            default:
+                throw new Exception(raw.getString("data"));
+        }
+    }
 }

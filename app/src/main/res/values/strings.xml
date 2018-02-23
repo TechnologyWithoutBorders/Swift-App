@@ -1,7 +1,17 @@
 <resources>
     <!-- General information -->
     <string name="app_name">Swift</string>
-    <string name="about_text">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
+    <string name="about_text_old">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
+    <string name="about_text">Technology without Borders\n
+        WG Hospital Support\n\n
+        Contact:\n
+        swift-app@teog.de\n\n
+        Overall Coordination:\n
+        Andreas Vierling\n\n
+        Lead Development:\n
+        Julian Deyerler\n\n
+        Hopefully many more to come... :-)
+    </string>
 
     <!-- Activity names -->
     <string name="title_activity_user_profile">My Profile</string>

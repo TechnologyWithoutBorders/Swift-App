@@ -1,11 +1,16 @@
 package ngo.teog.swift.comm;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -30,6 +35,7 @@ import ngo.teog.swift.TodoFragment;
 import ngo.teog.swift.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
+import ngo.teog.swift.helpers.NewsItem;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.User;
@@ -91,6 +97,73 @@ public class RequestFactory {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public NewsListRequest createNewsRequest(Context context) {
+        String url = NewsListRequest.BASE_URL;
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("action", "fetch");
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+
+        JSONObject request = new JSONObject(params);
+
+        return new NewsListRequest(context, url, request);
+    }
+
+    public class NewsListRequest extends JsonObjectRequest {
+
+        public static final String BASE_URL = "https://teog.virlep.de/info.php";
+
+        public NewsListRequest(final Context context, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
+
+                        if(newsList.size() > 0) {
+                            //Test Benachrichtigung
+                            int mNotificationId = newsList.get(newsList.size()-1).getID();
+
+                            String news = "";
+
+                            for(NewsItem item : newsList) {
+                                news += Defaults.DATE_FORMAT.format(item.getDate()) + "\n" + item.getValue() + "\n\n";
+                            }
+
+                            String CHANNEL_ID = "news_channel";
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                                    .setSmallIcon(R.drawable.ic_stat_name)
+                                    .setContentTitle("News")
+                                    .setContentText("News");
+                            Intent resultIntent = new Intent(context, MainActivity.class);
+                            resultIntent.putExtra("NEWS", news);
+
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                            stackBuilder.addParentStack(MainActivity.class);
+                            stackBuilder.addNextIntent(resultIntent);
+                            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                            mBuilder.setContentIntent(resultPendingIntent);
+                            NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                            mNotificationManager.notify(mNotificationId, mBuilder.build());
+                        }
+                    } catch(Exception e) {
+                        Log.e("ERROR", "", e);
+                    }
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("ERROR", error.toString());
                 }
             });
         }
@@ -204,6 +277,7 @@ public class RequestFactory {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt(context.getString(R.string.id_pref), id);
                         editor.putString(context.getString(R.string.pw_pref), password);
+                        editor.putInt("LAST_NEWS_ID", -1);
                         editor.commit();
 
                         Intent intent = new Intent(context, MainActivity.class);

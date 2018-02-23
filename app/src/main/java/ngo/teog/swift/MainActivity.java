@@ -1,8 +1,12 @@
 package ngo.teog.swift;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,7 +14,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +62,20 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.addTab(
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
+        }
+
+        Intent intent = this.getIntent();
+        if(intent.hasExtra("NEWS")) {
+            String news = intent.getStringExtra("NEWS");
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            final SpannableString s = new SpannableString(news);
+            Linkify.addLinks(s, Linkify.ALL);
+            builder1.setMessage(s);
+            builder1.setCancelable(true);
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
         }
     }
 
