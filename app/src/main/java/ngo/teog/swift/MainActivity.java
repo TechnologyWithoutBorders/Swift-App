@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import ngo.teog.swift.helpers.Defaults;
 
@@ -68,14 +69,15 @@ public class MainActivity extends AppCompatActivity {
         if(intent.hasExtra("NEWS")) {
             String news = intent.getStringExtra("NEWS");
 
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-            final SpannableString s = new SpannableString(news);
-            Linkify.addLinks(s, Linkify.ALL);
-            builder1.setMessage(s);
-            builder1.setCancelable(true);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View view = this.getLayoutInflater().inflate(R.layout.dialog_news, null);
+            TextView tv = view.findViewById(R.id.newsView);
+            tv.setText(news);
+            builder.setView(view);
+            builder.setCancelable(true);
 
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
+            AlertDialog alert1 = builder.create();
+            alert1.show();
         }
     }
 
