@@ -35,7 +35,7 @@ public class NewDeviceActivity extends AppCompatActivity {
 
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView imageView;
-    private Bitmap bitmap;
+    private String mCurrentPhotoPath;
     private Button createButton;
     private ProgressBar progressBar;
 
@@ -61,13 +61,6 @@ public class NewDeviceActivity extends AppCompatActivity {
         modelField = findViewById(R.id.modelText);
         wardField = findViewById(R.id.wardText);
 
-        if(savedInstanceState != null) {
-            if(savedInstanceState.containsKey("IMAGE")) {
-                String path = savedInstanceState.getString("IMAGE");
-                imageView.setImageBitmap(decode(path, imageView.getHeight(), imageView.getWidth()));
-            }
-        }
-
         createButton = findViewById(R.id.createButton);
         progressBar = findViewById(R.id.progressBar);
 
@@ -75,6 +68,24 @@ public class NewDeviceActivity extends AppCompatActivity {
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mCurrentPhotoPath != null) {
+            imageView.setImageBitmap(decode(mCurrentPhotoPath, 500, 500));
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            if(savedInstanceState.containsKey("IMAGE")) {
+                mCurrentPhotoPath = savedInstanceState.getString("IMAGE");
+            }
         }
     }
 
@@ -114,13 +125,13 @@ public class NewDeviceActivity extends AppCompatActivity {
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
+        Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
+
         RequestFactory factory = new RequestFactory();
         RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, createButton, device, bitmap, wardField.getText().toString());
 
         queue.add(request);
     }
-
-    String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -160,7 +171,6 @@ public class NewDeviceActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            bitmap = decode(mCurrentPhotoPath, 500, 500);
             imageView.setImageBitmap(decode(mCurrentPhotoPath, imageView.getHeight(), imageView.getWidth()));
         }
     }
