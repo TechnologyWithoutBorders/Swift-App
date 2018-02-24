@@ -145,6 +145,7 @@ public class RequestFactory {
                                     .setContentText("Tap to show messages");
                             Intent resultIntent = new Intent(context, MainActivity.class);
                             resultIntent.putExtra("NEWS", news);
+                            resultIntent.putExtra("notification", mNotificationId);
 
                             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                             stackBuilder.addParentStack(MainActivity.class);

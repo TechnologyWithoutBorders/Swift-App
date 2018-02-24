@@ -1,10 +1,12 @@
 package ngo.teog.swift;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -72,16 +75,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         if(intent.hasExtra("NEWS")) {
             String news = intent.getStringExtra("NEWS");
+            int notificationID = intent.getIntExtra("notification", -1);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            View view = this.getLayoutInflater().inflate(R.layout.dialog_news, null);
-            TextView tv = view.findViewById(R.id.newsView);
-            tv.setText(news);
-            builder.setView(view);
-            builder.setCancelable(true);
+            Bundle args = new Bundle();
+            args.putString("news", news);
+            args.putInt("notification", notificationID);
 
-            AlertDialog alert = builder.create();
-            alert.show();
+            DialogFragment newsFragment = new NewsDialogFragment();
+            newsFragment.setArguments(args);
+            newsFragment.show(getSupportFragmentManager(), "news");
         }
 
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
