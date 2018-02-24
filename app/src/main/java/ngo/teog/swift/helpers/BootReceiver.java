@@ -22,7 +22,6 @@ import android.util.Log;
 
 public class BootReceiver extends BroadcastReceiver {
 
-    private AlarmManager alarmManager = null;
     private PendingIntent pendingIntent;
 
     @Override
@@ -44,10 +43,10 @@ public class BootReceiver extends BroadcastReceiver {
                 mNotificationManager.createNotificationChannel(mChannel);
             }
 
-            if(alarmManager == null) {
-                alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if(pendingIntent == null) {
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-                pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, 0);
+                pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
             }

@@ -142,7 +142,7 @@ public class RequestFactory {
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
                                     .setSmallIcon(R.drawable.ic_stat_name)
                                     .setContentTitle("Fake news from Swift")
-                                    .setContentText("Tap to show messages.");
+                                    .setContentText("Tap to show messages");
                             Intent resultIntent = new Intent(context, MainActivity.class);
                             resultIntent.putExtra("NEWS", news);
 

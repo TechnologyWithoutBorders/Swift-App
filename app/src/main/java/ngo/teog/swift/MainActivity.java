@@ -1,13 +1,16 @@
 package ngo.teog.swift;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import ngo.teog.swift.helpers.AlarmReceiver;
 import ngo.teog.swift.helpers.Defaults;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,9 +80,15 @@ public class MainActivity extends AppCompatActivity {
             builder.setView(view);
             builder.setCancelable(true);
 
-            AlertDialog alert1 = builder.create();
-            alert1.show();
+            AlertDialog alert = builder.create();
+            alert.show();
         }
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 60 * 1000, AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
