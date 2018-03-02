@@ -61,8 +61,14 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView assetNumberView = findViewById(R.id.assetNumberView);
         assetNumberView.setText(device.getAssetNumber());
 
-        TextView nameView = findViewById(R.id.nameValueView);
-        nameView.setText(device.getType());
+        TextView typeView = findViewById(R.id.typeView);
+        typeView.setText(device.getType());
+
+        TextView modelView = findViewById(R.id.modelView);
+        modelView.setText(device.getModel());
+
+        TextView manufacturerView = findViewById(R.id.manufacturerView);
+        manufacturerView.setText(device.getManufacturer());
 
         TextView serialNumberView = findViewById(R.id.serialNumberView);
         serialNumberView.setText(device.getSerialNumber());
