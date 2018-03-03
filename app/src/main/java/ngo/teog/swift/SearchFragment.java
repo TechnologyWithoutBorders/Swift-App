@@ -25,6 +25,7 @@ import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
+import ngo.teog.swift.helpers.Filter;
 import ngo.teog.swift.helpers.HospitalDevice;
 
 public class SearchFragment extends BaseFragment {
@@ -80,7 +81,7 @@ public class SearchFragment extends BaseFragment {
         if(searchField.getText().length() > 0) {
             String searchString = searchField.getText().toString();
 
-            DeviceFilter[] filters = {new DeviceFilter(DeviceFilter.TYPE, searchString)};
+            Filter[] filters = {new Filter(DeviceFilter.TYPE, searchString)};
 
             if(this.checkForInternetConnection()) {
                 RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();

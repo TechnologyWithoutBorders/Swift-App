@@ -7,27 +7,11 @@ package ngo.teog.swift.helpers;
  * Created by Julian on 18.11.2017.
  */
 
-public class UserFilter {
+public final class UserFilter {
     public static final String ID = "u_ID";
     public static final String FULL_NAME = "u_full_name";
     public static final String MAIL = "u_mail";
     public static final String PASSWORD = "u_password";
     public static final String QUALIFICATIONS = "u_qualifications";
     public static final String PHONE = "u_phone";
-
-    private String type;
-    private String value;
-
-    public UserFilter(String type, String value) {
-        this.type = type;
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

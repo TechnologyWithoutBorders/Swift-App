@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordField = findViewById(R.id.pwText);
 
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        if(preferences.contains(getString(R.string.id_pref)) && preferences.contains(getString(R.string.pw_pref))) {
+        if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
             progressBar.setVisibility(View.VISIBLE);
             loginButton.setVisibility(View.INVISIBLE);
 

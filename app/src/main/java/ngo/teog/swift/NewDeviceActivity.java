@@ -121,7 +121,7 @@ public class NewDeviceActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
-                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), null, true, new Date());
+                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), true, new Date());
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

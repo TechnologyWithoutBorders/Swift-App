@@ -170,9 +170,10 @@ public class MainActivity extends AppCompatActivity {
     public void logout() {
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(getString(R.string.id_pref));
-        editor.remove(getString(R.string.pw_pref));
-        editor.commit();
+        editor.remove(Defaults.ID_PREFERENCE);
+        editor.remove(Defaults.PW_PREFERENCE);
+        editor.remove(Defaults.LAST_NEWS_PREF);
+        editor.apply();
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

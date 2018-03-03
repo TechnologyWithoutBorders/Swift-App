@@ -13,7 +13,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,31 +31,25 @@ import ngo.teog.swift.DeviceInfoActivity;
 import ngo.teog.swift.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.TodoFragment;
-import ngo.teog.swift.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
+import ngo.teog.swift.helpers.Filter;
 import ngo.teog.swift.helpers.NewsItem;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.HospitalDevice;
-import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.UserFilter;
 import ngo.teog.swift.helpers.ResponseException;
 
 /**
- * Created by Julian on 13.12.2017.
+ * @author Julian Deyerler
  */
 
 //TODO könnte auch ein Singleton werden
 public class RequestFactory {
     public DeviceOpenRequest createDeviceOpenRequest(Context context, View disable, View enable, int id) {
-        String url = DeviceOpenRequest.BASE_URL;
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "fetch");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = generateParameterMap(context, "fetch", true);
         params.put(DeviceFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -65,8 +58,6 @@ public class RequestFactory {
     }
 
     public class DeviceOpenRequest extends JsonObjectRequest {
-
-        public static final String BASE_URL = "https://teog.virlep.de/devices.php";
 
         public DeviceOpenRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
@@ -103,14 +94,9 @@ public class RequestFactory {
     }
 
     public NewsListRequest createNewsRequest(Context context) {
-        String url = NewsListRequest.BASE_URL;
+        final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
 
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "fetch");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = generateParameterMap(context, "fetch", true);
 
         JSONObject request = new JSONObject(params);
 
@@ -118,8 +104,6 @@ public class RequestFactory {
     }
 
     public class NewsListRequest extends JsonObjectRequest {
-
-        public static final String BASE_URL = "https://teog.virlep.de/info.php";
 
         public NewsListRequest(final Context context, final String url, JSONObject request) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
@@ -170,18 +154,13 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, DeviceFilter[] filters, ArrayAdapter<HospitalDevice> adapter) {
-        String url = DeviceListRequest.BASE_URL;
+    public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<HospitalDevice> adapter) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "fetch");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = generateParameterMap(context, "fetch", true);
 
         if(filters != null) {
-            for (DeviceFilter filter : filters) {
+            for (Filter filter : filters) {
                 params.put(filter.getType(), filter.getValue());
             }
         }
@@ -192,8 +171,6 @@ public class RequestFactory {
     }
 
     public class DeviceListRequest extends JsonObjectRequest {
-
-        public static final String BASE_URL = "https://teog.virlep.de/devices.php";
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
@@ -227,18 +204,13 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, DeviceFilter[] filters, ArrayAdapter<HospitalDevice> adapter) {
-        String url = DeviceListRequest.BASE_URL;
+    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<HospitalDevice> adapter) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "search");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = generateParameterMap(context, "search", true);
 
         if(filters != null) {
-            for (DeviceFilter filter : filters) {
+            for (Filter filter : filters) {
                 params.put(filter.getType(), filter.getValue());
             }
         }
@@ -249,37 +221,35 @@ public class RequestFactory {
     }
 
     public LoginRequest createLoginRequest(Activity context, View disable, View enable, String mail, String password) {
-        String url = LoginRequest.BASE_URL;
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        Map<String, String> params = generateParameterMap(context, "login", false);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "login");
         params.put(UserFilter.MAIL, mail);
         params.put(UserFilter.PASSWORD, password);
 
         JSONObject request = new JSONObject(params);
 
-        return new LoginRequest(context, disable, enable, url, request, preferences, password);
+        return new LoginRequest(context, disable, enable, url, request, password);
     }
 
+    //TODO beim LoginRequest sollte auch die zuletzt zugestellte News-ID abgerufen werden
     public class LoginRequest extends JsonObjectRequest {
 
-        public static final String BASE_URL = "https://teog.virlep.de/users.php";
-
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final View disable, final View enable, final String url, JSONObject request, final SharedPreferences preferences, final String password) {
+        public LoginRequest(final Activity context, final View disable, final View enable, final String url, JSONObject request, final String password) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
                         int id = new ResponseParser().parseLoginResponse(response);
 
+                        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt(context.getString(R.string.id_pref), id);
-                        editor.putString(context.getString(R.string.pw_pref), password);
-                        editor.putInt("LAST_NEWS_ID", -1);
-                        editor.commit();
+                        editor.putInt(Defaults.ID_PREFERENCE, id);
+                        editor.putString(Defaults.PW_PREFERENCE, password);
+                        editor.putInt(Defaults.LAST_NEWS_PREF, -1);
+                        editor.apply();
 
                         Intent intent = new Intent(context, MainActivity.class);
                         context.startActivity(intent);
@@ -307,15 +277,9 @@ public class RequestFactory {
     }
 
     public DeviceCreationRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        String url = DeviceCreationRequest.BASE_URL;
-
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "create");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        Map<String, String> params = generateParameterMap(context, "create", true);
 
         params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
         params.put(DeviceFilter.TYPE, device.getType());
@@ -340,8 +304,6 @@ public class RequestFactory {
     }
 
     public class DeviceCreationRequest extends JsonObjectRequest {
-
-        private static final String BASE_URL = "https://teog.virlep.de/devices.php";
 
         public DeviceCreationRequest(final Context context, final String url, JSONObject request, final View disable, final View enable) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
@@ -371,5 +333,19 @@ public class RequestFactory {
                 }
             });
         }
+    }
+
+    private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
+        HashMap<String, String> parameterMap = new HashMap<>();
+        parameterMap.put("action", action);
+
+        if(userValidation) {
+            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+            parameterMap.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
+            parameterMap.put(UserFilter.PASSWORD, preferences.getString(Defaults.PW_PREFERENCE, null));
+        }
+
+        return parameterMap;
     }
 }

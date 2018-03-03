@@ -1,7 +1,7 @@
 package ngo.teog.swift.helpers;
 
 /**
- * Created by Julian on 13.01.2018.
+ * @author Julian Deyerler
  */
 
 public class ResponseException extends Exception {

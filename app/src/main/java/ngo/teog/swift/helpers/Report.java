@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * Created by Julian on 08.11.2017.
+ * @author Julian Deyerler
  */
 
 public class Report implements Serializable {

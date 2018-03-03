@@ -1,12 +1,11 @@
 package ngo.teog.swift.helpers;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * Created by Julian on 07.11.2017.
+ * @author Julian Deyerler
  */
 
 public class User implements Serializable {
@@ -22,6 +21,10 @@ public class User implements Serializable {
         this.mail = mail;
         this.fullName = fullName;
         this.qualifications = qualifications;
+    }
+
+    public int getID() {
+        return id;
     }
 
     public String getPhone() {

@@ -1,5 +1,7 @@
 package ngo.teog.swift.helpers;
 
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,7 +48,6 @@ public class ResponseParser {
                     String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
-                    String imagePath = deviceObject.getString(DeviceFilter.IMAGE_PATH);
                     String workingString = deviceObject.getString(DeviceFilter.WORKING);
                     boolean isWorking = false;
                     if(workingString.equals("1")) {
@@ -56,7 +57,7 @@ public class ResponseParser {
 
                     Date nextMaintenance = TodoFragment.DATE_FORMAT.parse(dateString);
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, imagePath, isWorking, nextMaintenance);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, isWorking, nextMaintenance);
                     result.add(device);
                 }
 

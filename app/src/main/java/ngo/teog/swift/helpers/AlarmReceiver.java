@@ -29,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(checkForInternetConnection(context)) {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            if(preferences.contains(context.getString(R.string.id_pref)) && preferences.contains(context.getString(R.string.pw_pref))) {
+            if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
 
                 RequestFactory.NewsListRequest request = new RequestFactory().createNewsRequest(context);
                 VolleyManager.getInstance(context).getRequestQueue().add(request);

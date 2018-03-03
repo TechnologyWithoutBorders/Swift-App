@@ -3,7 +3,7 @@ package ngo.teog.swift.helpers;
 import java.util.Date;
 
 /**
- * Created by Julian on 23.02.2018.
+ * @author Julian Deyerler
  */
 
 public class NewsItem {

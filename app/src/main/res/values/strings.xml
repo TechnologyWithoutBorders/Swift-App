@@ -27,10 +27,6 @@
     <!-- Error messages -->
     <string name="error_no_internet_connection">no internet connection</string>
 
-    <!-- Preferences Keys -->
-    <string name="id_pref">ID_PREFERENCE</string>
-    <string name="pw_pref">PW_PREFERENCE</string>
-
     <string-array name="search_options">
         <item>Device</item>
     </string-array>

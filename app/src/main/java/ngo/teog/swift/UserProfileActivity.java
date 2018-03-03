@@ -121,8 +121,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<>();
         params.put("action", "profile");
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(context.getString(R.string.id_pref), -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(context.getString(R.string.pw_pref), null));
+        params.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
+        params.put(UserFilter.PASSWORD, preferences.getString(Defaults.PW_PREFERENCE, null));
 
         JSONObject request = new JSONObject(params);
 
