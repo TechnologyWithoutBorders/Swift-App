@@ -1,28 +1,17 @@
 package ngo.teog.swift;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -30,29 +19,18 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import ngo.teog.swift.comm.RequestFactory;
 import ngo.teog.swift.comm.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.Report;
-import ngo.teog.swift.helpers.ResponseCode;
+import ngo.teog.swift.helpers.Response;
 import ngo.teog.swift.helpers.ResponseException;
-import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.UserFilter;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -134,13 +112,13 @@ public class UserProfileActivity extends AppCompatActivity {
         public static final String BASE_URL = "https://teog.virlep.de/users.php";
 
         public ProfileOpenRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+            super(Request.Method.POST, url, request, new com.android.volley.Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
                         int responseCode = response.getInt("response_code");
                         switch(responseCode) {
-                            case ResponseCode.OK:
+                            case Response.CODE_OK:
                                 JSONObject userObject = response.getJSONObject("data");
 
                                 String phone = userObject.getString(UserFilter.PHONE);
@@ -163,9 +141,9 @@ public class UserProfileActivity extends AppCompatActivity {
                                 }
 
                                 break;
-                            case ResponseCode.FAILED_VISIBLE:
+                            case Response.CODE_FAILED_VISIBLE:
                                 throw new ResponseException(response.getString("data"));
-                            case ResponseCode.FAILED_HIDDEN:
+                            case Response.CODE_FAILED_HIDDEN:
                             default:
                                 throw new Exception(response.getString("data"));
                         }
@@ -179,7 +157,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     enable.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.VISIBLE);
                 }
-            }, new Response.ErrorListener() {
+            }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     disable.setVisibility(View.INVISIBLE);

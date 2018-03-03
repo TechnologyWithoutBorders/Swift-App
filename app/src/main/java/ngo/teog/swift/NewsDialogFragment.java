@@ -36,7 +36,7 @@ public class NewsDialogFragment extends DialogFragment {
         builder.setView(view);
 
         // Use the Builder class for convenient dialog construction
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("CODE_OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     if(notificationID != -1) {
                         NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
