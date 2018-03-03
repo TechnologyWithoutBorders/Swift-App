@@ -13,6 +13,11 @@ public class Filter {
         this.value = value;
     }
 
+    public Filter(String type, int value) {
+        this.type = type;
+        this.value = Integer.toString(value);
+    }
+
     public String getType() {
         return type;
     }
