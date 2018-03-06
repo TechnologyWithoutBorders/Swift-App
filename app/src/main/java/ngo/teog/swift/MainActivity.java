@@ -86,6 +86,22 @@ public class MainActivity extends AppCompatActivity {
             newsFragment.show(getSupportFragmentManager(), "news");
         }
 
+        if(Build.VERSION.SDK_INT >= 26) {
+            NotificationManager mNotificationManager =
+                    (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+            // The id of the channel.
+            String id = "news_channel";
+            // The user-visible name of the channel.
+            CharSequence name = "News";
+            // The user-visible description of the channel.
+            String description = "Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel mChannel = new NotificationChannel(id, name, importance);
+            // Configure the notification channel.
+            mChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
