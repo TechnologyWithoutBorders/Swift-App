@@ -29,7 +29,10 @@
             android:name=".DeviceInfoActivity"
             android:label="@string/title_activity_device_info"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".NewReportActivity" />
+        <activity
+            android:name=".NewReportActivity"
+            android:label="Enter general data"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"

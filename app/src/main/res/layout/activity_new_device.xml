@@ -2,77 +2,118 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <ViewFlipper
+        android:id="@+id/flipper"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
 
-    <Button
-        android:id="@+id/pictureButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Take Picture"
-        android:onClick="dispatchTakePictureIntent"/>
+        <LinearLayout
+            android:id="@+id/first"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/assetNumberText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Asset Number"
-        android:inputType="text" />
+            <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                android:id="@+id/barcodeScannerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:zxing_use_texture_view="false"
+                app:zxing_preview_scaling_strategy="centerCrop"/>
 
-    <EditText
-        android:id="@+id/typeText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Type"
-        android:inputType="text" />
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/serialNumberText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Serial Number"
-        android:inputType="text" />
+        <LinearLayout
+            android:id="@+id/second"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/manufacturerText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Manufacturer"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/assetNumberText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Asset Number"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/modelText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Model"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/typeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type"
+                android:inputType="text" />
 
-    <EditText
-        android:id="@+id/wardText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ward"
-        android:inputType="text" />
+            <EditText
+                android:id="@+id/serialNumberText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Serial Number"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/manufacturerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Manufacturer"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/modelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Model"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/wardText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ward"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/third"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/pictureButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Take Picture"
+                android:onClick="dispatchTakePictureIntent"/>
+
+        </LinearLayout>
+
+    </ViewFlipper>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/buttonArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/createButton"
+            android:id="@+id/nextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create"
-            android:onClick="createDevice"/>
+            android:text="Next"
+            android:onClick="next"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

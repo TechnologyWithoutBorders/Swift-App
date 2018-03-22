@@ -15,10 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ViewFlipper;
 
 import com.android.volley.RequestQueue;
 
@@ -36,7 +41,6 @@ public class NewDeviceActivity extends AppCompatActivity {
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView imageView;
     private String mCurrentPhotoPath;
-    private Button createButton;
     private ProgressBar progressBar;
 
     private EditText assetNumberField;
@@ -45,6 +49,14 @@ public class NewDeviceActivity extends AppCompatActivity {
     private EditText manufacturerField;
     private EditText modelField;
     private EditText wardField;
+
+    private ViewFlipper flipper;
+    private LinearLayout first;
+    private LinearLayout second;
+    private LinearLayout third;
+    private Button nextButton;
+
+    private RelativeLayout buttonArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +73,24 @@ public class NewDeviceActivity extends AppCompatActivity {
         modelField = findViewById(R.id.modelText);
         wardField = findViewById(R.id.wardText);
 
-        createButton = findViewById(R.id.createButton);
+        nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
 
         progressBar.setVisibility(View.INVISIBLE);
+
+        first = findViewById(R.id.first);
+        second = findViewById(R.id.second);
+        third = findViewById(R.id.third);
+        nextButton = findViewById(R.id.nextButton);
+        flipper = findViewById(R.id.flipper);
+
+        buttonArea = findViewById(R.id.buttonArea);
+
+        Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        Animation out = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
+
+        flipper.setInAnimation(in);
+        flipper.setOutAnimation(out);
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
@@ -116,21 +142,31 @@ public class NewDeviceActivity extends AppCompatActivity {
         }
     }
 
-    public void createDevice(View view) {
-        createButton.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+    public void next(View view) {
+        if(flipper.getCurrentView() == first) {
+            this.setTitle("Enter general data");
+            buttonArea.setVisibility(View.VISIBLE);
+            flipper.showNext();
+        } else if(flipper.getCurrentView() == second) {
+            this.setTitle("Attach Picture");
+            nextButton.setText("Create");
+            flipper.showNext();
+        } else if(flipper.getCurrentView() == third) {
+            nextButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
-        HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
-                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), true, new Date());
+            HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
+                    typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), true, new Date());
 
-        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-        Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
+            Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
 
-        RequestFactory factory = new RequestFactory();
-        RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, createButton, device, bitmap, wardField.getText().toString());
+            RequestFactory factory = new RequestFactory();
+            RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, nextButton, device, bitmap, wardField.getText().toString());
 
-        queue.add(request);
+            queue.add(request);
+        }
     }
 
     private File createImageFile() throws IOException {
