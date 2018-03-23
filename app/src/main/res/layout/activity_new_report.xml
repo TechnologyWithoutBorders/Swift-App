@@ -23,33 +23,18 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Asset Number"
+                android:hint="Report Name"
                 android:inputType="text" />
 
-            <EditText
+            <Spinner
+                android:id="@+id/typeSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Name"
-                android:inputType="text" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Type"
-                android:inputType="text" />
+                android:layout_height="wrap_content" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Error Tags" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/second"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <EditText
                 android:layout_width="match_parent"
@@ -61,7 +46,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/third"
+            android:id="@+id/second"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

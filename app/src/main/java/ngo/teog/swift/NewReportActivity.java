@@ -18,7 +18,6 @@ public class NewReportActivity extends AppCompatActivity {
     private ViewFlipper flipper;
     private LinearLayout first;
     private LinearLayout second;
-    private LinearLayout third;
     private Button nextButton;
 
     @Override
@@ -28,7 +27,6 @@ public class NewReportActivity extends AppCompatActivity {
 
         first = findViewById(R.id.first);
         second = findViewById(R.id.second);
-        third = findViewById(R.id.third);
         nextButton = findViewById(R.id.nextButton);
         flipper = findViewById(R.id.flipper);
 
@@ -41,9 +39,6 @@ public class NewReportActivity extends AppCompatActivity {
 
     public void next(View view) {
         if(flipper.getCurrentView() == first) {
-            this.setTitle("Add detailed description");
-            flipper.showNext();
-        } else if(flipper.getCurrentView() == second) {
             this.setTitle("Attach Pictures");
             nextButton.setText("Create");
             flipper.showNext();
