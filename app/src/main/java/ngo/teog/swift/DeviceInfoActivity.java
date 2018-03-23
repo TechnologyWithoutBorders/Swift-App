@@ -83,6 +83,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @Deprecated
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         private ImageView imageView;
         private ProgressBar progressBar;

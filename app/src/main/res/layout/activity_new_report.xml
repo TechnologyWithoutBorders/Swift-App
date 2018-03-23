@@ -32,9 +32,15 @@
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/tagButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Error Tags" />
+
+            <ListView
+                android:id="@+id/tagList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:layout_width="match_parent"
