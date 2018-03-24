@@ -30,11 +30,14 @@ import java.util.Map;
 import ngo.teog.swift.DeviceInfoActivity;
 import ngo.teog.swift.MainActivity;
 import ngo.teog.swift.R;
+import ngo.teog.swift.ReportInfoActivity;
 import ngo.teog.swift.TodoFragment;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceFilter;
 import ngo.teog.swift.helpers.Filter;
 import ngo.teog.swift.helpers.NewsItem;
+import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.ReportFilter;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.UserFilter;
@@ -330,6 +333,52 @@ public class RequestFactory {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public ReportCreationRequest createReportCreationRequest(final Context context, View disable, View enable, final Report report) {
+        final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "create", true);
+
+        params.put(ReportFilter.AUTHOR, Integer.toString(report.getAuthor()));
+        params.put(ReportFilter.DEVICE, Integer.toString(report.getDevice()));
+        params.put(ReportFilter.TITLE, report.getTitle());
+
+        JSONObject request = new JSONObject(params);
+
+        return new ReportCreationRequest(context, url, request, disable, enable);
+    }
+
+    public class ReportCreationRequest extends JsonObjectRequest {
+
+        public ReportCreationRequest(final Context context, final String url, JSONObject request, final View disable, final View enable) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        ArrayList<Report> deviceList = new ResponseParser().parseReportList(response);
+
+                        Intent intent = new Intent(context, ReportInfoActivity.class);
+                        intent.putExtra("REPORT", deviceList.get(0));
+                        context.startActivity(intent);
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -11,30 +11,30 @@ import java.util.Date;
 
 public class Report implements Serializable {
     private int id;
-    private User author;
-    private HospitalDevice device;
-    private Date date;
+    private int author;
+    private int device;
+    private String title;
 
-    public Report(int id, User author, HospitalDevice device, Date date) {
+    public Report(int id, int author, int device, String title) {
         this.id = id;
         this.author = author;
         this.device = device;
-        this.date = date;
+        this.title = title;
     }
 
     public int getID() {
         return id;
     }
 
-    public HospitalDevice getDevice() {
+    public int getAuthor() {
+        return author;
+    }
+
+    public int getDevice() {
         return device;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public User getAuthor() {
-        return author;
+    public String getTitle() {
+        return title;
     }
 }

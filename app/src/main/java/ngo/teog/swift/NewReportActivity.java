@@ -3,6 +3,8 @@ package ngo.teog.swift;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,16 +17,27 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.android.volley.RequestQueue;
+
 import java.util.ArrayList;
+import java.util.Date;
+
+import ngo.teog.swift.comm.RequestFactory;
+import ngo.teog.swift.comm.VolleyManager;
+import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.Report;
 
 
 public class NewReportActivity extends AppCompatActivity {
@@ -32,6 +45,7 @@ public class NewReportActivity extends AppCompatActivity {
     private ViewFlipper flipper;
     private LinearLayout first;
     private LinearLayout second;
+    private ProgressBar progressBar;
     private Button nextButton;
     private Button tagButton;
 
@@ -39,14 +53,20 @@ public class NewReportActivity extends AppCompatActivity {
     private ListView tagList;
     private ArrayList<String> tagNames = new ArrayList<String>();
 
+    private HospitalDevice device;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_report);
 
+        Intent intent = this.getIntent();
+        device = (HospitalDevice)intent.getSerializableExtra("DEVICE");
+
         first = findViewById(R.id.first);
         second = findViewById(R.id.second);
         nextButton = findViewById(R.id.nextButton);
+        progressBar = findViewById(R.id.progressBar);
         flipper = findViewById(R.id.flipper);
 
         Animation in = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
@@ -110,7 +130,22 @@ public class NewReportActivity extends AppCompatActivity {
             nextButton.setText("Create");
             flipper.showNext();
         } else {
-            //TODO Create
+            nextButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            int author = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+            String title = "bla";
+
+            Report report = new Report(-1, author, device.getID(), title);
+
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+            RequestFactory factory = new RequestFactory();
+            RequestFactory.ReportCreationRequest request = factory.createReportCreationRequest(this, progressBar, nextButton, report);
+
+            queue.add(request);
         }
     }
 

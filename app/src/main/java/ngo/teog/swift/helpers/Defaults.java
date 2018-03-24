@@ -24,4 +24,5 @@ public final class Defaults {
     public static final String DEVICES_URL = "devices.php";
     public static final String USERS_URL = "users.php";
     public static final String NEWS_URL = "info.php";
+    public static final String REPORTS_URL = "reports.php";
 }

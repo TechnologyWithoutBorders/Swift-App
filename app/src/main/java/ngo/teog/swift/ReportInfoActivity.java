@@ -21,12 +21,9 @@ public class ReportInfoActivity extends AppCompatActivity {
         assetView.setText(Integer.toString(report.getID()));
 
         TextView nameView = findViewById(R.id.nameView);
-        nameView.setText(report.getDevice().getAssetNumber());
 
         TextView typeView = findViewById(R.id.typeView);
-        typeView.setText(report.getDevice().getType());
 
         TextView dateNameView = findViewById(R.id.dateNameView);
-        dateNameView.setText(report.getDate() + " " + report.getAuthor().getFullName());
     }
 }

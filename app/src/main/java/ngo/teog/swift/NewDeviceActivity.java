@@ -76,8 +76,6 @@ public class NewDeviceActivity extends AppCompatActivity {
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
 
-        progressBar.setVisibility(View.INVISIBLE);
-
         first = findViewById(R.id.first);
         second = findViewById(R.id.second);
         third = findViewById(R.id.third);

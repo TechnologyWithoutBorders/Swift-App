@@ -68,6 +68,35 @@ public class ResponseParser {
         }
     }
 
+    public ArrayList<Report> parseReportList(JSONObject raw) throws Exception {
+        int responseCode = raw.getInt(Response.CODE_FIELD);
+        switch(responseCode) {
+            case Response.CODE_OK:
+                JSONArray reportList = raw.getJSONArray(Response.DATA_FIELD);
+
+                ArrayList<Report> result = new ArrayList<>();
+
+                for(int i = 0; i < reportList.length(); i++) {
+                    JSONObject reportObject = reportList.getJSONObject(i);
+
+                    int id = reportObject.getInt(ReportFilter.ID);
+                    int author = reportObject.getInt(ReportFilter.AUTHOR);
+                    int device = reportObject.getInt(ReportFilter.DEVICE);
+                    String title = reportObject.getString(ReportFilter.TITLE);
+
+                    Report report = new Report(id, author, device, title);
+                    result.add(report);
+                }
+
+                return result;
+            case Response.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(Response.DATA_FIELD));
+            case Response.CODE_FAILED_HIDDEN:
+            default:
+                throw new Exception(raw.getString(Response.DATA_FIELD));
+        }
+    }
+
     public ArrayList<NewsItem> parseNewsList(JSONObject raw) throws Exception {
         int responseCode = raw.getInt(Response.CODE_FIELD);
         switch(responseCode) {
