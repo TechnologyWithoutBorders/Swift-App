@@ -34,6 +34,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 RequestFactory.NewsListRequest request = new RequestFactory().createNewsRequest(context);
                 VolleyManager.getInstance(context).getRequestQueue().add(request);
             }
+        } else {
+            //TODO Alarm reschedulen
         }
     }
 
