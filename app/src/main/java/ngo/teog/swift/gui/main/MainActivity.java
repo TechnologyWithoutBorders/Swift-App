@@ -1,15 +1,12 @@
-package ngo.teog.swift;
+package ngo.teog.swift.gui.main;
 
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -20,18 +17,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
+import ngo.teog.swift.gui.AboutActivity;
+import ngo.teog.swift.gui.LoginActivity;
+import ngo.teog.swift.gui.NewDeviceActivity;
+import ngo.teog.swift.R;
+import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.helpers.AlarmReceiver;
 import ngo.teog.swift.helpers.Defaults;
 

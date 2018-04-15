@@ -14,37 +14,37 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name=".gui.main.MainActivity"
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".gui.UserProfileActivity"
             android:label="@string/title_activity_user_profile"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".NewDeviceActivity"
+            android:name=".gui.NewDeviceActivity"
             android:label="@string/title_activity_create_device"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".DeviceInfoActivity"
+            android:name=".gui.DeviceInfoActivity"
             android:label="@string/title_activity_device_info"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".NewReportActivity"
+            android:name=".gui.NewReportActivity"
             android:label="Enter general data"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".gui.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".LoginActivity">
+            android:parentActivityName=".gui.main.MainActivity" />
+        <activity android:name=".gui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ReportInfoActivity" />
+        <activity android:name=".gui.ReportInfoActivity" />
 
         <receiver android:name=".helpers.BootReceiver">
             <intent-filter>

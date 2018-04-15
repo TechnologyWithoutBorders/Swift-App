@@ -1,4 +1,4 @@
-package ngo.teog.swift;
+package ngo.teog.swift.gui.main;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -23,8 +23,9 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.List;
 
-import ngo.teog.swift.comm.RequestFactory;
-import ngo.teog.swift.comm.VolleyManager;
+import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 
 public class BarcodeFragment extends Fragment {
 

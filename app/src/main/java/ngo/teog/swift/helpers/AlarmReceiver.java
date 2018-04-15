@@ -1,7 +1,6 @@
 package ngo.teog.swift.helpers;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,15 +9,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
-import android.view.View;
 
-import ngo.teog.swift.MainActivity;
-import ngo.teog.swift.R;
-import ngo.teog.swift.comm.RequestFactory;
-import ngo.teog.swift.comm.VolleyManager;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 
 /**
  * Wird getriggert, wenn die Geräte-Deadlines geprüft werden sollen.

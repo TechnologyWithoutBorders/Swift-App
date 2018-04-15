@@ -1,55 +1,48 @@
-package ngo.teog.swift;
+package ngo.teog.swift.gui.main;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import ngo.teog.swift.comm.RequestFactory;
-import ngo.teog.swift.comm.VolleyManager;
-import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceFilter;
-import ngo.teog.swift.helpers.Filter;
+import ngo.teog.swift.gui.BaseFragment;
+import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class SearchFragment extends BaseFragment {
+public class TodoFragment extends BaseFragment {
 
     private MySimpleArrayAdapter adapter;
+    private ListView listView;
     private ProgressBar progressBar;
-    private EditText searchField;
-    private Button searchButton;
+
+    //TODO Die Konstante muss natürlich hier weg
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_search, container, false);
-
-        Spinner spinner = rootView.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.search_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        return rootView;
+        return inflater.inflate(R.layout.activity_todo, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        ListView listView = view.findViewById(R.id.maintenanceList);
+        listView = view.findViewById(R.id.maintenanceList);
         ArrayList<HospitalDevice> values = new ArrayList<>();
 
         progressBar = view.findViewById(R.id.progressBar);
@@ -66,42 +59,38 @@ public class SearchFragment extends BaseFragment {
             }
         });
 
-        searchButton = view.findViewById(R.id.button22);
-        searchField = view.findViewById(R.id.editText);
+        final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search();
+        swipeRefreshLayout.setOnRefreshListener(
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    swipeRefreshLayout.setRefreshing(false);
+                    refresh();
+                }
             }
-        });
+        );
+
+        refresh();
     }
 
-    private void search() {
-        if(searchField.getText().length() > 0) {
-            String searchString = searchField.getText().toString();
+    private void refresh() {
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            Filter[] filters = {new Filter(DeviceFilter.TYPE, searchString)};
+            RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(getContext(), progressBar, listView, null, adapter);
 
-            if(this.checkForInternetConnection()) {
-                RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+            progressBar.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.INVISIBLE);
 
-                RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, filters, adapter);
-
-                progressBar.setVisibility(View.VISIBLE);
-                searchButton.setVisibility(View.INVISIBLE);
-
-                queue.add(request);
-            }
-        } else {
-            Toast.makeText(this.getContext().getApplicationContext(), "invalid search value", Toast.LENGTH_SHORT).show();
+            queue.add(request);
         }
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
         private final Context context;
 
-        public MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
+        private MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -122,10 +111,10 @@ public class SearchFragment extends BaseFragment {
             if(device != null) {
                 nameView.setText(device.getType());
 
-                String dateString = Defaults.DATE_FORMAT.format(device.getNextMaintenance());
+                String dateString = DATE_FORMAT.format(device.getNextMaintenance());
                 dateView.setText(dateString);
             } else {
-                nameView.setText("no internet connection");
+                nameView.setText(R.string.error_no_internet_connection);
                 nameView.setTextColor(Color.RED);
                 dateView.setText(null);
             }

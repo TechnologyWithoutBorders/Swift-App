@@ -1,4 +1,4 @@
-package ngo.teog.swift;
+package ngo.teog.swift.gui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,9 +13,11 @@ import android.widget.ProgressBar;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import ngo.teog.swift.comm.RequestFactory;
-import ngo.teog.swift.comm.VolleyManager;
+import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.gui.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 

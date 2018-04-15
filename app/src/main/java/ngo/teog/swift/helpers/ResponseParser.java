@@ -6,7 +6,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
-import ngo.teog.swift.TodoFragment;
+import ngo.teog.swift.helpers.filters.DeviceFilter;
+import ngo.teog.swift.helpers.filters.NewsFilter;
+import ngo.teog.swift.helpers.filters.ReportFilter;
+import ngo.teog.swift.gui.main.TodoFragment;
 
 /**
  * Hilfsklasse, die JSON-Responses aus der HTPPS-Schnittstelle

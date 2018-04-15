@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.helpers.filters;
 
 /**
  * Created by Julian on 03.03.2018.

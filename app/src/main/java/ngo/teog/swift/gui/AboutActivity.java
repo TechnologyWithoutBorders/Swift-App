@@ -1,8 +1,10 @@
-package ngo.teog.swift;
+package ngo.teog.swift.gui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import ngo.teog.swift.R;
 
 public class AboutActivity extends AppCompatActivity {
 

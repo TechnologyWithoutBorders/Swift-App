@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.helpers.filters;
 
 /**
  * Filterklasse für die Auswahl von Geräten.
