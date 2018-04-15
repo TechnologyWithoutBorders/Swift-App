@@ -3,6 +3,8 @@ package ngo.teog.swift.gui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.TextView;
 
 import ngo.teog.swift.R;
@@ -26,5 +28,12 @@ public class ReportInfoActivity extends AppCompatActivity {
         TextView typeView = findViewById(R.id.typeView);
 
         TextView dateNameView = findViewById(R.id.dateNameView);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_device_info, menu);
+        return true;
     }
 }
