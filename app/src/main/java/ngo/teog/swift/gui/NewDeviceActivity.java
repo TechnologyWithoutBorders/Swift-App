@@ -154,12 +154,12 @@ public class NewDeviceActivity extends AppCompatActivity {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
+            Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
+
             HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
                     typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), true, new Date());
 
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-            Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
 
             RequestFactory factory = new RequestFactory();
             RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(this, progressBar, nextButton, device, bitmap, wardField.getText().toString());
@@ -173,11 +173,7 @@ public class NewDeviceActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        File image = File.createTempFile(imageFileName,".jpg", storageDir);
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();

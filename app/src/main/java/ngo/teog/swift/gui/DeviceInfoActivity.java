@@ -1,10 +1,13 @@
 package ngo.teog.swift.gui;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,9 +20,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+
 import java.io.InputStream;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
 
 public class DeviceInfoActivity extends AppCompatActivity {
@@ -76,7 +83,16 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView serialNumberView = findViewById(R.id.serialNumberView);
         serialNumberView.setText(device.getSerialNumber());
 
-        new DownloadImageTask(imageView, progressBar).execute("https://teog.virlep.de/device_graphics/" + device.getID() + ".jpg", null);
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+            RequestFactory.DeviceImageRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, imageView, device.getID());
+
+            progressBar.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+
+            queue.add(request);
+        }
     }
 
     @Override
@@ -93,44 +109,15 @@ public class DeviceInfoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @Deprecated
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        private ImageView imageView;
-        private ProgressBar progressBar;
+    private boolean checkForInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        public DownloadImageTask(ImageView imageView, ProgressBar progressBar) {
-            this.imageView = imageView;
-            this.progressBar = progressBar;
-        }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-        @Override
-        protected void onPreExecute() {
-            imageView.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            if(result != null) {
-                bitmap = result;
-                imageView.setImageBitmap(result);
-            }
-            progressBar.setVisibility(View.INVISIBLE);
-            imageView.setVisibility(View.VISIBLE);
+        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

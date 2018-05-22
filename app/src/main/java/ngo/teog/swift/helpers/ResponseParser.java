@@ -1,5 +1,9 @@
 package ngo.teog.swift.helpers;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 

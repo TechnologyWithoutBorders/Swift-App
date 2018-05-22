@@ -1,5 +1,7 @@
 package ngo.teog.swift.helpers;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Date;
 
