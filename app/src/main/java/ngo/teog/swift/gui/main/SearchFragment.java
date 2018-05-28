@@ -97,7 +97,7 @@ public class SearchFragment extends BaseFragment {
                 queue.add(request);
             }
         } else {
-            Toast.makeText(this.getContext().getApplicationContext(), "invalid search value", Toast.LENGTH_SHORT).show();
+            searchField.setError("invalid search value");
         }
     }
 

@@ -52,12 +52,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, progressBar, loginButton, mailField.getText().toString(), getHash(passwordField.getText().toString()));
+        if(mailField.getText().length() > 0) {
+            if(passwordField.getText().length() > 0) {
+                RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, progressBar, loginButton, mailField.getText().toString(), getHash(passwordField.getText().toString()));
 
-        progressBar.setVisibility(View.VISIBLE);
-        loginButton.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                loginButton.setVisibility(View.INVISIBLE);
 
-        VolleyManager.getInstance(this).getRequestQueue().add(request);
+                VolleyManager.getInstance(this).getRequestQueue().add(request);
+            } else {
+                passwordField.setError("empty password");
+            }
+        } else {
+            mailField.setError("empty mail address");
+        }
     }
 
     /**
