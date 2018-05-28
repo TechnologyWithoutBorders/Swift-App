@@ -25,7 +25,7 @@
 
     <!-- Activity names -->
     <string name="title_activity_user_profile">My Profile</string>
-    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_login">Welcome</string>
     <string name="title_activity_create_device">Scan barcode</string>
     <string name="title_activity_device_info">Device info</string>
     <string name="title_activity_about">About Swift</string>
