@@ -20,6 +20,7 @@
             android:orientation="vertical"
             android:paddingLeft="28dp"
             android:paddingRight="28dp">
+
             <ImageView
                 android:id="@+id/imageView2"
                 app:srcCompat="@drawable/ic_2015_teog_logo_vector_official_just_world"
@@ -37,29 +38,29 @@
                 android:layout_marginBottom="30dp"
                 android:text="Swift" />
 
-            <EditText
-                android:id="@+id/mailText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:hint="E-Mail"
-                android:inputType="textEmailAddress" />
+                android:orientation="vertical"
+                android:id="@+id/form">
 
-            <EditText
-                android:id="@+id/pwText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:hint="Password"
-                android:inputType="textPassword" />
+                <EditText
+                    android:id="@+id/mailText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:hint="E-Mail"
+                    android:inputType="textEmailAddress" />
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:layout_marginTop="30dp">
+                <EditText
+                    android:id="@+id/pwText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
 
                 <Button
                     android:id="@+id/loginButton"
@@ -68,16 +69,11 @@
                     android:text="Login"
                     android:background="@color/teog_blue"
                     android:textColor="@color/white"
-                    android:onClick="login" />
+                    android:onClick="login"
+                    android:padding="15dp"
+                    android:layout_marginTop="30dp"/>
+            </LinearLayout>
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:visibility="invisible"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"/>
-            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

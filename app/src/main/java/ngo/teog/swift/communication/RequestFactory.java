@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -280,7 +281,7 @@ public class RequestFactory {
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
     }
 
-    public LoginRequest createLoginRequest(Activity context, View disable, View enable, String mail, String password) {
+    public LoginRequest createLoginRequest(Activity context, ImageView imageView, LinearLayout form, String mail, String password) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, "login", false);
@@ -290,14 +291,14 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new LoginRequest(context, disable, enable, url, request, password);
+        return new LoginRequest(context, imageView, form, url, request, password);
     }
 
     //TODO beim LoginRequest sollte auch die zuletzt zugestellte News-ID abgerufen werden
     public class LoginRequest extends JsonObjectRequest {
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final View disable, final View enable, final String url, JSONObject request, final String password) {
+        public LoginRequest(final Activity context, final ImageView imageView, final LinearLayout form, final String url, JSONObject request, final String password) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -318,19 +319,22 @@ public class RequestFactory {
                         context.finish();
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        imageView.setAnimation(null);
+                        form.setVisibility(View.VISIBLE);
                     } catch(Exception e) {
                         Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Log.e("LOGIN", "failed", e);
+                        imageView.setAnimation(null);
+                        form.setVisibility(View.VISIBLE);
                     }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
+                    imageView.setAnimation(null);
+                    form.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Log.e("LOGIN", error.toString());
                 }
             });
         }

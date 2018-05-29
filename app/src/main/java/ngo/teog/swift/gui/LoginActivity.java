@@ -3,14 +3,24 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,25 +33,34 @@ import ngo.teog.swift.gui.main.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private ProgressBar progressBar;
     private Button loginButton;
     private EditText mailField;
     private EditText passwordField;
+    private LinearLayout form;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        progressBar = findViewById(R.id.progressBar);
+        imageView = findViewById(R.id.imageView2);
+        form = findViewById(R.id.form);
+
         loginButton = findViewById(R.id.loginButton);
         mailField = findViewById(R.id.mailText);
         passwordField = findViewById(R.id.pwText);
 
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
-            progressBar.setVisibility(View.VISIBLE);
-            loginButton.setVisibility(View.INVISIBLE);
+            form.setVisibility(View.GONE);
+
+            RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            anim.setInterpolator(new LinearInterpolator());
+            anim.setRepeatCount(Animation.INFINITE);
+            anim.setDuration(700);
+
+            imageView.startAnimation(anim);
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
@@ -63,12 +82,22 @@ public class LoginActivity extends AppCompatActivity {
     public void login(View view) {
         if(mailField.getText().length() > 0) {
             if(passwordField.getText().length() > 0) {
-                RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, progressBar, loginButton, mailField.getText().toString(), getHash(passwordField.getText().toString()));
+                if(checkForInternetConnection()) {
+                    RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, imageView, form, mailField.getText().toString(), getHash(passwordField.getText().toString()));
 
-                progressBar.setVisibility(View.VISIBLE);
-                loginButton.setVisibility(View.INVISIBLE);
+                    form.setVisibility(View.GONE);
 
-                VolleyManager.getInstance(this).getRequestQueue().add(request);
+                    RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    anim.setInterpolator(new LinearInterpolator());
+                    anim.setRepeatCount(Animation.INFINITE);
+                    anim.setDuration(700);
+
+                    imageView.startAnimation(anim);
+
+                    VolleyManager.getInstance(this).getRequestQueue().add(request);
+                } else {
+                    Toast.makeText(this.getApplicationContext(), "no internet connection", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 passwordField.setError("empty password");
             }
@@ -98,6 +127,18 @@ public class LoginActivity extends AppCompatActivity {
             return sb.toString();
         } catch (NoSuchAlgorithmException e1) {
             return null;
+        }
+    }
+
+    protected boolean checkForInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if(cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        } else {
+            return false;
         }
     }
 }
