@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -105,6 +106,8 @@ public class TodoFragment extends BaseFragment {
 
             TextView nameView = convertView.findViewById(R.id.nameView);
             TextView dateView = convertView.findViewById(R.id.dateView);
+            TextView statusView = convertView.findViewById(R.id.statusView);
+            ImageView imageView = convertView.findViewById(R.id.imageView);
 
             HospitalDevice device = this.getItem(position);
 
@@ -113,6 +116,16 @@ public class TodoFragment extends BaseFragment {
 
                 String dateString = DATE_FORMAT.format(device.getNextMaintenance());
                 dateView.setText(dateString);
+
+                if(device.isWorking()) {
+                    statusView.setText("maintenance");
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_maintenance));
+                    imageView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                } else {
+                    statusView.setText("repair");
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_repair));
+                    imageView.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
+                }
             } else {
                 nameView.setText(R.string.error_no_internet_connection);
                 nameView.setTextColor(Color.RED);
