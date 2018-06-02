@@ -14,6 +14,7 @@ import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.NewsFilter;
 import ngo.teog.swift.helpers.filters.ReportFilter;
 import ngo.teog.swift.gui.main.TodoFragment;
+import ngo.teog.swift.helpers.filters.UserFilter;
 
 /**
  * Hilfsklasse, die JSON-Responses aus der HTPPS-Schnittstelle
@@ -64,6 +65,36 @@ public class ResponseParser {
 
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, isWorking, nextMaintenance);
                     result.add(device);
+                }
+
+                return result;
+            case Response.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(Response.DATA_FIELD));
+            case Response.CODE_FAILED_HIDDEN:
+            default:
+                throw new Exception(raw.getString(Response.DATA_FIELD));
+        }
+    }
+
+    public ArrayList<User> parseUserList(JSONObject raw) throws Exception {
+        int responseCode = raw.getInt(Response.CODE_FIELD);
+        switch(responseCode) {
+            case Response.CODE_OK:
+                JSONArray userList = raw.getJSONArray(Response.DATA_FIELD);
+
+                ArrayList<User> result = new ArrayList<>();
+
+                for(int i = 0; i < userList.length(); i++) {
+                    JSONObject userObject = userList.getJSONObject(i);
+
+                    int id = userObject.getInt(UserFilter.ID);
+                    String phone = userObject.getString(UserFilter.PHONE);
+                    String mail = userObject.getString(UserFilter.MAIL);
+                    String fullName = userObject.getString(UserFilter.FULL_NAME);
+                    String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
+
+                    User user = new User(id, phone, mail, fullName, qualifications);
+                    result.add(user);
                 }
 
                 return result;

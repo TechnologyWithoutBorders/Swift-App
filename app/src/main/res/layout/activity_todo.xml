@@ -8,14 +8,6 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TODO"
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"

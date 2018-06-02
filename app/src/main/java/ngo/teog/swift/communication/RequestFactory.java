@@ -36,6 +36,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.Filter;
 import ngo.teog.swift.helpers.NewsItem;
@@ -292,6 +293,40 @@ public class RequestFactory {
         JSONObject request = new JSONObject(params);
 
         return new LoginRequest(context, imageView, form, url, request, password);
+    }
+
+    public class UserListRequest extends JsonObjectRequest {
+
+        public UserListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if(adapter != null) {
+                        adapter.clear();
+                    }
+
+                    try {
+                        if(adapter != null) {
+                            adapter.addAll(new ResponseParser().parseUserList(response));
+                        }
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    adapter.clear();
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     //TODO beim LoginRequest sollte auch die zuletzt zugestellte News-ID abgerufen werden

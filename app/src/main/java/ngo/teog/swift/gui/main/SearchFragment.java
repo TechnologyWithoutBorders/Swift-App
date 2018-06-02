@@ -33,19 +33,23 @@ import ngo.teog.swift.helpers.HospitalDevice;
 
 public class SearchFragment extends BaseFragment {
 
+    private static final int DEVICE = 0;
+    private static final int USER = 1;
+
     private MySimpleArrayAdapter adapter;
     private ProgressBar progressBar;
     private EditText searchField;
+    private Spinner searchSpinner;
     private Button searchButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_search, container, false);
 
-        Spinner spinner = rootView.findViewById(R.id.spinner);
+        searchSpinner = rootView.findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.search_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        searchSpinner.setAdapter(adapter);
 
         return rootView;
     }
@@ -84,17 +88,25 @@ public class SearchFragment extends BaseFragment {
         if(searchField.getText().length() > 0) {
             String searchString = searchField.getText().toString();
 
-            Filter[] filters = {new Filter(DeviceFilter.TYPE, searchString)};
+            switch(searchSpinner.getSelectedItemPosition()) {
+                case DEVICE:
+                    if(this.checkForInternetConnection()) {
+                        RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            if(this.checkForInternetConnection()) {
-                RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+                        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, new Filter[]{new Filter(DeviceFilter.TYPE, searchString)}, adapter);
 
-                RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, filters, adapter);
+                        progressBar.setVisibility(View.VISIBLE);
+                        searchButton.setVisibility(View.INVISIBLE);
 
-                progressBar.setVisibility(View.VISIBLE);
-                searchButton.setVisibility(View.INVISIBLE);
+                        queue.add(request);
+                    }
 
-                queue.add(request);
+                    break;
+
+                case USER:
+                    //TODO
+
+                    break;
             }
         } else {
             searchField.setError("invalid search value");

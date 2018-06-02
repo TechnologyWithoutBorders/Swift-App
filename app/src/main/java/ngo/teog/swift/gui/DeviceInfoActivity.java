@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -32,7 +33,6 @@ import ngo.teog.swift.helpers.HospitalDevice;
 public class DeviceInfoActivity extends AppCompatActivity {
 
     private HospitalDevice device;
-    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +42,17 @@ public class DeviceInfoActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         device = (HospitalDevice)intent.getSerializableExtra("device");
 
-        ImageView imageView = findViewById(R.id.imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        final ImageView globalImageView = findViewById(R.id.imageView);
+        globalImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog settingsDialog = new Dialog(DeviceInfoActivity.this);
-                settingsDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                Dialog imageDialog = new Dialog(DeviceInfoActivity.this);
+                imageDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                 View dialogView = getLayoutInflater().inflate(R.layout.image_dialog, null);
                 ImageView imageView = dialogView.findViewById(R.id.imageView);
-                imageView.setImageBitmap(bitmap);
-                settingsDialog.setContentView(dialogView);
-                settingsDialog.show();
+                imageView.setImageBitmap(((BitmapDrawable)globalImageView.getDrawable()).getBitmap());
+                imageDialog.setContentView(dialogView);
+                imageDialog.show();
             }
         });
 
@@ -86,10 +86,10 @@ public class DeviceInfoActivity extends AppCompatActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DeviceImageRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, imageView, device.getID());
+            RequestFactory.DeviceImageRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
 
             progressBar.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.INVISIBLE);
+            globalImageView.setVisibility(View.INVISIBLE);
 
             queue.add(request);
         }
