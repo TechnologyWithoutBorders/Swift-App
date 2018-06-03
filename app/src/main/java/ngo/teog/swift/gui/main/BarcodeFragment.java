@@ -105,6 +105,7 @@ public class BarcodeFragment extends Fragment {
 
         RequestFactory.DeviceOpenRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, id);
 
+        searchField.setText(Integer.toString(id));
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 

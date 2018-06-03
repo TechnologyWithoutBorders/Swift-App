@@ -5,13 +5,15 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.Date;
 
+import ngo.teog.swift.gui.DeviceInfoActivity;
+
 /**
  * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
  * @author Julian Deyerler
  */
 
-public class HospitalDevice implements Serializable, SearchObject {
+public class HospitalDevice extends SearchObject {
     private int id;
     private String assetNumber;
     private String type;
@@ -72,5 +74,15 @@ public class HospitalDevice implements Serializable, SearchObject {
     @Override
     public String getInformation() {
         return type;
+    }
+
+    @Override
+    public Class<?> getInfoActivityClass() {
+        return DeviceInfoActivity.class;
+    }
+
+    @Override
+    public String getExtraIdentifier() {
+        return "device";
     }
 }

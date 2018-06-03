@@ -1,6 +1,10 @@
 package ngo.teog.swift.helpers;
 
-public interface SearchObject {
-    public String getName();
-    public String getInformation();
+import java.io.Serializable;
+
+public abstract class SearchObject implements Serializable {
+    public abstract String getName();
+    public abstract String getInformation();
+    public abstract Class<?> getInfoActivityClass();
+    public abstract String getExtraIdentifier();
 }

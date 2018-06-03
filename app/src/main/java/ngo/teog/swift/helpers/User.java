@@ -2,13 +2,15 @@ package ngo.teog.swift.helpers;
 
 import java.io.Serializable;
 
+import ngo.teog.swift.gui.UserInfoActivity;
+
 /**
  * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
  * @author Julian Deyerler
  */
 
-public class User implements Serializable, SearchObject {
+public class User extends SearchObject {
     private int id;
     private String phone;
     private String mail;
@@ -51,5 +53,15 @@ public class User implements Serializable, SearchObject {
     @Override
     public String getInformation() {
         return phone;
+    }
+
+    @Override
+    public Class<?> getInfoActivityClass() {
+        return UserInfoActivity.class;
+    }
+
+    @Override
+    public String getExtraIdentifier() {
+        return "user";
     }
 }

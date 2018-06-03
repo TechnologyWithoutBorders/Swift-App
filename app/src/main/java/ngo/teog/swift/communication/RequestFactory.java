@@ -109,6 +109,61 @@ public class RequestFactory {
         }
     }
 
+    public UserImageRequest createUserImageRequest(Context context, View disable, View enable, int id) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "image", true);
+        params.put(UserFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new UserImageRequest(context, disable, enable, url, request);
+    }
+
+    public class UserImageRequest extends JsonObjectRequest {
+        public UserImageRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        int responseCode = response.getInt("response_code");
+                        switch(responseCode) {
+                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                                String imageData = response.getString("data");
+
+                                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                                ((ImageView)enable).setImageBitmap(bitmap);
+
+                                break;
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString("data"));
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            default:
+                                throw new Exception(response.getString("data"));
+                        }
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Log.e("image fetch", "something went wrong", e);
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     public DeviceOpenRequest createDeviceOpenRequest(Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 

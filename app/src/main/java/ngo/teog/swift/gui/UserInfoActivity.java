@@ -28,30 +28,33 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
+import org.w3c.dom.Text;
+
 import java.io.InputStream;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.User;
 
-public class DeviceInfoActivity extends AppCompatActivity {
+public class UserInfoActivity extends AppCompatActivity {
 
-    private HospitalDevice device;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_info);
+        setContentView(R.layout.activity_user_info);
 
         Intent intent = this.getIntent();
-        device = (HospitalDevice) intent.getSerializableExtra("device");
+        user = (User) intent.getSerializableExtra("user");
 
         final ImageView globalImageView = findViewById(R.id.imageView);
         globalImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog imageDialog = new Dialog(DeviceInfoActivity.this);
+                Dialog imageDialog = new Dialog(UserInfoActivity.this);
                 imageDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                 View dialogView = getLayoutInflater().inflate(R.layout.image_dialog, null);
                 ImageView imageView = dialogView.findViewById(R.id.imageView);
@@ -61,40 +64,19 @@ public class DeviceInfoActivity extends AppCompatActivity {
             }
         });
 
-        ImageView statusImageView = findViewById(R.id.statusImageView);
-        TextView statusTextView = findViewById(R.id.statusTextView);
-        if (device.isWorking()) {
-            statusTextView.setText("device requires maintenance");
-            statusImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_maintenance));
-            statusImageView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-        } else {
-            statusTextView.setText("device requires repair");
-            statusImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_repair));
-            statusImageView.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
-        }
-
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        TextView assetNumberView = findViewById(R.id.assetNumberView);
-        assetNumberView.setText(device.getAssetNumber());
+        TextView nameView = findViewById(R.id.nameView);
+        nameView.setText(user.getFullName());
 
-        TextView typeView = findViewById(R.id.typeView);
-        typeView.setText(device.getType());
+        TextView mailView = findViewById(R.id.mailView);
+        mailView.setText(user.getMail());
 
-        TextView modelView = findViewById(R.id.modelView);
-        modelView.setText(device.getModel());
-
-        TextView manufacturerView = findViewById(R.id.manufacturerView);
-        manufacturerView.setText(device.getManufacturer());
-
-        TextView serialNumberView = findViewById(R.id.serialNumberView);
-        serialNumberView.setText(device.getSerialNumber());
-
-        if(this.checkForInternetConnection()) {
+        if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DeviceImageRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
+            RequestFactory.UserImageRequest request = new RequestFactory().createUserImageRequest(this, progressBar, globalImageView, user.getID());
 
             progressBar.setVisibility(View.VISIBLE);
             globalImageView.setVisibility(View.INVISIBLE);
@@ -103,18 +85,22 @@ public class DeviceInfoActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_info, menu);
-        return true;
+    public void invokeCall(View view) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + user.getPhone()));
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
+        } else {
+            startActivity(callIntent);//TODO lieber in Callback packen
+        }
     }
 
-    public void startReportActivity(View view) {
-        Intent intent = new Intent(getApplicationContext(), NewReportActivity.class);
-        intent.putExtra("DEVICE", device);
-
-        startActivity(intent);
+    public void invokeMail(View view) {
+        Intent mailIntent = new Intent(Intent.ACTION_VIEW);
+        Uri data = Uri.parse("mailto:" + user.getMail());
+        mailIntent.setData(data);
+        startActivity(mailIntent);
     }
 
     private boolean checkForInternetConnection() {

@@ -68,8 +68,10 @@ public class SearchFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
-                intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
+                SearchObject item = (SearchObject)adapterView.getItemAtPosition(i);
+
+                Intent intent = new Intent(getContext(), item.getInfoActivityClass());
+                intent.putExtra(item.getExtraIdentifier(), item);
                 startActivity(intent);
             }
         });
