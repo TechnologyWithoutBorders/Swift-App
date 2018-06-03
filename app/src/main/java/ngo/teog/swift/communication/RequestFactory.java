@@ -36,6 +36,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.Filter;
@@ -216,7 +217,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<HospitalDevice> adapter) {
+    public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, "fetch", true);
@@ -234,7 +235,7 @@ public class RequestFactory {
 
     public class DeviceListRequest extends JsonObjectRequest {
 
-        public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
+        public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<SearchObject> adapter) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -266,7 +267,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<HospitalDevice> adapter) {
+    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, "search", true);
@@ -295,9 +296,25 @@ public class RequestFactory {
         return new LoginRequest(context, imageView, form, url, request, password);
     }
 
+    public UserListRequest createUserSearchRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "search", true);
+
+        if(filters != null) {
+            for (Filter filter : filters) {
+                params.put(filter.getType(), filter.getValue());
+            }
+        }
+
+        JSONObject request = new JSONObject(params);
+
+        return new UserListRequest(context, disable, enable, url, request, adapter);
+    }
+
     public class UserListRequest extends JsonObjectRequest {
 
-        public UserListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
+        public UserListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<SearchObject> adapter) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

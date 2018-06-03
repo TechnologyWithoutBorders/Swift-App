@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Julian Deyerler
  */
 
-public class User implements Serializable {
+public class User implements Serializable, SearchObject {
     private int id;
     private String phone;
     private String mail;
@@ -41,5 +41,15 @@ public class User implements Serializable {
 
     public String getQualifications() {
         return qualifications;
+    }
+
+    @Override
+    public String getName() {
+        return fullName;
+    }
+
+    @Override
+    public String getInformation() {
+        return phone;
     }
 }

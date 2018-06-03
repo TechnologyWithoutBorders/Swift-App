@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,7 +16,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
@@ -26,17 +26,18 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.Filter;
 import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.filters.UserFilter;
 
 public class SearchFragment extends BaseFragment {
 
     private static final int DEVICE = 0;
     private static final int USER = 1;
 
-    private MySimpleArrayAdapter adapter;
+    private SearchArrayAdapter adapter;
     private ProgressBar progressBar;
     private EditText searchField;
     private Spinner searchSpinner;
@@ -57,11 +58,11 @@ public class SearchFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ListView listView = view.findViewById(R.id.maintenanceList);
-        ArrayList<HospitalDevice> values = new ArrayList<>();
+        ArrayList<SearchObject> values = new ArrayList<>();
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        adapter = new MySimpleArrayAdapter(getContext(), values);
+        adapter = new SearchArrayAdapter(getContext(), values);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,16 +88,15 @@ public class SearchFragment extends BaseFragment {
     private void search() {
         if(searchField.getText().length() > 0) {
             String searchString = searchField.getText().toString();
+            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+
+            progressBar.setVisibility(View.VISIBLE);
+            searchButton.setVisibility(View.INVISIBLE);
 
             switch(searchSpinner.getSelectedItemPosition()) {
                 case DEVICE:
                     if(this.checkForInternetConnection()) {
-                        RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
-
                         RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, new Filter[]{new Filter(DeviceFilter.TYPE, searchString)}, adapter);
-
-                        progressBar.setVisibility(View.VISIBLE);
-                        searchButton.setVisibility(View.INVISIBLE);
 
                         queue.add(request);
                     }
@@ -104,19 +104,26 @@ public class SearchFragment extends BaseFragment {
                     break;
 
                 case USER:
-                    //TODO
+                    if(this.checkForInternetConnection()) {
+                        RequestFactory.UserListRequest request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, new Filter[]{new Filter(UserFilter.FULL_NAME, searchString)}, adapter);
+
+                        queue.add(request);
+                    }
 
                     break;
             }
+
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
         } else {
             searchField.setError("invalid search value");
         }
     }
 
-    private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
+    private class SearchArrayAdapter extends ArrayAdapter<SearchObject> {
         private final Context context;
 
-        public MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
+        public SearchArrayAdapter(Context context, ArrayList<SearchObject> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -126,23 +133,21 @@ public class SearchFragment extends BaseFragment {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                convertView = inflater.inflate(R.layout.row_search, parent, false);
             }
 
             TextView nameView = convertView.findViewById(R.id.nameView);
-            TextView dateView = convertView.findViewById(R.id.dateView);
+            TextView infoView = convertView.findViewById(R.id.infoView);
 
-            HospitalDevice device = this.getItem(position);
+            SearchObject object = this.getItem(position);
 
-            if(device != null) {
-                nameView.setText(device.getType());
-
-                String dateString = Defaults.DATE_FORMAT.format(device.getNextMaintenance());
-                dateView.setText(dateString);
+            if(object != null) {
+                nameView.setText(object.getName());
+                infoView.setText(object.getInformation());
             } else {
                 nameView.setText("no internet connection");
                 nameView.setTextColor(Color.RED);
-                dateView.setText(null);
+                infoView.setText(null);
             }
 
             return convertView;

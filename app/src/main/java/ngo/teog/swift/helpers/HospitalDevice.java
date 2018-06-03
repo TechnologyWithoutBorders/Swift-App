@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Julian Deyerler
  */
 
-public class HospitalDevice implements Serializable {
+public class HospitalDevice implements Serializable, SearchObject {
     private int id;
     private String assetNumber;
     private String type;
@@ -62,5 +62,15 @@ public class HospitalDevice implements Serializable {
 
     public Date getNextMaintenance() {
         return nextMaintenance;
+    }
+
+    @Override
+    public String getName() {
+        return model;
+    }
+
+    @Override
+    public String getInformation() {
+        return type;
     }
 }

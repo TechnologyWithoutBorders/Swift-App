@@ -26,6 +26,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.SearchObject;
 
 public class TodoFragment extends BaseFragment {
 
@@ -44,7 +45,7 @@ public class TodoFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.maintenanceList);
-        ArrayList<HospitalDevice> values = new ArrayList<>();
+        ArrayList<SearchObject> values = new ArrayList<>();
 
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -88,10 +89,10 @@ public class TodoFragment extends BaseFragment {
         }
     }
 
-    private class MySimpleArrayAdapter extends ArrayAdapter<HospitalDevice> {
+    private class MySimpleArrayAdapter extends ArrayAdapter<SearchObject> {
         private final Context context;
 
-        private MySimpleArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
+        private MySimpleArrayAdapter(Context context, ArrayList<SearchObject> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -109,7 +110,7 @@ public class TodoFragment extends BaseFragment {
             TextView statusView = convertView.findViewById(R.id.statusView);
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
-            HospitalDevice device = this.getItem(position);
+            HospitalDevice device = (HospitalDevice)this.getItem(position);
 
             if(device != null) {
                 nameView.setText(device.getType());
