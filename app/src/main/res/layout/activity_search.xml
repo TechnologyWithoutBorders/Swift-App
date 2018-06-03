@@ -2,11 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    android:padding="16dp"
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -46,7 +43,8 @@
         android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sort by" />
+        android:text="Sort by"
+        android:padding="3dp" />
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/maintenanceList"
