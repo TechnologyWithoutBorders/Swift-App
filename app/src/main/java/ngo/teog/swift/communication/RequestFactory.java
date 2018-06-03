@@ -54,7 +54,82 @@ import ngo.teog.swift.helpers.ResponseException;
 
 //TODO könnte auch ein Singleton werden
 public class RequestFactory {
-    public DeviceImageRequest createDeviceImageRequest(Context context, View disable, View enable, int id) {
+    public class DefaultRequest extends JsonObjectRequest {
+        public DefaultRequest(Context context, String url, JSONObject request, View disable, View enable, BaseResponseListener listener) {
+            super(Request.Method.POST, url, request, listener, new BaseErrorListener(context, disable, enable));
+        }
+    }
+
+    private abstract class BaseResponseListener implements Response.Listener<JSONObject> {
+        private Context context;
+        private View disable;
+        private View enable;
+
+        public BaseResponseListener(Context context, View disable, View enable) {
+            this.context = context;
+            this.disable = disable;
+            this.enable = enable;
+        }
+
+        @Override
+        public void onResponse(JSONObject response) {
+            try {
+                int responseCode = response.getInt("response_code");
+                switch(responseCode) {
+                    case ngo.teog.swift.helpers.Response.CODE_OK:
+                        onSuccess(response);
+
+                        break;
+                    case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
+                        throw new ResponseException(response.getString("data"));
+                    case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                    default:
+                        throw new Exception(response.getString("data"));
+                }
+            } catch(ResponseException e) {
+                Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            } catch(Exception e) {
+                Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+            }
+
+            if(disable != null) {
+                disable.setVisibility(View.INVISIBLE);
+            }
+
+            if(enable != null) {
+                enable.setVisibility(View.VISIBLE);
+            }
+        }
+
+        public abstract void onSuccess(JSONObject response) throws Exception;
+    }
+
+    private class BaseErrorListener implements Response.ErrorListener {
+        private Context context;
+        private View disable;
+        private View enable;
+
+        public BaseErrorListener(Context context, View disable, View enable) {
+            this.context = context;
+            this.disable = disable;
+            this.enable = enable;
+        }
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            if(disable != null) {
+                disable.setVisibility(View.INVISIBLE);
+            }
+
+            if(enable != null) {
+                enable.setVisibility(View.VISIBLE);
+            }
+
+            Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public DefaultRequest createDeviceImageRequest(Context context, View disable, final View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, "image", true);
@@ -62,54 +137,20 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceImageRequest(context, disable, enable, url, request);
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                String imageData = response.getString("data");
+
+                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                ((ImageView) enable).setImageBitmap(bitmap);
+            }
+        });
     }
 
-    public class DeviceImageRequest extends JsonObjectRequest {
-        public DeviceImageRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int responseCode = response.getInt("response_code");
-                        switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
-                                String imageData = response.getString("data");
-
-                                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                                ((ImageView)enable).setImageBitmap(bitmap);
-
-                                break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString("data"));
-                        }
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                        Log.e("image fetch", "something went wrong", e);
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    public UserImageRequest createUserImageRequest(Context context, View disable, View enable, int id) {
+    public DefaultRequest createUserImageRequest(Context context, View disable, final View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, "image", true);
@@ -117,54 +158,20 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new UserImageRequest(context, disable, enable, url, request);
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                String imageData = response.getString("data");
+
+                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                ((ImageView) enable).setImageBitmap(bitmap);
+            }
+        });
     }
 
-    public class UserImageRequest extends JsonObjectRequest {
-        public UserImageRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int responseCode = response.getInt("response_code");
-                        switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
-                                String imageData = response.getString("data");
-
-                                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                                ((ImageView)enable).setImageBitmap(bitmap);
-
-                                break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString("data"));
-                        }
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                        Log.e("image fetch", "something went wrong", e);
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    public DeviceOpenRequest createDeviceOpenRequest(Context context, View disable, View enable, int id) {
+    public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, "fetch", true);
@@ -172,104 +179,64 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceOpenRequest(context, disable, enable, url, request);
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
+
+                if(deviceList.size() > 0) {
+                    Intent intent = new Intent(context, DeviceInfoActivity.class);
+                    intent.putExtra("device", deviceList.get(0));
+                    context.startActivity(intent);
+                } else {
+                    throw new ResponseException("device not found");
+                }
+            }
+        });
     }
 
-    public class DeviceOpenRequest extends JsonObjectRequest {
-
-        public DeviceOpenRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
-
-                        if(deviceList.size() > 0) {
-                            Intent intent = new Intent(context, DeviceInfoActivity.class);
-                            intent.putExtra("device", deviceList.get(0));
-                            context.startActivity(intent);
-                        } else {
-                            throw new ResponseException("device not found");
-                        }
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    public NewsListRequest createNewsRequest(Context context) {
+    public DefaultRequest createNewsRequest(final Context context) {
         final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
 
         Map<String, String> params = generateParameterMap(context, "fetch", true);
 
         JSONObject request = new JSONObject(params);
 
-        return new NewsListRequest(context, url, request);
-    }
+        return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
 
-    public class NewsListRequest extends JsonObjectRequest {
+                if(newsList.size() > 0) {
+                    //Test Benachrichtigung
+                    int mNotificationId = newsList.get(newsList.size()-1).getID();
 
-        public NewsListRequest(final Context context, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
+                    String news = "";
 
-                        if(newsList.size() > 0) {
-                            //Test Benachrichtigung
-                            int mNotificationId = newsList.get(newsList.size()-1).getID();
-
-                            String news = "";
-
-                            for(NewsItem item : newsList) {
-                                news += Defaults.DATE_FORMAT.format(item.getDate()) + "\n" + item.getValue() + "\n\n";
-                            }
-
-                            String CHANNEL_ID = "news_channel";
-                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                                    .setSmallIcon(R.drawable.ic_stat_name)
-                                    .setContentTitle("Fake news from Swift")
-                                    .setContentText("Tap to show messages");
-                            Intent resultIntent = new Intent(context, MainActivity.class);
-                            resultIntent.putExtra("NEWS", news);
-                            resultIntent.putExtra("notification", mNotificationId);
-
-                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                            stackBuilder.addParentStack(MainActivity.class);
-                            stackBuilder.addNextIntent(resultIntent);
-                            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                            mBuilder.setContentIntent(resultPendingIntent);
-                            NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                            mNotificationManager.notify(mNotificationId, mBuilder.build());
-                        }
-                    } catch(Exception e) {
-                        Log.e("ERROR", "", e);
+                    for(NewsItem item : newsList) {
+                        news += Defaults.DATE_FORMAT.format(item.getDate()) + "\n" + item.getValue() + "\n\n";
                     }
 
+                    String CHANNEL_ID = "news_channel";
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.ic_stat_name)
+                            .setContentTitle("Fake news from Swift")
+                            .setContentText("Tap to show messages");
+                    Intent resultIntent = new Intent(context, MainActivity.class);
+                    resultIntent.putExtra("NEWS", news);
+                    resultIntent.putExtra("notification", mNotificationId);
+
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    stackBuilder.addParentStack(MainActivity.class);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mBuilder.setContentIntent(resultPendingIntent);
+                    NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    mNotificationManager.notify(mNotificationId, mBuilder.build());
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("ERROR", error.toString());
-                }
-            });
-        }
+            }
+        });
     }
 
     public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
@@ -447,7 +414,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceCreationRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
+    public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, "create", true);
@@ -471,42 +438,19 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceCreationRequest(context, url, request, disable, enable);
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
+
+                Intent intent = new Intent(context, DeviceInfoActivity.class);
+                intent.putExtra("device", deviceList.get(0));
+                context.startActivity(intent);
+            }
+        });
     }
 
-    public class DeviceCreationRequest extends JsonObjectRequest {
-
-        public DeviceCreationRequest(final Context context, final String url, JSONObject request, final View disable, final View enable) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
-
-                        Intent intent = new Intent(context, DeviceInfoActivity.class);
-                        intent.putExtra("device", deviceList.get(0));
-                        context.startActivity(intent);
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    public ReportCreationRequest createReportCreationRequest(final Context context, View disable, View enable, final Report report) {
+    public DefaultRequest createReportCreationRequest(final Context context, View disable, View enable, final Report report) {
         final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
 
         Map<String, String> params = generateParameterMap(context, "create", true);
@@ -517,39 +461,16 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new ReportCreationRequest(context, url, request, disable, enable);
-    }
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<Report> deviceList = new ResponseParser().parseReportList(response);
 
-    public class ReportCreationRequest extends JsonObjectRequest {
-
-        public ReportCreationRequest(final Context context, final String url, JSONObject request, final View disable, final View enable) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        ArrayList<Report> deviceList = new ResponseParser().parseReportList(response);
-
-                        Intent intent = new Intent(context, ReportInfoActivity.class);
-                        intent.putExtra("REPORT", deviceList.get(0));
-                        context.startActivity(intent);
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+                Intent intent = new Intent(context, ReportInfoActivity.class);
+                intent.putExtra("REPORT", deviceList.get(0));
+                context.startActivity(intent);
+            }
+        });
     }
 
     private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {

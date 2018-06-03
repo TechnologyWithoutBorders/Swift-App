@@ -76,7 +76,7 @@ public class UserInfoActivity extends AppCompatActivity {
         if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.UserImageRequest request = new RequestFactory().createUserImageRequest(this, progressBar, globalImageView, user.getID());
+            RequestFactory.DefaultRequest request = new RequestFactory().createUserImageRequest(this, progressBar, globalImageView, user.getID());
 
             progressBar.setVisibility(View.VISIBLE);
             globalImageView.setVisibility(View.INVISIBLE);

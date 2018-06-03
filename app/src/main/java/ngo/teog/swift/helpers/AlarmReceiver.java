@@ -28,7 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
 
-                RequestFactory.NewsListRequest request = new RequestFactory().createNewsRequest(context);
+                RequestFactory.DefaultRequest request = new RequestFactory().createNewsRequest(context);
                 VolleyManager.getInstance(context).getRequestQueue().add(request);
             }
         } else {

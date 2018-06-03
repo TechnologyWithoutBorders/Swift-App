@@ -136,7 +136,7 @@ public class NewReportActivity extends AppCompatActivity {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             RequestFactory factory = new RequestFactory();
-            RequestFactory.ReportCreationRequest request = factory.createReportCreationRequest(this, progressBar, nextButton, report);
+            RequestFactory.DefaultRequest request = factory.createReportCreationRequest(this, progressBar, nextButton, report);
 
             queue.add(request);
         }

@@ -94,7 +94,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DeviceImageRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
+            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
 
             progressBar.setVisibility(View.VISIBLE);
             globalImageView.setVisibility(View.INVISIBLE);
