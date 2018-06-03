@@ -56,13 +56,16 @@ public class DeviceInfoActivity extends AppCompatActivity {
             }
         });
 
-        TextView statusView = findViewById(R.id.statusView);
+        ImageView statusImageView = findViewById(R.id.statusImageView);
+        TextView statusTextView = findViewById(R.id.statusTextView);
         if(device.isWorking()) {
-            statusView.setText(R.string.device_status_working);
-            statusView.setBackgroundColor(Color.GREEN);
+            statusTextView.setText("device requires maintenance");
+            statusImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_maintenance));
+            statusImageView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
         } else {
-            statusView.setText(R.string.device_status_broken);
-            statusView.setBackgroundColor(Color.RED);
+            statusTextView.setText("device requires repair");
+            statusImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_repair));
+            statusImageView.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
         }
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
