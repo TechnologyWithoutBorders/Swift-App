@@ -70,8 +70,14 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView nameView = findViewById(R.id.nameView);
         nameView.setText(user.getFullName());
 
+        TextView phoneView = findViewById(R.id.phoneView);
+        phoneView.setText(user.getPhone());
+
         TextView mailView = findViewById(R.id.mailView);
         mailView.setText(user.getMail());
+
+        TextView hospitalView = findViewById(R.id.hospitalView);
+        hospitalView.setText(user.getHospital().getName());
 
         if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();

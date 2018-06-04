@@ -86,7 +86,7 @@
                 android:text="Telephone" />
 
             <TextView
-                android:id="@+id/telephoneView"
+                android:id="@+id/phoneView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"

@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
@@ -412,6 +414,23 @@ public class RequestFactory {
                 }
             });
         }
+    }
+
+    public DefaultRequest createProfileUpdateRequest(final Context context, View disable, final View enable, int id, String phone) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "update", true);
+
+        params.put(UserFilter.PHONE, phone);
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                enable.setEnabled(false);
+            }
+        });
     }
 
     public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {

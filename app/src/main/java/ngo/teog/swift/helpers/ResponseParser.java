@@ -93,7 +93,13 @@ public class ResponseParser {
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
                     String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
 
-                    User user = new User(id, phone, mail, fullName, qualifications);
+                    JSONObject hospitalObject = userObject.getJSONObject("hospital");
+                    int hospitalId = hospitalObject.getInt("h_ID");
+                    String hospitalName = hospitalObject.getString("h_name");
+
+                    Hospital hospital = new Hospital(hospitalId, hospitalName);
+
+                    User user = new User(id, phone, mail, fullName, qualifications, hospital);
                     result.add(user);
                 }
 

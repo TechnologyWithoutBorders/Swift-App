@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.Response;
@@ -54,6 +55,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private ImageView imageView;
 
     private Button saveButton;
+    private ProgressBar saveProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class UserProfileActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
 
         saveButton = findViewById(R.id.saveButton);
+        saveProgressBar = findViewById(R.id.saveProgressBar);
 
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
@@ -116,6 +119,21 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    public void save(View view) {
+        if(checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+            RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString());
+
+            saveProgressBar.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
+
+            queue.add(request);
+        }
     }
 
     private boolean checkForInternetConnection() {
