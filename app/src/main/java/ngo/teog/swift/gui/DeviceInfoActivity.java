@@ -1,34 +1,32 @@
 package ngo.teog.swift.gui;
 
-import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.os.Environment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
-import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
@@ -51,15 +49,34 @@ public class DeviceInfoActivity extends AppCompatActivity {
         globalImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog imageDialog = new Dialog(DeviceInfoActivity.this);
-                imageDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                View dialogView = getLayoutInflater().inflate(R.layout.image_dialog, null);
-                ImageView imageView = dialogView.findViewById(R.id.imageView);
-                imageView.setImageBitmap(((BitmapDrawable) globalImageView.getDrawable()).getBitmap());
-                imageDialog.setContentView(dialogView);
-                imageDialog.show();
+                // Create an image file name
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = "JPEG_" + timeStamp + "_";
+                File image = null;//TODO außerdem deleteOnExit() nutzen?
+                try {
+                    image = File.createTempFile(imageFileName,".jpg", DeviceInfoActivity.this.getCacheDir());
+
+                    FileOutputStream fos = null;
+                    fos = new FileOutputStream(image);
+                    // Use the compress method on the BitMap object to write image to the OutputStream
+                    ((BitmapDrawable)globalImageView.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fos);
+
+                    fos.close();
+
+                    // Save a file: path for use with ACTION_VIEW intents
+                    String mCurrentPhotoPath = image.getAbsolutePath();
+
+                    Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
+                    intent.putExtra("IMAGE", mCurrentPhotoPath);
+
+                    startActivity(intent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
+
+        //TODO Bild nur auf Knopfdruck herunterladen, außerdem per Hash überprüfen, ob es ein neueres gibt
 
         ImageView statusImageView = findViewById(R.id.statusImageView);
         TextView statusTextView = findViewById(R.id.statusTextView);
@@ -97,7 +114,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
             RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
 
             progressBar.setVisibility(View.VISIBLE);
-            globalImageView.setVisibility(View.INVISIBLE);
+            globalImageView.setVisibility(View.GONE);
 
             queue.add(request);
         }
