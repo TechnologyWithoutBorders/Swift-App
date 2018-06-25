@@ -8,7 +8,10 @@ public class ReportFilter {
     public static final String ID = "r_ID";
     public static final String AUTHOR = "r_author";
     public static final String DEVICE = "r_device";
-    public static final String TITLE = "r_title";
+    public static final String DESCRIPTION = "r_description";
+    public static final String PREVIOUS_STATE = "r_previous_state";
+    public static final String CURRENT_STATE = "r_current_state";
+    public static final String DATETIME = "r_datetime";
 
     private String type;
     private String value;

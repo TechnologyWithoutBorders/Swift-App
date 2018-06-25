@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/notificationButton"
+        android:icon="@drawable/ic_notifications_off"
+        android:title="notifications off"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/new_game"
         android:icon="@drawable/ic_share"
         android:title="share"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/deleteButton"
+        android:title="delete"
+        app:showAsAction="never"/>
 </menu>

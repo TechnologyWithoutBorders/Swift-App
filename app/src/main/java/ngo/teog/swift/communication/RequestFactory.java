@@ -476,7 +476,6 @@ public class RequestFactory {
 
         params.put(ReportFilter.AUTHOR, Integer.toString(report.getAuthor()));
         params.put(ReportFilter.DEVICE, Integer.toString(report.getDevice()));
-        params.put(ReportFilter.TITLE, report.getTitle());
 
         JSONObject request = new JSONObject(params);
 

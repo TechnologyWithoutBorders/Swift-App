@@ -131,14 +131,14 @@ public class NewReportActivity extends AppCompatActivity {
 
             String title = "bla";
 
-            Report report = new Report(-1, author, device.getID(), title);
+            /*Report report = new Report(-1, author, device.getID(), title);
 
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             RequestFactory factory = new RequestFactory();
             RequestFactory.DefaultRequest request = factory.createReportCreationRequest(this, progressBar, nextButton, report);
 
-            queue.add(request);
+            queue.add(request);*/
         }
     }
 
