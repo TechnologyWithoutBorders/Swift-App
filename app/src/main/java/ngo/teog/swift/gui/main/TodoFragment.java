@@ -127,10 +127,6 @@ public class TodoFragment extends BaseFragment {
                     imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_repair));
                     imageView.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
                 }
-            } else {
-                nameView.setText(R.string.error_no_internet_connection);
-                nameView.setTextColor(Color.RED);
-                dateView.setText(null);
             }
 
             return convertView;

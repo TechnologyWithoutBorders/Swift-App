@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -433,6 +434,56 @@ public class RequestFactory {
         });
     }
 
+    public ReportListRequest createReportListRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<Report> adapter) {
+        final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch", true);
+
+        if(filters != null) {
+            for (Filter filter : filters) {
+                params.put(filter.getType(), filter.getValue());
+            }
+        }
+
+        JSONObject request = new JSONObject(params);
+
+        return new ReportListRequest(context, disable, enable, url, request, adapter);
+    }
+
+    public class ReportListRequest extends JsonObjectRequest {
+
+        public ReportListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<Report> adapter) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    if(adapter != null) {
+                        adapter.clear();
+                    }
+
+                    try {
+                        if(adapter != null) {
+                            adapter.addAll(new ResponseParser().parseReportList(response));
+                        }
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    adapter.clear();
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
@@ -476,16 +527,18 @@ public class RequestFactory {
 
         params.put(ReportFilter.AUTHOR, Integer.toString(report.getAuthor()));
         params.put(ReportFilter.DEVICE, Integer.toString(report.getDevice()));
+        params.put(ReportFilter.DESCRIPTION, report.getDescription());
+        params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
 
         JSONObject request = new JSONObject(params);
 
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<Report> deviceList = new ResponseParser().parseReportList(response);
+                ArrayList<Report> reportList = new ResponseParser().parseReportList(response);
 
                 Intent intent = new Intent(context, ReportInfoActivity.class);
-                intent.putExtra("REPORT", deviceList.get(0));
+                intent.putExtra("REPORT", reportList.get(0));
                 context.startActivity(intent);
             }
         });

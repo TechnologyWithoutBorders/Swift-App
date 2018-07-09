@@ -14,6 +14,16 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
  */
 
 public class HospitalDevice extends SearchObject {
+
+    public static final int STATE_WORKING = 0;
+    public static final int STATE_PM_DUE = 1;
+    public static final int STATE_REPAIR_NEEDED = 2;
+    public static final int STATE_IN_PROGRESS = 3;
+    public static final int STATE_BROKEN_SALVAGE = 4;
+    public static final int STATE_WORKING_WITH_LIMITATIONS = 5;
+
+    public static final String[] STATES = {"working", "pm due", "repair needed", "in progress", "broken/salvage", "working with limitations"};
+
     private int id;
     private String assetNumber;
     private String type;
@@ -22,6 +32,7 @@ public class HospitalDevice extends SearchObject {
     private String model;
     private boolean isWorking;
     private Date nextMaintenance;
+    private int state = 1;
 
     public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, boolean isWorking, Date nextMaintenance) {
         this.id = id;
@@ -64,6 +75,14 @@ public class HospitalDevice extends SearchObject {
 
     public Date getNextMaintenance() {
         return nextMaintenance;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     @Override

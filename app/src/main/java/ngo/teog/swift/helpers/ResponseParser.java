@@ -126,9 +126,11 @@ public class ResponseParser {
                     int id = reportObject.getInt(ReportFilter.ID);
                     int author = reportObject.getInt(ReportFilter.AUTHOR);
                     int device = reportObject.getInt(ReportFilter.DEVICE);
-                    String title = reportObject.getString(ReportFilter.TITLE);
+                    int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
+                    int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
+                    String description = reportObject.getString(ReportFilter.DESCRIPTION);
 
-                    Report report = new Report(id, author, device, title);
+                    Report report = new Report(id, author, device, previousState, currentState, description , new Date());
                     result.add(report);
                 }
 

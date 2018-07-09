@@ -52,4 +52,13 @@
         <item>Wiring</item>
         <item>Wear</item>
     </string-array>
+
+    <string-array name="device_states">
+        <item>working</item>
+        <item>preventive maintenance due</item>
+        <item>repair needed</item>
+        <item>in progress</item>
+        <item>broken/salvage</item>
+        <item>working with limitations</item>
+    </string-array>
 </resources>

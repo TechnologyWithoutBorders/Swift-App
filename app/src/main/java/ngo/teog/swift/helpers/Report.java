@@ -13,17 +13,15 @@ public class Report implements Serializable {
     private int id;
     private int author;
     private int device;
-    private String title;
     private int previousState;
     private int currentState;
     private String description;
     private Date dateTime;
 
-    public Report(int id, int author, int device, String title, int previousState, int currentState, String description, Date dateTime) {
+    public Report(int id, int author, int device, int previousState, int currentState, String description, Date dateTime) {
         this.id = id;
         this.author = author;
         this.device = device;
-        this.title = title;
         this.previousState = previousState;
         this.currentState = currentState;
         this.description = description;
@@ -42,8 +40,19 @@ public class Report implements Serializable {
         return device;
     }
 
-    public String getTitle() {
-        return title;
+    public int getPreviousState() {
+        return previousState;
     }
 
+    public int getCurrentState() {
+        return currentState;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
 }
