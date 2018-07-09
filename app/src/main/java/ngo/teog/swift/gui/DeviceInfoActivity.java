@@ -39,6 +39,8 @@ import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.Report;
 import ngo.teog.swift.helpers.SearchObject;
+import ngo.teog.swift.helpers.filters.Filter;
+import ngo.teog.swift.helpers.filters.ReportFilter;
 
 public class DeviceInfoActivity extends AppCompatActivity {
 
@@ -141,7 +143,8 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             queue.add(request);
 
-            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, null, adapter);
+            Filter[] filters = {new Filter(ReportFilter.DEVICE, Integer.toString(device.getID()))};
+            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, filters, adapter);
 
             reportListProgressbar.setVisibility(View.VISIBLE);
             reportListView.setVisibility(View.INVISIBLE);
