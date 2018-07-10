@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -47,12 +48,14 @@ public class DeviceInfoActivity extends AppCompatActivity {
     private ReportArrayAdapter adapter;
 
     private HospitalDevice device;
-    private ImageView statusImageView;
-    private TextView statusTextView;
 
     private ListView reportListView;
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+    private Spinner statusSpinner;
+
+    private boolean triggered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,28 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         device = (HospitalDevice) intent.getSerializableExtra("device");
+
+        statusSpinner = findViewById(R.id.statusSpinner);
+        statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
+        statusSpinner.setSelection(device.getState()+1);
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(triggered) {
+                    Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                    intent.putExtra("NEW_STATUS", i + 1);
+                    intent.putExtra("DEVICE", device.getID());
+                    startActivity(intent);
+                } else {
+                    triggered = true;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         reportListView = findViewById(R.id.reportList);
 
@@ -101,18 +126,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
         });
 
         //TODO Bild nur auf Knopfdruck herunterladen, außerdem per Hash überprüfen, ob es ein neueres gibt
-
-        statusImageView = findViewById(R.id.statusImageView);
-        statusTextView = findViewById(R.id.statusTextView);
-        if (device.isWorking()) {
-            statusTextView.setText("device requires maintenance");
-            statusImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_maintenance));
-            statusImageView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-        } else {
-            statusTextView.setText("device requires repair");
-            statusImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_repair));
-            statusImageView.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
-        }
 
         ProgressBar progressBar = findViewById(R.id.progressBar);
 
@@ -173,37 +186,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
         }
     }
 
-    public void showStatusDialog(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Change status");
-
-        final Spinner input = new Spinner(this);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.device_states, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        input.setAdapter(adapter);
-        input.setSelection(device.getState());
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                intent.putExtra("NEW_STATUS", input.getSelectedItemPosition());
-                intent.putExtra("DEVICE", device.getID());
-                startActivity(intent);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
-
     private class ReportArrayAdapter extends ArrayAdapter<Report> {
         private final Context context;
 
@@ -235,6 +217,62 @@ public class DeviceInfoActivity extends AppCompatActivity {
             }
 
             return convertView;
+        }
+    }
+
+    private class StatusArrayAdapter extends ArrayAdapter<String> {
+
+        private final Context context;
+
+        private StatusArrayAdapter(Context context, String[] values) {
+            super(context, -1, values);
+            this.context = context;
+        }
+
+        private View getCustomView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.spinner_status, parent, false);
+            }
+
+            TextView statusTextView = convertView.findViewById(R.id.statusTextView);
+            statusTextView.setText(getItem(position));
+
+            ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
+
+            int background = android.R.color.white;
+            int drawable = R.drawable.ic_repair;
+
+            switch(position) {
+                case HospitalDevice.STATE_WORKING:
+                    drawable = R.drawable.ic_check;
+                    background = android.R.color.holo_green_dark;
+                    break;
+                case HospitalDevice.STATE_PM_DUE:
+                    drawable = R.drawable.ic_maintenance;
+                    background = android.R.color.holo_blue_light;
+                    break;
+                case HospitalDevice.STATE_REPAIR_NEEDED:
+                    drawable = R.drawable.ic_repair;
+                    background = android.R.color.holo_orange_dark;
+                    break;
+            }
+
+            statusImageView.setImageDrawable(getResources().getDrawable(drawable));
+            statusImageView.setBackgroundColor(getResources().getColor(background));
+
+            return convertView;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
         }
     }
 }

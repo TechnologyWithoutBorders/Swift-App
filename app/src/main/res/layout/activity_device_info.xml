@@ -23,29 +23,12 @@
 
     </RelativeLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:onClick="showStatusDialog"
+    <Spinner
+        android:id="@+id/statusSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:padding="3dp">
-
-        <ImageView
-            android:id="@+id/statusImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/statusTextView"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textSize="20sp"
-            android:text="[status]"
-            android:paddingLeft="10dp"
-            android:textStyle="bold"/>
-    </LinearLayout>
+        android:padding="3dp" />
 
     <TableLayout
         android:layout_width="match_parent"
