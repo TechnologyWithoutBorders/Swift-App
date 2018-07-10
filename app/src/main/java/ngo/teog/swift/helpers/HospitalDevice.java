@@ -30,19 +30,18 @@ public class HospitalDevice extends SearchObject {
     private String serialNumber;
     private String manufacturer;
     private String model;
-    private boolean isWorking;
     private Date nextMaintenance;
     private int state = 1;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, boolean isWorking, Date nextMaintenance) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, Date nextMaintenance) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
         this.serialNumber = serialNumber;
         this.manufacturer = manufacturer;
         this.model = model;
-        this.isWorking =  isWorking;
         this.nextMaintenance = nextMaintenance;
+        this.state = state;
     }
 
     public int getID() {
@@ -67,10 +66,6 @@ public class HospitalDevice extends SearchObject {
 
     public String getModel() {
         return model;
-    }
-
-    public boolean isWorking() {
-        return isWorking;
     }
 
     public Date getNextMaintenance() {

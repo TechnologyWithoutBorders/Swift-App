@@ -118,15 +118,40 @@ public class TodoFragment extends BaseFragment {
                 String dateString = DATE_FORMAT.format(device.getNextMaintenance());
                 dateView.setText(dateString);
 
-                if(device.isWorking()) {
-                    statusView.setText("maintenance");
-                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_maintenance));
-                    imageView.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                } else {
-                    statusView.setText("repair");
-                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_repair));
-                    imageView.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
+                int background = android.R.color.white;
+                int drawable = R.drawable.ic_repair;
+
+                switch(device.getState()) {
+                    case HospitalDevice.STATE_WORKING:
+                        drawable = R.drawable.ic_check;
+                        background = android.R.color.holo_green_dark;
+                        break;
+                    case HospitalDevice.STATE_PM_DUE:
+                        drawable = R.drawable.ic_maintenance;
+                        background = android.R.color.holo_blue_light;
+                        break;
+                    case HospitalDevice.STATE_REPAIR_NEEDED:
+                        drawable = R.drawable.ic_repair;
+                        background = android.R.color.holo_orange_dark;
+                        break;
+                    case HospitalDevice.STATE_IN_PROGRESS:
+                        drawable = R.drawable.ic_in_progress;
+                        background = android.R.color.holo_green_light;
+                        break;
+                    case HospitalDevice.STATE_BROKEN_SALVAGE:
+                        drawable = R.drawable.ic_broken_salvage;
+                        background = android.R.color.holo_red_dark;
+                        break;
+                    case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
+                        drawable = R.drawable.ic_working_with_limitations;
+                        background = android.R.color.holo_red_light;
+                        break;
                 }
+
+                statusView.setText(HospitalDevice.STATES[device.getState()]);
+
+                imageView.setImageDrawable(getResources().getDrawable(drawable));
+                imageView.setBackgroundColor(getResources().getColor(background));
             }
 
             return convertView;

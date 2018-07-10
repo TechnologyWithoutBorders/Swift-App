@@ -264,14 +264,27 @@ public class RequestFactory {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    if(adapter != null) {
-                        adapter.clear();
-                    }
-
                     try {
-                        if(adapter != null) {
-                            adapter.addAll(new ResponseParser().parseDeviceList(response));
+                        int responseCode = response.getInt("response_code");
+                        switch(responseCode) {
+                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                                if(adapter != null) {
+                                    adapter.clear();
+                                }
+
+                                if(adapter != null) {
+                                    adapter.addAll(new ResponseParser().parseDeviceList(response));
+                                }
+
+                                break;
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString("data"));
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            default:
+                                throw new Exception(response.getString("data"));
                         }
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {
                         Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                     }
@@ -494,7 +507,6 @@ public class RequestFactory {
         params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
         params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
         params.put(DeviceFilter.MODEL, device.getModel());
-        params.put(DeviceFilter.WORKING, Boolean.toString(device.isWorking()));
         params.put(DeviceFilter.NEXT_MAINTENANCE, TodoFragment.DATE_FORMAT.format(device.getNextMaintenance()));
         params.put("ward", ward);
 
@@ -528,7 +540,8 @@ public class RequestFactory {
         params.put(ReportFilter.AUTHOR, Integer.toString(report.getAuthor()));
         params.put(ReportFilter.DEVICE, Integer.toString(report.getDevice()));
         params.put(ReportFilter.DESCRIPTION, report.getDescription());
-        params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
+        params.put(ReportFilter.PREVIOUS_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
+        params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getCurrentState()));
 
         JSONObject request = new JSONObject(params);
 

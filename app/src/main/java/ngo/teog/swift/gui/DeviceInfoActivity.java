@@ -73,6 +73,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(triggered) {
                     Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                    intent.putExtra("OLD_STATUS", device.getState()+1);
                     intent.putExtra("NEW_STATUS", i + 1);
                     intent.putExtra("DEVICE", device.getID());
                     startActivity(intent);
@@ -256,6 +257,18 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 case HospitalDevice.STATE_REPAIR_NEEDED:
                     drawable = R.drawable.ic_repair;
                     background = android.R.color.holo_orange_dark;
+                    break;
+                case HospitalDevice.STATE_IN_PROGRESS:
+                    drawable = R.drawable.ic_in_progress;
+                    background = android.R.color.holo_green_light;
+                    break;
+                case HospitalDevice.STATE_BROKEN_SALVAGE:
+                    drawable = R.drawable.ic_broken_salvage;
+                    background = android.R.color.holo_red_dark;
+                    break;
+                case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
+                    drawable = R.drawable.ic_working_with_limitations;
+                    background = android.R.color.holo_red_light;
                     break;
             }
 

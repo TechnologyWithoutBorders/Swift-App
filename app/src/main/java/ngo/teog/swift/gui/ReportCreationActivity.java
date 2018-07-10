@@ -26,6 +26,7 @@ public class ReportCreationActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Button saveButton;
 
+    private int oldState;
     private int state;
     private int device;
 
@@ -35,6 +36,7 @@ public class ReportCreationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_report_creation);
 
         Intent intent = getIntent();
+        oldState = intent.getIntExtra("OLD_STATUS", -1);
         state = intent.getIntExtra("NEW_STATUS", -1);
         device = intent.getIntExtra("DEVICE", -1);
 
@@ -48,7 +50,7 @@ public class ReportCreationActivity extends AppCompatActivity {
 
         String description = descriptionText.getText().toString();
 
-        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, 0, state, description, new Date());
+        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date());
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

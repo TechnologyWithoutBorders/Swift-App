@@ -54,16 +54,16 @@ public class ResponseParser {
                     String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
-                    String workingString = deviceObject.getString(DeviceFilter.WORKING);
-                    boolean isWorking = false;
-                    if(workingString.equals("1")) {
-                        isWorking = true;
+                    int currentState = 0;
+                    try {
+                        currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
+                    } catch(Exception e) {
+                        currentState = 0;
                     }
-                    String dateString = deviceObject.getString(DeviceFilter.NEXT_MAINTENANCE);
 
-                    Date nextMaintenance = TodoFragment.DATE_FORMAT.parse(dateString);
+                    Date nextMaintenance = new Date();
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, isWorking, nextMaintenance);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance);
                     result.add(device);
                 }
 
