@@ -79,7 +79,7 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
         hospitalView.setText(user.getHospital().getName());
 
-        if (this.checkForInternetConnection()) {
+        /*if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             RequestFactory.DefaultRequest request = new RequestFactory().createUserImageRequest(this, progressBar, globalImageView, user.getID());
@@ -88,7 +88,7 @@ public class UserInfoActivity extends AppCompatActivity {
             globalImageView.setVisibility(View.INVISIBLE);
 
             queue.add(request);
-        }
+        }*/
     }
 
     public void invokeCall(View view) {

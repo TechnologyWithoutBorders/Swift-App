@@ -564,8 +564,8 @@ public class RequestFactory {
         if(userValidation) {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-            parameterMap.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
-            parameterMap.put(UserFilter.PASSWORD, preferences.getString(Defaults.PW_PREFERENCE, null));
+            parameterMap.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
+            parameterMap.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
         }
 
         return parameterMap;
