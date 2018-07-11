@@ -22,8 +22,6 @@ public class HospitalDevice extends SearchObject {
     public static final int STATE_BROKEN_SALVAGE = 4;
     public static final int STATE_WORKING_WITH_LIMITATIONS = 5;
 
-    public static final String[] STATES = {"working", "pm due", "repair needed", "in progress", "broken/salvage", "working with limitations"};
-
     private int id;
     private String assetNumber;
     private String type;
@@ -32,8 +30,10 @@ public class HospitalDevice extends SearchObject {
     private String model;
     private Date nextMaintenance;
     private int state = 1;
+    private String hospital;
+    private String ward;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, Date nextMaintenance) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, Date nextMaintenance, String hospital, String ward) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -42,6 +42,8 @@ public class HospitalDevice extends SearchObject {
         this.model = model;
         this.nextMaintenance = nextMaintenance;
         this.state = state;
+        this.hospital = hospital;
+        this.ward = ward;
     }
 
     public int getID() {
@@ -78,6 +80,14 @@ public class HospitalDevice extends SearchObject {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public String getHospital() {
+        return hospital;
+    }
+
+    public String getWard() {
+        return ward;
     }
 
     @Override

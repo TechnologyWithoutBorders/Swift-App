@@ -148,7 +148,7 @@ public class TodoFragment extends BaseFragment {
                         break;
                 }
 
-                statusView.setText(HospitalDevice.STATES[device.getState()]);
+                statusView.setText(getResources().getStringArray(R.array.device_states)[device.getState()]);
 
                 imageView.setImageDrawable(getResources().getDrawable(drawable));
                 imageView.setBackgroundColor(getResources().getColor(background));

@@ -67,14 +67,14 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
         statusSpinner = findViewById(R.id.statusSpinner);
         statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
-        statusSpinner.setSelection(device.getState()+1);
+        statusSpinner.setSelection(device.getState());
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(triggered) {
                     Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                    intent.putExtra("OLD_STATUS", device.getState()+1);
-                    intent.putExtra("NEW_STATUS", i + 1);
+                    intent.putExtra("OLD_STATUS", device.getState());
+                    intent.putExtra("NEW_STATUS", i);
                     intent.putExtra("DEVICE", device.getID());
                     startActivity(intent);
                 } else {
@@ -147,6 +147,12 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView serialNumberView = findViewById(R.id.serialNumberView);
         serialNumberView.setText(device.getSerialNumber());
 
+        TextView hospitalView = findViewById(R.id.hospitalView);
+        hospitalView.setText(device.getHospital());
+
+        TextView wardView = findViewById(R.id.wardView);
+        wardView.setText(device.getWard());
+
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
@@ -209,7 +215,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
             Report report = this.getItem(position);
 
             if(report != null) {
-                String statusString = HospitalDevice.STATES[report.getPreviousState()] + " -> " + HospitalDevice.STATES[report.getCurrentState()];
+                String statusString = getResources().getStringArray(R.array.device_states)[report.getPreviousState()] + " -> " + getResources().getStringArray(R.array.device_states)[report.getCurrentState()];
 
                 statusChangeView.setText(statusString);
 
