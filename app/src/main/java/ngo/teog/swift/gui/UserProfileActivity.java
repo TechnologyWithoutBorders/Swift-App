@@ -36,8 +36,10 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.Hospital;
 import ngo.teog.swift.helpers.Response;
 import ngo.teog.swift.helpers.ResponseException;
+import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -46,7 +48,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView mailView;
     private TextView hospitalView;
     private TextView positionView;
-    private TextView qualificationsView;
     private TextView nameView;
 
     private ProgressBar progressBar2;
@@ -71,7 +72,6 @@ public class UserProfileActivity extends AppCompatActivity {
         mailView = findViewById(R.id.mailView);
         hospitalView = findViewById(R.id.locationView);
         positionView = findViewById(R.id.positionView);
-        qualificationsView = findViewById(R.id.qualificationsView);
 
         progressBar2 = findViewById(R.id.progressBar2);
 
@@ -155,8 +155,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<>();
         params.put("action", "profile");
+        params.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
+        params.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
         params.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
-        params.put(UserFilter.PASSWORD, preferences.getString(Defaults.PW_PREFERENCE, null));
 
         JSONObject request = new JSONObject(params);
 
@@ -180,12 +181,14 @@ public class UserProfileActivity extends AppCompatActivity {
                                 String phone = userObject.getString(UserFilter.PHONE);
                                 String mail = userObject.getString(UserFilter.MAIL);
                                 String fullName = userObject.getString(UserFilter.FULL_NAME);
-                                String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
+                                String hospital = userObject.getString("h_name");
+                                String position = userObject.getString("u_position");
 
                                 nameView.setText(fullName);
                                 telephoneView.setText(phone);
                                 mailView.setText(mail);
-                                qualificationsView.setText(qualifications);
+                                hospitalView.setText(hospital);
+                                positionView.setText(position);
 
                                 if(userObject.has("picture")) {
                                     String imageData = userObject.getString("picture");
@@ -206,7 +209,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     disable.setVisibility(View.INVISIBLE);
@@ -218,7 +221,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 public void onErrorResponse(VolleyError error) {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

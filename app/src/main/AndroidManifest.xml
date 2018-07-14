@@ -3,7 +3,6 @@
     package="ngo.teog.swift">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -22,24 +21,19 @@
             android:label="@string/app_name" />
         <activity
             android:name=".gui.UserProfileActivity"
-            android:label="@string/title_activity_user_profile"
-            android:parentActivityName=".gui.main.MainActivity" />
+            android:label="@string/title_activity_user_profile" />
         <activity
             android:name=".gui.NewDeviceActivity"
-            android:label="@string/title_activity_create_device"
-            android:parentActivityName=".gui.main.MainActivity" />
+            android:label="@string/title_activity_create_device" />
         <activity
             android:name=".gui.DeviceInfoActivity"
-            android:label="@string/title_activity_device_info"
-            android:parentActivityName=".gui.main.MainActivity" />
+            android:label="@string/title_activity_device_info" />
         <activity
             android:name=".gui.AboutActivity"
-            android:label="@string/title_activity_about"
-            android:parentActivityName=".gui.main.MainActivity" />
+            android:label="@string/title_activity_about" />
         <activity
             android:name=".gui.ImageActivity"
-            android:label="Image"
-            android:parentActivityName=".gui.main.MainActivity" />
+            android:label="Image" />
         <activity
             android:name=".gui.LoginActivity"
             android:label="@string/title_activity_login">
@@ -69,7 +63,7 @@
         </provider>
 
         <activity android:name=".gui.UserInfoActivity" />
-        <activity android:name=".gui.ReportCreationActivity"></activity>
+        <activity android:name=".gui.ReportCreationActivity" />
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package ngo.teog.swift.helpers;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -10,6 +11,9 @@ import java.util.Date;
  */
 
 public class Report implements Serializable {
+
+    public static final SimpleDateFormat reportFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     private int id;
     private int author;
     private int device;

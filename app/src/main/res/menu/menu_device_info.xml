@@ -9,7 +9,4 @@
         android:icon="@drawable/ic_share"
         android:title="share"
         app:showAsAction="ifRoom"/>
-    <item android:id="@+id/deleteButton"
-        android:title="delete"
-        app:showAsAction="never"/>
 </menu>

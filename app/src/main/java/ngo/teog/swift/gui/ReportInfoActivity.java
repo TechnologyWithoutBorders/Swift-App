@@ -28,14 +28,20 @@ public class ReportInfoActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Report report = (Report)intent.getSerializableExtra("REPORT");
 
-        TextView assetView = findViewById(R.id.assetNumberView);
-        assetView.setText(Integer.toString(report.getID()));
+        TextView dateView = findViewById(R.id.dateView);
+        dateView.setText(Report.reportFormat.format(report.getDateTime()));
+
+        TextView stateChangeView = findViewById(R.id.stateChangeView);
+        stateChangeView.setText(getResources().getStringArray(R.array.device_states)[report.getPreviousState()] + " -> " + getResources().getStringArray(R.array.device_states)[report.getCurrentState()]);
+
+        TextView descriptionView = findViewById(R.id.descriptionView);
+        descriptionView.setText(report.getDescription());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_info, menu);
+        inflater.inflate(R.menu.menu_report_info, menu);
         return true;
     }
 }

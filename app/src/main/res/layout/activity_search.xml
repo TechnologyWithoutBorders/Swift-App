@@ -52,10 +52,4 @@
         android:layout_weight="1"
         android:layout_height="0dp" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="Advanced Search"/>
-
 </LinearLayout>

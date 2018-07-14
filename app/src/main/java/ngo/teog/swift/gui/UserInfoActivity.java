@@ -92,14 +92,9 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     public void invokeCall(View view) {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + user.getPhone()));
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
-        } else {
-            startActivity(callIntent);//TODO lieber in Callback packen
-        }
+        Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+        dialIntent.setData(Uri.parse("tel:" + user.getPhone()));
+        startActivity(dialIntent);
     }
 
     public void invokeMail(View view) {

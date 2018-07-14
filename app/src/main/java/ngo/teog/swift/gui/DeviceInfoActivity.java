@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
@@ -56,6 +58,8 @@ public class DeviceInfoActivity extends AppCompatActivity {
     private Spinner statusSpinner;
 
     private boolean triggered = false;
+
+    private boolean notifications = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,15 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
         adapter = new ReportArrayAdapter(this, values);
         reportListView.setAdapter(adapter);
+
+        reportListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
+                intent.putExtra("REPORT", (Report)adapterView.getItemAtPosition(i));
+                startActivity(intent);
+            }
+        });
 
         final ImageView globalImageView = findViewById(R.id.imageView);
         globalImageView.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +194,18 @@ public class DeviceInfoActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+            case R.id.notificationButton:
+                toggleNotifications();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private boolean checkForInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -209,15 +234,61 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 convertView = inflater.inflate(R.layout.row_reports, parent, false);
             }
 
-            TextView statusChangeView = convertView.findViewById(R.id.statusChangeView);
-            TextView dateView = convertView.findViewById(R.id.dateView);
-
             Report report = this.getItem(position);
 
             if(report != null) {
-                String statusString = getResources().getStringArray(R.array.device_states)[report.getPreviousState()] + " -> " + getResources().getStringArray(R.array.device_states)[report.getCurrentState()];
+                TextView dateView = convertView.findViewById(R.id.dateView);
+                ImageView fromState = convertView.findViewById(R.id.fromState);
 
-                statusChangeView.setText(statusString);
+                int background = android.R.color.white;
+
+                switch(report.getPreviousState()) {
+                    case HospitalDevice.STATE_WORKING:
+                        background = android.R.color.holo_green_dark;
+                        break;
+                    case HospitalDevice.STATE_PM_DUE:
+                        background = android.R.color.holo_blue_light;
+                        break;
+                    case HospitalDevice.STATE_REPAIR_NEEDED:
+                        background = android.R.color.holo_orange_dark;
+                        break;
+                    case HospitalDevice.STATE_IN_PROGRESS:
+                        background = android.R.color.holo_green_light;
+                        break;
+                    case HospitalDevice.STATE_BROKEN_SALVAGE:
+                        background = android.R.color.holo_red_dark;
+                        break;
+                    case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
+                        background = android.R.color.holo_red_light;
+                        break;
+                }
+
+                fromState.setColorFilter(getResources().getColor(background));
+
+                ImageView toState = convertView.findViewById(R.id.toState);
+
+                switch(report.getCurrentState()) {
+                    case HospitalDevice.STATE_WORKING:
+                        background = android.R.color.holo_green_dark;
+                        break;
+                    case HospitalDevice.STATE_PM_DUE:
+                        background = android.R.color.holo_blue_light;
+                        break;
+                    case HospitalDevice.STATE_REPAIR_NEEDED:
+                        background = android.R.color.holo_orange_dark;
+                        break;
+                    case HospitalDevice.STATE_IN_PROGRESS:
+                        background = android.R.color.holo_green_light;
+                        break;
+                    case HospitalDevice.STATE_BROKEN_SALVAGE:
+                        background = android.R.color.holo_red_dark;
+                        break;
+                    case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
+                        background = android.R.color.holo_red_light;
+                        break;
+                }
+
+                toState.setColorFilter(getResources().getColor(background));
 
                 String dateString = DATE_FORMAT.format(report.getDateTime());
                 dateView.setText(dateString);
@@ -225,6 +296,26 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    private void toggleNotifications() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Do you really want to unsubscribe from this device?\nYou will no longer receive notifications abouts its state.")
+                .setTitle("Confirm")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(DeviceInfoActivity.this, "not implemented yet", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //ignore
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private class StatusArrayAdapter extends ArrayAdapter<String> {

@@ -93,7 +93,6 @@ public class ResponseParser {
                     String phone = userObject.getString(UserFilter.PHONE);
                     String mail = userObject.getString(UserFilter.MAIL);
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
-                    String qualifications = userObject.getString(UserFilter.QUALIFICATIONS);
 
                     JSONObject hospitalObject = userObject.getJSONObject("hospital");
                     int hospitalId = hospitalObject.getInt("h_ID");
@@ -101,7 +100,7 @@ public class ResponseParser {
 
                     Hospital hospital = new Hospital(hospitalId, hospitalName);
 
-                    User user = new User(id, phone, mail, fullName, qualifications, hospital);
+                    User user = new User(id, phone, mail, fullName, hospital);
                     result.add(user);
                 }
 
@@ -131,8 +130,11 @@ public class ResponseParser {
                     int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                     int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                     String description = reportObject.getString(ReportFilter.DESCRIPTION);
+                    String dateString = reportObject.getString(ReportFilter.DATETIME);
 
-                    Report report = new Report(id, author, device, previousState, currentState, description , new Date());
+                    Date date = Report.reportFormat.parse(dateString);
+
+                    Report report = new Report(id, author, device, previousState, currentState, description , date);
                     result.add(report);
                 }
 

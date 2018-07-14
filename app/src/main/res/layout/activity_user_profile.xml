@@ -134,26 +134,6 @@
                     android:text="[position]" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Qualifications"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:paddingRight="5dp"/>
-
-                <TextView
-                    android:id="@+id/qualificationsView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="[phone number]" />
-            </TableRow>
-
         </TableLayout>
 
         <ProgressBar

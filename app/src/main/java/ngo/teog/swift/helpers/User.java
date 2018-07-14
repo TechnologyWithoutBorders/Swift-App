@@ -15,16 +15,14 @@ public class User extends SearchObject {
     private String phone;
     private String mail;
     private String fullName;
-    private String qualifications;
 
     private Hospital hospital;
 
-    public User(int id, String phone, String mail, String fullName, String qualifications, Hospital hospital) {
+    public User(int id, String phone, String mail, String fullName, Hospital hospital) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
         this.fullName = fullName;
-        this.qualifications = qualifications;
         this.hospital = hospital;
     }
 
@@ -46,10 +44,6 @@ public class User extends SearchObject {
 
     public Hospital getHospital() {
         return hospital;
-    }
-
-    public String getQualifications() {
-        return qualifications;
     }
 
     @Override

@@ -38,6 +38,7 @@ import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
+import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.User;
@@ -92,7 +93,11 @@ public class RequestFactory {
             } catch(ResponseException e) {
                 Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } catch(Exception e) {
-                Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                if(Debugging.showSystemExceptions) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
             }
 
             if(disable != null) {
@@ -128,7 +133,11 @@ public class RequestFactory {
                 enable.setVisibility(View.VISIBLE);
             }
 
-            Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+            if(Debugging.showSystemExceptions) {
+                Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -435,6 +444,7 @@ public class RequestFactory {
 
         Map<String, String> params = generateParameterMap(context, "update", true);
 
+        params.put(UserFilter.ID, Integer.toString(id));
         params.put(UserFilter.PHONE, phone);
 
         JSONObject request = new JSONObject(params);

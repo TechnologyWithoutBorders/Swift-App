@@ -12,6 +12,5 @@ public final class UserFilter {
     public static final String FULL_NAME = "u_full_name";
     public static final String MAIL = "u_mail";
     public static final String PASSWORD = "u_password";
-    public static final String QUALIFICATIONS = "u_qualifications";
     public static final String PHONE = "u_phone";
 }
