@@ -57,21 +57,7 @@ public class MainActivity extends AppCompatActivity {
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
 
-        //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
-
-        if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
-            try {
-                int deviceNumber = Integer.parseInt(appLinkData.getLastPathSegment());
-
-                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-                RequestFactory.DefaultRequest request = new RequestFactory().createDeviceOpenRequest(this, null, null, deviceNumber);
-
-                queue.add(request);
-            } catch(NumberFormatException e) {
-                Toast.makeText(this.getApplicationContext(), "invalid device number", Toast.LENGTH_SHORT).show();
-            }
-        } else if(intent.hasExtra("NEWS")) {
+        if(intent.hasExtra("NEWS")) {
             String news = intent.getStringExtra("NEWS");
             int notificationID = intent.getIntExtra("notification", -1);
 
@@ -82,6 +68,30 @@ public class MainActivity extends AppCompatActivity {
             DialogFragment newsFragment = new NewsDialogFragment();
             newsFragment.setArguments(args);
             newsFragment.show(getSupportFragmentManager(), "news");
+        } else if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
+            //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
+
+            try {
+                String type = appLinkData.getPathSegments().get(appLinkData.getPathSegments().size()-2);
+                Toast.makeText(this, type, Toast.LENGTH_LONG).show();
+
+                int objectNumber = Integer.parseInt(appLinkData.getLastPathSegment());
+
+                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+                RequestFactory.DefaultRequest request = null;
+
+                if("device".equals(type)) {
+                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber);
+                } else if("user".equals(type)) {
+                    request = new RequestFactory().createUserOpenRequest(this, null, null, objectNumber);
+                } else if("report".equals(type)) {
+                    request = new RequestFactory().createReportOpenRequest(this, null, null, objectNumber);
+                }
+
+                queue.add(request);
+            } catch(NumberFormatException e) {
+                Toast.makeText(this.getApplicationContext(), "invalid item link", Toast.LENGTH_SHORT).show();
+            }
         }
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);

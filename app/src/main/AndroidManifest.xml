@@ -30,6 +30,28 @@
                     android:host="teog.virlep.de"
                     android:pathPrefix="/device" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="teog.virlep.de"
+                    android:pathPrefix="/report" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="teog.virlep.de"
+                    android:pathPrefix="/user" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".gui.UserProfileActivity"

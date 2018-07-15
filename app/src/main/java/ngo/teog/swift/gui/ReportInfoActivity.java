@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,13 +21,15 @@ import ngo.teog.swift.helpers.Report;
 
 public class ReportInfoActivity extends AppCompatActivity {
 
+    private Report report;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_info);
 
         Intent intent = this.getIntent();
-        Report report = (Report)intent.getSerializableExtra("REPORT");
+        report = (Report)intent.getSerializableExtra("REPORT");
 
         TextView dateView = findViewById(R.id.dateView);
         dateView.setText(Report.reportFormat.format(report.getDateTime()));
@@ -43,5 +46,21 @@ public class ReportInfoActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_report_info, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+            case R.id.share:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this report: http://teog.virlep.de/report/" + Integer.toString(report.getID()));
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "Share report link"));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

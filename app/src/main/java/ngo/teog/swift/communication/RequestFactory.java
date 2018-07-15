@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
@@ -202,6 +203,54 @@ public class RequestFactory {
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("device not found");
+                }
+            }
+        });
+    }
+
+    public DefaultRequest createUserOpenRequest(final Context context, View disable, View enable, int id) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch", true);
+        params.put(UserFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<User> userList = new ResponseParser().parseUserList(response);
+
+                if(userList.size() > 0) {
+                    Intent intent = new Intent(context, UserInfoActivity.class);
+                    intent.putExtra("user", userList.get(0));
+                    context.startActivity(intent);
+                } else {
+                    throw new ResponseException("user not found");
+                }
+            }
+        });
+    }
+
+    public DefaultRequest createReportOpenRequest(final Context context, View disable, View enable, int id) {
+        final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch", true);
+        params.put(ReportFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<Report> reportList = new ResponseParser().parseReportList(response);
+
+                if(reportList.size() > 0) {
+                    Intent intent = new Intent(context, ReportInfoActivity.class);
+                    intent.putExtra("REPORT", reportList.get(0));
+                    context.startActivity(intent);
+                } else {
+                    throw new ResponseException("report not found");
                 }
             }
         });
