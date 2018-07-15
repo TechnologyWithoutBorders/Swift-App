@@ -94,13 +94,13 @@ public class ResponseParser {
                     String mail = userObject.getString(UserFilter.MAIL);
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
 
-                    JSONObject hospitalObject = userObject.getJSONObject("hospital");
-                    int hospitalId = hospitalObject.getInt("h_ID");
-                    String hospitalName = hospitalObject.getString("h_name");
+                    int hospitalId = userObject.getInt("h_ID");
+                    String hospitalName = userObject.getString("h_name");
+                    String position = userObject.getString("u_position");
 
                     Hospital hospital = new Hospital(hospitalId, hospitalName);
 
-                    User user = new User(id, phone, mail, fullName, hospital);
+                    User user = new User(id, phone, mail, fullName, hospital, position);
                     result.add(user);
                 }
 

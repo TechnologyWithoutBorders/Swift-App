@@ -145,7 +145,7 @@ public class RequestFactory {
     public DefaultRequest createDeviceImageRequest(Context context, View disable, final View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "image", true);
+        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE_IMAGE, true);
         params.put(DeviceFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -166,7 +166,7 @@ public class RequestFactory {
     public DefaultRequest createUserImageRequest(Context context, View disable, final View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "image", true);
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER_IMAGE, true);
         params.put(UserFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -187,7 +187,7 @@ public class RequestFactory {
     public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
+        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE, true);
         params.put(DeviceFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -211,7 +211,7 @@ public class RequestFactory {
     public DefaultRequest createUserOpenRequest(final Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER, true);
         params.put(UserFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -235,7 +235,7 @@ public class RequestFactory {
     public DefaultRequest createReportOpenRequest(final Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
+        Map<String, String> params = generateParameterMap(context, ReportFilter.ACTION_FETCH_REPORT, true);
         params.put(ReportFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -266,7 +266,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
+                /*ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
 
                 if(newsList.size() > 0) {
                     //Test Benachrichtigung
@@ -295,22 +295,15 @@ public class RequestFactory {
                     NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     mNotificationManager.notify(mNotificationId, mBuilder.build());
-                }
+                }*/
             }
         });
     }
 
-    public DeviceListRequest createDeviceRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
+    public DeviceListRequest createTodoListRequest(Context context, View disable, View enable, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
-
-        if(filters != null) {
-            for (Filter filter : filters) {
-                params.put(filter.getType(), filter.getValue());
-            }
-        }
-
+        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_TODO_LIST, true);
         JSONObject request = new JSONObject(params);
 
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
@@ -363,16 +356,11 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
+    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "search", true);
-
-        if(filters != null) {
-            for (Filter filter : filters) {
-                params.put(filter.getType(), filter.getValue());
-            }
-        }
+        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_SEARCH_DEVICE, true);
+        params.put(DeviceFilter.TYPE, searchValue);
 
         JSONObject request = new JSONObject(params);
 
@@ -382,7 +370,7 @@ public class RequestFactory {
     public LoginRequest createLoginRequest(Activity context, ImageView imageView, LinearLayout form, String mail, String password) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "login", false);
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_LOGIN_USER, false);
 
         params.put(UserFilter.MAIL, mail);
         params.put(UserFilter.PASSWORD, password);
@@ -392,16 +380,11 @@ public class RequestFactory {
         return new LoginRequest(context, imageView, form, url, request, password);
     }
 
-    public UserListRequest createUserSearchRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<SearchObject> adapter) {
+    public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "search", true);
-
-        if(filters != null) {
-            for (Filter filter : filters) {
-                params.put(filter.getType(), filter.getValue());
-            }
-        }
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_SEARCH_USER, true);
+        params.put(UserFilter.FULL_NAME, searchValue);
 
         JSONObject request = new JSONObject(params);
 
@@ -491,7 +474,7 @@ public class RequestFactory {
     public DefaultRequest createProfileUpdateRequest(final Context context, View disable, final View enable, int id, String phone) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "update", true);
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_UPDATE_USER, true);
 
         params.put(UserFilter.ID, Integer.toString(id));
         params.put(UserFilter.PHONE, phone);
@@ -500,22 +483,17 @@ public class RequestFactory {
 
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
-            public void onSuccess(JSONObject response) throws Exception {
+            public void onSuccess(JSONObject response) {
                 enable.setEnabled(false);
             }
         });
     }
 
-    public ReportListRequest createReportListRequest(Context context, View disable, View enable, Filter[] filters, ArrayAdapter<Report> adapter) {
+    public ReportListRequest createReportListRequest(Context context, View disable, View enable, int deviceID, ArrayAdapter<Report> adapter) {
         final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
-
-        if(filters != null) {
-            for (Filter filter : filters) {
-                params.put(filter.getType(), filter.getValue());
-            }
-        }
+        Map<String, String> params = generateParameterMap(context, ReportFilter.ACTION_FETCH_REPORT_LIST, true);
+        params.put(ReportFilter.DEVICE, Integer.toString(deviceID));
 
         JSONObject request = new JSONObject(params);
 
@@ -559,7 +537,7 @@ public class RequestFactory {
     public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "create", true);
+        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_CREATE_DEVICE, true);
 
         params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
         params.put(DeviceFilter.TYPE, device.getType());
@@ -594,7 +572,7 @@ public class RequestFactory {
     public DefaultRequest createReportCreationRequest(final Context context, View disable, View enable, final Report report) {
         final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "create", true);
+        Map<String, String> params = generateParameterMap(context, ReportFilter.ACTION_CREATE_REPORT, true);
 
         params.put(ReportFilter.AUTHOR, Integer.toString(report.getAuthor()));
         params.put(ReportFilter.DEVICE, Integer.toString(report.getDevice()));

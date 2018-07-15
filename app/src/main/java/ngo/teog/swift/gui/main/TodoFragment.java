@@ -2,7 +2,6 @@ package ngo.teog.swift.gui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -80,7 +79,7 @@ public class TodoFragment extends BaseFragment {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceRequest(getContext(), progressBar, listView, null, adapter);
+            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
 
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.INVISIBLE);

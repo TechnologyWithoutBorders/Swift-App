@@ -178,8 +178,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             queue.add(request);
 
-            Filter[] filters = {new Filter(ReportFilter.DEVICE, Integer.toString(device.getID()))};
-            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, filters, adapter);
+            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, device.getID(), adapter);
 
             reportListProgressbar.setVisibility(View.VISIBLE);
             reportListView.setVisibility(View.INVISIBLE);

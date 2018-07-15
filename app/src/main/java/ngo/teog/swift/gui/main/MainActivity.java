@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 String type = appLinkData.getPathSegments().get(appLinkData.getPathSegments().size()-2);
-                Toast.makeText(this, type, Toast.LENGTH_LONG).show();
 
                 int objectNumber = Integer.parseInt(appLinkData.getLastPathSegment());
 

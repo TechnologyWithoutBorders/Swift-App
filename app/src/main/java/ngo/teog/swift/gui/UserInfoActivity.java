@@ -80,6 +80,9 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
         hospitalView.setText(user.getHospital().getName());
 
+        TextView positionView = findViewById(R.id.positionView);
+        positionView.setText(user.getPosition());
+
         /*if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

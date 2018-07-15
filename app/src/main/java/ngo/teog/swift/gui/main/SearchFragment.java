@@ -98,7 +98,7 @@ public class SearchFragment extends BaseFragment {
             switch(searchSpinner.getSelectedItemPosition()) {
                 case DEVICE:
                     if(this.checkForInternetConnection()) {
-                        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, new Filter[]{new Filter(DeviceFilter.TYPE, searchString)}, adapter);
+                        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
 
                         queue.add(request);
                     }
@@ -107,7 +107,7 @@ public class SearchFragment extends BaseFragment {
 
                 case USER:
                     if(this.checkForInternetConnection()) {
-                        RequestFactory.UserListRequest request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, new Filter[]{new Filter(UserFilter.FULL_NAME, searchString)}, adapter);
+                        RequestFactory.UserListRequest request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
 
                         queue.add(request);
                     }

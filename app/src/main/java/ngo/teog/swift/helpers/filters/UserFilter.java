@@ -13,4 +13,10 @@ public final class UserFilter {
     public static final String MAIL = "u_mail";
     public static final String PASSWORD = "u_password";
     public static final String PHONE = "u_phone";
+
+    public static final String ACTION_LOGIN_USER = "login_user";
+    public static final String ACTION_FETCH_USER = "fetch_user";
+    public static final String ACTION_SEARCH_USER = "search_user";
+    public static final String ACTION_FETCH_USER_IMAGE = "fetch_user_image";
+    public static final String ACTION_UPDATE_USER = "update_user";
 }

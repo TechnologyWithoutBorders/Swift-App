@@ -18,6 +18,12 @@ public class DeviceFilter {
     public static final String WORKING = "d_working";
     public static final String NEXT_MAINTENANCE = "d_next_maintenance";
 
+    public static final String ACTION_FETCH_DEVICE = "fetch_device";
+    public static final String ACTION_FETCH_TODO_LIST = "fetch_todo_list";
+    public static final String ACTION_SEARCH_DEVICE = "search_device";
+    public static final String ACTION_CREATE_DEVICE = "create_device";
+    public static final String ACTION_FETCH_DEVICE_IMAGE = "fetch_device_image";
+
     private String type;
     private String value;
 
