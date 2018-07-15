@@ -18,7 +18,19 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".gui.main.MainActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="teog.virlep.de"
+                    android:pathPrefix="/device" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".gui.UserProfileActivity"
             android:label="@string/title_activity_user_profile" />
@@ -27,7 +39,7 @@
             android:label="@string/title_activity_create_device" />
         <activity
             android:name=".gui.DeviceInfoActivity"
-            android:label="@string/title_activity_device_info" />
+            android:label="@string/title_activity_device_info"></activity>
         <activity
             android:name=".gui.AboutActivity"
             android:label="@string/title_activity_about" />

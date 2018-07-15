@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -23,14 +24,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
+import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.gui.LoginActivity;
 import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.helpers.AlarmReceiver;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.HospitalDevice;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +51,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = this.getIntent();
+
+        String appLinkAction = intent.getAction();
+        Uri appLinkData = intent.getData();
+
+        //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
+
+        if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
+            try {
+                int deviceNumber = Integer.parseInt(appLinkData.getLastPathSegment());
+
+                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+                RequestFactory.DefaultRequest request = new RequestFactory().createDeviceOpenRequest(this, null, null, deviceNumber);
+
+                queue.add(request);
+            } catch(NumberFormatException e) {
+                Toast.makeText(this.getApplicationContext(), "invalid device number", Toast.LENGTH_SHORT).show();
+            }
+        } else if(intent.hasExtra("NEWS")) {
+            String news = intent.getStringExtra("NEWS");
+            int notificationID = intent.getIntExtra("notification", -1);
+
+            Bundle args = new Bundle();
+            args.putString("news", news);
+            args.putInt("notification", notificationID);
+
+            DialogFragment newsFragment = new NewsDialogFragment();
+            newsFragment.setArguments(args);
+            newsFragment.show(getSupportFragmentManager(), "news");
+        }
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
 
@@ -67,20 +107,6 @@ public class MainActivity extends AppCompatActivity {
             tabLayout.addTab(
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
-        }
-
-        Intent intent = this.getIntent();
-        if(intent.hasExtra("NEWS")) {
-            String news = intent.getStringExtra("NEWS");
-            int notificationID = intent.getIntExtra("notification", -1);
-
-            Bundle args = new Bundle();
-            args.putString("news", news);
-            args.putInt("notification", notificationID);
-
-            DialogFragment newsFragment = new NewsDialogFragment();
-            newsFragment.setArguments(args);
-            newsFragment.show(getSupportFragmentManager(), "news");
         }
 
         if(Build.VERSION.SDK_INT >= 26) {

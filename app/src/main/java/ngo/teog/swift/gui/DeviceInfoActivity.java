@@ -8,9 +8,11 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,7 +77,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(triggered) {
+                if (triggered) {
                     Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
                     intent.putExtra("OLD_STATUS", device.getState());
                     intent.putExtra("NEW_STATUS", i);
@@ -103,7 +105,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
-                intent.putExtra("REPORT", (Report)adapterView.getItemAtPosition(i));
+                intent.putExtra("REPORT", (Report) adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
         });
@@ -117,12 +119,12 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 String imageFileName = "JPEG_" + timeStamp + "_";
                 File image = null;//TODO außerdem deleteOnExit() nutzen?
                 try {
-                    image = File.createTempFile(imageFileName,".jpg", DeviceInfoActivity.this.getCacheDir());
+                    image = File.createTempFile(imageFileName, ".jpg", DeviceInfoActivity.this.getCacheDir());
 
                     FileOutputStream fos = null;
                     fos = new FileOutputStream(image);
                     // Use the compress method on the BitMap object to write image to the OutputStream
-                    ((BitmapDrawable)globalImageView.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    ((BitmapDrawable) globalImageView.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fos);
 
                     fos.close();
 
@@ -166,7 +168,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView wardView = findViewById(R.id.wardView);
         wardView.setText(device.getWard());
 
-        if(this.checkForInternetConnection()) {
+        if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
@@ -184,7 +186,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             queue.add(reportListRequest);
         }
-
     }
 
     @Override
@@ -200,6 +201,13 @@ public class DeviceInfoActivity extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.notificationButton:
                 toggleNotifications();
+                return true;
+            case R.id.share:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + Integer.toString(device.getID()));
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, "Share device link"));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
