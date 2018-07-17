@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.SystemClock;
+import android.widget.Toast;
 
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
@@ -28,7 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
 
-                RequestFactory.DefaultRequest request = new RequestFactory().createNewsRequest(context);
+                RequestFactory.DefaultRequest request = new RequestFactory().createWorkRequest(context, preferences.getInt(Defaults.ID_PREFERENCE, -1));
                 VolleyManager.getInstance(context).getRequestQueue().add(request);
             }
         } else {

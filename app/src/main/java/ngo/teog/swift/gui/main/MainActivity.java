@@ -122,9 +122,9 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager mNotificationManager =
                     (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
             // The id of the channel.
-            String id = "news_channel";
+            String id = "work_channel";
             // The user-visible name of the channel.
-            CharSequence name = "News";
+            CharSequence name = "Work";
             // The user-visible description of the channel.
             String description = "Description";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -133,12 +133,6 @@ public class MainActivity extends AppCompatActivity {
             mChannel.setDescription(description);
             mNotificationManager.createNotificationChannel(mChannel);
         }
-
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 3000, pendingIntent);
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {

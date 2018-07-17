@@ -1,8 +1,11 @@
 package ngo.teog.swift.gui.main;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,7 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.AlarmReceiver;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
 
@@ -85,6 +89,12 @@ public class TodoFragment extends BaseFragment {
             listView.setVisibility(View.INVISIBLE);
 
             queue.add(request);
+
+            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
+            Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
         }
     }
 

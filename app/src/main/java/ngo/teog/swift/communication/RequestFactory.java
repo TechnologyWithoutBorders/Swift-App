@@ -256,7 +256,7 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createNewsRequest(final Context context) {
+    /*public DefaultRequest createNewsRequest(final Context context) {
         final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
 
         Map<String, String> params = generateParameterMap(context, "fetch", true);
@@ -266,7 +266,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                /*ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
+                ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
 
                 if(newsList.size() > 0) {
                     //Test Benachrichtigung
@@ -295,7 +295,44 @@ public class RequestFactory {
                     NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
                     mNotificationManager.notify(mNotificationId, mBuilder.build());
-                }*/
+                }
+            }
+        });
+    }*/
+
+    public DefaultRequest createWorkRequest(final Context context, int id) {
+        final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch_work", true);
+        params.put(UserFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ArrayList<Report> reportList = new ResponseParser().parseReportList(response);
+
+                if(reportList.size() > 0) {
+                    int notificationID = reportList.get(0).getID();
+
+                    final String CHANNEL_ID = "work_channel";
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.ic_stat_name)
+                            .setContentTitle("Incoming work")
+                            .setContentText(reportList.size() + " devices need attention.")
+                            .setAutoCancel(true);
+                    Intent resultIntent = new Intent(context, MainActivity.class);
+
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    stackBuilder.addParentStack(MainActivity.class);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mBuilder.setContentIntent(resultPendingIntent);
+                    NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    mNotificationManager.notify(notificationID, mBuilder.build());
+                }
             }
         });
     }
