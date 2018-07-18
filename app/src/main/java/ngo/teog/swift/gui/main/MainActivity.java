@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(Defaults.ID_PREFERENCE);
         editor.remove(Defaults.PW_PREFERENCE);
-        editor.remove(Defaults.LAST_NEWS_PREF);
+        editor.remove(Defaults.NOTIFICATION_COUNTER);
         editor.apply();
 
         Intent intent = new Intent(this, LoginActivity.class);

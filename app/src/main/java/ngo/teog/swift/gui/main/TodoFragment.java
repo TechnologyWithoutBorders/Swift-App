@@ -81,6 +81,12 @@ public class TodoFragment extends BaseFragment {
 
     private void refresh() {
         if(this.checkForInternetConnection()) {
+            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
+            Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
+
             RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
             RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
@@ -89,12 +95,6 @@ public class TodoFragment extends BaseFragment {
             listView.setVisibility(View.INVISIBLE);
 
             queue.add(request);
-
-            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-
-            Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
         }
     }
 

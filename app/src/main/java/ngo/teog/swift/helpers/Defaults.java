@@ -17,7 +17,7 @@ public final class Defaults {
 
     public static final String ID_PREFERENCE = "ID_PREFERENCE";
     public static final String PW_PREFERENCE = "PW_PREFERENCE";
-    public static final String LAST_NEWS_PREF = "LAST_NEWS_ID";
+    public static final String NOTIFICATION_COUNTER = "NOTIFICATION_COUNTER";
 
     //Paths
     public static final String BASE_URL = "https://teog.virlep.de/";

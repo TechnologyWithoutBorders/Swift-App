@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.VibrationEffect;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Base64;
@@ -24,11 +26,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -300,38 +304,76 @@ public class RequestFactory {
         });
     }*/
 
-    public DefaultRequest createWorkRequest(final Context context, int id) {
+    public DefaultRequest createWorkRequest(final Context context, int id, final int notificationCounter) {
         final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
 
         Map<String, String> params = generateParameterMap(context, "fetch_work", true);
         params.put(UserFilter.ID, Integer.toString(id));
+        params.put("notification_counter", Integer.toString(notificationCounter));
 
         JSONObject request = new JSONObject(params);
 
         return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<Report> reportList = new ResponseParser().parseReportList(response);
+                ArrayList<Report> reportList = new ArrayList<>();
 
-                if(reportList.size() > 0) {
-                    int notificationID = reportList.get(0).getID();
+                int responseCode = response.getInt(ngo.teog.swift.helpers.Response.CODE_FIELD);
+                switch(responseCode) {
+                    case ngo.teog.swift.helpers.Response.CODE_OK:
+                        JSONObject data = response.getJSONObject(ngo.teog.swift.helpers.Response.DATA_FIELD);
+                        int notificationID = data.getInt("notification_counter");
 
-                    final String CHANNEL_ID = "work_channel";
-                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_stat_name)
-                            .setContentTitle("Incoming work")
-                            .setContentText(reportList.size() + " devices need attention.")
-                            .setAutoCancel(true);
-                    Intent resultIntent = new Intent(context, MainActivity.class);
+                        JSONArray jsonReportList = data.getJSONArray("report_list");
 
-                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                    stackBuilder.addParentStack(MainActivity.class);
-                    stackBuilder.addNextIntent(resultIntent);
-                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                    mBuilder.setContentIntent(resultPendingIntent);
-                    NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        for(int i = 0; i < jsonReportList.length(); i++) {
+                            JSONObject reportObject = jsonReportList.getJSONObject(i);
 
-                    mNotificationManager.notify(notificationID, mBuilder.build());
+                            int id = reportObject.getInt(ReportFilter.ID);
+                            int author = reportObject.getInt(ReportFilter.AUTHOR);
+                            int device = reportObject.getInt(ReportFilter.DEVICE);
+                            int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
+                            int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
+                            String description = reportObject.getString(ReportFilter.DESCRIPTION);
+                            String dateString = reportObject.getString(ReportFilter.DATETIME);
+
+                            Date date = Report.reportFormat.parse(dateString);
+
+                            Report report = new Report(id, author, device, previousState, currentState, description , date);
+                            reportList.add(report);
+                        }
+
+                        if(reportList.size() > 0) {
+                            final String CHANNEL_ID = "work_channel";
+                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                                    .setSmallIcon(R.drawable.ic_stat_name)
+                                    .setContentTitle("TeoG Swift")
+                                    .setVibrate(new long[] {0, 1000})
+                                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                                    .setContentText(reportList.size() + " devices need your attention.")
+                                    .setAutoCancel(true);
+                            Intent resultIntent = new Intent(context, MainActivity.class);
+
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                            stackBuilder.addParentStack(MainActivity.class);
+                            stackBuilder.addNextIntent(resultIntent);
+                            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                            mBuilder.setContentIntent(resultPendingIntent);
+                            NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                            mNotificationManager.notify(0, mBuilder.build());
+                        }
+
+                        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt(Defaults.NOTIFICATION_COUNTER, notificationID);
+                        editor.apply();
+
+                        break;
+                    case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
+                        throw new ResponseException(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
+                    case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                    default:
+                        throw new Exception(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
                 }
             }
         });
@@ -462,7 +504,6 @@ public class RequestFactory {
         }
     }
 
-    //TODO beim LoginRequest sollte auch die zuletzt zugestellte News-ID abgerufen werden
     public class LoginRequest extends JsonObjectRequest {
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
@@ -477,7 +518,7 @@ public class RequestFactory {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt(Defaults.ID_PREFERENCE, id);
                         editor.putString(Defaults.PW_PREFERENCE, password);
-                        editor.putInt(Defaults.LAST_NEWS_PREF, -1);
+                        editor.putInt(Defaults.NOTIFICATION_COUNTER, 0);
                         editor.apply();
 
                         Intent intent = new Intent(context, MainActivity.class);

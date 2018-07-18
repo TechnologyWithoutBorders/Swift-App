@@ -29,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ import ngo.teog.swift.helpers.Hospital;
 import ngo.teog.swift.helpers.Response;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
+import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -154,7 +156,7 @@ public class UserProfileActivity extends AppCompatActivity {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         Map<String, String> params = new HashMap<>();
-        params.put("action", "profile");
+        params.put("action", "fetch_user");
         params.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
         params.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
         params.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
@@ -173,39 +175,23 @@ public class UserProfileActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        int responseCode = response.getInt("response_code");
-                        switch(responseCode) {
-                            case Response.CODE_OK:
-                                JSONObject userObject = response.getJSONObject("data");
+                        ArrayList<User> userList = new ResponseParser().parseUserList(response);
+                        User user = userList.get(0);
 
-                                String phone = userObject.getString(UserFilter.PHONE);
-                                String mail = userObject.getString(UserFilter.MAIL);
-                                String fullName = userObject.getString(UserFilter.FULL_NAME);
-                                String hospital = userObject.getString("h_name");
-                                String position = userObject.getString("u_position");
+                        nameView.setText(user.getFullName());
+                        telephoneView.setText(user.getPhone());
+                        mailView.setText(user.getMail());
+                        hospitalView.setText(user.getHospital().getName());
+                        positionView.setText(user.getPosition());
 
-                                nameView.setText(fullName);
-                                telephoneView.setText(phone);
-                                mailView.setText(mail);
-                                hospitalView.setText(hospital);
-                                positionView.setText(position);
+                        /*if(userObject.has("picture")) {
+                            String imageData = userObject.getString("picture");
 
-                                if(userObject.has("picture")) {
-                                    String imageData = userObject.getString("picture");
+                            byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                                    byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                                    imageView.setImageBitmap(bitmap);
-                                }
-
-                                break;
-                            case Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case Response.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString("data"));
-                        }
+                            imageView.setImageBitmap(bitmap);
+                        }*/
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {
