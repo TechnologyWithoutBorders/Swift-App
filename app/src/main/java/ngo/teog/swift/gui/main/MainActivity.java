@@ -80,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 RequestFactory.DefaultRequest request = null;
 
                 if("device".equals(type)) {
-                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber);
+                    SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber, user);
                 } else if("user".equals(type)) {
                     request = new RequestFactory().createUserOpenRequest(this, null, null, objectNumber);
                 } else if("report".equals(type)) {

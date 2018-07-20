@@ -2,6 +2,7 @@ package ngo.teog.swift.gui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.Filter;
@@ -98,7 +100,10 @@ public class SearchFragment extends BaseFragment {
             switch(searchSpinner.getSelectedItemPosition()) {
                 case DEVICE:
                     if(this.checkForInternetConnection()) {
-                        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
+                        SharedPreferences preferences = getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                        int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+                        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, user, adapter);
 
                         queue.add(request);
                     }

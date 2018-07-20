@@ -1,11 +1,14 @@
 package ngo.teog.swift.gui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -41,6 +44,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.main.MainActivity;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.Report;
 import ngo.teog.swift.helpers.SearchObject;
@@ -60,8 +64,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
     private Spinner statusSpinner;
 
     private boolean triggered = false;
-
-    private boolean notifications = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +193,13 @@ public class DeviceInfoActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_device_info, menu);
+
+        MenuItem notificationButton = menu.getItem(0);
+
+        if(device.getUnsubscribed()) {
+            notificationButton.setIcon(getResources().getDrawable(R.drawable.ic_notifications_off));
+        }
+
         return true;
     }
 
@@ -199,7 +208,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         // Handle item selection
         switch(item.getItemId()) {
             case R.id.notificationButton:
-                toggleNotifications();
+                toggleNotifications(item);
                 return true;
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
@@ -305,14 +314,29 @@ public class DeviceInfoActivity extends AppCompatActivity {
         }
     }
 
-    private void toggleNotifications() {
+    private void toggleNotifications(final MenuItem item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final Drawable successView;
+        if(device.getUnsubscribed()) {
+            successView = getResources().getDrawable(R.drawable.ic_notifications_on);
+        } else {
+            successView = getResources().getDrawable(R.drawable.ic_notifications_off);
+        }
 
         builder.setMessage("Do you really want to unsubscribe from this device?\nYou will no longer receive notifications abouts its state.")
                 .setTitle("Confirm")
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(DeviceInfoActivity.this, "not implemented yet", Toast.LENGTH_LONG).show();
+                        SharedPreferences preferences = DeviceInfoActivity.this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                        int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+                        RequestQueue queue = VolleyManager.getInstance(DeviceInfoActivity.this).getRequestQueue();
+
+                        RequestFactory.UnsubscriptionRequest request = new RequestFactory().createUnubscriptionRequest(DeviceInfoActivity.this, item, successView, !device.getUnsubscribed(), user, device.getID());
+
+                        item.setActionView(new ProgressBar(DeviceInfoActivity.this));
+                        queue.add(request);
                     }
                 })
                 .setNegativeButton("no", new DialogInterface.OnClickListener() {

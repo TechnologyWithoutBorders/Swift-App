@@ -1,6 +1,8 @@
 package ngo.teog.swift.gui.main;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,8 @@ import java.util.List;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.helpers.Defaults;
 
 public class BarcodeFragment extends Fragment {
 
@@ -103,7 +107,10 @@ public class BarcodeFragment extends Fragment {
     public void invokeFetchRequest(int id) {
         RequestQueue queue = VolleyManager.getInstance(getActivity()).getRequestQueue();
 
-        RequestFactory.DefaultRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, id);
+        SharedPreferences preferences = getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        RequestFactory.DefaultRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, id, user);
 
         searchField.setText(Integer.toString(id));
         searchButton.setVisibility(View.INVISIBLE);

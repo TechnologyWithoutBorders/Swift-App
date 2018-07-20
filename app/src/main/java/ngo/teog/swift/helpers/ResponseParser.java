@@ -3,8 +3,10 @@ package ngo.teog.swift.helpers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -54,18 +56,19 @@ public class ResponseParser {
                     String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
-                    int currentState = 0;
-                    try {
-                        currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
-                    } catch(Exception e) {
-                        currentState = 0;
-                    }
+                    int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
 
                     Date nextMaintenance = new Date();
                     String hospital = deviceObject.getString("h_name");
                     String ward = deviceObject.getString("d_ward");
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, ward);
+                    boolean unsubscribed = false;
+
+                    if(!deviceObject.isNull("s_device")) {
+                        unsubscribed = true;
+                    }
+
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, ward, unsubscribed);
                     result.add(device);
                 }
 

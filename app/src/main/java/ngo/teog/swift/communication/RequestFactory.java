@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.VibrationEffect;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -188,11 +190,12 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id) {
+    public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id, int user) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE, true);
         params.put(DeviceFilter.ID, Integer.toString(id));
+        params.put(UserFilter.ID, Integer.toString(user));
 
         JSONObject request = new JSONObject(params);
 
@@ -379,10 +382,11 @@ public class RequestFactory {
         });
     }
 
-    public DeviceListRequest createTodoListRequest(Context context, View disable, View enable, ArrayAdapter<SearchObject> adapter) {
+    public DeviceListRequest createTodoListRequest(Context context, View disable, View enable, int user, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_TODO_LIST, true);
+        params.put(UserFilter.ID, Integer.toString(user));
         JSONObject request = new JSONObject(params);
 
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
@@ -435,11 +439,61 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
+    public UnsubscriptionRequest createUnubscriptionRequest(Context context, MenuItem item, Drawable successDrawable, boolean unsubscribe, int user, int device) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, "update_unsubscription", true);
+        params.put(UserFilter.ID, Integer.toString(user));
+        params.put(DeviceFilter.ID, Integer.toString(device));
+        params.put("unsubscribe", Boolean.toString(unsubscribe));
+        JSONObject request = new JSONObject(params);
+
+        return new UnsubscriptionRequest(context, url, request, item, successDrawable);
+    }
+
+    public class UnsubscriptionRequest extends JsonObjectRequest {
+
+        public UnsubscriptionRequest(final Context context, final String url, JSONObject request, final MenuItem item, final Drawable successDrawable) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        int responseCode = response.getInt("response_code");
+                        switch(responseCode) {
+                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                                item.setActionView(null);
+                                item.setIcon(successDrawable);
+                                break;
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString("data"));
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            default:
+                                throw new Exception(response.getString("data"));
+                        }
+                    } catch(ResponseException e) {
+                        item.setActionView(null);
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        item.setActionView(null);
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    item.setActionView(null);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, int user, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_SEARCH_DEVICE, true);
         params.put(DeviceFilter.TYPE, searchValue);
+        params.put(UserFilter.ID, Integer.toString(user));
 
         JSONObject request = new JSONObject(params);
 

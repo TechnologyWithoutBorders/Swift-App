@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +29,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.AlarmReceiver;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
 
@@ -89,7 +91,10 @@ public class TodoFragment extends BaseFragment {
 
             RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
+            SharedPreferences preferences = getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, user, adapter);
 
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.INVISIBLE);
