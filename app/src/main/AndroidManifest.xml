@@ -27,9 +27,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="http"
                     android:host="teog.virlep.de"
-                    android:pathPrefix="/device" />
+                    android:pathPrefix="/device"
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -38,9 +38,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="http"
                     android:host="teog.virlep.de"
-                    android:pathPrefix="/report" />
+                    android:pathPrefix="/report"
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -49,9 +49,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="http"
                     android:host="teog.virlep.de"
-                    android:pathPrefix="/user" />
+                    android:pathPrefix="/user"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
@@ -62,7 +62,7 @@
             android:label="@string/title_activity_create_device" />
         <activity
             android:name=".gui.DeviceInfoActivity"
-            android:label="@string/title_activity_device_info"></activity>
+            android:label="@string/title_activity_device_info" />
         <activity
             android:name=".gui.AboutActivity"
             android:label="@string/title_activity_about" />
@@ -99,6 +99,9 @@
 
         <activity android:name=".gui.UserInfoActivity" />
         <activity android:name=".gui.ReportCreationActivity" />
+        <activity android:name=".gui.HospitalActivity"
+            android:label="My Hospital">
+        </activity>
     </application>
 
 </manifest>

@@ -91,10 +91,7 @@ public class TodoFragment extends BaseFragment {
 
             RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            SharedPreferences preferences = getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, user, adapter);
+            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
 
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.INVISIBLE);

@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.os.VibrationEffect;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -18,7 +16,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -32,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +36,6 @@ import java.util.Map;
 
 import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.gui.UserInfoActivity;
-import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
@@ -50,8 +45,6 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.filters.Filter;
-import ngo.teog.swift.helpers.NewsItem;
 import ngo.teog.swift.helpers.Report;
 import ngo.teog.swift.helpers.filters.ReportFilter;
 import ngo.teog.swift.helpers.ResponseParser;
@@ -190,12 +183,11 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id, int user) {
+    public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE, true);
         params.put(DeviceFilter.ID, Integer.toString(id));
-        params.put(UserFilter.ID, Integer.toString(user));
 
         JSONObject request = new JSONObject(params);
 
@@ -382,10 +374,19 @@ public class RequestFactory {
         });
     }
 
-    public DeviceListRequest createTodoListRequest(Context context, View disable, View enable, int user, ArrayAdapter<SearchObject> adapter) {
+    public DeviceListRequest createTodoListRequest(Context context, View disable, View enable, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_TODO_LIST, true);
+        JSONObject request = new JSONObject(params);
+
+        return new DeviceListRequest(context, disable, enable, url, request, adapter);
+    }
+
+    public DeviceListRequest createDeviceListRequest(Context context, View disable, View enable, ArrayAdapter<SearchObject> adapter, int user) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch_device_list", true);
         params.put(UserFilter.ID, Integer.toString(user));
         JSONObject request = new JSONObject(params);
 
@@ -420,7 +421,7 @@ public class RequestFactory {
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     disable.setVisibility(View.INVISIBLE);
@@ -433,27 +434,24 @@ public class RequestFactory {
 
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
-    public UnsubscriptionRequest createUnubscriptionRequest(Context context, MenuItem item, Drawable successDrawable, boolean unsubscribe, int user, int device) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+    public ColleagueRequest createColleagueRequest(Context context, View disable, View enable, ArrayAdapter<User> userAdapter, int user) {
+        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
-        Map<String, String> params = generateParameterMap(context, "update_unsubscription", true);
+        Map<String, String> params = generateParameterMap(context, "fetch_members", true);
         params.put(UserFilter.ID, Integer.toString(user));
-        params.put(DeviceFilter.ID, Integer.toString(device));
-        params.put("unsubscribe", Boolean.toString(unsubscribe));
         JSONObject request = new JSONObject(params);
 
-        return new UnsubscriptionRequest(context, url, request, item, successDrawable);
+        return new ColleagueRequest(context, disable, enable, url, request, userAdapter);
     }
 
-    public class UnsubscriptionRequest extends JsonObjectRequest {
-
-        public UnsubscriptionRequest(final Context context, final String url, JSONObject request, final MenuItem item, final Drawable successDrawable) {
+    public class ColleagueRequest extends JsonObjectRequest {
+        public ColleagueRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> userAdapter) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -461,8 +459,76 @@ public class RequestFactory {
                         int responseCode = response.getInt("response_code");
                         switch(responseCode) {
                             case ngo.teog.swift.helpers.Response.CODE_OK:
+                                if(userAdapter != null) {
+                                    userAdapter.clear();
+                                }
+
+                                if(userAdapter != null) {
+                                    userAdapter.addAll(new ResponseParser().parseUserList(response));
+                                }
+
+                                break;
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString("data"));
+                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            default:
+                                throw new Exception(response.getString("data"));
+                        }
+                    } catch(ResponseException e) {
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    } catch(Exception e) {
+                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    userAdapter.clear();
+
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public UnsubscriptionOptionalUpdateRequest createUnsubscriptionOptionalUpdateRequest(Context context, MenuItem item, boolean toggle, int user, int device) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, "update_unsubscription", true);
+        params.put(UserFilter.ID, Integer.toString(user));
+        params.put(DeviceFilter.ID, Integer.toString(device));
+        params.put("toggle", Boolean.toString(toggle));
+
+        JSONObject request = new JSONObject(params);
+
+        return new UnsubscriptionOptionalUpdateRequest(context, url, request, item);
+    }
+
+    public class UnsubscriptionOptionalUpdateRequest extends JsonObjectRequest {
+
+        public UnsubscriptionOptionalUpdateRequest(final Context context, final String url, JSONObject request, final MenuItem item) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        int responseCode = response.getInt("response_code");
+                        switch(responseCode) {
+                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                                int unsubscriptions = response.getInt(ngo.teog.swift.helpers.Response.DATA_FIELD);
+
+                                if(unsubscriptions > 0) {
+                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_off));
+                                } else {
+                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_on));
+                                }
+
                                 item.setActionView(null);
-                                item.setIcon(successDrawable);
+
                                 break;
                             case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
                                 throw new ResponseException(response.getString("data"));
@@ -475,25 +541,24 @@ public class RequestFactory {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     } catch(Exception e) {
                         item.setActionView(null);
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     item.setActionView(null);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
-    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, int user, ArrayAdapter<SearchObject> adapter) {
+    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_SEARCH_DEVICE, true);
         params.put(DeviceFilter.TYPE, searchValue);
-        params.put(UserFilter.ID, Integer.toString(user));
 
         JSONObject request = new JSONObject(params);
 

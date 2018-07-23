@@ -3,6 +3,9 @@
     <item android:id="@+id/profileItem"
         android:title="my profile">
     </item>
+    <item android:id="@+id/hospitalItem"
+        android:title="my hospital">
+    </item>
     <item android:id="@+id/logoutItem"
         android:title="log out">
     </item>

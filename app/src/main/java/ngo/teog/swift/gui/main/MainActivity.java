@@ -32,6 +32,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.HospitalActivity;
 import ngo.teog.swift.gui.LoginActivity;
 import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;
@@ -80,10 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 RequestFactory.DefaultRequest request = null;
 
                 if("device".equals(type)) {
-                    SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                    int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber, user);
+                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber);
                 } else if("user".equals(type)) {
                     request = new RequestFactory().createUserOpenRequest(this, null, null, objectNumber);
                 } else if("report".equals(type)) {
@@ -196,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.profileItem:
                 startUserProfileActivity();
                 return true;
+            case R.id.hospitalItem:
+                startHospitalActivity();
+                return true;
             case R.id.logoutItem:
                 logout();
                 return true;
@@ -228,6 +229,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void startUserProfileActivity() {
         Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void startHospitalActivity() {
+        Intent intent = new Intent(MainActivity.this, HospitalActivity.class);
         startActivity(intent);
     }
 

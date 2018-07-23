@@ -32,9 +32,8 @@ public class HospitalDevice extends SearchObject {
     private int state = 1;
     private String hospital;
     private String ward;
-    private boolean unsubscribed;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, Date nextMaintenance, String hospital, String ward, boolean unsubscribed) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, Date nextMaintenance, String hospital, String ward) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -45,7 +44,6 @@ public class HospitalDevice extends SearchObject {
         this.state = state;
         this.hospital = hospital;
         this.ward = ward;
-        this.unsubscribed = unsubscribed;
     }
 
     public int getID() {
@@ -86,10 +84,6 @@ public class HospitalDevice extends SearchObject {
 
     public String getWard() {
         return ward;
-    }
-
-    public boolean getUnsubscribed() {
-        return unsubscribed;
     }
 
     @Override

@@ -62,13 +62,7 @@ public class ResponseParser {
                     String hospital = deviceObject.getString("h_name");
                     String ward = deviceObject.getString("d_ward");
 
-                    boolean unsubscribed = false;
-
-                    if(!deviceObject.isNull("s_device")) {
-                        unsubscribed = true;
-                    }
-
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, ward, unsubscribed);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, ward);
                     result.add(device);
                 }
 

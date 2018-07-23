@@ -157,7 +157,7 @@ public class NewDeviceActivity extends AppCompatActivity {
             Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
 
             HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
-                    typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), 0, new Date(), "bla", "blub", false);
+                    typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), 0, new Date(), "bla", "blub");
 
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

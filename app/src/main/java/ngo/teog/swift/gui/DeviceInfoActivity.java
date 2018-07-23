@@ -1,21 +1,17 @@
 package ngo.teog.swift.gui;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,7 +25,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
@@ -43,13 +38,9 @@ import java.util.Date;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.Report;
-import ngo.teog.swift.helpers.SearchObject;
-import ngo.teog.swift.helpers.filters.Filter;
-import ngo.teog.swift.helpers.filters.ReportFilter;
 
 public class DeviceInfoActivity extends AppCompatActivity {
 
@@ -194,11 +185,17 @@ public class DeviceInfoActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_device_info, menu);
 
-        MenuItem notificationButton = menu.getItem(0);
+        MenuItem item = menu.getItem(0);
 
-        if(device.getUnsubscribed()) {
-            notificationButton.setIcon(getResources().getDrawable(R.drawable.ic_notifications_off));
-        }
+        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        RequestFactory.UnsubscriptionOptionalUpdateRequest notificationRequest = new RequestFactory().createUnsubscriptionOptionalUpdateRequest(DeviceInfoActivity.this, item, false, user, device.getID());
+
+        item.setActionView(new ProgressBar(DeviceInfoActivity.this));
+        queue.add(notificationRequest);
 
         return true;
     }
@@ -317,14 +314,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
     private void toggleNotifications(final MenuItem item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        final Drawable successView;
-        if(device.getUnsubscribed()) {
-            successView = getResources().getDrawable(R.drawable.ic_notifications_on);
-        } else {
-            successView = getResources().getDrawable(R.drawable.ic_notifications_off);
-        }
-
-        builder.setMessage("Do you really want to unsubscribe from this device?\nYou will no longer receive notifications abouts its state.")
+        builder.setMessage("Are you sure you want to change this setting? If the bell is disabled, you will not receive any more notifications regarding this device.")
                 .setTitle("Confirm")
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -333,7 +323,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
                         RequestQueue queue = VolleyManager.getInstance(DeviceInfoActivity.this).getRequestQueue();
 
-                        RequestFactory.UnsubscriptionRequest request = new RequestFactory().createUnubscriptionRequest(DeviceInfoActivity.this, item, successView, !device.getUnsubscribed(), user, device.getID());
+                        RequestFactory.UnsubscriptionOptionalUpdateRequest request = new RequestFactory().createUnsubscriptionOptionalUpdateRequest(DeviceInfoActivity.this, item, true, user, device.getID());
 
                         item.setActionView(new ProgressBar(DeviceInfoActivity.this));
                         queue.add(request);

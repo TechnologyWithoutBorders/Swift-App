@@ -65,9 +65,6 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         nameView = findViewById(R.id.nameView);
 
         telephoneView = findViewById(R.id.phoneView);

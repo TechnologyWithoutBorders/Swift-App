@@ -1,6 +1,7 @@
 package ngo.teog.swift.helpers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Hospital implements Serializable {
     private int id;
