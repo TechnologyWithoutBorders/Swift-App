@@ -100,6 +100,7 @@ public class UserProfileActivity extends AppCompatActivity {
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_PHONE);
+        input.setText(telephoneView.getText());
         builder.setView(input);
 
         // Set up the buttons
@@ -120,13 +121,44 @@ public class UserProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
+    public void editPosition(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Position");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(positionView.getText());
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                positionView.setText(input.getText().toString());
+                saveButton.setEnabled(true);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     public void save(View view) {
         if(checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString());
+            User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), null, positionView.getText().toString());
+
+            RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, user);
 
             saveProgressBar.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);

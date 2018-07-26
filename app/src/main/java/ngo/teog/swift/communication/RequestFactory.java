@@ -668,13 +668,14 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createProfileUpdateRequest(final Context context, View disable, final View enable, int id, String phone) {
+    public DefaultRequest createProfileUpdateRequest(final Context context, View disable, final View enable, User user) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_UPDATE_USER, true);
 
-        params.put(UserFilter.ID, Integer.toString(id));
-        params.put(UserFilter.PHONE, phone);
+        params.put(UserFilter.ID, Integer.toString(user.getID()));
+        params.put(UserFilter.PHONE, user.getPhone());
+        params.put("u_position", user.getPosition());
 
         JSONObject request = new JSONObject(params);
 

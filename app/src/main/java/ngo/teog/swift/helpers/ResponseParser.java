@@ -60,9 +60,9 @@ public class ResponseParser {
 
                     Date nextMaintenance = new Date();
                     String hospital = deviceObject.getString("h_name");
-                    String ward = deviceObject.getString("d_ward");
+                    int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, ward);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, maintenanceInterval);
                     result.add(device);
                 }
 

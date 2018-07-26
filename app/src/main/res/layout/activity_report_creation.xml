@@ -2,18 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Report Description:" />
+        android:background="@color/teog_blue"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:padding="3dp"
+        android:textStyle="bold"
+        android:text="Report Description" />
 
     <EditText
         android:id="@+id/descriptionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:hint="provide a short description" />
 
     <Space
         android:layout_width="match_parent"

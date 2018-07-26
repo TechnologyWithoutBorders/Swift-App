@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:text="Members"
         android:textColor="#FFFFFF"
+        android:textSize="15sp"
         android:background="@color/teog_blue"
         android:textStyle="bold"
         android:padding="3dp" />
@@ -36,6 +37,7 @@
         android:layout_height="wrap_content"
         android:text="Devices"
         android:textColor="#FFFFFF"
+        android:textSize="15sp"
         android:background="@color/teog_blue"
         android:textStyle="bold"
         android:padding="3dp" />

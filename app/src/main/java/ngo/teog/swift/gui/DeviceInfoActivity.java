@@ -158,8 +158,8 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
         hospitalView.setText(device.getHospital());
 
-        TextView wardView = findViewById(R.id.wardView);
-        wardView.setText(device.getWard());
+        TextView intervalView = findViewById(R.id.intervalView);
+        //intervalView.setText();
 
         if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
