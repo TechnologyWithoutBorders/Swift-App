@@ -1,7 +1,9 @@
 package ngo.teog.swift.gui;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -21,20 +24,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ViewFlipper;
 
 import com.android.volley.RequestQueue;
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.main.BarcodeFragment;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 
 public class NewDeviceActivity extends AppCompatActivity {
@@ -49,7 +60,6 @@ public class NewDeviceActivity extends AppCompatActivity {
     private EditText serialNumberField;
     private EditText manufacturerField;
     private EditText modelField;
-    private EditText wardField;
 
     private ViewFlipper flipper;
     private LinearLayout first;
@@ -58,6 +68,36 @@ public class NewDeviceActivity extends AppCompatActivity {
     private Button nextButton;
 
     private RelativeLayout buttonArea;
+
+    private DecoratedBarcodeView barcodeScannerView;
+    private String lastText;
+
+    private int deviceNumber;
+
+    private BarcodeCallback callback = new BarcodeCallback() {
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if(result.getText() == null || result.getText().equals(lastText)) {
+                // Prevent duplicate scans
+                return;
+            }
+
+            lastText = result.getText();
+
+            try {
+                deviceNumber = Integer.parseInt(result.getText());
+
+                next(null);
+            } catch(NumberFormatException e) {
+                //ignore
+            }
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+            //ignore
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +112,10 @@ public class NewDeviceActivity extends AppCompatActivity {
         serialNumberField = findViewById(R.id.serialNumberText);
         manufacturerField = findViewById(R.id.manufacturerText);
         modelField = findViewById(R.id.modelText);
-        wardField = findViewById(R.id.wardText);
+        NumberPicker intervalPicker = findViewById(R.id.intervalPicker);
+        intervalPicker.setMinValue(1);
+        intervalPicker.setMaxValue(24);
+        intervalPicker.setValue(4);
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
@@ -94,11 +137,26 @@ public class NewDeviceActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
         }
+
+        barcodeScannerView = findViewById(R.id.barcodeScannerView);
+        barcodeScannerView.decodeContinuous(callback);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return barcodeScannerView.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        barcodeScannerView.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        barcodeScannerView.resume();
+        lastText = null;
 
         if(mCurrentPhotoPath != null) {
             imageView.setImageBitmap(decode(mCurrentPhotoPath, 500, 500));
@@ -156,13 +214,16 @@ public class NewDeviceActivity extends AppCompatActivity {
 
             Bitmap bitmap = decode(mCurrentPhotoPath, 500, 500);
 
-            HospitalDevice device = new HospitalDevice(-1, assetNumberField.getText().toString(),
-                    typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), 0, new Date(), "bla", 4);
+            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+            HospitalDevice device = new HospitalDevice(deviceNumber, assetNumberField.getText().toString(),
+                    typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), 0, "bla", 4, new Date());
 
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             RequestFactory factory = new RequestFactory();
-            RequestFactory.DefaultRequest request = factory.createDeviceCreationRequest(this, progressBar, nextButton, device, bitmap, wardField.getText().toString());
+            RequestFactory.DefaultRequest request = factory.createDeviceCreationRequest(this, progressBar, nextButton, device, bitmap, user);
 
             queue.add(request);
         }

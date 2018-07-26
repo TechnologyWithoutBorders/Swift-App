@@ -71,12 +71,10 @@
                 android:hint="Model"
                 android:inputType="text" />
 
-            <EditText
-                android:id="@+id/wardText"
+            <NumberPicker
+                android:id="@+id/intervalPicker"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ward"
-                android:inputType="text" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

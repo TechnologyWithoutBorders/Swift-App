@@ -159,7 +159,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         hospitalView.setText(device.getHospital());
 
         TextView intervalView = findViewById(R.id.intervalView);
-        //intervalView.setText();
+        intervalView.setText(Integer.toString(device.getMaintenanceInterval()) + " Weeks");
 
         if (this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();

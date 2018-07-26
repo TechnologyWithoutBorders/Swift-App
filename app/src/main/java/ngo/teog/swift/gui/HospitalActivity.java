@@ -150,7 +150,7 @@ public class HospitalActivity extends AppCompatActivity {
             if(device != null) {
                 nameView.setText(device.getType());
 
-                String dateString = DATE_FORMAT.format(device.getNextMaintenance());
+                String dateString = DATE_FORMAT.format(device.getLastReportDate());
                 dateView.setText(dateString);
 
                 int background = android.R.color.white;

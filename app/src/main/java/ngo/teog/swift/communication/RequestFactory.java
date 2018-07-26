@@ -732,18 +732,19 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, String ward) {
+    public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, int userID) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_CREATE_DEVICE, true);
 
+        params.put(UserFilter.ID, Integer.toString(userID));
+        params.put(DeviceFilter.ID, Integer.toString(device.getID()));
         params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
         params.put(DeviceFilter.TYPE, device.getType());
         params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
         params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
         params.put(DeviceFilter.MODEL, device.getModel());
-        params.put(DeviceFilter.NEXT_MAINTENANCE, TodoFragment.DATE_FORMAT.format(device.getNextMaintenance()));
-        params.put("ward", ward);
+        params.put("d_maintenance_interval", Integer.toString(device.getMaintenanceInterval()));
 
         if(bitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen

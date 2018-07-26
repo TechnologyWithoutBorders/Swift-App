@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -58,11 +59,15 @@ public class ResponseParser {
                     String model = deviceObject.getString(DeviceFilter.MODEL);
                     int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
 
-                    Date nextMaintenance = new Date();
+                    final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
                     String hospital = deviceObject.getString("h_name");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
+                    String reportDateString = deviceObject.getString("r_datetime");
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, nextMaintenance, hospital, maintenanceInterval);
+                    Date lastReportDate = DATE_FORMAT.parse(reportDateString);
+
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, hospital, maintenanceInterval, lastReportDate);
                     result.add(device);
                 }
 

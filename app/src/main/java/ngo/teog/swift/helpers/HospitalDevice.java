@@ -28,22 +28,22 @@ public class HospitalDevice extends SearchObject {
     private String serialNumber;
     private String manufacturer;
     private String model;
-    private Date nextMaintenance;
     private int state;
     private String hospital;
     private int maintenanceInterval;
+    private Date lastReportDate;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, Date nextMaintenance, String hospital, int maintenanceInterval) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int state, String hospital, int maintenanceInterval, Date lastReportDate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
         this.serialNumber = serialNumber;
         this.manufacturer = manufacturer;
         this.model = model;
-        this.nextMaintenance = nextMaintenance;
         this.state = state;
         this.hospital = hospital;
         this.maintenanceInterval = maintenanceInterval;
+        this.lastReportDate = lastReportDate;
     }
 
     public int getID() {
@@ -70,10 +70,6 @@ public class HospitalDevice extends SearchObject {
         return model;
     }
 
-    public Date getNextMaintenance() {
-        return nextMaintenance;
-    }
-
     public int getState() {
         return state;
     }
@@ -84,6 +80,10 @@ public class HospitalDevice extends SearchObject {
 
     public int getMaintenanceInterval() {
         return maintenanceInterval;
+    }
+
+    public Date getLastReportDate() {
+        return lastReportDate;
     }
 
     @Override
