@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -29,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -141,7 +143,25 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createDeviceImageRequest(Context context, View disable, final View enable, int id) {
+    public DefaultRequest createDeviceImageHashRequest(Context context, View disable, final View enable, int id) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch_image_hash", true);
+        params.put(DeviceFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                String imageHash = response.getString("data");
+
+                //TODO
+            }
+        });
+    }
+
+    public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE_IMAGE, true);
@@ -156,6 +176,8 @@ public class RequestFactory {
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                File.createTempFile(Integer.toString(id), null, context.getCacheDir());
 
                 ((ImageView) enable).setImageBitmap(bitmap);
             }
@@ -565,7 +587,7 @@ public class RequestFactory {
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
     }
 
-    public LoginRequest createLoginRequest(Activity context, ImageView imageView, LinearLayout form, String mail, String password) {
+    public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_LOGIN_USER, false);
@@ -575,7 +597,7 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new LoginRequest(context, imageView, form, url, request, password);
+        return new LoginRequest(context, anim, form, url, request, password);
     }
 
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
@@ -626,7 +648,7 @@ public class RequestFactory {
     public class LoginRequest extends JsonObjectRequest {
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final ImageView imageView, final LinearLayout form, final String url, JSONObject request, final String password) {
+        public LoginRequest(final Activity context, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -647,19 +669,19 @@ public class RequestFactory {
                         context.finish();
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        imageView.setAnimation(null);
+                        anim.stop();
                         form.setVisibility(View.VISIBLE);
                     } catch(Exception e) {
                         Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                         Log.e("LOGIN", "failed", e);
-                        imageView.setAnimation(null);
+                        anim.stop();
                         form.setVisibility(View.VISIBLE);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    imageView.setAnimation(null);
+                    anim.stop();
                     form.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                     Log.e("LOGIN", error.toString());

@@ -103,16 +103,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setCurrentItem(1);
 
-        try {
-            ActionBar actionBar = getSupportActionBar();
-
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setLogo(R.mipmap.ic_launcher_round);
-            actionBar.setDisplayUseLogoEnabled(true);
-        } catch(NullPointerException e) {
-            //ignore
-        }
-
         for(int i = 0; i < 3; i++) {
             tabLayout.addTab(
                     tabLayout.newTab()

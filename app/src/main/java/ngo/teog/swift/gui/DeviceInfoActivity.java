@@ -59,6 +59,11 @@ public class DeviceInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null) {
+            triggered = savedInstanceState.getBoolean("TRIGGERED");
+        }
+
         setContentView(R.layout.activity_device_info);
 
         Intent intent = this.getIntent();
@@ -178,6 +183,13 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             queue.add(reportListRequest);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean("TRIGGERED", false);
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override

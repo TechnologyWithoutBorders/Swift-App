@@ -3,11 +3,13 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -42,9 +44,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_login);
 
         imageView = findViewById(R.id.imageView2);
+
+        imageView.setBackgroundResource(R.drawable.logo_layer);
+
         form = findViewById(R.id.form);
 
         loginButton = findViewById(R.id.loginButton);
@@ -83,16 +90,14 @@ public class LoginActivity extends AppCompatActivity {
         if(mailField.getText().length() > 0) {
             if(passwordField.getText().length() > 0) {
                 if(checkForInternetConnection()) {
-                    RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, imageView, form, mailField.getText().toString(), getHash(passwordField.getText().toString()));
+                    AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
+
+                    RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()));
 
                     form.setVisibility(View.GONE);
 
-                    RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                    anim.setInterpolator(new LinearInterpolator());
-                    anim.setRepeatCount(Animation.INFINITE);
-                    anim.setDuration(700);
-
-                    imageView.startAnimation(anim);
+                    imageView.setImageDrawable(null);
+                    anim.start();
 
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } else {
