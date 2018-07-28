@@ -81,6 +81,13 @@ public class TodoFragment extends BaseFragment {
         refresh();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refresh();
+    }
+
     private void refresh() {
         if(this.checkForInternetConnection()) {
             AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
