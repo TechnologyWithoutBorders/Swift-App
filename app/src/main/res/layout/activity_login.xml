@@ -36,6 +36,16 @@
                 android:orientation="vertical"
                 android:id="@+id/form">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Country"/>
+
+                <Spinner
+                    android:id="@+id/countrySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <EditText
                     android:id="@+id/mailText"
                     android:layout_width="match_parent"

@@ -44,15 +44,10 @@
         <item>User</item>
     </string-array>
 
-    <string-array name="report_types">
-        <item>Maintenance</item>
-        <item>Repair</item>
+    <string-array name="countries_options">
+        <item>Germany</item>
     </string-array>
 
-    <string-array name="error_tags">
-        <item>Wiring</item>
-        <item>Wear</item>
-    </string-array>
 
     <string-array name="device_states">
         <item>working</item>

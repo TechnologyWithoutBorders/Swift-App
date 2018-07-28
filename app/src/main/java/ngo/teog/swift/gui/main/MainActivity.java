@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(Defaults.ID_PREFERENCE);
         editor.remove(Defaults.PW_PREFERENCE);
+        editor.remove(Defaults.COUNTRY_PREFERENCE);
         editor.remove(Defaults.NOTIFICATION_COUNTER);
         editor.apply();
 

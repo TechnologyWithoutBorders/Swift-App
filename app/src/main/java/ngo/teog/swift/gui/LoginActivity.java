@@ -17,11 +17,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.security.MessageDigest;
@@ -40,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordField;
     private LinearLayout form;
     private ImageView imageView;
+    private Spinner countrySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         mailField = findViewById(R.id.mailText);
         passwordField = findViewById(R.id.pwText);
 
+        countrySpinner = findViewById(R.id.countrySpinner);
+
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
             form.setVisibility(View.GONE);
@@ -75,7 +80,12 @@ public class LoginActivity extends AppCompatActivity {
             //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
             LoginActivity.this.finish();
         } else {
-            //TODO
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.countries_options, android.R.layout.simple_spinner_item);
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the spinner
+            countrySpinner.setAdapter(adapter);
         }
     }
 
@@ -92,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(checkForInternetConnection()) {
                     AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
 
-                    RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()));
+                    RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()), (String)countrySpinner.getSelectedItem());
 
                     form.setVisibility(View.GONE);
 

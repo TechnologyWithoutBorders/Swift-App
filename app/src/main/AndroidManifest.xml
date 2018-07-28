@@ -7,9 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
 
     <application
         android:allowBackup="true"
@@ -89,7 +88,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="ngo.teog.swift.fileprovider"
+            android:authorities="ngo.teog.swift.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -99,9 +98,11 @@
 
         <activity android:name=".gui.UserInfoActivity" />
         <activity android:name=".gui.ReportCreationActivity" />
-        <activity android:name=".gui.HospitalActivity"
-            android:label="My Hospital">
-        </activity>
+        <activity
+            android:name=".gui.HospitalActivity"
+            android:label="My Hospital" />
+        <activity android:name=".gui.NewDeviceActivity2" />
+        <activity android:name=".gui.NewDeviceActivity3"></activity>
     </application>
 
 </manifest>

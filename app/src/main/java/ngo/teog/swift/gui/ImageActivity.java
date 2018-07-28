@@ -29,12 +29,10 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_image_dialog);
 
         Intent intent = this.getIntent();
-        String path = intent.getStringExtra("IMAGE");
+        File image = (File)intent.getSerializableExtra("IMAGE");
 
-        File f = new File(path);
-        Bitmap b = null;
         try {
-            b = BitmapFactory.decodeStream(new FileInputStream(f));
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(image));
 
             ImageView imageView = findViewById(R.id.imageView);
             imageView.setImageBitmap(b);

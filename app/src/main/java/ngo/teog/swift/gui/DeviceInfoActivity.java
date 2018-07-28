@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -112,29 +113,13 @@ public class DeviceInfoActivity extends AppCompatActivity {
         globalImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Create an image file name
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName = "JPEG_" + timeStamp + "_";
-                File image = null;//TODO außerdem deleteOnExit() nutzen?
-                try {
-                    image = File.createTempFile(imageFileName, ".jpg", DeviceInfoActivity.this.getCacheDir());
+                File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
 
-                    FileOutputStream fos = null;
-                    fos = new FileOutputStream(image);
-                    // Use the compress method on the BitMap object to write image to the OutputStream
-                    ((BitmapDrawable) globalImageView.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fos);
-
-                    fos.close();
-
-                    // Save a file: path for use with ACTION_VIEW intents
-                    String mCurrentPhotoPath = image.getAbsolutePath();
-
-                    Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
-                    intent.putExtra("IMAGE", mCurrentPhotoPath);
+                if(image.exists()) {
+                    Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
+                    intent.putExtra("IMAGE", image);
 
                     startActivity(intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -166,15 +151,22 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView intervalView = findViewById(R.id.intervalView);
         intervalView.setText(Integer.toString(device.getMaintenanceInterval()) + " Weeks");
 
-        if (this.checkForInternetConnection()) {
+        if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
+            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
 
-            progressBar.setVisibility(View.VISIBLE);
-            globalImageView.setVisibility(View.GONE);
+            if(!image.exists()) {
+                RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
 
-            queue.add(request);
+                progressBar.setVisibility(View.VISIBLE);
+                globalImageView.setVisibility(View.GONE);
+
+                queue.add(request);
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+            globalImageView.setImageBitmap(bitmap);
 
             RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, device.getID(), adapter);
 

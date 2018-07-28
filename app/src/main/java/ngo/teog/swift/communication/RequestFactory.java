@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -177,7 +178,15 @@ public class RequestFactory {
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                File.createTempFile(Integer.toString(id), null, context.getCacheDir());
+                FileOutputStream outputStream;
+
+                try {
+                    outputStream = context.openFileOutput("image_" + Integer.toString(id) + ".jpg", Context.MODE_PRIVATE);
+                    outputStream.write(decodedString);
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 ((ImageView) enable).setImageBitmap(bitmap);
             }
@@ -587,7 +596,7 @@ public class RequestFactory {
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
     }
 
-    public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password) {
+    public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_LOGIN_USER, false);
@@ -597,7 +606,7 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new LoginRequest(context, anim, form, url, request, password);
+        return new LoginRequest(context, anim, form, url, request, password, country);
     }
 
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
@@ -648,7 +657,7 @@ public class RequestFactory {
     public class LoginRequest extends JsonObjectRequest {
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password) {
+        public LoginRequest(final Activity context, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password, final String country) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -659,6 +668,7 @@ public class RequestFactory {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt(Defaults.ID_PREFERENCE, id);
                         editor.putString(Defaults.PW_PREFERENCE, password);
+                        editor.putString(Defaults.COUNTRY_PREFERENCE, country);
                         editor.putInt(Defaults.NOTIFICATION_COUNTER, 0);
                         editor.apply();
 
@@ -816,12 +826,13 @@ public class RequestFactory {
     }
 
     private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
         HashMap<String, String> parameterMap = new HashMap<>();
         parameterMap.put("action", action);
+        parameterMap.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
 
         if(userValidation) {
-            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
             parameterMap.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
             parameterMap.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
         }
