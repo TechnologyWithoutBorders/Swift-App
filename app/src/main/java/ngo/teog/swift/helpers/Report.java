@@ -16,15 +16,17 @@ public class Report implements Serializable {
 
     private int id;
     private int author;
+    private String authorName;
     private int device;
     private int previousState;
     private int currentState;
     private String description;
     private Date dateTime;
 
-    public Report(int id, int author, int device, int previousState, int currentState, String description, Date dateTime) {
+    public Report(int id, int author, String authorName, int device, int previousState, int currentState, String description, Date dateTime) {
         this.id = id;
         this.author = author;
+        this.authorName = authorName;
         this.device = device;
         this.previousState = previousState;
         this.currentState = currentState;
@@ -38,6 +40,10 @@ public class Report implements Serializable {
 
     public int getAuthor() {
         return author;
+    }
+
+    public String getAuthorName() {
+        return authorName;
     }
 
     public int getDevice() {

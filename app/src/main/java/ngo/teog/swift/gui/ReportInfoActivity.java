@@ -34,6 +34,9 @@ public class ReportInfoActivity extends AppCompatActivity {
         TextView dateView = findViewById(R.id.dateView);
         dateView.setText(Report.reportFormat.format(report.getDateTime()));
 
+        TextView authorView = findViewById(R.id.authorView);
+        authorView.setText(report.getAuthorName());
+
         TextView stateChangeView = findViewById(R.id.stateChangeView);
         stateChangeView.setText(getResources().getStringArray(R.array.device_states)[report.getPreviousState()] + " -> " + getResources().getStringArray(R.array.device_states)[report.getCurrentState()]);
 

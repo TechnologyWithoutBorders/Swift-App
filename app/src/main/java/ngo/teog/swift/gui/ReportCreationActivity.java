@@ -59,7 +59,7 @@ public class ReportCreationActivity extends AppCompatActivity {
 
         String description = descriptionText.getText().toString();
 
-        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date());
+        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), null, device, oldState, state, description, new Date());
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
