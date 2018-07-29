@@ -14,6 +14,7 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +23,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -61,6 +64,9 @@ public class DeviceInfoActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageView globalImageView;
 
+    private TextView intervalView;
+    private ProgressBar intervalProgressbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +76,8 @@ public class DeviceInfoActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_device_info);
+
+        intervalProgressbar = findViewById(R.id.intervalProgressbar);
 
         Intent intent = this.getIntent();
         device = (HospitalDevice) intent.getSerializableExtra("device");
@@ -139,7 +147,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
         hospitalView.setText(device.getHospital());
 
-        TextView intervalView = findViewById(R.id.intervalView);
+        intervalView = findViewById(R.id.intervalView);
         intervalView.setText(Integer.toString(device.getMaintenanceInterval()) + " Weeks");
 
         File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
@@ -183,6 +191,43 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             queue.add(reportListRequest);
         }
+    }
+
+    public void editMaintenanceInterval(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Maintenance Interval");
+
+        final NumberPicker intervalPicker = new NumberPicker(this);
+        intervalPicker.setMinValue(1);
+        intervalPicker.setMaxValue(24);
+        intervalPicker.setValue(Integer.parseInt(intervalView.getText().toString().replace(" Weeks", "")));
+
+        builder.setView(intervalPicker);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(DeviceInfoActivity.this.checkForInternetConnection()) {
+                    RequestQueue queue = VolleyManager.getInstance(DeviceInfoActivity.this).getRequestQueue();
+
+                    RequestFactory.DefaultRequest request = new RequestFactory().createDeviceUpdateRequest(DeviceInfoActivity.this, intervalProgressbar, intervalView, device.getID(), intervalPicker.getValue());
+
+                    intervalProgressbar.setVisibility(View.VISIBLE);
+                    intervalView.setVisibility(View.INVISIBLE);
+
+                    queue.add(request);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     private void downloadImage() {

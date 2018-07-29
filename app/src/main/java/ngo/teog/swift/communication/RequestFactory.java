@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -733,6 +734,24 @@ public class RequestFactory {
             @Override
             public void onSuccess(JSONObject response) {
                 enable.setEnabled(false);
+            }
+        });
+    }
+
+    public DefaultRequest createDeviceUpdateRequest(final Context context, View disable, final View enable, int deviceID, int maintenanceInterval) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, "update_maintenance_interval", true);
+
+        params.put(DeviceFilter.ID, Integer.toString(deviceID));
+        params.put("d_maintenance_interval", Integer.toString(maintenanceInterval));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                ((TextView)enable).setText(Integer.toString(response.getInt("data")) + " Weeks");
             }
         });
     }
