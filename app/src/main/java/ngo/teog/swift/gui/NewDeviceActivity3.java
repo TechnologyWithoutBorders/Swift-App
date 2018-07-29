@@ -15,6 +15,8 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -71,6 +73,13 @@ public class NewDeviceActivity3 extends AppCompatActivity {
         outState.putString("image", imagePath);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_device_creation3, menu);
+        return true;
     }
 
     public void createDevice(View view) {

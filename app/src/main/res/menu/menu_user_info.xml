@@ -5,4 +5,8 @@
         android:icon="@drawable/ic_share"
         android:title="share"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/new_game"
+        android:icon="@drawable/ic_info"
+        android:title="information"
+        app:showAsAction="always"/>
 </menu>
