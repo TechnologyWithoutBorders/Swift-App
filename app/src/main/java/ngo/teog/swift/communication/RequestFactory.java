@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
@@ -162,7 +164,7 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
+    public DefaultRequest createDeviceImageRequest(final DeviceInfoActivity context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE_IMAGE, true);
@@ -189,6 +191,21 @@ public class RequestFactory {
                 }
 
                 ((ImageView) enable).setImageBitmap(bitmap);
+                enable.setBackgroundColor(Color.BLACK);
+
+                enable.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        File image = new File(context.getFilesDir(), "image_" + Integer.toString(id) + ".jpg");
+
+                        if(image.exists()) {
+                            Intent intent = new Intent(context, ImageActivity.class);
+                            intent.putExtra("IMAGE", image);
+
+                            context.startActivity(intent);
+                        }
+                    }
+                });
             }
         });
     }
@@ -554,9 +571,9 @@ public class RequestFactory {
                                 int unsubscriptions = response.getInt(ngo.teog.swift.helpers.Response.DATA_FIELD);
 
                                 if(unsubscriptions > 0) {
-                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_off));
+                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_off_white_24dp));
                                 } else {
-                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_on));
+                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_white_24dp));
                                 }
 
                                 item.setActionView(null);

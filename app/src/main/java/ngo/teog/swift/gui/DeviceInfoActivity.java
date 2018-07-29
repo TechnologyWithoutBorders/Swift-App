@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -56,6 +57,9 @@ public class DeviceInfoActivity extends AppCompatActivity {
     private Spinner statusSpinner;
 
     private boolean triggered = false;
+
+    private ProgressBar progressBar;
+    private ImageView globalImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,24 +113,11 @@ public class DeviceInfoActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView globalImageView = findViewById(R.id.imageView);
-        globalImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
-
-                if(image.exists()) {
-                    Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                    intent.putExtra("IMAGE", image);
-
-                    startActivity(intent);
-                }
-            }
-        });
+        globalImageView = findViewById(R.id.imageView);
 
         //TODO Bild nur auf Knopfdruck herunterladen, außerdem per Hash überprüfen, ob es ein neueres gibt
 
-        ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
         ProgressBar reportListProgressbar = findViewById(R.id.reportListProgressbar);
 
@@ -151,22 +142,39 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView intervalView = findViewById(R.id.intervalView);
         intervalView.setText(Integer.toString(device.getMaintenanceInterval()) + " Weeks");
 
-        if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+        File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
 
-            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
+        if(!image.exists()) {
+            globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
 
-            if(!image.exists()) {
-                RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
-
-                progressBar.setVisibility(View.VISIBLE);
-                globalImageView.setVisibility(View.GONE);
-
-                queue.add(request);
-            }
-
+            globalImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                   downloadImage();
+                }
+            });
+        } else {
             Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
             globalImageView.setImageBitmap(bitmap);
+            globalImageView.setBackgroundColor(Color.BLACK);
+
+            globalImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
+
+                    if(image.exists()) {
+                        Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
+                        intent.putExtra("IMAGE", image);
+
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, device.getID(), adapter);
 
@@ -174,6 +182,19 @@ public class DeviceInfoActivity extends AppCompatActivity {
             reportListView.setVisibility(View.INVISIBLE);
 
             queue.add(reportListRequest);
+        }
+    }
+
+    private void downloadImage() {
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
+
+            progressBar.setVisibility(View.VISIBLE);
+            globalImageView.setVisibility(View.GONE);
+
+            queue.add(request);
         }
     }
 
