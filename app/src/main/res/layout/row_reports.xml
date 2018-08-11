@@ -13,8 +13,8 @@
         <ImageView
             android:id="@+id/fromState"
             android:src="@drawable/report_dot"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="29dp"
+            android:layout_height="29dp" />
 
         <TextView
             android:layout_gravity="center_vertical"
@@ -27,8 +27,8 @@
         <ImageView
             android:id="@+id/toState"
             android:src="@drawable/report_dot"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_width="29dp"
+            android:layout_height="29dp" />
     </LinearLayout>
 
     <TextView
