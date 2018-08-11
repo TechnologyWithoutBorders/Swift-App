@@ -69,6 +69,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingRight="7dp"
                     android:onClick="editPhone"
                     app:srcCompat="@drawable/ic_edit_black_24dp" />
             </TableRow>
@@ -135,6 +136,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:paddingRight="7dp"
                     android:onClick="editPosition"
                     app:srcCompat="@drawable/ic_edit_black_24dp" />
             </TableRow>

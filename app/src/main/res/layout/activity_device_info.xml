@@ -195,6 +195,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingRight="7dp"
                 android:onClick="editMaintenanceInterval"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
 
