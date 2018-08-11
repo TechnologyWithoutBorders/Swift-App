@@ -122,6 +122,9 @@
         <item>Nepal</item>
     </string-array>
 
-
-
+    <string-array name="maintenance_intervall_options">
+        <item>Weeks</item>
+        <item>Months</item>
+    </string-array>
+  
 </resources>
