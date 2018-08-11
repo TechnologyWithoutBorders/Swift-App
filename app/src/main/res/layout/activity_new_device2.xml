@@ -10,78 +10,81 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
-    <LinearLayout
-        android:id="@+id/second"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <EditText
-            android:id="@+id/assetNumberText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Asset Number"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/typeText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Type"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/serialNumberText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Serial Number"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/manufacturerText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Manufacturer"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/modelText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Model"
-            android:inputType="text" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/assetNumberText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:text="Maintenance Intervall"/>
+                android:hint="Asset Number"
+                android:inputType="text" />
 
-            <NumberPicker
-                android:id="@+id/intervalPicker"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/typeText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:hint="Type"
+                android:inputType="text" />
 
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/serialNumberText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:entries="@array/maintenance_intervall_options" />
+                android:hint="Serial Number"
+                android:inputType="text" />
 
+            <EditText
+                android:id="@+id/manufacturerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Manufacturer"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/modelText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Model"
+                android:inputType="text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="Maintenance Intervall" />
+
+                <NumberPicker
+                    android:id="@+id/intervalPicker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:entries="@array/maintenance_intervall_options" />
+
+            </LinearLayout>
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/buttonArea"
