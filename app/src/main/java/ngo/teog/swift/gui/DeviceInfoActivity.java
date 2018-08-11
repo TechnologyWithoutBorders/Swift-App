@@ -46,6 +46,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.Triple;
 
 public class DeviceInfoActivity extends AppCompatActivity {
 
@@ -323,55 +324,22 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);
 
-                int background = android.R.color.white;
 
-                switch(report.getPreviousState()) {
-                    case HospitalDevice.STATE_WORKING:
-                        background = android.R.color.holo_green_dark;
-                        break;
-                    case HospitalDevice.STATE_PM_DUE:
-                        background = android.R.color.holo_blue_light;
-                        break;
-                    case HospitalDevice.STATE_REPAIR_NEEDED:
-                        background = android.R.color.holo_orange_dark;
-                        break;
-                    case HospitalDevice.STATE_IN_PROGRESS:
-                        background = android.R.color.holo_green_light;
-                        break;
-                    case HospitalDevice.STATE_BROKEN_SALVAGE:
-                        background = android.R.color.holo_red_dark;
-                        break;
-                    case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
-                        background = android.R.color.holo_red_light;
-                        break;
-                }
+                Triple triple = Triple.buildtriple(report.getPreviousState(),this.getContext());
 
-                fromState.setColorFilter(getResources().getColor(background));
+                fromState.setImageDrawable(triple.getStateicon());
+                fromState.setColorFilter(triple.getBackgroundcolor());
 
                 ImageView toState = convertView.findViewById(R.id.toState);
 
-                switch(report.getCurrentState()) {
-                    case HospitalDevice.STATE_WORKING:
-                        background = android.R.color.holo_green_dark;
-                        break;
-                    case HospitalDevice.STATE_PM_DUE:
-                        background = android.R.color.holo_blue_light;
-                        break;
-                    case HospitalDevice.STATE_REPAIR_NEEDED:
-                        background = android.R.color.holo_orange_dark;
-                        break;
-                    case HospitalDevice.STATE_IN_PROGRESS:
-                        background = android.R.color.holo_green_light;
-                        break;
-                    case HospitalDevice.STATE_BROKEN_SALVAGE:
-                        background = android.R.color.holo_red_dark;
-                        break;
-                    case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
-                        background = android.R.color.holo_red_light;
-                        break;
-                }
 
-                toState.setColorFilter(getResources().getColor(background));
+
+
+                Triple triple1 = Triple.buildtriple(report.getCurrentState(),this.getContext());
+
+
+                toState.setImageDrawable(triple1.getStateicon());
+                toState.setColorFilter(triple1.getBackgroundcolor());
 
                 String dateString = DATE_FORMAT.format(report.getDateTime());
                 dateView.setText(dateString);
@@ -430,38 +398,10 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
 
-            int background = android.R.color.white;
-            int drawable = R.drawable.ic_repair;
+            Triple triple = Triple.buildtriple(position,this.getContext());
 
-            switch(position) {
-                case HospitalDevice.STATE_WORKING:
-                    drawable = R.drawable.ic_check;
-                    background = android.R.color.holo_green_dark;
-                    break;
-                case HospitalDevice.STATE_PM_DUE:
-                    drawable = R.drawable.ic_maintenance;
-                    background = android.R.color.holo_blue_light;
-                    break;
-                case HospitalDevice.STATE_REPAIR_NEEDED:
-                    drawable = R.drawable.ic_repair;
-                    background = android.R.color.holo_orange_dark;
-                    break;
-                case HospitalDevice.STATE_IN_PROGRESS:
-                    drawable = R.drawable.ic_in_progress;
-                    background = android.R.color.holo_green_light;
-                    break;
-                case HospitalDevice.STATE_BROKEN_SALVAGE:
-                    drawable = R.drawable.ic_broken_salvage;
-                    background = android.R.color.holo_red_dark;
-                    break;
-                case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
-                    drawable = R.drawable.ic_working_with_limitations;
-                    background = android.R.color.holo_red_light;
-                    break;
-            }
-
-            statusImageView.setImageDrawable(getResources().getDrawable(drawable));
-            statusImageView.setBackgroundColor(getResources().getColor(background));
+            statusImageView.setImageDrawable(triple.getStateicon());
+            statusImageView.setBackgroundColor(triple.getBackgroundcolor());
 
             return convertView;
         }

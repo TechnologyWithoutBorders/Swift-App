@@ -27,4 +27,7 @@ public final class Defaults {
     public static final String NEWS_URL = "info.php";
     public static final String REPORTS_URL = "reports.php";
     public static final String HOSPITALS_URL = "hospitals.php";
+
+    //default methodes
+
 }
