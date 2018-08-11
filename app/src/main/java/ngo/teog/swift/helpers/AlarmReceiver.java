@@ -1,10 +1,18 @@
 package ngo.teog.swift.helpers;
 
-import android.app.NotificationManager;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.SystemClock;
+import android.widget.Toast;
+
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 
 /**
  * Wird getriggert, wenn die Geräte-Deadlines geprüft werden sollen.
@@ -13,28 +21,38 @@ import android.content.Intent;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private int id = 0;
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        /*//Test Benachrichtigung
-        int mNotificationId = id;
-        String CHANNEL_ID = "dummy_channel";
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("Notification Test")
-                .setContentText("Swift App has just checked for device that need maintenance.");
-        Intent resultIntent = new Intent(context, MainActivity.class);
+        long plusHours = 6;
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if(checkForInternetConnection(context)) {
+            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
 
-        mNotificationManager.notify(mNotificationId, mBuilder.build());
+                RequestFactory.DefaultRequest request = new RequestFactory().createWorkRequest(context, preferences.getInt(Defaults.ID_PREFERENCE, -1), preferences.getInt(Defaults.NOTIFICATION_COUNTER, 0));
+                VolleyManager.getInstance(context).getRequestQueue().add(request);
+            }
+        } else {
+            //Neuer Versuch in einer Stunde
+            plusHours = 1;
+        }
 
-        id++;*/
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + plusHours * 3600 * 1000, pendingIntent);
+    }
+
+    private boolean checkForInternetConnection(Context context) {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if(cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        } else {
+            return false;
+        }
     }
 }

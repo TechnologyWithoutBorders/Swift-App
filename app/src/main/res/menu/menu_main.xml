@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-    <item android:id="@+id/logoutItem"
-        android:title="log out"
-        android:enabled="false">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/new_game"
+        android:icon="@drawable/ic_info_outline_white_24dp"
+        android:title="information"
+        app:showAsAction="always"/>
+    <item android:id="@+id/profileItem"
+        android:title="my profile">
     </item>
-    <item android:id="@+id/statsItem"
-        android:title="statistics">
+    <item android:id="@+id/hospitalItem"
+        android:title="my hospital">
+    </item>
+    <item android:id="@+id/logoutItem"
+        android:title="log out">
     </item>
     <item android:id="@+id/aboutItem"
         android:title="about">

@@ -1,33 +1,36 @@
 package ngo.teog.swift.helpers;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
+import ngo.teog.swift.gui.UserInfoActivity;
 
 /**
  * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * Created by Julian on 07.11.2017.
+ * @author Julian Deyerler
  */
 
-public class User implements Serializable {
+public class User extends SearchObject {
     private int id;
-    private String userName;
     private String phone;
     private String mail;
     private String fullName;
-    private String qualifications;
 
-    public User(int id, String userName, String phone, String mail, String fullName, String qualifications) {
+    private Hospital hospital;
+
+    private String position;
+
+    public User(int id, String phone, String mail, String fullName, Hospital hospital, String position) {
         this.id = id;
-        this.userName = userName;
         this.phone = phone;
         this.mail = mail;
         this.fullName = fullName;
-        this.qualifications = qualifications;
+        this.hospital = hospital;
+        this.position = position;
     }
 
-    public String getUserName() {
-        return userName;
+    public int getID() {
+        return id;
     }
 
     public String getPhone() {
@@ -42,7 +45,31 @@ public class User implements Serializable {
         return fullName;
     }
 
-    public String getQualifications() {
-        return qualifications;
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    @Override
+    public String getName() {
+        return fullName;
+    }
+
+    @Override
+    public String getInformation() {
+        return hospital.getName();
+    }
+
+    @Override
+    public Class<?> getInfoActivityClass() {
+        return UserInfoActivity.class;
+    }
+
+    @Override
+    public String getExtraIdentifier() {
+        return "user";
     }
 }

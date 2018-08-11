@@ -1,17 +1,60 @@
 <resources>
+    <!-- General information -->
     <string name="app_name">Swift</string>
+    <string name="about_text_old">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
+    <string name="about_text">Technology without Borders\n
+        WG Hospital Support\n\n
+        Contact:\n
+        swift-app@teog.de\n\n
+        Overall Coordination:\n
+        Andreas Vierling\n\n
+        Lead Development:\n
+        Julian Deyerler\n\n
+        Testers:\n
+        Lena Augustin\n
+        Paul Böhnke\n
+        Arne Bruns\n
+        Maximilian Deckelmann\n
+        Sebastian Hofmann\n
+        Julian Kauth\n
+        Lukas Köferl\n
+        Simon Meilinger\n
+        Nhat Nguyen\n
+        Felix Tuchnitz\n
+        Ina Reichmann\n\n
+        Hopefully many more to come... :-) penis
+    </string>
 
-    <string name="title_activity_user_profile">User Profile</string>
+    <!-- Activity names -->
+    <string name="title_activity_user_profile">My Profile</string>
+    <string name="title_activity_login">Swift</string>
+    <string name="title_activity_create_device">Scan barcode</string>
+    <string name="title_activity_device_info">Device info</string>
+    <string name="title_activity_about">About Swift</string>
 
-    <!-- Preferences Keys -->
-    <string name="id_pref">ID_PREFERENCE</string>
-    <string name="pw_pref">PW_PREFERENCE</string>
+    <!-- Device states -->
+    <string name="device_status_working">working</string>
+    <string name="device_status_broken">broken</string>
 
-    <string name="title_activity_login">Sign in</string>
+    <!-- Error messages -->
+    <string name="error_no_internet_connection">no internet connection</string>
 
     <string-array name="search_options">
-        <item>Hospital</item>
-        <item>Status</item>
-        <item>Type</item>
+        <item>Device</item>
+        <item>User</item>
+    </string-array>
+
+    <string-array name="countries_options">
+        <item>Germany</item>
+    </string-array>
+
+
+    <string-array name="device_states">
+        <item>working</item>
+        <item>preventive maintenance due</item>
+        <item>repair needed</item>
+        <item>in progress</item>
+        <item>broken/salvage</item>
+        <item>working with limitations</item>
     </string-array>
 </resources>

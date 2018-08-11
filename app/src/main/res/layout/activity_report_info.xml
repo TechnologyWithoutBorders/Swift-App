@@ -2,85 +2,97 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:orientation="vertical"
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_height="wrap_content" >
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/teog_blue_dark">
+            android:background="@color/teog_blue"
+            android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:text="NO." />
+                android:textSize="15sp"
+                android:paddingRight="5dp"
+                android:textStyle="bold"
+                android:text="Date" />
 
             <TextView
-                android:id="@+id/assetNumberView"
+                android:id="@+id/dateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:text="[asset number]" />
+                android:textSize="15sp"
+                android:text="[date]" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name" />
+                android:paddingRight="5dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="State Change" />
 
             <TextView
-                android:id="@+id/nameView"
+                android:id="@+id/stateChangeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="[device name]" />
+                android:textSize="15sp"
+                android:text="[state change]" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Type" />
+                android:paddingRight="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Author" />
 
             <TextView
-                android:id="@+id/typeView"
+                android:id="@+id/authorView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="[type]" />
+                android:textSize="15sp"
+                android:text="[author]" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Date/Mechanic" />
+                android:paddingRight="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="Description" />
 
             <TextView
-                android:id="@+id/dateNameView"
+                android:id="@+id/descriptionView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="[date/name of mechanic]" />
+                android:textSize="15sp"
+                android:text="[description]" />
         </TableRow>
 
     </TableLayout>
 
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit Report" />
 </LinearLayout>
