@@ -323,6 +323,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
             if(report != null) {
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);
+                TextView userView = convertView.findViewById(R.id.nameView);
 
 
                 Triple triple = Triple.buildtriple(report.getPreviousState(),this.getContext());
@@ -335,6 +336,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
 
 
+
                 Triple triple1 = Triple.buildtriple(report.getCurrentState(),this.getContext());
 
 
@@ -343,6 +345,8 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
                 String dateString = DATE_FORMAT.format(report.getDateTime());
                 dateView.setText(dateString);
+                String userString = report.getAuthorName();
+                userView.setText(userString);
             }
 
             return convertView;
