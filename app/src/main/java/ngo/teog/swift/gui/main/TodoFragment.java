@@ -32,6 +32,7 @@ import ngo.teog.swift.helpers.AlarmReceiver;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
+import ngo.teog.swift.helpers.Triple;
 
 public class TodoFragment extends BaseFragment {
 
@@ -115,6 +116,8 @@ public class TodoFragment extends BaseFragment {
             this.context = context;
         }
 
+
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {
@@ -136,40 +139,11 @@ public class TodoFragment extends BaseFragment {
                 String dateString = DATE_FORMAT.format(device.getLastReportDate());
                 dateView.setText(dateString);
 
-                int background = android.R.color.white;
-                int drawable = R.drawable.ic_repair;
+                Triple triple = Triple.buildtriple(device.getState(),this.getContext());
 
-                switch(device.getState()) {
-                    case HospitalDevice.STATE_WORKING:
-                        drawable = R.drawable.ic_check;
-                        background = android.R.color.holo_green_dark;
-                        break;
-                    case HospitalDevice.STATE_PM_DUE:
-                        drawable = R.drawable.ic_maintenance;
-                        background = android.R.color.holo_blue_light;
-                        break;
-                    case HospitalDevice.STATE_REPAIR_NEEDED:
-                        drawable = R.drawable.ic_repair;
-                        background = android.R.color.holo_orange_dark;
-                        break;
-                    case HospitalDevice.STATE_IN_PROGRESS:
-                        drawable = R.drawable.ic_in_progress;
-                        background = android.R.color.holo_green_light;
-                        break;
-                    case HospitalDevice.STATE_BROKEN_SALVAGE:
-                        drawable = R.drawable.ic_broken_salvage;
-                        background = android.R.color.holo_red_dark;
-                        break;
-                    case HospitalDevice.STATE_WORKING_WITH_LIMITATIONS:
-                        drawable = R.drawable.ic_working_with_limitations;
-                        background = android.R.color.holo_red_light;
-                        break;
-                }
-
-                statusView.setText(getResources().getStringArray(R.array.device_states)[device.getState()]);
-
-                imageView.setImageDrawable(getResources().getDrawable(drawable));
-                imageView.setBackgroundColor(getResources().getColor(background));
+                statusView.setText(triple.getStatestring());
+                imageView.setImageDrawable(triple.getStateicon());
+                imageView.setBackgroundColor(triple.getBackgroundcolor());
             }
 
             return convertView;
