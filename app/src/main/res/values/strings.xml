@@ -57,4 +57,9 @@
         <item>broken/salvage</item>
         <item>working with limitations</item>
     </string-array>
+
+    <string-array name="maintenance_intervall_options">
+        <item>Weeks</item>
+        <item>Months</item>
+    </string-array>
 </resources>
