@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="3dp">
 
@@ -13,10 +13,11 @@
         <ImageView
             android:id="@+id/fromState"
             android:src="@drawable/report_dot"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
@@ -26,14 +27,28 @@
         <ImageView
             android:id="@+id/toState"
             android:src="@drawable/report_dot"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/nameView"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_width="0dp"
+        android:textSize="15sp"
+        android:text="[name]"
+        />
+
+    <TextView
         android:id="@+id/dateView"
-        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:textAlignment="viewEnd"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="[date]"/>
+
 
 </LinearLayout>
