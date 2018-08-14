@@ -197,6 +197,7 @@ public class UserProfileActivity extends AppCompatActivity {
         params.put("action", "fetch_user");
         params.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
         params.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
+        params.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
         params.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
 
         JSONObject request = new JSONObject(params);
