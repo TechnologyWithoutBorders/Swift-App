@@ -621,6 +621,7 @@ public class RequestFactory {
 
         params.put(UserFilter.MAIL, mail);
         params.put(UserFilter.PASSWORD, password);
+        params.put("country", country);
 
         JSONObject request = new JSONObject(params);
 
