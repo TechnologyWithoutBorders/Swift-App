@@ -12,7 +12,6 @@
 
         <ImageView
             android:id="@+id/fromState"
-            android:src="@drawable/report_dot"
             android:layout_width="20dp"
             android:layout_height="20dp" />
 
@@ -25,14 +24,24 @@
 
         <ImageView
             android:id="@+id/toState"
-            android:src="@drawable/report_dot"
             android:layout_width="20dp"
             android:layout_height="20dp" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/authorView"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:text="[author]"/>
+
+    <TextView
         android:id="@+id/dateView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textAlignment="viewEnd"
+        android:layout_gravity="end"
         android:layout_height="wrap_content"
         android:text="[date]"/>
 
