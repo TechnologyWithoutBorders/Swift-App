@@ -24,28 +24,31 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        if(Build.VERSION.SDK_INT >= 26) {
+            NotificationManager mNotificationManager =
+                    (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+            // The id of the channel.
+            String id = "news_channel";
+            // The user-visible name of the channel.
+            CharSequence name = "News";
+            // The user-visible description of the channel.
+            String description = "Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel mChannel = new NotificationChannel(id, name, importance);
+            // Configure the notification channel.
+            mChannel.setDescription(description);
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
         if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            if(Build.VERSION.SDK_INT >= 26) {
-                NotificationManager mNotificationManager =
-                        (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-                // The id of the channel.
-                String id = "news_channel";
-                // The user-visible name of the channel.
-                CharSequence name = "News";
-                // The user-visible description of the channel.
-                String description = "Description";
-                int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                NotificationChannel mChannel = new NotificationChannel(id, name, importance);
-                // Configure the notification channel.
-                mChannel.setDescription(description);
-                mNotificationManager.createNotificationChannel(mChannel);
-            }
-
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-            Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
         }
     }
 }
