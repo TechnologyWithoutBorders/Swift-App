@@ -165,7 +165,6 @@ public class HospitalActivity extends AppCompatActivity {
 
                 Triple triple = Triple.buildtriple(device.getState(), HospitalActivity.this);
 
-
                 statusView.setText(triple.getStatestring());
 
                 imageView.setImageDrawable(triple.getStateicon());

@@ -149,7 +149,14 @@ public class DeviceInfoActivity extends AppCompatActivity {
         hospitalView.setText(device.getHospital());
 
         intervalView = findViewById(R.id.intervalView);
-        intervalView.setText(Integer.toString(device.getMaintenanceInterval()) + " Weeks");
+
+        int interval = device.getMaintenanceInterval();
+
+        if(interval % 4 == 0) {
+            intervalView.setText(Integer.toString(interval/4) + " Months");
+        } else {
+            intervalView.setText(Integer.toString(interval) + " Weeks");
+        }
 
         File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
 
@@ -201,7 +208,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
         final NumberPicker intervalPicker = new NumberPicker(this);
         intervalPicker.setMinValue(1);
         intervalPicker.setMaxValue(24);
-        intervalPicker.setValue(Integer.parseInt(intervalView.getText().toString().replace(" Weeks", "")));
+        intervalPicker.setValue(device.getMaintenanceInterval());
 
         builder.setView(intervalPicker);
 
@@ -321,10 +328,10 @@ public class DeviceInfoActivity extends AppCompatActivity {
             Report report = this.getItem(position);
 
             if(report != null) {
+                TextView authorView = convertView.findViewById(R.id.authorView);
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);
                 TextView userView = convertView.findViewById(R.id.nameView);
-
 
                 Triple triple = Triple.buildtriple(report.getPreviousState(),this.getContext());
 
@@ -333,15 +340,12 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
                 ImageView toState = convertView.findViewById(R.id.toState);
 
-
-
-
-
                 Triple triple1 = Triple.buildtriple(report.getCurrentState(),this.getContext());
-
 
                 toState.setImageDrawable(triple1.getStateicon());
                 toState.setColorFilter(triple1.getBackgroundcolor());
+
+                authorView.setText(report.getAuthorName());
 
                 String dateString = DATE_FORMAT.format(report.getDateTime());
                 dateView.setText(dateString);
