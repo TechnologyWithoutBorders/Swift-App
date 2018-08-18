@@ -163,7 +163,7 @@ public class HospitalActivity extends AppCompatActivity {
                 String dateString = DATE_FORMAT.format(device.getLastReportDate());
                 dateView.setText(dateString);
 
-                Triple triple = Triple.buildtriple(device.getState(), this.getContext());
+                Triple triple = Triple.buildtriple(device.getState(), HospitalActivity.this);
 
                 statusView.setText(triple.getStatestring());
 

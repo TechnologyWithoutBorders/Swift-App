@@ -100,7 +100,8 @@
         </activity>
         <activity
             android:name=".gui.LoginActivity"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -141,7 +142,8 @@
                 android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity android:name=".gui.ReportCreationActivity"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
+            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -158,7 +160,8 @@
         </activity>
         <activity android:name=".gui.NewDeviceActivity2"
             android:label="Enter general data"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
+            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <!-- The meta-data element is needed for versions lower than 4.1 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
