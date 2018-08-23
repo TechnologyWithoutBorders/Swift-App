@@ -2,11 +2,14 @@ package ngo.teog.swift.gui.main;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +56,10 @@ public class TodoFragment extends BaseFragment {
         listView = view.findViewById(R.id.maintenanceList);
         ArrayList<SearchObject> values = new ArrayList<>();
 
+        BroadcastReceiver receiver = new WorkFetchedBroadcastReceiver();
+        IntentFilter filter = new IntentFilter("ngo.swift.teog.WORK_FETCHED");
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver, filter);
+
         progressBar = view.findViewById(R.id.progressBar);
 
         adapter = new MySimpleArrayAdapter(getContext(), values);
@@ -93,18 +100,26 @@ public class TodoFragment extends BaseFragment {
         if(this.checkForInternetConnection()) {
             AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 
-            Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
-
-            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
-
-            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
-
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.INVISIBLE);
 
-            queue.add(request);
+            Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
+        }
+    }
+
+    public class WorkFetchedBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if(TodoFragment.this.checkForInternetConnection()) {
+                RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+
+                RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
+
+                queue.add(request);
+            }
         }
     }
 
