@@ -13,6 +13,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -419,6 +420,10 @@ public class RequestFactory {
                     default:
                         throw new Exception(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
                 }
+
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction("ngo.swift.teog.WORK_FETCHED");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             }
         });
     }
