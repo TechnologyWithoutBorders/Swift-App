@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.android.volley.RequestQueue;
 
@@ -35,6 +36,10 @@ public class NewDeviceActivity2 extends AppCompatActivity {
     private EditText serialNumberField;
     private EditText manufacturerField;
     private EditText modelField;
+    private EditText wardField;
+
+    private NumberPicker intervalPicker;
+    private Spinner weekMonthSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,10 @@ public class NewDeviceActivity2 extends AppCompatActivity {
         serialNumberField = findViewById(R.id.serialNumberText);
         manufacturerField = findViewById(R.id.manufacturerText);
         modelField = findViewById(R.id.modelText);
+        wardField = findViewById(R.id.wardText);
+
+        intervalPicker = findViewById(R.id.intervalPicker);
+        weekMonthSpinner = findViewById(R.id.spinner2);
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
@@ -80,8 +89,16 @@ public class NewDeviceActivity2 extends AppCompatActivity {
                             assetNumber = Integer.toString(deviceNumber);
                         }
 
+                        int interval;
+
+                        if(((String)weekMonthSpinner.getSelectedItem()).equals("Week")) {
+                            interval = intervalPicker.getValue();
+                        } else {
+                            interval = intervalPicker.getValue()*4;
+                        }
+
                         HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), 0, "bla", 4, new Date());
+                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), 0, "bla", interval, new Date());
 
                         Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                         intent.putExtra("device", device);

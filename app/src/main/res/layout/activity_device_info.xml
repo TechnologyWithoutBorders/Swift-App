@@ -171,6 +171,26 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
+                android:text="Ward" />
+
+            <TextView
+                android:id="@+id/wardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="[hospital]" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:paddingRight="5dp"
+                android:textStyle="bold"
                 android:text="Maint. Interval" />
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

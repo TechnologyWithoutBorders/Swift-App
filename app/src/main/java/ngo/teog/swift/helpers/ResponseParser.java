@@ -57,6 +57,7 @@ public class ResponseParser {
                     String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
+                    String ward = deviceObject.getString("d_ward");
                     int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
 
                     final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -67,7 +68,7 @@ public class ResponseParser {
 
                     Date lastReportDate = DATE_FORMAT.parse(reportDateString);
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, currentState, hospital, maintenanceInterval, lastReportDate);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastReportDate);
                     result.add(device);
                 }
 

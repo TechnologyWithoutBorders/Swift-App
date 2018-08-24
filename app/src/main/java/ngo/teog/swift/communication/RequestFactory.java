@@ -818,6 +818,7 @@ public class RequestFactory {
         params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
         params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
         params.put(DeviceFilter.MODEL, device.getModel());
+        params.put("d_ward", device.getWard());
         params.put("d_maintenance_interval", Integer.toString(device.getMaintenanceInterval()));
 
         if(bitmap != null) {
