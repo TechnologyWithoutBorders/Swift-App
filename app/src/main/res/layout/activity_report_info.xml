@@ -85,14 +85,14 @@
                 android:textSize="15sp"
                 android:text="Description" />
 
-            <TextView
-                android:id="@+id/descriptionView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[description]" />
-        </TableRow>
 
+        </TableRow>
+        <TextView
+            android:id="@+id/descriptionView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="[description]"
+            android:textSize="15sp" />
     </TableLayout>
 
 </LinearLayout>
