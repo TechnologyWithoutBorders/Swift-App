@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
@@ -113,12 +115,24 @@ public class TodoFragment extends BaseFragment {
 
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            if(TodoFragment.this.checkForInternetConnection()) {
-                RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+            if(this.checkForInternetConnection(context)) {
+                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-                RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
+                RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(context, progressBar, listView, adapter);
 
                 queue.add(request);
+            }
+        }
+
+        private boolean checkForInternetConnection(Context context) {
+            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            if(cm != null) {
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+                return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+            } else {
+                return false;
             }
         }
     }
