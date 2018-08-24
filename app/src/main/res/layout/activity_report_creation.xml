@@ -21,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:hint="provide a short description" />
+        android:hint="provide a short description"
+        android:maxLength="600"/>
 
     <Space
         android:layout_width="match_parent"

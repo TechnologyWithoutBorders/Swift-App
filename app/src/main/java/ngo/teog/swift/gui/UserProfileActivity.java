@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Base64;
 import android.view.Menu;
@@ -105,14 +106,12 @@ public class UserProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Telephone");
 
-        // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
         input.setInputType(InputType.TYPE_CLASS_PHONE);
         input.setText(telephoneView.getText());
         builder.setView(input);
 
-        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -134,14 +133,12 @@ public class UserProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Position");
 
-        // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(30)});
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(positionView.getText());
         builder.setView(input);
 
-        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
