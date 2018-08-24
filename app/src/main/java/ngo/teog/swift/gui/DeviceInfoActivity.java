@@ -148,6 +148,9 @@ public class DeviceInfoActivity extends AppCompatActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
         hospitalView.setText(device.getHospital());
 
+        TextView wardView = findViewById(R.id.wardView);
+        wardView.setText(device.getWard());
+
         intervalView = findViewById(R.id.intervalView);
         intervalView.setText(Integer.toString(device.getMaintenanceInterval()) + " Weeks");
 
@@ -196,7 +199,7 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
     public void editMaintenanceInterval(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Maintenance Interval");
+        builder.setTitle("Maintenance Interval (Weeks)");
 
         final NumberPicker intervalPicker = new NumberPicker(this);
         intervalPicker.setMinValue(1);
