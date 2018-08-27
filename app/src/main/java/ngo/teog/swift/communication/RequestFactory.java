@@ -821,6 +821,7 @@ public class RequestFactory {
         params.put(DeviceFilter.MODEL, device.getModel());
         params.put("d_ward", device.getWard());
         params.put("d_maintenance_interval", Integer.toString(device.getMaintenanceInterval()));
+        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
         if(bitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
