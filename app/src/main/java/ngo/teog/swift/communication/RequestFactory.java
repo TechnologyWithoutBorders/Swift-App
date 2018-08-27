@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -853,6 +854,7 @@ public class RequestFactory {
         params.put(ReportFilter.DESCRIPTION, report.getDescription());
         params.put(ReportFilter.PREVIOUS_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
         params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getCurrentState()));
+        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(report.getDateTime()));
 
         JSONObject request = new JSONObject(params);
 
