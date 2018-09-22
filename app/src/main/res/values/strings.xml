@@ -119,6 +119,7 @@
 
     <string-array name="countries_options">
         <item>Germany</item>
+        <item>Ghana</item>
         <item>Nepal</item>
     </string-array>
 

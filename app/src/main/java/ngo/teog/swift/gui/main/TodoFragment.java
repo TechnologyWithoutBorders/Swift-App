@@ -170,7 +170,7 @@ public class TodoFragment extends BaseFragment {
 
                 Triple triple = Triple.buildtriple(device.getState(),this.getContext());
 
-                statusView.setText(triple.getStatestring());
+                statusView.setText(device.getWard());
                 imageView.setImageDrawable(triple.getStateicon());
                 imageView.setBackgroundColor(triple.getBackgroundcolor());
             }
