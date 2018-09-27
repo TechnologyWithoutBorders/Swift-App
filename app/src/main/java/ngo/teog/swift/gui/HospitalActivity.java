@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -40,44 +42,38 @@ public class HospitalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital);
 
-        ArrayList<User> values = new ArrayList<>();
+        ArrayList<User> members = new ArrayList<>();
+        ArrayList<HospitalDevice> devices = new ArrayList<>();
 
-        ProgressBar progressBar = findViewById(R.id.memberProgressBar);
-        ListView memberListView = findViewById(R.id.memberList);
+        ExpandableListView hospitalListView = findViewById(R.id.hospitalList);
 
-        MemberListAdapter memberAdapter = new MemberListAdapter(this, values);
-        memberListView.setAdapter(memberAdapter);
+        HospitalListAdapter hospitalListAdapter = new HospitalListAdapter(this, members, devices);
+        hospitalListView.setAdapter(hospitalListAdapter);
 
-        memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
                 intent.putExtra("user", (User)adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
-        });
+        });*/
 
-        ArrayList<SearchObject> devices = new ArrayList<>();
+        ProgressBar hospitalProgressBar = findViewById(R.id.hospitalProgressBar);
 
-        ProgressBar deviceProgressBar = findViewById(R.id.deviceProgressBar);
-        ListView deviceListView = findViewById(R.id.deviceList);
-
-        DeviceListAdapter deviceAdapter = new DeviceListAdapter(this, devices);
-        deviceListView.setAdapter(deviceAdapter);
-
-        deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
                 intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
-        });
+        });*/
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
         if(this.checkForInternetConnection()) {
-            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            /*SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
             RequestFactory.ColleagueRequest request = new RequestFactory().createColleagueRequest(this, progressBar, memberListView, memberAdapter, user);
@@ -91,7 +87,7 @@ public class HospitalActivity extends AppCompatActivity {
             deviceListView.setVisibility(View.INVISIBLE);
             deviceProgressBar.setVisibility(View.VISIBLE);
 
-            queue.add(deviceRequest);
+            queue.add(deviceRequest);*/
         }
     }
 
@@ -102,76 +98,156 @@ public class HospitalActivity extends AppCompatActivity {
         return true;
     }
 
-    private class MemberListAdapter extends ArrayAdapter<User> {
-        private final Context context;
-
-        private MemberListAdapter(Context context, ArrayList<User> values) {
-            super(context, -1, values);
-            this.context = context;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.row_members, parent, false);
-            }
-
-            User user = this.getItem(position);
-
-            if(user != null) {
-                TextView nameView = convertView.findViewById(R.id.nameView);
-                TextView positionView = convertView.findViewById(R.id.positionView);
-
-                nameView.setText(user.getName());
-                positionView.setText(user.getPosition());
-            }
-
-            return convertView;
-        }
-    }
-
-    private class DeviceListAdapter extends ArrayAdapter<SearchObject> {
+    private class HospitalListAdapter extends BaseExpandableListAdapter {
         private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+        private ArrayList<User> memberList;
+        private ArrayList<HospitalDevice> deviceList;
 
         private final Context context;
 
-        private DeviceListAdapter(Context context, ArrayList<SearchObject> values) {
-            super(context, -1, values);
+        private HospitalListAdapter(Context context, ArrayList<User> memberList, ArrayList<HospitalDevice> deviceList) {
             this.context = context;
+            this.memberList = memberList;
+            this.deviceList = deviceList;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public int getGroupCount() {
+            return 2;
+        }
+
+        @Override
+        public int getChildrenCount(int i) {
+            switch(i) {
+                case 0:
+                    return memberList.size();
+                case 1:
+                    return deviceList.size();
+                default:
+                    return 0;
+            }
+        }
+
+        @Override
+        public Object getGroup(int i) {
+            switch(i) {
+                case 0:
+                    return "Members";
+                case 1:
+                    return "Devices";
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            switch(groupPosition) {
+                case 0:
+                    return memberList.get(childPosition);
+                case 1:
+                    return deviceList.get(childPosition);
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public long getGroupId(int i) {
+            return i;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public View getGroupView(int position, boolean isExpanded, View convertView, ViewGroup parent) {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                convertView = inflater.inflate(R.layout.header_hospital, parent, false);
             }
 
             TextView nameView = convertView.findViewById(R.id.nameView);
-            TextView dateView = convertView.findViewById(R.id.dateView);
-            TextView statusView = convertView.findViewById(R.id.statusView);
-            ImageView imageView = convertView.findViewById(R.id.imageView);
+            TextView countView = convertView.findViewById(R.id.countView);
 
-            HospitalDevice device = (HospitalDevice)this.getItem(position);
-
-            if(device != null) {
-                nameView.setText(device.getType());
-
-                String dateString = DATE_FORMAT.format(device.getLastReportDate());
-                dateView.setText(dateString);
-
-                Triple triple = Triple.buildtriple(device.getState(), HospitalActivity.this);
-
-                statusView.setText(triple.getStatestring());
-
-                imageView.setImageDrawable(triple.getStateicon());
-                imageView.setBackgroundColor(triple.getBackgroundcolor());
+            switch(position) {
+                case 0:
+                    nameView.setText("Members");
+                    countView.setText(Integer.toString(memberList.size()));
+                    break;
+                case 1:
+                    nameView.setText("Devices");
+                    countView.setText(Integer.toString(deviceList.size()));
+                    break;
             }
 
             return convertView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            switch(groupPosition) {
+                case 0:
+                    if(convertView == null) {
+                        LayoutInflater inflater = (LayoutInflater) context
+                                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        convertView = inflater.inflate(R.layout.row_members, parent, false);
+                    }
+
+                    User user = memberList.get(childPosition);
+
+                    if(user != null) {
+                        TextView nameView = convertView.findViewById(R.id.nameView);
+                        TextView positionView = convertView.findViewById(R.id.positionView);
+
+                        nameView.setText(user.getName());
+                        positionView.setText(user.getPosition());
+                    }
+                    break;
+                case 1:
+                    if(convertView == null) {
+                        LayoutInflater inflater = (LayoutInflater) context
+                                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                    }
+
+                    TextView nameView = convertView.findViewById(R.id.nameView);
+                    TextView dateView = convertView.findViewById(R.id.dateView);
+                    TextView statusView = convertView.findViewById(R.id.statusView);
+                    ImageView imageView = convertView.findViewById(R.id.imageView);
+
+                    HospitalDevice device = deviceList.get(childPosition);
+
+                    if(device != null) {
+                        nameView.setText(device.getType());
+
+                        String dateString = DATE_FORMAT.format(device.getLastReportDate());
+                        dateView.setText(dateString);
+
+                        Triple triple = Triple.buildtriple(device.getState(), HospitalActivity.this);
+
+                        statusView.setText(triple.getStatestring());
+
+                        imageView.setImageDrawable(triple.getStateicon());
+                        imageView.setBackgroundColor(triple.getBackgroundcolor());
+                    }
+                    break;
+            }
+
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int i, int i1) {
+            return false;
         }
     }
 
