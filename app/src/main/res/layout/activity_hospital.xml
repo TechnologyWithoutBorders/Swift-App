@@ -2,17 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hospital"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        android:background="@color/teog_blue"
-        android:textStyle="bold"
-        android:padding="3dp" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_home_black_24dp"
+            android:onClick="invokeMail" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="[Hospital Name]"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="[Hospital Location]"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
     
     <RelativeLayout
         android:layout_width="match_parent"
