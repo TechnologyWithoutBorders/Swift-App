@@ -14,8 +14,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:padding="8dp"
-            app:srcCompat="@drawable/ic_home_black_24dp"
-            android:onClick="invokeMail" />
+            app:srcCompat="@drawable/ic_home_black_24dp" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_weight="1"
