@@ -48,25 +48,7 @@ public class HospitalActivity extends AppCompatActivity {
         TextView nameView = findViewById(R.id.nameView);
         TextView locationView = findViewById(R.id.locationView);
 
-        /*memberListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
-                intent.putExtra("user", (User)adapterView.getItemAtPosition(i));
-                startActivity(intent);
-            }
-        });*/
-
         ProgressBar hospitalProgressBar = findViewById(R.id.hospitalProgressBar);
-
-        /*deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
-                intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
-                startActivity(intent);
-            }
-        });*/
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
