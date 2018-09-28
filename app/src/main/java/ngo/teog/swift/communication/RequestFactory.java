@@ -340,6 +340,25 @@ public class RequestFactory {
                         return false;
                     }
                 });
+
+                listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    @Override
+                    public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
+                        switch(groupPosition) {
+                            case 0:
+                                Intent intent = new Intent(context, UserInfoActivity.class);
+                                intent.putExtra("user", memberList.get(childPosition));
+                                context.startActivity(intent);
+                                break;
+                            case 1:
+                                Intent intent2 = new Intent(context, DeviceInfoActivity.class);
+                                intent2.putExtra("device", deviceList.get(childPosition));
+                                context.startActivity(intent2);
+                                break;
+                        }
+                        return false;
+                    }
+                });
             }
         });
     }
