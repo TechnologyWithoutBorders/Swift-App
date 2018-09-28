@@ -16,9 +16,14 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.HospitalActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -50,7 +56,9 @@ import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.Hospital;
 import ngo.teog.swift.helpers.SearchObject;
+import ngo.teog.swift.helpers.Triple;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.Report;
@@ -163,6 +171,175 @@ public class RequestFactory {
                 String imageHash = response.getString("data");
 
                 //TODO
+            }
+        });
+    }
+
+    public DefaultRequest createHospitalRequest(final Context context, View disable, final View enable, final TextView nameView, final TextView locationView, final ExpandableListView listView, final int user) {
+        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch_hospital", true);
+        params.put(UserFilter.ID, Integer.toString(user));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                JSONObject hospitalObject = response.getJSONObject("data");
+
+                String name = hospitalObject.getString("h_name");
+                String location = hospitalObject.getString("h_location");
+
+                nameView.setText(name);
+                locationView.setText(location);
+
+                ResponseParser parser = new ResponseParser();
+                final ArrayList<User> memberList = parser.parseUserList(hospitalObject.getJSONArray("members"));
+                final ArrayList<HospitalDevice> deviceList = parser.parseDeviceList(hospitalObject.getJSONArray("devices"));
+
+                listView.setAdapter(new BaseExpandableListAdapter() {
+                    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+                    @Override
+                    public int getGroupCount() {
+                        return 2;
+                    }
+
+                    @Override
+                    public int getChildrenCount(int i) {
+                        switch(i) {
+                            case 0:
+                                return memberList.size();
+                            case 1:
+                                return deviceList.size();
+                            default:
+                                return 0;
+                        }
+                    }
+
+                    @Override
+                    public Object getGroup(int i) {
+                        switch(i) {
+                            case 0:
+                                return "Members";
+                            case 1:
+                                return "Devices";
+                            default:
+                                return null;
+                        }
+                    }
+
+                    @Override
+                    public Object getChild(int groupPosition, int childPosition) {
+                        switch(groupPosition) {
+                            case 0:
+                                return memberList.get(childPosition);
+                            case 1:
+                                return deviceList.get(childPosition);
+                            default:
+                                return null;
+                        }
+                    }
+
+                    @Override
+                    public long getGroupId(int i) {
+                        return i;
+                    }
+
+                    @Override
+                    public long getChildId(int groupPosition, int childPosition) {
+                        return childPosition;
+                    }
+
+                    @Override
+                    public boolean hasStableIds() {
+                        return false;
+                    }
+
+                    @Override
+                    public View getGroupView(int position, boolean isExpanded, View convertView, ViewGroup parent) {
+                        if(convertView == null) {
+                            LayoutInflater inflater = (LayoutInflater) context
+                                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            convertView = inflater.inflate(R.layout.header_hospital, parent, false);
+                        }
+
+                        TextView nameView = convertView.findViewById(R.id.nameView);
+                        TextView countView = convertView.findViewById(R.id.countView);
+
+                        switch(position) {
+                            case 0:
+                                nameView.setText("Members");
+                                countView.setText(Integer.toString(memberList.size()));
+                                break;
+                            case 1:
+                                nameView.setText("Devices");
+                                countView.setText(Integer.toString(deviceList.size()));
+                                break;
+                        }
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+                        switch(groupPosition) {
+                            case 0:
+                                if(convertView == null) {
+                                    LayoutInflater inflater = (LayoutInflater) context
+                                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    convertView = inflater.inflate(R.layout.row_members, parent, false);
+                                }
+
+                                User user = memberList.get(childPosition);
+
+                                if(user != null) {
+                                    TextView nameView = convertView.findViewById(R.id.nameView);
+                                    TextView positionView = convertView.findViewById(R.id.positionView);
+
+                                    nameView.setText(user.getName());
+                                    positionView.setText(user.getPosition());
+                                }
+                                break;
+                            case 1:
+                                if(convertView == null) {
+                                    LayoutInflater inflater = (LayoutInflater) context
+                                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                                }
+
+                                TextView nameView = convertView.findViewById(R.id.nameView);
+                                TextView dateView = convertView.findViewById(R.id.dateView);
+                                TextView statusView = convertView.findViewById(R.id.statusView);
+                                ImageView imageView = convertView.findViewById(R.id.imageView);
+
+                                HospitalDevice device = deviceList.get(childPosition);
+
+                                if(device != null) {
+                                    nameView.setText(device.getType());
+
+                                    String dateString = DATE_FORMAT.format(device.getLastReportDate());
+                                    dateView.setText(dateString);
+
+                                    Triple triple = Triple.buildtriple(device.getState(), context);
+
+                                    statusView.setText(triple.getStatestring());
+
+                                    imageView.setImageDrawable(triple.getStateicon());
+                                    imageView.setBackgroundColor(triple.getBackgroundcolor());
+                                }
+                                break;
+                        }
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public boolean isChildSelectable(int i, int i1) {
+                        return false;
+                    }
+                });
             }
         });
     }
@@ -438,16 +615,6 @@ public class RequestFactory {
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
     }
 
-    public DeviceListRequest createDeviceListRequest(Context context, View disable, View enable, ArrayAdapter<SearchObject> adapter, int user) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch_device_list", true);
-        params.put(UserFilter.ID, Integer.toString(user));
-        JSONObject request = new JSONObject(params);
-
-        return new DeviceListRequest(context, disable, enable, url, request, adapter);
-    }
-
     public class DeviceListRequest extends JsonObjectRequest {
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<SearchObject> adapter) {
@@ -493,16 +660,6 @@ public class RequestFactory {
                 }
             });
         }
-    }
-
-    public ColleagueRequest createColleagueRequest(Context context, View disable, View enable, ArrayAdapter<User> userAdapter, int user) {
-        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch_members", true);
-        params.put(UserFilter.ID, Integer.toString(user));
-        JSONObject request = new JSONObject(params);
-
-        return new ColleagueRequest(context, disable, enable, url, request, userAdapter);
     }
 
     public class ColleagueRequest extends JsonObjectRequest {
