@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -28,6 +29,7 @@
                 android:padding="4dp">
 
                 <TextView
+                    android:id="@+id/nameView"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:text="[Hospital Name]"
@@ -35,6 +37,7 @@
                     android:textSize="20sp"/>
 
                 <TextView
+                    android:id="@+id/locationView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="[Hospital Location]"
