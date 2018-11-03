@@ -41,7 +41,7 @@ import ngo.teog.swift.helpers.Triple;
 
 public class TodoFragment extends BaseFragment {
 
-    private MySimpleArrayAdapter adapter;
+    private CustomSimpleArrayAdapter adapter;
     private ListView listView;
     private ProgressBar progressBar;
 
@@ -64,7 +64,7 @@ public class TodoFragment extends BaseFragment {
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        adapter = new MySimpleArrayAdapter(getContext(), values);
+        adapter = new CustomSimpleArrayAdapter(getContext(), values);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -137,10 +137,10 @@ public class TodoFragment extends BaseFragment {
         }
     }
 
-    private class MySimpleArrayAdapter extends ArrayAdapter<SearchObject> {
+    private class CustomSimpleArrayAdapter extends ArrayAdapter<SearchObject> {
         private final Context context;
 
-        private MySimpleArrayAdapter(Context context, ArrayList<SearchObject> values) {
+        private CustomSimpleArrayAdapter(Context context, ArrayList<SearchObject> values) {
             super(context, -1, values);
             this.context = context;
         }
