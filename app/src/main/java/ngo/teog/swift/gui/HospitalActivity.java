@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.HeterogeneousExpandableList;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;

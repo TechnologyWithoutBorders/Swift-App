@@ -258,7 +258,7 @@ public class RequestFactory {
                     }
 
                     @Override
-                    public View getGroupView(int position, boolean isExpanded, View convertView, ViewGroup parent) {
+                    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
                         if(convertView == null) {
                             LayoutInflater inflater = (LayoutInflater) context
                                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -268,7 +268,7 @@ public class RequestFactory {
                         TextView nameView = convertView.findViewById(R.id.nameView);
                         TextView countView = convertView.findViewById(R.id.countView);
 
-                        switch(position) {
+                        switch(groupPosition) {
                             case 0:
                                 nameView.setText("Members");
                                 countView.setText(Integer.toString(memberList.size()));
@@ -286,10 +286,11 @@ public class RequestFactory {
                     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
                         switch(groupPosition) {
                             case 0:
-                                if(convertView == null) {
+                                if(convertView == null || (int)convertView.getTag() != groupPosition) {
                                     LayoutInflater inflater = (LayoutInflater) context
                                             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                     convertView = inflater.inflate(R.layout.row_members, parent, false);
+                                    convertView.setTag(groupPosition);
                                 }
 
                                 User user = memberList.get(childPosition);
@@ -303,10 +304,11 @@ public class RequestFactory {
                                 }
                                 break;
                             case 1:
-                                if(convertView == null) {
+                                if(convertView == null || (int)convertView.getTag() != groupPosition) {
                                     LayoutInflater inflater = (LayoutInflater) context
                                             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                                     convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                                    convertView.setTag(groupPosition);
                                 }
 
                                 TextView nameView = convertView.findViewById(R.id.nameView);
@@ -339,6 +341,26 @@ public class RequestFactory {
                     public boolean isChildSelectable(int i, int i1) {
                         return false;
                     }
+
+                    @Override
+                    public int getChildTypeCount() {
+                        return 2;
+                    }
+
+                    @Override
+                    public int getGroupTypeCount() {
+                        return 2;
+                    }
+
+                    @Override
+                    public int getGroupType(int groupPosition) {
+                        return groupPosition;
+                    }
+
+                    @Override
+                    public int getChildType(int groupPosition, int childPosition) {
+                        return groupPosition;
+                    }
                 });
 
                 listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -356,6 +378,7 @@ public class RequestFactory {
                                 context.startActivity(intent2);
                                 break;
                         }
+
                         return false;
                     }
                 });
