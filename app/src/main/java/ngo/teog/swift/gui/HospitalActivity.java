@@ -45,7 +45,28 @@ public class HospitalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hospital);
 
         LinearLayout contentView = findViewById(R.id.contentView);
-        ExpandableListView hospitalListView = findViewById(R.id.hospitalList);
+        final ExpandableListView hospitalListView = findViewById(R.id.hospitalList);
+
+        hospitalListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
+                switch(groupPosition) {
+                    case 0:
+                        Intent intent = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
+                        intent.putExtra("user", (User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition));
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
+                        intent2.putExtra("device", (HospitalDevice)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition));
+                        startActivity(intent2);
+                        break;
+                }
+
+                return false;
+            }
+        });
+
         TextView nameView = findViewById(R.id.nameView);
         TextView locationView = findViewById(R.id.locationView);
 
