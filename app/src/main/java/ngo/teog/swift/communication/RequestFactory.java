@@ -525,50 +525,6 @@ public class RequestFactory {
         });
     }
 
-    /*public DefaultRequest createNewsRequest(final Context context) {
-        final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
-
-                if(newsList.size() > 0) {
-                    //Test Benachrichtigung
-                    int mNotificationId = newsList.get(newsList.size()-1).getID();
-
-                    String news = "";
-
-                    for(NewsItem item : newsList) {
-                        news += Defaults.DATE_FORMAT.format(item.getDate()) + "\n" + item.getValue() + "\n\n";
-                    }
-
-                    String CHANNEL_ID = "news_channel";
-                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_stat_name)
-                            .setContentTitle("Fake news from Swift")
-                            .setContentText("Tap to show messages");
-                    Intent resultIntent = new Intent(context, MainActivity.class);
-                    resultIntent.putExtra("NEWS", news);
-                    resultIntent.putExtra("notification", mNotificationId);
-
-                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                    stackBuilder.addParentStack(MainActivity.class);
-                    stackBuilder.addNextIntent(resultIntent);
-                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                    mBuilder.setContentIntent(resultPendingIntent);
-                    NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    mNotificationManager.notify(mNotificationId, mBuilder.build());
-                }
-            }
-        });
-    }*/
-
     public DefaultRequest createWorkRequest(final Context context, int id, final int notificationCounter) {
         final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
 
