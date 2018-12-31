@@ -30,6 +30,6 @@ public class CalendarFragment extends BaseFragment {
         CalendarView maintenanceCalendar = view.findViewById(R.id.maintenanceCalendar);
 
         long today = Calendar.getInstance().getTimeInMillis();
-        maintenanceCalendar.setMinDate(today);
+        //maintenanceCalendar.setMinDate(today);
     }
 }

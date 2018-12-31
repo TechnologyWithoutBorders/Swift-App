@@ -259,18 +259,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_device_info, menu);
 
-        MenuItem item = menu.getItem(0);
-
-        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-        RequestFactory.UnsubscriptionOptionalUpdateRequest notificationRequest = new RequestFactory().createUnsubscriptionOptionalUpdateRequest(DeviceInfoActivity.this, item, false, user, device.getID());
-
-        item.setActionView(new ProgressBar(DeviceInfoActivity.this));
-        queue.add(notificationRequest);
-
         return true;
     }
 
@@ -278,9 +266,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch(item.getItemId()) {
-            case R.id.notificationButton:
-                toggleNotifications(item);
-                return true;
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
@@ -351,34 +336,6 @@ public class DeviceInfoActivity extends AppCompatActivity {
 
             return convertView;
         }
-    }
-
-    private void toggleNotifications(final MenuItem item) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage("Are you sure you want to change this setting? If the bell is disabled, you will not receive any more notifications regarding this device.")
-                .setTitle("Confirm")
-                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        SharedPreferences preferences = DeviceInfoActivity.this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                        int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-                        RequestQueue queue = VolleyManager.getInstance(DeviceInfoActivity.this).getRequestQueue();
-
-                        RequestFactory.UnsubscriptionOptionalUpdateRequest request = new RequestFactory().createUnsubscriptionOptionalUpdateRequest(DeviceInfoActivity.this, item, true, user, device.getID());
-
-                        item.setActionView(new ProgressBar(DeviceInfoActivity.this));
-                        queue.add(request);
-                    }
-                })
-                .setNegativeButton("no", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //ignore
-                    }
-                });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private class StatusArrayAdapter extends ArrayAdapter<String> {

@@ -698,64 +698,6 @@ public class RequestFactory {
         }
     }
 
-    public UnsubscriptionOptionalUpdateRequest createUnsubscriptionOptionalUpdateRequest(Context context, MenuItem item, boolean toggle, int user, int device) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, "update_unsubscription", true);
-        params.put(UserFilter.ID, Integer.toString(user));
-        params.put(DeviceFilter.ID, Integer.toString(device));
-        params.put("toggle", Boolean.toString(toggle));
-
-        JSONObject request = new JSONObject(params);
-
-        return new UnsubscriptionOptionalUpdateRequest(context, url, request, item);
-    }
-
-    public class UnsubscriptionOptionalUpdateRequest extends JsonObjectRequest {
-
-        public UnsubscriptionOptionalUpdateRequest(final Context context, final String url, JSONObject request, final MenuItem item) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
-                        switch(responseCode) {
-                            case SwiftResponse.CODE_OK:
-                                int unsubscriptions = response.getInt(SwiftResponse.DATA_FIELD);
-
-                                if(unsubscriptions > 0) {
-                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_off_white_24dp));
-                                } else {
-                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_white_24dp));
-                                }
-
-                                item.setActionView(null);
-
-                                break;
-                            case SwiftResponse.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
-                            case SwiftResponse.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
-                        }
-                    } catch(ResponseException e) {
-                        item.setActionView(null);
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        item.setActionView(null);
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    item.setActionView(null);
-                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
     public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
