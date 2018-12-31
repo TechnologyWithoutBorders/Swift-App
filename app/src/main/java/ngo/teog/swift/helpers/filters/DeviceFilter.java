@@ -14,9 +14,6 @@ public class DeviceFilter {
     public static final String SERIAL_NUMBER = "d_serial_no";
     public static final String MANUFACTURER = "d_manufacturer";
     public static final String MODEL = "d_model";
-    public static final String IMAGE_PATH = "d_image_path";
-    public static final String WORKING = "d_working";
-    public static final String NEXT_MAINTENANCE = "d_next_maintenance";
 
     public static final String ACTION_FETCH_DEVICE = "fetch_device";
     public static final String ACTION_FETCH_TODO_LIST = "fetch_todo_list";
