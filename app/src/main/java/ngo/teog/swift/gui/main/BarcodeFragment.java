@@ -1,11 +1,8 @@
 package ngo.teog.swift.gui.main;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
@@ -28,10 +25,9 @@ import java.util.List;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.gui.DeviceInfoActivity;
-import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.gui.BaseFragment;
 
-public class BarcodeFragment extends Fragment {
+public class BarcodeFragment extends BaseFragment {
 
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
@@ -67,7 +63,7 @@ public class BarcodeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_qr, container, false);
+        return inflater.inflate(R.layout.fragment_barcode, container, false);
     }
 
     @Override

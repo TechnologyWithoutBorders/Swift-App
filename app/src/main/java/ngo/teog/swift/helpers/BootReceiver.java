@@ -11,6 +11,14 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 /**
  * Globaler Receiver, der getriggert wird, wenn das Android-Gerät gebootet hat.
  * Erstellt einen AlarmManager (JobScheduler ist erst ab API-Level 21 möglich),
@@ -40,15 +48,15 @@ public class BootReceiver extends BroadcastReceiver {
             mNotificationManager.createNotificationChannel(mChannel);
         }
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Constraints updateConstraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
 
-        Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 6, TimeUnit.HOURS)
+                .addTag("update_todo")
+                .setConstraints(updateConstraints)
+                .build();
 
-        if(intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, pendingIntent);
-        } else {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
-        }
+        WorkManager.getInstance().enqueue(updateWork);
     }
 }
