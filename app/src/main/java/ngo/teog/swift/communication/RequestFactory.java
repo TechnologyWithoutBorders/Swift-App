@@ -640,10 +640,6 @@ public class RequestFactory {
                     default:
                         throw new Exception(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
                 }
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("ngo.swift.teog.WORK_FETCHED");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             }
         });
     }

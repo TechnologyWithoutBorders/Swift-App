@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -58,18 +57,7 @@ public class MainActivity extends AppCompatActivity {
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
 
-        if(intent.hasExtra("NEWS")) {
-            String news = intent.getStringExtra("NEWS");
-            int notificationID = intent.getIntExtra("notification", -1);
-
-            Bundle args = new Bundle();
-            args.putString("news", news);
-            args.putInt("notification", notificationID);
-
-            DialogFragment newsFragment = new NewsDialogFragment();
-            newsFragment.setArguments(args);
-            newsFragment.show(getSupportFragmentManager(), "news");
-        } else if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
+        if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
             //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
 
             try {
@@ -135,15 +123,11 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch(i) {
                 case 0:
-                    if(codeFragment == null) {
-                        codeFragment = new BarcodeFragment();
-                    }
-
-                    return codeFragment;
+                    return new SearchFragment();
                 case 1:
                     return new TodoFragment();
                 case 2:
-                    return new SearchFragment();
+                    return new CalendarFragment();
                 default:
                     return null;
             }
@@ -156,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String[] names = {"Scanner", "Todo", "Search"};
+            String[] names = {"Search", "Todo", "Maintenance"};
 
             return names[position];
         }

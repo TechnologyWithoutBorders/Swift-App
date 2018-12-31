@@ -1,17 +1,8 @@
 package ngo.teog.swift.gui.main;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,17 +18,21 @@ import com.android.volley.RequestQueue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.AlarmReceiver;
-import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.Triple;
+import ngo.teog.swift.helpers.UpdateWorker;
 
 public class TodoFragment extends BaseFragment {
 
@@ -50,17 +45,13 @@ public class TodoFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_todo, container, false);
+        return inflater.inflate(R.layout.fragment_todo, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.maintenanceList);
         ArrayList<SearchObject> values = new ArrayList<>();
-
-        BroadcastReceiver receiver = new WorkFetchedBroadcastReceiver();
-        IntentFilter filter = new IntentFilter("ngo.swift.teog.WORK_FETCHED");
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver, filter);
 
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -99,41 +90,28 @@ public class TodoFragment extends BaseFragment {
     }
 
     private void refresh() {
+        Constraints updateConstraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        WorkManager.getInstance().cancelAllWorkByTag("update_todo");
+
+        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 6, TimeUnit.HOURS)
+                .addTag("update_todo")
+                .setConstraints(updateConstraints)
+                .build();
+
+        WorkManager.getInstance().enqueue(updateWork);
+
+        progressBar.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.INVISIBLE);
+
         if(this.checkForInternetConnection()) {
-            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            progressBar.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.INVISIBLE);
+            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
 
-            Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), pendingIntent);
-        }
-    }
-
-    public class WorkFetchedBroadcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            if(this.checkForInternetConnection(context)) {
-                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
-
-                RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(context, progressBar, listView, adapter);
-
-                queue.add(request);
-            }
-        }
-
-        private boolean checkForInternetConnection(Context context) {
-            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            if(cm != null) {
-                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-                return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-            } else {
-                return false;
-            }
+            queue.add(request);
         }
     }
 
