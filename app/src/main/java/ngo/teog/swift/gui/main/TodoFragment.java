@@ -130,7 +130,7 @@ public class TodoFragment extends BaseFragment {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                convertView = inflater.inflate(R.layout.row_todo, parent, false);
             }
 
             TextView nameView = convertView.findViewById(R.id.nameView);

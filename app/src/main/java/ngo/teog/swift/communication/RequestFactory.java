@@ -303,7 +303,7 @@ public class RequestFactory {
                                 if(convertView == null || (int)convertView.getTag() != groupPosition) {
                                     LayoutInflater inflater = (LayoutInflater) context
                                             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                    convertView = inflater.inflate(R.layout.row_maintenance, parent, false);
+                                    convertView = inflater.inflate(R.layout.row_todo, parent, false);
                                     convertView.setTag(groupPosition);
                                 }
 
