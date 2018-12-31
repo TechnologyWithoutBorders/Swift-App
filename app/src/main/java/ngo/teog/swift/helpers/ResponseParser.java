@@ -20,23 +20,23 @@ import ngo.teog.swift.helpers.filters.UserFilter;
 public class ResponseParser {
 
     public int parseLoginResponse(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                return raw.getInt(Response.DATA_FIELD);
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_OK:
+                return raw.getInt(SwiftResponse.DATA_FIELD);
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 
     public ArrayList<HospitalDevice> parseDeviceList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray deviceList = raw.getJSONArray(Response.DATA_FIELD);
+            case SwiftResponse.CODE_OK:
+                JSONArray deviceList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 ArrayList<HospitalDevice> result = new ArrayList<>();
 
@@ -65,11 +65,11 @@ public class ResponseParser {
                 }
 
                 return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 
@@ -104,10 +104,10 @@ public class ResponseParser {
     }
 
     public ArrayList<User> parseUserList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray userList = raw.getJSONArray(Response.DATA_FIELD);
+            case SwiftResponse.CODE_OK:
+                JSONArray userList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 ArrayList<User> result = new ArrayList<>();
 
@@ -130,11 +130,11 @@ public class ResponseParser {
                 }
 
                 return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 
@@ -163,10 +163,10 @@ public class ResponseParser {
     }
 
     public ArrayList<Report> parseReportList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray reportList = raw.getJSONArray(Response.DATA_FIELD);
+            case SwiftResponse.CODE_OK:
+                JSONArray reportList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 ArrayList<Report> result = new ArrayList<>();
 
@@ -189,11 +189,11 @@ public class ResponseParser {
                 }
 
                 return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 }
