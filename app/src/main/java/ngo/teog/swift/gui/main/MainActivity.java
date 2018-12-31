@@ -123,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch(i) {
                 case 0:
-                    return new SearchFragment();
+                    return new BarcodeFragment();
                 case 1:
                     return new TodoFragment();
                 case 2:
-                    return new CalendarFragment();
+                    return new SearchFragment();
                 default:
                     return null;
             }
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String[] names = {"Search", "Todo", "Maintenance"};
+            String[] names = {"Scanner", "Todo", "Search"};
 
             return names[position];
         }
