@@ -4,7 +4,7 @@ package ngo.teog.swift.helpers;
  * @author Julian Deyerler, Technology without Borders
  */
 
-public final class Response {
+public final class SwiftResponse {
 
     //Response Codes
 

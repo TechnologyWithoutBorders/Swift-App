@@ -13,7 +13,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,17 +45,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ngo.teog.swift.gui.DeviceInfoActivity;
-import ngo.teog.swift.gui.HospitalActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
-import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.Hospital;
 import ngo.teog.swift.helpers.SearchObject;
+import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.Triple;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
@@ -94,17 +90,17 @@ public class RequestFactory {
         @Override
         public void onResponse(JSONObject response) {
             try {
-                int responseCode = response.getInt("response_code");
+                int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                 switch(responseCode) {
-                    case ngo.teog.swift.helpers.Response.CODE_OK:
+                    case SwiftResponse.CODE_OK:
                         onSuccess(response);
 
                         break;
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                        throw new ResponseException(response.getString("data"));
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                    case SwiftResponse.CODE_FAILED_VISIBLE:
+                        throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                    case SwiftResponse.CODE_FAILED_HIDDEN:
                     default:
-                        throw new Exception(response.getString("data"));
+                        throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                 }
             } catch(ResponseException e) {
                 Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -168,7 +164,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                String imageHash = response.getString("data");
+                String imageHash = response.getString(SwiftResponse.DATA_FIELD);
 
                 //TODO
             }
@@ -186,7 +182,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                JSONObject hospitalObject = response.getJSONObject("data");
+                JSONObject hospitalObject = response.getJSONObject(SwiftResponse.DATA_FIELD);
 
                 String name = hospitalObject.getString("h_name");
                 String location = hospitalObject.getString("h_location");
@@ -397,7 +393,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                String imageData = response.getString("data");
+                String imageData = response.getString(SwiftResponse.DATA_FIELD);
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -443,7 +439,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                String imageData = response.getString("data");
+                String imageData = response.getString(SwiftResponse.DATA_FIELD);
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -539,10 +535,10 @@ public class RequestFactory {
             public void onSuccess(JSONObject response) throws Exception {
                 ArrayList<Report> reportList = new ArrayList<>();
 
-                int responseCode = response.getInt(ngo.teog.swift.helpers.Response.CODE_FIELD);
+                int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                 switch(responseCode) {
-                    case ngo.teog.swift.helpers.Response.CODE_OK:
-                        JSONObject data = response.getJSONObject(ngo.teog.swift.helpers.Response.DATA_FIELD);
+                    case SwiftResponse.CODE_OK:
+                        JSONObject data = response.getJSONObject(SwiftResponse.DATA_FIELD);
                         int notificationID = data.getInt("notification_counter");
 
                         JSONArray jsonReportList = data.getJSONArray("report_list");
@@ -590,11 +586,11 @@ public class RequestFactory {
                         editor.apply();
 
                         break;
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                        throw new ResponseException(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                    case SwiftResponse.CODE_FAILED_VISIBLE:
+                        throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                    case SwiftResponse.CODE_FAILED_HIDDEN:
                     default:
-                        throw new Exception(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
+                        throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                 }
             }
         });
@@ -616,9 +612,9 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        int responseCode = response.getInt("response_code");
+                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                         switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                            case SwiftResponse.CODE_OK:
                                 if(adapter != null) {
                                     adapter.clear();
                                 }
@@ -628,11 +624,11 @@ public class RequestFactory {
                                 }
 
                                 break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            case SwiftResponse.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            case SwiftResponse.CODE_FAILED_HIDDEN:
                             default:
-                                throw new Exception(response.getString("data"));
+                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                         }
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -662,9 +658,9 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        int responseCode = response.getInt("response_code");
+                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                         switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                            case SwiftResponse.CODE_OK:
                                 if(userAdapter != null) {
                                     userAdapter.clear();
                                 }
@@ -674,11 +670,11 @@ public class RequestFactory {
                                 }
 
                                 break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            case SwiftResponse.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            case SwiftResponse.CODE_FAILED_HIDDEN:
                             default:
-                                throw new Exception(response.getString("data"));
+                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                         }
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -722,10 +718,10 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        int responseCode = response.getInt("response_code");
+                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                         switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
-                                int unsubscriptions = response.getInt(ngo.teog.swift.helpers.Response.DATA_FIELD);
+                            case SwiftResponse.CODE_OK:
+                                int unsubscriptions = response.getInt(SwiftResponse.DATA_FIELD);
 
                                 if(unsubscriptions > 0) {
                                     item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_off_white_24dp));
@@ -736,11 +732,11 @@ public class RequestFactory {
                                 item.setActionView(null);
 
                                 break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            case SwiftResponse.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            case SwiftResponse.CODE_FAILED_HIDDEN:
                             default:
-                                throw new Exception(response.getString("data"));
+                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                         }
                     } catch(ResponseException e) {
                         item.setActionView(null);
