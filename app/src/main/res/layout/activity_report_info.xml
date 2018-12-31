@@ -13,7 +13,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/teog_blue"
+            android:background="@color/black"
             android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
