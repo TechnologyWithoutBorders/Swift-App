@@ -54,7 +54,7 @@ import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.SwiftResponse;
-import ngo.teog.swift.helpers.Triple;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.Report;
@@ -320,7 +320,7 @@ public class RequestFactory {
                                     String dateString = DATE_FORMAT.format(device.getLastReportDate());
                                     dateView.setText(dateString);
 
-                                    Triple triple = Triple.buildtriple(device.getState(), context);
+                                    DeviceState triple = DeviceState.buildState(device.getState(), context);
 
                                     statusView.setText(triple.getStatestring());
 

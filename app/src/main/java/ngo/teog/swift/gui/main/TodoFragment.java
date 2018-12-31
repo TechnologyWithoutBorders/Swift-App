@@ -31,7 +31,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
-import ngo.teog.swift.helpers.Triple;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.UpdateWorker;
 
 public class TodoFragment extends BaseFragment {
@@ -146,7 +146,7 @@ public class TodoFragment extends BaseFragment {
                 String dateString = DATE_FORMAT.format(device.getLastReportDate());
                 dateView.setText(dateString);
 
-                Triple triple = Triple.buildtriple(device.getState(),this.getContext());
+                DeviceState triple = DeviceState.buildState(device.getState(),this.getContext());
 
                 statusView.setText(device.getWard());
                 imageView.setImageDrawable(triple.getStateicon());
