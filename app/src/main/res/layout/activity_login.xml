@@ -69,8 +69,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Login"
-                    android:background="@color/teog_blue"
-                    android:textColor="@color/white"
                     android:onClick="login"
                     android:padding="15dp"
                     android:layout_marginTop="30dp"/>
