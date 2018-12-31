@@ -1,12 +1,6 @@
 package ngo.teog.swift.helpers;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-import android.util.Log;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -14,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.filters.NewsFilter;
 import ngo.teog.swift.helpers.filters.ReportFilter;
-import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 /**
