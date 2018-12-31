@@ -204,31 +204,4 @@ public class ResponseParser {
                 throw new Exception(raw.getString(Response.DATA_FIELD));
         }
     }
-
-    public ArrayList<NewsItem> parseNewsList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
-        switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray newsList = raw.getJSONArray(Response.DATA_FIELD);
-
-                ArrayList<NewsItem> result = new ArrayList<>();
-
-                for(int i = 0; i < newsList.length(); i++) {
-                    JSONObject newsObject = newsList.getJSONObject(i);
-
-                    int id = newsObject.getInt(NewsFilter.ID);
-                    Date date = Defaults.DATE_FORMAT.parse(newsObject.getString(NewsFilter.DATE));
-                    String value = newsObject.getString(NewsFilter.VALUE);
-
-                    result.add(new NewsItem(id, date, value));
-                }
-
-                return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
-            default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
-        }
-    }
 }
