@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Device"
+        android:background="@color/teog_blue"
         android:onClick="startNewDeviceActivity"/>
 
 </LinearLayout>
