@@ -3,16 +3,13 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -39,8 +36,6 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.Hospital;
-import ngo.teog.swift.helpers.Response;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.User;
@@ -105,14 +100,12 @@ public class UserProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Telephone");
 
-        // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
         input.setInputType(InputType.TYPE_CLASS_PHONE);
         input.setText(telephoneView.getText());
         builder.setView(input);
 
-        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -134,14 +127,12 @@ public class UserProfileActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Position");
 
-        // Set up the input
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(30)});
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(positionView.getText());
         builder.setView(input);
 
-        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

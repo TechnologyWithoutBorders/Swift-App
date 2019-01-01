@@ -122,7 +122,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".helpers.AlarmReceiver" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

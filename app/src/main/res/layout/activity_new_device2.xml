@@ -25,42 +25,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Asset Number"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="20"/>
 
             <EditText
                 android:id="@+id/typeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Type"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="20"/>
 
             <EditText
                 android:id="@+id/serialNumberText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Serial Number"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="20"/>
 
             <EditText
                 android:id="@+id/manufacturerText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Manufacturer"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="20"/>
 
             <EditText
                 android:id="@+id/modelText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Model"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="20"/>
 
             <EditText
                 android:id="@+id/wardText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Ward"
-                android:inputType="text" />
+                android:inputType="text"
+                android:maxLength="20"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

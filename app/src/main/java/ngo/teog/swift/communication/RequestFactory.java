@@ -13,12 +13,15 @@ import android.graphics.drawable.AnimationDrawable;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +38,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,10 +50,11 @@ import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
-import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
+import ngo.teog.swift.helpers.SwiftResponse;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.Report;
@@ -85,17 +90,17 @@ public class RequestFactory {
         @Override
         public void onResponse(JSONObject response) {
             try {
-                int responseCode = response.getInt("response_code");
+                int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                 switch(responseCode) {
-                    case ngo.teog.swift.helpers.Response.CODE_OK:
+                    case SwiftResponse.CODE_OK:
                         onSuccess(response);
 
                         break;
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                        throw new ResponseException(response.getString("data"));
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                    case SwiftResponse.CODE_FAILED_VISIBLE:
+                        throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                    case SwiftResponse.CODE_FAILED_HIDDEN:
                     default:
-                        throw new Exception(response.getString("data"));
+                        throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                 }
             } catch(ResponseException e) {
                 Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -159,9 +164,220 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                String imageHash = response.getString("data");
+                String imageHash = response.getString(SwiftResponse.DATA_FIELD);
 
                 //TODO
+            }
+        });
+    }
+
+    public DefaultRequest createHospitalRequest(final Context context, View disable, final View enable, final TextView nameView, final TextView locationView, final ExpandableListView listView, final int user) {
+        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
+
+        Map<String, String> params = generateParameterMap(context, "fetch_hospital", true);
+        params.put(UserFilter.ID, Integer.toString(user));
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                JSONObject hospitalObject = response.getJSONObject(SwiftResponse.DATA_FIELD);
+
+                String name = hospitalObject.getString("h_name");
+                String location = hospitalObject.getString("h_location");
+
+                nameView.setText(name);
+                locationView.setText(location);
+
+                ResponseParser parser = new ResponseParser();
+                final ArrayList<User> memberList = parser.parseUserList(hospitalObject.getJSONArray("members"));
+                final ArrayList<HospitalDevice> deviceList = parser.parseDeviceList(hospitalObject.getJSONArray("devices"));
+
+                listView.setAdapter(new BaseExpandableListAdapter() {
+                    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
+                    @Override
+                    public int getGroupCount() {
+                        return 2;
+                    }
+
+                    @Override
+                    public int getChildrenCount(int i) {
+                        switch(i) {
+                            case 0:
+                                return memberList.size();
+                            case 1:
+                                return deviceList.size();
+                            default:
+                                return 0;
+                        }
+                    }
+
+                    @Override
+                    public Object getGroup(int i) {
+                        switch(i) {
+                            case 0:
+                                return "Members";
+                            case 1:
+                                return "Devices";
+                            default:
+                                return null;
+                        }
+                    }
+
+                    @Override
+                    public Object getChild(int groupPosition, int childPosition) {
+                        switch(groupPosition) {
+                            case 0:
+                                return memberList.get(childPosition);
+                            case 1:
+                                return deviceList.get(childPosition);
+                            default:
+                                return null;
+                        }
+                    }
+
+                    @Override
+                    public long getGroupId(int i) {
+                        return i;
+                    }
+
+                    @Override
+                    public long getChildId(int groupPosition, int childPosition) {
+                        return childPosition;
+                    }
+
+                    @Override
+                    public boolean hasStableIds() {
+                        return false;
+                    }
+
+                    @Override
+                    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+                        if(convertView == null) {
+                            LayoutInflater inflater = (LayoutInflater) context
+                                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            convertView = inflater.inflate(R.layout.header_hospital, parent, false);
+                        }
+
+                        TextView nameView = convertView.findViewById(R.id.nameView);
+                        TextView countView = convertView.findViewById(R.id.countView);
+
+                        switch(groupPosition) {
+                            case 0:
+                                nameView.setText("Members");
+                                countView.setText(Integer.toString(memberList.size()));
+                                break;
+                            case 1:
+                                nameView.setText("Devices");
+                                countView.setText(Integer.toString(deviceList.size()));
+                                break;
+                        }
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+                        switch(groupPosition) {
+                            case 0:
+                                if(convertView == null || (int)convertView.getTag() != groupPosition) {
+                                    LayoutInflater inflater = (LayoutInflater) context
+                                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    convertView = inflater.inflate(R.layout.row_members, parent, false);
+                                    convertView.setTag(groupPosition);
+                                }
+
+                                User user = memberList.get(childPosition);
+
+                                if(user != null) {
+                                    TextView nameView = convertView.findViewById(R.id.nameView);
+                                    TextView positionView = convertView.findViewById(R.id.positionView);
+
+                                    nameView.setText(user.getName());
+                                    positionView.setText(user.getPosition());
+                                }
+                                break;
+                            case 1:
+                                if(convertView == null || (int)convertView.getTag() != groupPosition) {
+                                    LayoutInflater inflater = (LayoutInflater) context
+                                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    convertView = inflater.inflate(R.layout.row_todo, parent, false);
+                                    convertView.setTag(groupPosition);
+                                }
+
+                                TextView nameView = convertView.findViewById(R.id.nameView);
+                                TextView dateView = convertView.findViewById(R.id.dateView);
+                                TextView statusView = convertView.findViewById(R.id.statusView);
+                                ImageView imageView = convertView.findViewById(R.id.imageView);
+
+                                HospitalDevice device = deviceList.get(childPosition);
+
+                                if(device != null) {
+                                    nameView.setText(device.getType());
+
+                                    String dateString = DATE_FORMAT.format(device.getLastReportDate());
+                                    dateView.setText(dateString);
+
+                                    DeviceState triple = DeviceState.buildState(device.getState(), context);
+
+                                    statusView.setText(triple.getStatestring());
+
+                                    imageView.setImageDrawable(triple.getStateicon());
+                                    imageView.setBackgroundColor(triple.getBackgroundcolor());
+                                }
+                                break;
+                        }
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public boolean isChildSelectable(int i, int i1) {
+                        return true;
+                    }
+
+                    @Override
+                    public int getChildTypeCount() {
+                        return 2;
+                    }
+
+                    @Override
+                    public int getGroupTypeCount() {
+                        return 2;
+                    }
+
+                    @Override
+                    public int getGroupType(int groupPosition) {
+                        return groupPosition;
+                    }
+
+                    @Override
+                    public int getChildType(int groupPosition, int childPosition) {
+                        return groupPosition;
+                    }
+                });
+
+                listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    @Override
+                    public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
+                        switch(groupPosition) {
+                            case 0:
+                                Intent intent = new Intent(context, UserInfoActivity.class);
+                                intent.putExtra("user", memberList.get(childPosition));
+                                context.startActivity(intent);
+                                break;
+                            case 1:
+                                Intent intent2 = new Intent(context, DeviceInfoActivity.class);
+                                intent2.putExtra("device", deviceList.get(childPosition));
+                                context.startActivity(intent2);
+                                break;
+                        }
+
+                        return false;
+                    }
+                });
             }
         });
     }
@@ -177,7 +393,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                String imageData = response.getString("data");
+                String imageData = response.getString(SwiftResponse.DATA_FIELD);
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -223,7 +439,7 @@ public class RequestFactory {
         return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
-                String imageData = response.getString("data");
+                String imageData = response.getString(SwiftResponse.DATA_FIELD);
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -305,50 +521,6 @@ public class RequestFactory {
         });
     }
 
-    /*public DefaultRequest createNewsRequest(final Context context) {
-        final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch", true);
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<NewsItem> newsList = new ResponseParser().parseNewsList(response);
-
-                if(newsList.size() > 0) {
-                    //Test Benachrichtigung
-                    int mNotificationId = newsList.get(newsList.size()-1).getID();
-
-                    String news = "";
-
-                    for(NewsItem item : newsList) {
-                        news += Defaults.DATE_FORMAT.format(item.getDate()) + "\n" + item.getValue() + "\n\n";
-                    }
-
-                    String CHANNEL_ID = "news_channel";
-                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_stat_name)
-                            .setContentTitle("Fake news from Swift")
-                            .setContentText("Tap to show messages");
-                    Intent resultIntent = new Intent(context, MainActivity.class);
-                    resultIntent.putExtra("NEWS", news);
-                    resultIntent.putExtra("notification", mNotificationId);
-
-                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                    stackBuilder.addParentStack(MainActivity.class);
-                    stackBuilder.addNextIntent(resultIntent);
-                    PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                    mBuilder.setContentIntent(resultPendingIntent);
-                    NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    mNotificationManager.notify(mNotificationId, mBuilder.build());
-                }
-            }
-        });
-    }*/
-
     public DefaultRequest createWorkRequest(final Context context, int id, final int notificationCounter) {
         final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
 
@@ -363,10 +535,10 @@ public class RequestFactory {
             public void onSuccess(JSONObject response) throws Exception {
                 ArrayList<Report> reportList = new ArrayList<>();
 
-                int responseCode = response.getInt(ngo.teog.swift.helpers.Response.CODE_FIELD);
+                int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                 switch(responseCode) {
-                    case ngo.teog.swift.helpers.Response.CODE_OK:
-                        JSONObject data = response.getJSONObject(ngo.teog.swift.helpers.Response.DATA_FIELD);
+                    case SwiftResponse.CODE_OK:
+                        JSONObject data = response.getJSONObject(SwiftResponse.DATA_FIELD);
                         int notificationID = data.getInt("notification_counter");
 
                         JSONArray jsonReportList = data.getJSONArray("report_list");
@@ -414,16 +586,12 @@ public class RequestFactory {
                         editor.apply();
 
                         break;
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                        throw new ResponseException(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
-                    case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                    case SwiftResponse.CODE_FAILED_VISIBLE:
+                        throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                    case SwiftResponse.CODE_FAILED_HIDDEN:
                     default:
-                        throw new Exception(response.getString(ngo.teog.swift.helpers.Response.DATA_FIELD));
+                        throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                 }
-
-                Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction("ngo.swift.teog.WORK_FETCHED");
-                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
             }
         });
     }
@@ -437,16 +605,6 @@ public class RequestFactory {
         return new DeviceListRequest(context, disable, enable, url, request, adapter);
     }
 
-    public DeviceListRequest createDeviceListRequest(Context context, View disable, View enable, ArrayAdapter<SearchObject> adapter, int user) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch_device_list", true);
-        params.put(UserFilter.ID, Integer.toString(user));
-        JSONObject request = new JSONObject(params);
-
-        return new DeviceListRequest(context, disable, enable, url, request, adapter);
-    }
-
     public class DeviceListRequest extends JsonObjectRequest {
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<SearchObject> adapter) {
@@ -454,9 +612,9 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        int responseCode = response.getInt("response_code");
+                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                         switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                            case SwiftResponse.CODE_OK:
                                 if(adapter != null) {
                                     adapter.clear();
                                 }
@@ -466,11 +624,11 @@ public class RequestFactory {
                                 }
 
                                 break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            case SwiftResponse.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            case SwiftResponse.CODE_FAILED_HIDDEN:
                             default:
-                                throw new Exception(response.getString("data"));
+                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                         }
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -494,25 +652,15 @@ public class RequestFactory {
         }
     }
 
-    public ColleagueRequest createColleagueRequest(Context context, View disable, View enable, ArrayAdapter<User> userAdapter, int user) {
-        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch_members", true);
-        params.put(UserFilter.ID, Integer.toString(user));
-        JSONObject request = new JSONObject(params);
-
-        return new ColleagueRequest(context, disable, enable, url, request, userAdapter);
-    }
-
     public class ColleagueRequest extends JsonObjectRequest {
         public ColleagueRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> userAdapter) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        int responseCode = response.getInt("response_code");
+                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
                         switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
+                            case SwiftResponse.CODE_OK:
                                 if(userAdapter != null) {
                                     userAdapter.clear();
                                 }
@@ -522,11 +670,11 @@ public class RequestFactory {
                                 }
 
                                 break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
+                            case SwiftResponse.CODE_FAILED_VISIBLE:
+                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            case SwiftResponse.CODE_FAILED_HIDDEN:
                             default:
-                                throw new Exception(response.getString("data"));
+                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                         }
                     } catch(ResponseException e) {
                         Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -545,64 +693,6 @@ public class RequestFactory {
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    public UnsubscriptionOptionalUpdateRequest createUnsubscriptionOptionalUpdateRequest(Context context, MenuItem item, boolean toggle, int user, int device) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, "update_unsubscription", true);
-        params.put(UserFilter.ID, Integer.toString(user));
-        params.put(DeviceFilter.ID, Integer.toString(device));
-        params.put("toggle", Boolean.toString(toggle));
-
-        JSONObject request = new JSONObject(params);
-
-        return new UnsubscriptionOptionalUpdateRequest(context, url, request, item);
-    }
-
-    public class UnsubscriptionOptionalUpdateRequest extends JsonObjectRequest {
-
-        public UnsubscriptionOptionalUpdateRequest(final Context context, final String url, JSONObject request, final MenuItem item) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int responseCode = response.getInt("response_code");
-                        switch(responseCode) {
-                            case ngo.teog.swift.helpers.Response.CODE_OK:
-                                int unsubscriptions = response.getInt(ngo.teog.swift.helpers.Response.DATA_FIELD);
-
-                                if(unsubscriptions > 0) {
-                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_off_white_24dp));
-                                } else {
-                                    item.setIcon(context.getResources().getDrawable(R.drawable.ic_notifications_white_24dp));
-                                }
-
-                                item.setActionView(null);
-
-                                break;
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString("data"));
-                            case ngo.teog.swift.helpers.Response.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString("data"));
-                        }
-                    } catch(ResponseException e) {
-                        item.setActionView(null);
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        item.setActionView(null);
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    item.setActionView(null);
-                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -820,6 +910,7 @@ public class RequestFactory {
         params.put(DeviceFilter.MODEL, device.getModel());
         params.put("d_ward", device.getWard());
         params.put("d_maintenance_interval", Integer.toString(device.getMaintenanceInterval()));
+        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
         if(bitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
@@ -853,6 +944,7 @@ public class RequestFactory {
         params.put(ReportFilter.DESCRIPTION, report.getDescription());
         params.put(ReportFilter.PREVIOUS_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
         params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getCurrentState()));
+        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(report.getDateTime()));
 
         JSONObject request = new JSONObject(params);
 

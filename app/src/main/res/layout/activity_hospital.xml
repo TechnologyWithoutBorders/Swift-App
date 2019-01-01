@@ -1,64 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Members"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        android:background="@color/teog_blue"
-        android:textStyle="bold"
-        android:padding="3dp" />
-    
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/memberProgressBar"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:orientation="horizontal">
 
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/memberList"
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_home_black_24dp" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/nameView"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="[Hospital Name]"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/locationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="[Hospital Location]"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/hospitalList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        </ExpandableListView>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/hospitalProgressBar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Devices"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        android:background="@color/teog_blue"
-        android:textStyle="bold"
-        android:padding="3dp" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ProgressBar
-            android:id="@+id/deviceProgressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"/>
-
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/deviceList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+        android:layout_centerInParent="true"
+        android:visibility="invisible"/>
+</RelativeLayout>

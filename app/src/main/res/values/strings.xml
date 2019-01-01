@@ -36,7 +36,7 @@
         \n
         \n
         \n
-        \n Impressum https://www.teog.ngo/verein-2/#anker8
+        \nImpressum Online https://www.teog.ngo/verein-2/#anker8
         \n
         \n
         \n <span style="font-size:25"><b>Impressum</b></span> \n\n
@@ -119,6 +119,7 @@
 
     <string-array name="countries_options">
         <item>Germany</item>
+        <item>Ghana</item>
         <item>Nepal</item>
     </string-array>
 
@@ -126,5 +127,8 @@
         <item>Weeks</item>
         <item>Months</item>
     </string-array>
-  
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

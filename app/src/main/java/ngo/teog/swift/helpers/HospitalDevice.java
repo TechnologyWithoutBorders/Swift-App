@@ -15,13 +15,6 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
 
 public class HospitalDevice extends SearchObject {
 
-    public static final int STATE_WORKING = 0;
-    public static final int STATE_PM_DUE = 1;
-    public static final int STATE_REPAIR_NEEDED = 2;
-    public static final int STATE_IN_PROGRESS = 3;
-    public static final int STATE_BROKEN_SALVAGE = 4;
-    public static final int STATE_WORKING_WITH_LIMITATIONS = 5;
-
     private int id;
     private String assetNumber;
     private String type;

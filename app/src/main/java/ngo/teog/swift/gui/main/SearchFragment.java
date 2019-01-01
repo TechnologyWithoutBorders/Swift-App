@@ -2,9 +2,9 @@ package ngo.teog.swift.gui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +23,10 @@ import com.android.volley.RequestQueue;
 import java.util.ArrayList;
 
 import ngo.teog.swift.gui.BaseFragment;
-import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
-import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.filters.Filter;
-import ngo.teog.swift.helpers.HospitalDevice;
-import ngo.teog.swift.helpers.filters.UserFilter;
 
 public class SearchFragment extends BaseFragment {
 
@@ -47,7 +41,7 @@ public class SearchFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_search, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
         searchSpinner = rootView.findViewById(R.id.spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.search_options, android.R.layout.simple_spinner_item);

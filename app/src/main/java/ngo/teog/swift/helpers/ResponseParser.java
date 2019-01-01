@@ -1,12 +1,6 @@
 package ngo.teog.swift.helpers;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-import android.util.Log;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -14,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.filters.NewsFilter;
 import ngo.teog.swift.helpers.filters.ReportFilter;
-import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 /**
@@ -28,23 +20,23 @@ import ngo.teog.swift.helpers.filters.UserFilter;
 public class ResponseParser {
 
     public int parseLoginResponse(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                return raw.getInt(Response.DATA_FIELD);
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_OK:
+                return raw.getInt(SwiftResponse.DATA_FIELD);
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 
     public ArrayList<HospitalDevice> parseDeviceList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray deviceList = raw.getJSONArray(Response.DATA_FIELD);
+            case SwiftResponse.CODE_OK:
+                JSONArray deviceList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 ArrayList<HospitalDevice> result = new ArrayList<>();
 
@@ -73,19 +65,49 @@ public class ResponseParser {
                 }
 
                 return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 
+    public ArrayList<HospitalDevice> parseDeviceList(JSONArray deviceList) throws Exception {
+        ArrayList<HospitalDevice> result = new ArrayList<>();
+
+        for(int i = 0; i < deviceList.length(); i++) {
+            JSONObject deviceObject = deviceList.getJSONObject(i);
+
+            int id = deviceObject.getInt(DeviceFilter.ID);
+            String assetNumber = deviceObject.getString(DeviceFilter.ASSET_NUMBER);
+            String type = deviceObject.getString(DeviceFilter.TYPE);
+            String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
+            String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
+            String model = deviceObject.getString(DeviceFilter.MODEL);
+            String ward = deviceObject.getString("d_ward");
+            int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
+
+            final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+            String hospital = deviceObject.getString("h_name");
+            int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
+            String reportDateString = deviceObject.getString("r_datetime");
+
+            Date lastReportDate = DATE_FORMAT.parse(reportDateString);
+
+            HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastReportDate);
+            result.add(device);
+        }
+
+        return result;
+    }
+
     public ArrayList<User> parseUserList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray userList = raw.getJSONArray(Response.DATA_FIELD);
+            case SwiftResponse.CODE_OK:
+                JSONArray userList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 ArrayList<User> result = new ArrayList<>();
 
@@ -108,19 +130,43 @@ public class ResponseParser {
                 }
 
                 return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 
+    public ArrayList<User> parseUserList(JSONArray userList) throws Exception {
+        ArrayList<User> result = new ArrayList<>();
+
+        for(int i = 0; i < userList.length(); i++) {
+            JSONObject userObject = userList.getJSONObject(i);
+
+            int id = userObject.getInt(UserFilter.ID);
+            String phone = userObject.getString(UserFilter.PHONE);
+            String mail = userObject.getString(UserFilter.MAIL);
+            String fullName = userObject.getString(UserFilter.FULL_NAME);
+
+            int hospitalId = userObject.getInt("h_ID");
+            String hospitalName = userObject.getString("h_name");
+            String position = userObject.getString("u_position");
+
+            Hospital hospital = new Hospital(hospitalId, hospitalName);
+
+            User user = new User(id, phone, mail, fullName, hospital, position);
+            result.add(user);
+        }
+
+        return result;
+    }
+
     public ArrayList<Report> parseReportList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
         switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray reportList = raw.getJSONArray(Response.DATA_FIELD);
+            case SwiftResponse.CODE_OK:
+                JSONArray reportList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 ArrayList<Report> result = new ArrayList<>();
 
@@ -143,38 +189,11 @@ public class ResponseParser {
                 }
 
                 return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
             default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
-        }
-    }
-
-    public ArrayList<NewsItem> parseNewsList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(Response.CODE_FIELD);
-        switch(responseCode) {
-            case Response.CODE_OK:
-                JSONArray newsList = raw.getJSONArray(Response.DATA_FIELD);
-
-                ArrayList<NewsItem> result = new ArrayList<>();
-
-                for(int i = 0; i < newsList.length(); i++) {
-                    JSONObject newsObject = newsList.getJSONObject(i);
-
-                    int id = newsObject.getInt(NewsFilter.ID);
-                    Date date = Defaults.DATE_FORMAT.parse(newsObject.getString(NewsFilter.DATE));
-                    String value = newsObject.getString(NewsFilter.VALUE);
-
-                    result.add(new NewsItem(id, date, value));
-                }
-
-                return result;
-            case Response.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(Response.DATA_FIELD));
-            case Response.CODE_FAILED_HIDDEN:
-            default:
-                throw new Exception(raw.getString(Response.DATA_FIELD));
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
         }
     }
 }

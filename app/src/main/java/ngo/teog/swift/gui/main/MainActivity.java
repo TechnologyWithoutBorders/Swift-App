@@ -1,23 +1,21 @@
 package ngo.teog.swift.gui.main;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -28,18 +26,19 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
+import java.io.File;
+
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.gui.HospitalActivity;
+import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.LoginActivity;
 import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.UserProfileActivity;
-import ngo.teog.swift.helpers.AlarmReceiver;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.HospitalDevice;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,18 +57,7 @@ public class MainActivity extends AppCompatActivity {
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
 
-        if(intent.hasExtra("NEWS")) {
-            String news = intent.getStringExtra("NEWS");
-            int notificationID = intent.getIntExtra("notification", -1);
-
-            Bundle args = new Bundle();
-            args.putString("news", news);
-            args.putInt("notification", notificationID);
-
-            DialogFragment newsFragment = new NewsDialogFragment();
-            newsFragment.setArguments(args);
-            newsFragment.show(getSupportFragmentManager(), "news");
-        } else if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
+        if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
             //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
 
             try {
@@ -135,11 +123,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch(i) {
                 case 0:
-                    if(codeFragment == null) {
-                        codeFragment = new BarcodeFragment();
-                    }
-
-                    return codeFragment;
+                    return new BarcodeFragment();
                 case 1:
                     return new TodoFragment();
                 case 2:
@@ -211,6 +195,10 @@ public class MainActivity extends AppCompatActivity {
         editor.remove(Defaults.COUNTRY_PREFERENCE);
         editor.remove(Defaults.NOTIFICATION_COUNTER);
         editor.apply();
+
+        for(File file : getFilesDir().listFiles()) {
+            file.delete();
+        }
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
