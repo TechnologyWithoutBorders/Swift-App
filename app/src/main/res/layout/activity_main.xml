@@ -9,8 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:background="@color/black"
-        app:tabTextColor="@color/white"
+        android:background="@color/teog_blue"
+        app:tabTextColor="@color/white_transparent"
+
+        app:tabIndicatorHeight="5dp"
         app:tabSelectedTextColor="@color/white"
         app:tabIndicatorColor="@color/white"
         android:id="@+id/tab_layout"/>

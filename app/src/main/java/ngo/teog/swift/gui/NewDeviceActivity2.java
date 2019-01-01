@@ -1,12 +1,10 @@
 package ngo.teog.swift.gui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,17 +12,12 @@ import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.android.volley.RequestQueue;
-
 import java.util.Date;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class NewDeviceActivity2 extends AppCompatActivity {
+public class NewDeviceActivity2 extends BaseActivity {
 
     private Button nextButton;
     private ProgressBar progressBar;
@@ -71,9 +64,25 @@ public class NewDeviceActivity2 extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_creation2, menu);
+        inflater.inflate(R.menu.menu_device_info, menu);
+
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+                case R.id.info:
+                showInfo(R.string.newdevice_activity_2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
 
     public void createDevice(View view) {
         if(typeField.getText().length() > 0) {

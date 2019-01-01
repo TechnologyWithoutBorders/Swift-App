@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,7 +36,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.gui.main.MainActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private Button loginButton;
     private EditText mailField;
@@ -96,6 +97,17 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.about_text);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void login(View view) {
         if(mailField.getText().length() > 0) {
             if(passwordField.getText().length() > 0) {
@@ -142,18 +154,6 @@ public class LoginActivity extends AppCompatActivity {
             return sb.toString();
         } catch (NoSuchAlgorithmException e1) {
             return null;
-        }
-    }
-
-    protected boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if(cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        } else {
-            return false;
         }
     }
 }

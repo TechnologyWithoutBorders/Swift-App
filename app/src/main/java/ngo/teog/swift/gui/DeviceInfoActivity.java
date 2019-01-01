@@ -3,14 +3,12 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,12 +34,11 @@ import java.util.ArrayList;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.Report;
 import ngo.teog.swift.helpers.DeviceState;
 
-public class DeviceInfoActivity extends AppCompatActivity {
+public class DeviceInfoActivity extends BaseActivity {
 
     private ReportArrayAdapter adapter;
 
@@ -273,20 +270,11 @@ public class DeviceInfoActivity extends AppCompatActivity {
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share device link"));
                 return true;
+            case R.id.info:
+                showInfo(R.string.deviceinfo_activity);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
         }
     }
 

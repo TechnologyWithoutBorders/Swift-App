@@ -2,16 +2,17 @@ package ngo.teog.swift.gui;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,16 +42,13 @@ import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends BaseActivity {
 
     private TextView telephoneView;
     private TextView mailView;
     private TextView hospitalView;
     private TextView positionView;
     private TextView nameView;
-
-    private ProgressBar progressBar2;
-    private TableLayout tableLayout;
 
     private ImageView imageView;
 
@@ -69,9 +67,9 @@ public class UserProfileActivity extends AppCompatActivity {
         hospitalView = findViewById(R.id.locationView);
         positionView = findViewById(R.id.positionView);
 
-        progressBar2 = findViewById(R.id.progressBar2);
+        ProgressBar progressBar2 = findViewById(R.id.progressBar2);
 
-        tableLayout = findViewById(R.id.tableLayout);
+        TableLayout tableLayout = findViewById(R.id.tableLayout);
         imageView = findViewById(R.id.imageView);
 
         saveButton = findViewById(R.id.saveButton);
@@ -92,10 +90,21 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_my_profile, menu);
+        inflater.inflate(R.menu.menu_user_info, menu);
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.userprofile_activity);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     public void editPhone(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Telephone");
@@ -164,18 +173,6 @@ public class UserProfileActivity extends AppCompatActivity {
             saveButton.setVisibility(View.INVISIBLE);
 
             queue.add(request);
-        }
-    }
-
-    private boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
         }
     }
 

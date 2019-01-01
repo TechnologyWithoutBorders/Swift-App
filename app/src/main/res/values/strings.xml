@@ -1,6 +1,16 @@
 <resources>
     <!-- General information -->
     <string name="app_name">Swift</string>
+    <string name="deviceinfo_activity">Will be implemented soon </string>
+    <string name="hospital_activity">Will be implemented soon </string>
+    <string name="image_activity">Will be implemented soon </string>
+    <string name="newdevice_activity_1">Will be implemented soon </string>
+    <string name="newdevice_activity_2">Will be implemented soon </string>
+    <string name="newdevice_activity_3">Will be implemented soon </string>
+    <string name="reportcreation_activity">Will be implemented soon </string>
+    <string name="reportInfoActivity">Will be implemented soon </string>
+    <string name="userinfo_activity">Will be implemented soon </string>
+    <string name="userprofile_activity">Will be implemented soon </string>
     <string name="about_text_old">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
     <string name="about_text">
         \n
@@ -26,7 +36,7 @@
         Nhat Nguyen\n
         Felix Tuchnitz\n
         Ina Reichmann\n\n
-        Hopefully many more to come... :-)\n
+        Hopefully many more to come… :-)\n
         \n
         \n
         \n

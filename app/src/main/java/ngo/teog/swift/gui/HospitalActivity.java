@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -24,7 +25,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.User;
 
-public class HospitalActivity extends AppCompatActivity {
+public class HospitalActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +82,16 @@ public class HospitalActivity extends AppCompatActivity {
         return true;
     }
 
-    protected boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if(cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        } else {
-            return false;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.hospital_activity);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

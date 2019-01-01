@@ -5,18 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.FileUriExposedException;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import com.android.volley.RequestQueue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
@@ -35,7 +32,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class NewDeviceActivity3 extends AppCompatActivity {
+public class NewDeviceActivity3 extends BaseActivity {
 
     private Button nextButton;
     private ProgressBar progressBar;
@@ -78,8 +75,21 @@ public class NewDeviceActivity3 extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_creation3, menu);
+        inflater.inflate(R.menu.menu_device_info, menu);
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.newdevice_activity_3);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void createDevice(View view) {

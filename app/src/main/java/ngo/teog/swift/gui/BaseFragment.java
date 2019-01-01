@@ -13,7 +13,7 @@ import android.support.v4.app.Fragment;
  * Created by Julian on 17.11.2017.
  */
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
     protected boolean checkForInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager)this.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
