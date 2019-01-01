@@ -178,7 +178,7 @@ public class MainActivity extends BaseActivity {
                 //TODO build calendar
                 return true;
             case R.id.info:
-                showInfo(R.string.userinfo_activity);
+                showInfo(R.string.mainactivity);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -12,6 +12,7 @@
     <string name="userinfo_activity"> You can use thes data to contact your colleagues. Every report has an author so you can easily deduct who yo need to contact. </string>
     <string name="userprofile_activity"> You can edit your telephone number and position here. </string>
     <string name="calender_activity">Will be implemented soon </string>
+    <string name="mainactivity">Scanner \n TODO\n Search </string>
     <string name="about_text_old">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
     <string name="about_text">
         \n
