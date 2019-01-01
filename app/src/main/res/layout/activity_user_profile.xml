@@ -27,7 +27,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
+                android:background="@color/grey_table_bar"
                 android:padding="3dp">
                 <TextView
                     android:layout_width="match_parent"
