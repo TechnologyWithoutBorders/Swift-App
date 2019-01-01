@@ -172,6 +172,9 @@ public class MainActivity extends BaseActivity {
             case R.id.aboutItem:
                 startAboutActivity();
                 return true;
+            case R.id.maintenance:
+                startCalendarActivity();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -213,6 +216,11 @@ public class MainActivity extends BaseActivity {
 
     public void startNewDeviceActivity(View view) {
         Intent intent = new Intent(MainActivity.this, NewDeviceActivity.class);
+        startActivity(intent);
+    }
+
+    public void startCalendarActivity() {
+        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
         startActivity(intent);
     }
 }
