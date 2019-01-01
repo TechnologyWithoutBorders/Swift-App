@@ -80,16 +80,4 @@ public class HospitalActivity extends BaseActivity {
         inflater.inflate(R.menu.menu_my_hospital, menu);
         return true;
     }
-
-    protected boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if(cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        } else {
-            return false;
-        }
-    }
 }

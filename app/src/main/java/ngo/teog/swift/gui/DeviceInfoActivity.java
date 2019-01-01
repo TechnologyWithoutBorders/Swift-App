@@ -275,18 +275,6 @@ public class DeviceInfoActivity extends BaseActivity {
         }
     }
 
-    private boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private class ReportArrayAdapter extends ArrayAdapter<Report> {
         private final Context context;
 

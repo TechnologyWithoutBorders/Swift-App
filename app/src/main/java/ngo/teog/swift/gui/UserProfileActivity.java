@@ -163,18 +163,6 @@ public class UserProfileActivity extends BaseActivity {
         }
     }
 
-    private boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public ProfileOpenRequest createProfileOpenRequest(Context context, View disable, View enable) {
         String url = ProfileOpenRequest.BASE_URL;
 

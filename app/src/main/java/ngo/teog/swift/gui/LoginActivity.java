@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.info:
-                showInfo("Message");
+                showInfo(R.string.about_text);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -154,18 +154,6 @@ public class LoginActivity extends BaseActivity {
             return sb.toString();
         } catch (NoSuchAlgorithmException e1) {
             return null;
-        }
-    }
-
-    protected boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if(cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-            return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        } else {
-            return false;
         }
     }
 }
