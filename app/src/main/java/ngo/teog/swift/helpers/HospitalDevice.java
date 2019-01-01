@@ -1,10 +1,12 @@
 package ngo.teog.swift.helpers;
 
 import android.graphics.Bitmap;
+import android.view.MenuItem;
 
 import java.io.Serializable;
 import java.util.Date;
 
+import ngo.teog.swift.R;
 import ngo.teog.swift.gui.DeviceInfoActivity;
 
 /**
@@ -104,4 +106,6 @@ public class HospitalDevice extends SearchObject {
     public String getExtraIdentifier() {
         return "device";
     }
+
+
 }

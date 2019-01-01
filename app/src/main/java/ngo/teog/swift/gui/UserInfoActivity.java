@@ -73,6 +73,9 @@ public class UserInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.userinfo_activity);
+                return true;
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
@@ -98,3 +101,6 @@ public class UserInfoActivity extends BaseActivity {
         startActivity(mailIntent);
     }
 }
+
+
+

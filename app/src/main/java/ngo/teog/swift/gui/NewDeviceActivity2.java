@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,9 +64,25 @@ public class NewDeviceActivity2 extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_creation2, menu);
+        inflater.inflate(R.menu.menu_device_info, menu);
+
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+                case R.id.info:
+                showInfo(R.string.newdevice_activity_2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
 
     public void createDevice(View view) {
         if(typeField.getText().length() > 0) {

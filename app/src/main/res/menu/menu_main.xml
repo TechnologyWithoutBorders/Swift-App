@@ -5,10 +5,11 @@
         android:icon="@drawable/ic_date_range_24dp"
         android:title="maintenance"
         app:showAsAction="always"/>
-    <item android:id="@+id/new_game"
+    <item
+        android:id="@+id/info"
         android:icon="@drawable/ic_info_outline_white_24dp"
         android:title="information"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
     <item android:id="@+id/profileItem"
         android:title="my profile">
     </item>

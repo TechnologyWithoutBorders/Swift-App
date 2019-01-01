@@ -5,8 +5,9 @@
         android:icon="@drawable/ic_share_white_24dp"
         android:title="share"
         app:showAsAction="ifRoom"/>
-    <item android:id="@+id/new_game"
+    <item
+        android:id="@+id/info"
         android:icon="@drawable/ic_info_outline_white_24dp"
         android:title="information"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

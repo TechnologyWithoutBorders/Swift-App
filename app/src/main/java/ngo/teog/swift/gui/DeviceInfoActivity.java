@@ -270,6 +270,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share device link"));
                 return true;
+            case R.id.info:
+                showInfo(R.string.deviceinfo_activity);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

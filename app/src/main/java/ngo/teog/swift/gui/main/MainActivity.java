@@ -173,7 +173,12 @@ public class MainActivity extends BaseActivity {
                 startAboutActivity();
                 return true;
             case R.id.maintenance:
-                startCalendarActivity();
+                showInfo(R.string.userinfo_activity);
+                //startCalendarActivity();
+                //TODO build calendar
+                return true;
+            case R.id.info:
+                showInfo(R.string.userinfo_activity);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -224,3 +229,5 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 }
+
+

@@ -46,6 +46,9 @@ public class ReportInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.reportInfoActivity);
+                return true;
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
@@ -58,3 +61,5 @@ public class ReportInfoActivity extends BaseActivity {
         }
     }
 }
+
+
