@@ -1,25 +1,16 @@
 package ngo.teog.swift.gui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.Report;
 
-public class ReportInfoActivity extends AppCompatActivity {
+public class ReportInfoActivity extends BaseActivity {
 
     private Report report;
 

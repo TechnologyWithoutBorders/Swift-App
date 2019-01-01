@@ -1,9 +1,6 @@
 package ngo.teog.swift.gui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,17 +11,12 @@ import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.android.volley.RequestQueue;
-
 import java.util.Date;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 
-public class NewDeviceActivity2 extends AppCompatActivity {
+public class NewDeviceActivity2 extends BaseActivity {
 
     private Button nextButton;
     private ProgressBar progressBar;

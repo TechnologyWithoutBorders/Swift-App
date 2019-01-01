@@ -1,23 +1,10 @@
 package ngo.teog.swift.gui;
 
-import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,19 +14,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-
-import org.w3c.dom.Text;
-
-import java.io.InputStream;
-
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.User;
 
-public class UserInfoActivity extends AppCompatActivity {
+public class UserInfoActivity extends BaseActivity {
 
     private User user;
 
@@ -82,17 +60,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
         TextView positionView = findViewById(R.id.positionView);
         positionView.setText(user.getPosition());
-
-        /*if (this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-            RequestFactory.DefaultRequest request = new RequestFactory().createUserImageRequest(this, progressBar, globalImageView, user.getID());
-
-            progressBar.setVisibility(View.VISIBLE);
-            globalImageView.setVisibility(View.INVISIBLE);
-
-            queue.add(request);
-        }*/
     }
 
     @Override
@@ -129,17 +96,5 @@ public class UserInfoActivity extends AppCompatActivity {
         Uri data = Uri.parse("mailto:" + user.getMail());
         mailIntent.setData(data);
         startActivity(mailIntent);
-    }
-
-    private boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

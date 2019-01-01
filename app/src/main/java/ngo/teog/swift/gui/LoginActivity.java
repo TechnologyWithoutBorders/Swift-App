@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,7 +36,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.gui.main.MainActivity;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private Button loginButton;
     private EditText mailField;
@@ -94,6 +95,17 @@ public class LoginActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_login, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.info:
+                showInfo("Message");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void login(View view) {

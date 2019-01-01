@@ -5,9 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,16 +27,15 @@ import java.io.File;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
-import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.HospitalActivity;
-import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.LoginActivity;
 import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;

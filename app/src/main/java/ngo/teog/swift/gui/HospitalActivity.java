@@ -24,7 +24,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
 import ngo.teog.swift.helpers.User;
 
-public class HospitalActivity extends AppCompatActivity {
+public class HospitalActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

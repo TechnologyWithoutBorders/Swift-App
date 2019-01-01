@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Menu;
@@ -41,16 +40,13 @@ import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.User;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends BaseActivity {
 
     private TextView telephoneView;
     private TextView mailView;
     private TextView hospitalView;
     private TextView positionView;
     private TextView nameView;
-
-    private ProgressBar progressBar2;
-    private TableLayout tableLayout;
 
     private ImageView imageView;
 
@@ -69,9 +65,9 @@ public class UserProfileActivity extends AppCompatActivity {
         hospitalView = findViewById(R.id.locationView);
         positionView = findViewById(R.id.positionView);
 
-        progressBar2 = findViewById(R.id.progressBar2);
+        ProgressBar progressBar2 = findViewById(R.id.progressBar2);
 
-        tableLayout = findViewById(R.id.tableLayout);
+        TableLayout tableLayout = findViewById(R.id.tableLayout);
         imageView = findViewById(R.id.imageView);
 
         saveButton = findViewById(R.id.saveButton);
