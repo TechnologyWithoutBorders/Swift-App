@@ -173,7 +173,7 @@ public class MainActivity extends BaseActivity {
                 startAboutActivity();
                 return true;
             case R.id.maintenance:
-                showInfo(R.string.userinfo_activity);
+                showInfo(R.string.calender_activity);
                 //startCalendarActivity();
                 //TODO build calendar
                 return true;
