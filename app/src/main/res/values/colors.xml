@@ -5,4 +5,8 @@
     <color name="black">#000000</color>
     <color name="teog_blue_dark">#01265D</color>
     <color name="white">#FFFFFF</color>
+    <color name="text_not_selected">#232323</color>
+    <color name="tab_background">#849BAC</color>
+    <color name="tab_indicator">#595959</color>
+
 </resources>
