@@ -17,7 +17,7 @@
         <p><b>Barcode Scanner</b><br>
         The Scanner tab lets you scan registered barcodes and leads you directly to the respective device page. Alternatively you can enter the number of the ID sticker, if scanning is not possible.</p>
         <p><b>TODO List</b><br>
-        The TODO tab gives you an overview of all devices that are broken or up for maintenance. If a colleague is already working on a case, it will be displayed as "in progress".</p>
+        The TODO tab gives you an overview of all devices that are broken or up for maintenance. If a colleague is already working on a case, it will be displayed as <i>in progress</i>.</p>
         <p><b>Search</b><br>
         The Search tab enables you to walk through the devices and users registered in the database.</p>
     ]]></string>
