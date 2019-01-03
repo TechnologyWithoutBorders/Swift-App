@@ -1,16 +1,20 @@
 <resources>
     <!-- General information -->
     <string name="app_name">Swift</string>
-    <string name="deviceinfo_activity">Will be implemented soon </string>
-    <string name="hospital_activity">Will be implemented soon </string>
-    <string name="image_activity">Will be implemented soon </string>
-    <string name="newdevice_activity_1">Will be implemented soon </string>
-    <string name="newdevice_activity_2">Will be implemented soon </string>
-    <string name="newdevice_activity_3">Will be implemented soon </string>
-    <string name="reportcreation_activity">Will be implemented soon </string>
-    <string name="reportInfoActivity">Will be implemented soon </string>
-    <string name="userinfo_activity">Will be implemented soon </string>
-    <string name="userprofile_activity">Will be implemented soon </string>
+    <string name="deviceinfo_activity">This view contains basic informations about the selected device. You can also change the device status and add a report to the change.</string>
+    <string name="hospital_activity">Hospital activity info text. </string>
+    <string name="image_activity"> Image view. </string>
+    <string name="newdevice_activity_1"> Put a fresh barcode sticker on a unregistered device and scan it to register the device. </string>
+    <string name="newdevice_activity_2"> Enter all general data known about the device. </string>
+    <string name="newdevice_activity_3"> Take a snapshot of the device, so others can indentify ist easily. </string>
+    <string name="reportcreation_activity"> working\n maintenance due\n repair needed\n in progess\n \n broken salvage \n limited use</string>
+    <string name="reportInfoActivity"> Alway consider browsing to the reports to get more information about the device before planning your repair. </string>
+    <string name="userinfo_activity"> You can use thes data to contact your colleagues. Every report has an author so you can easily deduct who yo need to contact. </string>
+    <string name="userprofile_activity"> You can edit your telephone number and position here. </string>
+    <string name="calender_activity">Will be implemented soon </string>
+    <string name="mainactivity">The Scanner tab lets you scan registered barcodes and directs you to the device page directly. Alternatively you can enter the number of the ID sticker, if scanning is not possible.
+                \n \n The TODO tab gives you an overview of all devices which are currently set to repair needed, maintenance due and in progress.
+                  \n \n The Search tab enables you to filter through the devices in the database and even through your colleagues contact data, if you need advice from them. </string>
     <string name="about_text_old">Was hier her soll:\n- Infos zu den AGB, zum Datenschutz usw.\naußerdem Infos zum Verein inklusive Kontaktmöglichkeiten und Spendenkonto :-)</string>
     <string name="about_text">
         \n
