@@ -90,7 +90,7 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_user_info, menu);
+        inflater.inflate(R.menu.menu_user_profile, menu);
         return true;
     }
 
