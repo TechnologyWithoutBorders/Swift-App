@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 
 import ngo.teog.swift.R;
 
@@ -13,7 +14,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showInfo(int stringID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage(getString(stringID))
+        builder.setMessage(Html.fromHtml(getString(stringID)))
                 .setTitle("Information")
                 .setIcon(R.drawable.ic_info_outline_black_24dp)
                 .setPositiveButton("Got it!", new DialogInterface.OnClickListener() {

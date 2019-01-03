@@ -33,25 +33,4 @@ public class ImageActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_info, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-
-            case R.id.info:
-                showInfo(R.string.image_activity);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

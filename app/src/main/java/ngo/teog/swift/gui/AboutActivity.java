@@ -1,6 +1,7 @@
 package ngo.teog.swift.gui;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
 import ngo.teog.swift.R;
@@ -13,6 +14,6 @@ public class AboutActivity extends BaseActivity {
         setContentView(R.layout.activity_about);
 
         TextView aboutText = findViewById(R.id.aboutText);
-        aboutText.setText(R.string.about_text);
+        aboutText.setText(Html.fromHtml(getString(R.string.about_text)));
     }
 }
