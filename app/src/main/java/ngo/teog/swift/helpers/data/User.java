@@ -1,8 +1,12 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.helpers.data;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
 import ngo.teog.swift.gui.UserInfoActivity;
+import ngo.teog.swift.helpers.SearchObject;
 
 /**
  * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
@@ -10,17 +14,20 @@ import ngo.teog.swift.gui.UserInfoActivity;
  * @author Julian Deyerler
  */
 
+@Entity
 public class User extends SearchObject {
+    @PrimaryKey
     private int id;
     private String phone;
     private String mail;
     private String fullName;
 
-    private Hospital hospital;
+    private int hospital;
 
     private String position;
+    private int lastUpdate;
 
-    public User(int id, String phone, String mail, String fullName, Hospital hospital, String position) {
+    public User(int id, String phone, String mail, String fullName, int hospital, String position) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
@@ -29,7 +36,7 @@ public class User extends SearchObject {
         this.position = position;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
@@ -45,12 +52,20 @@ public class User extends SearchObject {
         return fullName;
     }
 
-    public Hospital getHospital() {
+    public int getHospital() {
         return hospital;
     }
 
     public String getPosition() {
         return position;
+    }
+
+    public int getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(int lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
     @Override
@@ -60,7 +75,7 @@ public class User extends SearchObject {
 
     @Override
     public String getInformation() {
-        return hospital.getName();
+        return "Information";
     }
 
     @Override

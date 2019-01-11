@@ -1,4 +1,7 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.helpers.data;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -10,10 +13,12 @@ import java.util.Date;
  * @author Julian Deyerler
  */
 
+@Entity
 public class Report implements Serializable {
 
     public static final SimpleDateFormat reportFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    @PrimaryKey
     private int id;
     private int author;
     private String authorName;
