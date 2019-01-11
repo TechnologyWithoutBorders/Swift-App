@@ -1,15 +1,14 @@
 package ngo.teog.swift.gui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,13 +32,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.User;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.User;
+import ngo.teog.swift.helpers.data.UserProfileViewModel;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
+import ngo.teog.swift.helpers.data.ViewModelModule;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 public class UserProfileActivity extends BaseActivity {
@@ -54,6 +61,10 @@ public class UserProfileActivity extends BaseActivity {
 
     private Button saveButton;
     private ProgressBar saveProgressBar;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+    private UserProfileViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +86,30 @@ public class UserProfileActivity extends BaseActivity {
         saveButton = findViewById(R.id.saveButton);
         saveProgressBar = findViewById(R.id.saveProgressBar);
 
-        if(this.checkForInternetConnection()) {
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
+        viewModel.init(id);
+        viewModel.getUser().observe(this, user -> {
+            Log.d("SAVE_USER", "update");
+            if(user != null) {
+                nameView.setText(user.getFullName());
+                telephoneView.setText(user.getPhone());
+                mailView.setText(user.getMail());
+                positionView.setText(user.getPosition());
+            } else {
+                Log.d("SAVE_USER", "user is null");
+            }
+        });
+
+        /*if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
             ProfileOpenRequest request = createProfileOpenRequest(this, progressBar2, tableLayout);
@@ -84,7 +118,7 @@ public class UserProfileActivity extends BaseActivity {
             tableLayout.setVisibility(View.INVISIBLE);
 
             queue.add(request);
-        }
+        }*/
     }
 
     @Override
@@ -165,7 +199,7 @@ public class UserProfileActivity extends BaseActivity {
 
             SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-            User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), null, positionView.getText().toString());
+            User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), 0, positionView.getText().toString());
 
             RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, user);
 
@@ -208,7 +242,6 @@ public class UserProfileActivity extends BaseActivity {
                         nameView.setText(user.getFullName());
                         telephoneView.setText(user.getPhone());
                         mailView.setText(user.getMail());
-                        hospitalView.setText(user.getHospital().getName());
                         positionView.setText(user.getPosition());
 
                         /*if(userObject.has("picture")) {

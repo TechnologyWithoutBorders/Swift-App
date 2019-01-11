@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.data.Report;
 
 public class ReportInfoActivity extends BaseActivity {
 

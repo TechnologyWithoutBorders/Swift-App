@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.helpers.User;
+import ngo.teog.swift.helpers.data.User;
 
 public class UserInfoActivity extends BaseActivity {
 
@@ -55,9 +55,6 @@ public class UserInfoActivity extends BaseActivity {
         TextView mailView = findViewById(R.id.mailView);
         mailView.setText(user.getMail());
 
-        TextView hospitalView = findViewById(R.id.hospitalView);
-        hospitalView.setText(user.getHospital().getName());
-
         TextView positionView = findViewById(R.id.positionView);
         positionView.setText(user.getPosition());
     }
@@ -79,7 +76,7 @@ public class UserInfoActivity extends BaseActivity {
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + Integer.toString(user.getID()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + Integer.toString(user.getId()));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share user link"));
                 return true;

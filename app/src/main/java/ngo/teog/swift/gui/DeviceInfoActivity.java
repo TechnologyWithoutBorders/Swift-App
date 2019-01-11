@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,7 +33,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.HospitalDevice;
-import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
 
 public class DeviceInfoActivity extends BaseActivity {

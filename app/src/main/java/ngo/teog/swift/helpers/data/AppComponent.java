@@ -9,7 +9,7 @@ import ngo.teog.swift.gui.UserProfileActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 
 @Singleton
-@Component(dependencies = {}, modules = {AppModule.class, RoomModule.class})
+@Component(dependencies = {}, modules = {AppModule.class, RoomModule.class, ViewModelModule.class})
 public interface AppComponent {
 
     void inject(UserProfileActivity mainActivity);

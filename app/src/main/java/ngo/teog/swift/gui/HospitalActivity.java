@@ -3,9 +3,6 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +20,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalDevice;
-import ngo.teog.swift.helpers.User;
+import ngo.teog.swift.helpers.data.User;
 
 public class HospitalActivity extends BaseActivity {
 

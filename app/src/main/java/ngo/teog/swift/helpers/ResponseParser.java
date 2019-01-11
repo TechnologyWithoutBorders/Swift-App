@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ngo.teog.swift.helpers.data.Hospital;
+import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.ReportFilter;
 import ngo.teog.swift.helpers.filters.UserFilter;
@@ -125,7 +128,7 @@ public class ResponseParser {
 
                     Hospital hospital = new Hospital(hospitalId, hospitalName);
 
-                    User user = new User(id, phone, mail, fullName, hospital, position);
+                    User user = new User(id, phone, mail, fullName, 0, position);
                     result.add(user);
                 }
 
@@ -155,7 +158,7 @@ public class ResponseParser {
 
             Hospital hospital = new Hospital(hospitalId, hospitalName);
 
-            User user = new User(id, phone, mail, fullName, hospital, position);
+            User user = new User(id, phone, mail, fullName, 0, position);
             result.add(user);
         }
 

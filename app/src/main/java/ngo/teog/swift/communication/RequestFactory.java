@@ -16,7 +16,6 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -55,9 +54,9 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.DeviceState;
-import ngo.teog.swift.helpers.User;
+import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.Report;
+import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.filters.ReportFilter;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.HospitalDevice;
@@ -819,7 +818,7 @@ public class RequestFactory {
 
         Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_UPDATE_USER, true);
 
-        params.put(UserFilter.ID, Integer.toString(user.getID()));
+        params.put(UserFilter.ID, Integer.toString(user.getId()));
         params.put(UserFilter.PHONE, user.getPhone());
         params.put("u_position", user.getPosition());
 
