@@ -106,6 +106,7 @@
         <item>Germany</item>
         <item>Ghana</item>
         <item>Nepal</item>
+        <item>Thailand</item>
     </string-array>
 
     <string-array name="maintenance_intervall_options">
