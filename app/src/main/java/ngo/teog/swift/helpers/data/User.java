@@ -25,7 +25,7 @@ public class User extends SearchObject {
     private int hospital;
 
     private String position;
-    private int lastUpdate;
+    private long lastUpdate;
 
     public User(int id, String phone, String mail, String fullName, int hospital, String position) {
         this.id = id;
@@ -34,6 +34,7 @@ public class User extends SearchObject {
         this.fullName = fullName;
         this.hospital = hospital;
         this.position = position;
+        this.lastUpdate = System.currentTimeMillis();
     }
 
     public int getId() {
@@ -60,12 +61,8 @@ public class User extends SearchObject {
         return position;
     }
 
-    public int getLastUpdate() {
+    public long getLastUpdate() {
         return lastUpdate;
-    }
-
-    public void setLastUpdate(int lastUpdate) {
-        this.lastUpdate = lastUpdate;
     }
 
     @Override

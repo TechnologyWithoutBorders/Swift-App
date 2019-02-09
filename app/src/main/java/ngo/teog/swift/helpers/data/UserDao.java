@@ -15,6 +15,6 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE id = :id")
     LiveData<User> load(int id);
 
-    @Query("SELECT COUNT(*) FROM user WHERE id = :id AND lastUpdate >= :timeout")
-    int hasUser(int id, long timeout);
+    @Query("SELECT COUNT(*) FROM user WHERE id = :id AND lastUpdate >= :currentMillis-(:timeout*1000)")
+    int hasUser(int id, long currentMillis, int timeout);
 }

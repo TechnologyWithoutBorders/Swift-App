@@ -31,14 +31,14 @@ public class UserRepository {
         return userDao.load(id);
     }
 
-
     private void refreshUser(final int id) {
         // Runs in a background thread.
         ExecutorService executor = Executors.newCachedThreadPool();
 
         executor.execute(() -> {
-            // Check if user data was fetched recently
-            boolean userExists = (userDao.hasUser(id, 0) != 0);
+            // Check if user data has been fetched recently
+            boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 10) != 0);
+
             if (!userExists) {
                 //TODO Refresh the data.
                 User user = new User(1, "12345678", "julian.deyerler@teog.de", "Julian Deyerler", 0, "Developer");
