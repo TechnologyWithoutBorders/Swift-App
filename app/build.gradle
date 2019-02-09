@@ -25,13 +25,10 @@ android {
 
 dependencies {
     def room_version = "1.1.1"
-
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
-
     implementation 'com.google.dagger:dagger:2.20'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
-
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'android.arch.work:work-runtime:1.0.0-beta01'
