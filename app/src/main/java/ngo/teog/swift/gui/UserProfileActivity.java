@@ -106,17 +106,6 @@ public class UserProfileActivity extends BaseActivity {
                 Log.d("SAVE_USER", "user is null");
             }
         });
-
-        /*if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-            ProfileOpenRequest request = createProfileOpenRequest(this, progressBar2, tableLayout);
-
-            progressBar2.setVisibility(View.VISIBLE);
-            tableLayout.setVisibility(View.INVISIBLE);
-
-            queue.add(request);
-        }*/
     }
 
     @Override
@@ -205,69 +194,6 @@ public class UserProfileActivity extends BaseActivity {
             saveButton.setVisibility(View.INVISIBLE);
 
             queue.add(request);
-        }
-    }
-
-    public ProfileOpenRequest createProfileOpenRequest(Context context, View disable, View enable) {
-        String url = ProfileOpenRequest.BASE_URL;
-
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("action", "fetch_user");
-        params.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
-        params.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
-        params.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
-        params.put(UserFilter.ID, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
-
-        JSONObject request = new JSONObject(params);
-
-        return new ProfileOpenRequest(context, disable, enable, url, request);
-    }
-
-    public class ProfileOpenRequest extends JsonObjectRequest {
-
-        public static final String BASE_URL = "https://teog.virlep.de/users.php";
-
-        public ProfileOpenRequest(final Context context, final View disable, final View enable, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new com.android.volley.Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        ArrayList<User> userList = new ResponseParser().parseUserList(response);
-                        User user = userList.get(0);
-
-                        nameView.setText(user.getFullName());
-                        telephoneView.setText(user.getPhone());
-                        mailView.setText(user.getMail());
-                        positionView.setText(user.getPosition());
-
-                        /*if(userObject.has("picture")) {
-                            String imageData = userObject.getString("picture");
-
-                            byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                            imageView.setImageBitmap(bitmap);
-                        }*/
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.VISIBLE);
-                }
-            }, new com.android.volley.Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
         }
     }
 }
