@@ -78,8 +78,6 @@ public class UserProfileActivity extends BaseActivity {
         hospitalView = findViewById(R.id.locationView);
         positionView = findViewById(R.id.positionView);
 
-        ProgressBar progressBar2 = findViewById(R.id.progressBar2);
-
         TableLayout tableLayout = findViewById(R.id.tableLayout);
         imageView = findViewById(R.id.imageView);
 

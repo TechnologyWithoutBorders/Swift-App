@@ -3,6 +3,7 @@ package ngo.teog.swift.helpers.data;
 import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,17 +22,22 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import ngo.teog.swift.communication.RequestFactory;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.SearchObject;
-import ngo.teog.swift.helpers.data.User;
-import ngo.teog.swift.helpers.data.UserDao;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 @Singleton
@@ -39,7 +45,7 @@ public class UserRepository {
 
     private final UserDao userDao;
     private final Context context;
-    private Executor executor;
+    private ExecutorService executor;
 
     @Inject
     public UserRepository(UserDao userDao, Context context) {
@@ -61,17 +67,26 @@ public class UserRepository {
 
         executor.execute(() -> {
             //check if user data has been fetched recently
-            boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 60) != 0);
+            boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 10) != 0);
 
             if(!userExists) {
                 //refresh the data.
 
-                //TODO Workmanager verwenden mit Bedingung, wenn Internetconnection?
-                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+                Constraints updateConstraints = new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
 
-                UserListRequest userListRequest = createUserRequest(context, id, executor);
+                Data inputData = new Data.Builder()
+                        .putInt("id", id)
+                        .build();
 
-                queue.add(userListRequest);
+                WorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                        .addTag("update_profile")
+                        .setConstraints(updateConstraints)
+                        .setInputData(inputData)
+                        .build();
+
+                WorkManager.getInstance().enqueue(updateWork);
             }
         });
     }
@@ -130,5 +145,28 @@ public class UserRepository {
         }
 
         return parameterMap;
+    }
+
+    private class UpdateWorker extends Worker {
+
+        private Context context;
+
+        public UpdateWorker(Context context, WorkerParameters params) {
+            super(context, params);
+
+            this.context = context;
+        }
+
+        @NonNull
+        @Override
+        public Worker.Result doWork() {
+            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+            UserListRequest userListRequest = createUserRequest(context, this.getInputData().getInt("id", -1), executor);
+
+            queue.add(userListRequest);
+
+            return Result.success();
+        }
     }
 }
