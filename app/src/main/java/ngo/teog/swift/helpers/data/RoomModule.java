@@ -2,6 +2,7 @@ package ngo.teog.swift.helpers.data;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -30,7 +31,7 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    UserRepository userRepository(UserDao userDao) {
-        return new UserRepository(userDao);
+    UserRepository userRepository(UserDao userDao, Context context) {
+        return new UserRepository(userDao, context);
     }
 }

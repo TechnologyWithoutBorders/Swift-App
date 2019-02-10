@@ -65,6 +65,10 @@ public class User extends SearchObject {
         return lastUpdate;
     }
 
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
     @Override
     public String getName() {
         return fullName;

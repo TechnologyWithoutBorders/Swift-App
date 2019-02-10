@@ -1,6 +1,7 @@
 package ngo.teog.swift.helpers.data;
 
 import android.app.Application;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -10,7 +11,7 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    Application mApplication;
+    private Application mApplication;
 
     public AppModule(Application application) {
         mApplication = application;
@@ -22,4 +23,9 @@ public class AppModule {
         return mApplication;
     }
 
+    @Provides
+    @Singleton
+    Context providesContext() {
+        return mApplication.getApplicationContext();
+    }
 }

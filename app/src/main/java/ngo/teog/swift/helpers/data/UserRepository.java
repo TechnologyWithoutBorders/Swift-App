@@ -1,9 +1,23 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,17 +25,27 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResponseParser;
+import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.UserDao;
+import ngo.teog.swift.helpers.filters.UserFilter;
 
+@Singleton
 public class UserRepository {
 
     private final UserDao userDao;
+    private final Context context;
     private Executor executor;
 
     @Inject
-    public UserRepository(UserDao userDao) {
+    public UserRepository(UserDao userDao, Context context) {
         this.userDao = userDao;
+        this.context = context;
+        //TODO use previously defined executor
         this.executor = executor;
     }
 
@@ -32,28 +56,79 @@ public class UserRepository {
     }
 
     private void refreshUser(final int id) {
-        // Runs in a background thread.
+        //runs in a background thread.
         ExecutorService executor = Executors.newCachedThreadPool();
 
         executor.execute(() -> {
-            // Check if user data has been fetched recently
-            boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 10) != 0);
+            //check if user data has been fetched recently
+            boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 60) != 0);
 
-            if (!userExists) {
-                //TODO Refresh the data.
-                User user = new User(1, "12345678", "julian.deyerler@teog.de", "Julian Deyerler", 0, "Developer");
+            if(!userExists) {
+                //refresh the data.
 
-                //TODO Check for errors here.
+                //TODO Workmanager verwenden mit Bedingung, wenn Internetconnection?
+                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-                // Updates the database. The LiveData object automatically
-                // refreshes, so we don't need to do anything else here.
-                userDao.save(user);
+                UserListRequest userListRequest = createUserRequest(context, id, executor);
 
-                Log.d("SAVE_USER", "saved");
+                queue.add(userListRequest);
             }
         });
-
-        executor.shutdown();
     }
 
+    private UserListRequest createUserRequest(Context context, int id, ExecutorService executor) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER, true);
+        params.put(UserFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new UserListRequest(context, url, request, executor);
+    }
+
+    private class UserListRequest extends JsonObjectRequest {
+
+        private UserListRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    executor.execute(() -> {
+                        try {
+                            User user = new ResponseParser().parseUserList(response).get(0);
+
+                            // Updates the database. The LiveData object automatically
+                            // refreshes, so we don't need to do anything else here.
+                            userDao.save(user);
+                        } catch(Exception e) {
+                            Log.e("SAVE_USER", e.getMessage(), e);
+                            Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    executor.shutdown();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+        HashMap<String, String> parameterMap = new HashMap<>();
+        parameterMap.put("action", action);
+        parameterMap.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
+
+        if(userValidation) {
+            parameterMap.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
+            parameterMap.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
+        }
+
+        return parameterMap;
+    }
 }
