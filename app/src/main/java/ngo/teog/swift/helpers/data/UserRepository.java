@@ -63,7 +63,7 @@ public class UserRepository {
 
     private void refreshUser(final int id) {
         //runs in a background thread.
-        ExecutorService executor = Executors.newCachedThreadPool();
+        executor = Executors.newCachedThreadPool();
 
         executor.execute(() -> {
             //check if user data has been fetched recently
