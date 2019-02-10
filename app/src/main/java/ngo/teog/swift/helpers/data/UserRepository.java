@@ -89,7 +89,7 @@ public class UserRepository {
                         .putInt("id", id)
                         .build();
 
-                WorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                OneTimeWorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
                         .addTag("update_profile")
                         .setConstraints(updateConstraints)
                         .setInputData(inputData)
