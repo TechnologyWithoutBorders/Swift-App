@@ -81,7 +81,7 @@ public class UserRepository {
             if(!userExists) {
                 //refresh the data.
 
-                Constraints updateConstraints = new Constraints.Builder()
+                /*Constraints updateConstraints = new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build();
 
@@ -89,13 +89,20 @@ public class UserRepository {
                         .putInt("id", id)
                         .build();
 
+                //TODO hier funktioniert die Dependency Injection nicht, der Workaround ist aber ziemlich umständliche
                 OneTimeWorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
                         .addTag("update_profile")
                         .setConstraints(updateConstraints)
                         .setInputData(inputData)
                         .build();
 
-                WorkManager.getInstance().enqueue(updateWork);
+                WorkManager.getInstance().enqueue(updateWork);*/
+
+                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+                UserListRequest userListRequest = createUserRequest(context, id, executor);
+
+                queue.add(userListRequest);
             }
         });
     }
