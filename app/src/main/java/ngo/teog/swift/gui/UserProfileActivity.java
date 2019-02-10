@@ -181,19 +181,19 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     public void save(View view) {
-        if(checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), 0, positionView.getText().toString());
 
-            User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), 0, positionView.getText().toString());
+        viewModel.updateUser(user);
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, user);
+        /*RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            saveProgressBar.setVisibility(View.VISIBLE);
-            saveButton.setVisibility(View.INVISIBLE);
+        RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, user);
 
-            queue.add(request);
-        }
+        saveProgressBar.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+
+        queue.add(request);*/
     }
 }

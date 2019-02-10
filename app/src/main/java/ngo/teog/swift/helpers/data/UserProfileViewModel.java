@@ -30,4 +30,9 @@ public class UserProfileViewModel extends ViewModel {
     public LiveData<User> getUser() {
         return user;
     }
+
+    //TODO keine Ahnung, ob man das so macht
+    public void updateUser(User user) {
+        userRepo.updateUser(user);
+    }
 }

@@ -61,12 +61,21 @@ public class UserRepository {
         return userDao.load(id);
     }
 
+    public void updateUser(User user) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+
+        executor.execute(() -> {
+            userDao.save(user);
+        });
+    }
+
     private void refreshUser(final int id) {
         //runs in a background thread.
         executor = Executors.newCachedThreadPool();
 
         executor.execute(() -> {
             //check if user data has been fetched recently
+            //TODO prüfen, ob es lokal einen neueren gibt und wenn ja auf den Server pushen
             boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 10) != 0);
 
             if(!userExists) {
