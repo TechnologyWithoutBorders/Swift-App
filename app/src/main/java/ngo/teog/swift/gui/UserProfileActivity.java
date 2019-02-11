@@ -183,7 +183,7 @@ public class UserProfileActivity extends BaseActivity {
     public void save(View view) {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), 0, positionView.getText().toString());
+        User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), viewModel.getUser().getValue().getHospital(), positionView.getText().toString(), System.currentTimeMillis());
 
         viewModel.updateUser(user);
 
