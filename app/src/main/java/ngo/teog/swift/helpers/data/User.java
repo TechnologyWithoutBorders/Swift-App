@@ -27,14 +27,14 @@ public class User extends SearchObject {
     private String position;
     private long lastUpdate;
 
-    public User(int id, String phone, String mail, String fullName, int hospital, String position) {
+    public User(int id, String phone, String mail, String fullName, int hospital, String position, long lastUpdate) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
         this.fullName = fullName;
         this.hospital = hospital;
         this.position = position;
-        this.lastUpdate = System.currentTimeMillis();
+        this.lastUpdate = lastUpdate;
     }
 
     public int getId() {

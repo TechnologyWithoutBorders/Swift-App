@@ -121,6 +121,7 @@ public class ResponseParser {
                     String phone = userObject.getString(UserFilter.PHONE);
                     String mail = userObject.getString(UserFilter.MAIL);
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
+                    long lastUpdate = userObject.getLong("u_last_update");
 
                     int hospitalId = userObject.getInt("h_ID");
                     String hospitalName = userObject.getString("h_name");
@@ -128,7 +129,7 @@ public class ResponseParser {
 
                     Hospital hospital = new Hospital(hospitalId, hospitalName);
 
-                    User user = new User(id, phone, mail, fullName, 0, position);
+                    User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
                     result.add(user);
                 }
 
@@ -151,6 +152,7 @@ public class ResponseParser {
             String phone = userObject.getString(UserFilter.PHONE);
             String mail = userObject.getString(UserFilter.MAIL);
             String fullName = userObject.getString(UserFilter.FULL_NAME);
+            long lastUpdate = userObject.getLong("u_last_update");
 
             int hospitalId = userObject.getInt("h_ID");
             String hospitalName = userObject.getString("h_name");
@@ -158,7 +160,7 @@ public class ResponseParser {
 
             Hospital hospital = new Hospital(hospitalId, hospitalName);
 
-            User user = new User(id, phone, mail, fullName, 0, position);
+            User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
             result.add(user);
         }
 
