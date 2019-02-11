@@ -75,7 +75,6 @@ public class UserRepository {
 
         executor.execute(() -> {
             //check if user data has been fetched recently
-            //TODO prüfen, ob es lokal einen neueren gibt und wenn ja auf den Server pushen
             boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 10) != 0);
 
             if(!userExists) {
@@ -129,6 +128,8 @@ public class UserRepository {
                     executor.execute(() -> {
                         try {
                             User user = new ResponseParser().parseUserList(response).get(0);
+
+                            //TODO prüfen, ob es lokal einen neueren gibt und wenn ja auf den Server pushen
 
                             // Updates the database. The LiveData object automatically
                             // refreshes, so we don't need to do anything else here.
