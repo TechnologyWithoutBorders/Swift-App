@@ -187,6 +187,8 @@ public class UserProfileActivity extends BaseActivity {
 
         viewModel.updateUser(user);
 
+        saveButton.setEnabled(false);
+
         /*RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
         RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(this, saveProgressBar, saveButton, user);
