@@ -1,5 +1,7 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.helpers.data;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.view.MenuItem;
 
@@ -8,6 +10,7 @@ import java.util.Date;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.helpers.SearchObject;
 
 /**
  * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
@@ -15,8 +18,9 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
  * @author Julian Deyerler
  */
 
+@Entity
 public class HospitalDevice extends SearchObject {
-
+    @PrimaryKey
     private int id;
     private String assetNumber;
     private String type;
@@ -25,11 +29,11 @@ public class HospitalDevice extends SearchObject {
     private String model;
     private String ward;
     private int state;
-    private String hospital;
+    private int hospital;
     private int maintenanceInterval;
-    private Date lastReportDate;
+    private long lastUpdate;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int state, String hospital, int maintenanceInterval, Date lastReportDate) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int state, int hospital, int maintenanceInterval, long lastUpdate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -40,7 +44,7 @@ public class HospitalDevice extends SearchObject {
         this.state = state;
         this.hospital = hospital;
         this.maintenanceInterval = maintenanceInterval;
-        this.lastReportDate = lastReportDate;
+        this.lastUpdate = lastUpdate;
     }
 
     public int getID() {
@@ -71,16 +75,8 @@ public class HospitalDevice extends SearchObject {
         return state;
     }
 
-    public String getHospital() {
-        return hospital;
-    }
-
     public int getMaintenanceInterval() {
         return maintenanceInterval;
-    }
-
-    public Date getLastReportDate() {
-        return lastReportDate;
     }
 
     public String getWard() {
@@ -106,6 +102,4 @@ public class HospitalDevice extends SearchObject {
     public String getExtraIdentifier() {
         return "device";
     }
-
-
 }

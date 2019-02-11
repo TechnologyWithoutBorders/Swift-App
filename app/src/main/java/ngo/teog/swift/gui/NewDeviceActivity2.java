@@ -15,7 +15,7 @@ import android.widget.Spinner;
 import java.util.Date;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.data.HospitalDevice;
 
 public class NewDeviceActivity2 extends BaseActivity {
 
@@ -107,7 +107,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                         }
 
                         HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), 0, "bla", interval, new Date());
+                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), 0, 0, interval, System.currentTimeMillis());
 
                         Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                         intent.putExtra("device", device);

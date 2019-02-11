@@ -59,7 +59,7 @@ import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.filters.ReportFilter;
 import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.filters.UserFilter;
 import ngo.teog.swift.helpers.ResponseException;
 
@@ -316,8 +316,8 @@ public class RequestFactory {
                                 if(device != null) {
                                     nameView.setText(device.getType());
 
-                                    String dateString = DATE_FORMAT.format(device.getLastReportDate());
-                                    dateView.setText(dateString);
+                                    //String dateString = DATE_FORMAT.format(device.getLastReportDate());
+                                    //dateView.setText(dateString);
 
                                     DeviceState triple = DeviceState.buildState(device.getState(), context);
 
@@ -551,11 +551,9 @@ public class RequestFactory {
                             int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                             int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                             String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                            String dateString = reportObject.getString(ReportFilter.DATETIME);
+                            long lastUpdate = reportObject.getLong("last_update");
 
-                            Date date = Report.reportFormat.parse(dateString);
-
-                            Report report = new Report(id, author, null, device, previousState, currentState, description , date);
+                            Report report = new Report(id, author, null, device, previousState, currentState, description , lastUpdate);
                             reportList.add(report);
                         }
 
@@ -943,7 +941,7 @@ public class RequestFactory {
         params.put(ReportFilter.DESCRIPTION, report.getDescription());
         params.put(ReportFilter.PREVIOUS_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
         params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getCurrentState()));
-        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(report.getDateTime()));
+        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(report.getCreated()));
 
         JSONObject request = new JSONObject(params);
 

@@ -29,7 +29,7 @@ import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.UpdateWorker;
@@ -143,8 +143,8 @@ public class TodoFragment extends BaseFragment {
             if(device != null) {
                 nameView.setText(device.getType());
 
-                String dateString = DATE_FORMAT.format(device.getLastReportDate());
-                dateView.setText(dateString);
+                //String dateString = DATE_FORMAT.format(device.getLastReportDate());
+                //dateView.setText(dateString);
 
                 DeviceState triple = DeviceState.buildState(device.getState(),this.getContext());
 

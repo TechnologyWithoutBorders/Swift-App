@@ -26,9 +26,9 @@ public class Report implements Serializable {
     private int previousState;
     private int currentState;
     private String description;
-    private Date dateTime;
+    private long created;
 
-    public Report(int id, int author, String authorName, int device, int previousState, int currentState, String description, Date dateTime) {
+    public Report(int id, int author, String authorName, int device, int previousState, int currentState, String description, long created) {
         this.id = id;
         this.author = author;
         this.authorName = authorName;
@@ -36,7 +36,7 @@ public class Report implements Serializable {
         this.previousState = previousState;
         this.currentState = currentState;
         this.description = description;
-        this.dateTime = dateTime;
+        this.created = created;
     }
 
     public int getID() {
@@ -67,7 +67,7 @@ public class Report implements Serializable {
         return description;
     }
 
-    public Date getDateTime() {
-        return dateTime;
+    public long getCreated() {
+        return created;
     }
 }

@@ -11,10 +11,12 @@ public class Hospital implements Serializable {
     @PrimaryKey
     private int id;
     private String name;
+    private long lastUpdate;
 
-    public Hospital(int id, String name) {
+    public Hospital(int id, String name, long lastUpdate) {
         this.id = id;
         this.name = name;
+        this.lastUpdate = lastUpdate;
     }
 
     public String getName() {

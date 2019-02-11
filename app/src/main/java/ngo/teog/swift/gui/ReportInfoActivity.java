@@ -23,7 +23,7 @@ public class ReportInfoActivity extends BaseActivity {
         report = (Report)intent.getSerializableExtra("REPORT");
 
         TextView dateView = findViewById(R.id.dateView);
-        dateView.setText(Report.reportFormat.format(report.getDateTime()));
+        dateView.setText(Long.toString(report.getCreated()));
 
         TextView authorView = findViewById(R.id.authorView);
         authorView.setText(report.getAuthorName());

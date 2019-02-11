@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ngo.teog.swift.helpers.data.Hospital;
+import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
@@ -57,13 +58,11 @@ public class ResponseParser {
 
                     final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-                    String hospital = deviceObject.getString("h_name");
+                    int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-                    String reportDateString = deviceObject.getString("r_datetime");
+                    long lastUpdate = deviceObject.getLong("last_update");
 
-                    Date lastReportDate = DATE_FORMAT.parse(reportDateString);
-
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastReportDate);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastUpdate);
                     result.add(device);
                 }
 
@@ -93,13 +92,11 @@ public class ResponseParser {
 
             final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-            String hospital = deviceObject.getString("h_name");
+            int hospital = deviceObject.getInt("d_hospital");
             int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-            String reportDateString = deviceObject.getString("r_datetime");
+            long lastUpdate = deviceObject.getLong("last_update");
 
-            Date lastReportDate = DATE_FORMAT.parse(reportDateString);
-
-            HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastReportDate);
+            HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastUpdate);
             result.add(device);
         }
 
@@ -127,7 +124,7 @@ public class ResponseParser {
                     String hospitalName = userObject.getString("h_name");
                     String position = userObject.getString("u_position");
 
-                    Hospital hospital = new Hospital(hospitalId, hospitalName);
+                    //Hospital hospital = new Hospital(hospitalId, hospitalName);
 
                     User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
                     result.add(user);
@@ -158,7 +155,7 @@ public class ResponseParser {
             String hospitalName = userObject.getString("h_name");
             String position = userObject.getString("u_position");
 
-            Hospital hospital = new Hospital(hospitalId, hospitalName);
+            //Hospital hospital = new Hospital(hospitalId, hospitalName);
 
             User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
             result.add(user);
@@ -184,12 +181,10 @@ public class ResponseParser {
                     int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                     int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                     String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                    String dateString = reportObject.getString(ReportFilter.DATETIME);
+                    long created = reportObject.getLong(ReportFilter.DATETIME);
                     String authorName = reportObject.getString(UserFilter.FULL_NAME);
 
-                    Date date = Report.reportFormat.parse(dateString);
-
-                    Report report = new Report(id, author, authorName, device, previousState, currentState, description , date);
+                    Report report = new Report(id, author, authorName, device, previousState, currentState, description , created);
                     result.add(report);
                 }
 

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.HospitalDevice;
+import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
 
@@ -134,7 +134,7 @@ public class DeviceInfoActivity extends BaseActivity {
         serialNumberView.setText(device.getSerialNumber());
 
         TextView hospitalView = findViewById(R.id.hospitalView);
-        hospitalView.setText(device.getHospital());
+        //hospitalView.setText(device.getHospital());
 
         TextView wardView = findViewById(R.id.wardView);
         wardView.setText(device.getWard());
@@ -313,8 +313,8 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 authorView.setText(report.getAuthorName());
 
-                String dateString = DATE_FORMAT.format(report.getDateTime());
-                dateView.setText(dateString);
+                long date = report.getCreated();
+                dateView.setText(Long.toString(date));
             }
 
             return convertView;
