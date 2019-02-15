@@ -6,11 +6,13 @@ import android.arch.lifecycle.ViewModel;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.UserRepository;
 import ngo.teog.swift.helpers.data.User;
 
 public class UserProfileViewModel extends ViewModel {
     private LiveData<User> user;
+    private LiveData<Hospital> hospital;
     private UserRepository userRepo;
 
     @Inject
@@ -25,10 +27,15 @@ public class UserProfileViewModel extends ViewModel {
             return;
         }
         user = userRepo.getUser(id);
+        hospital = userRepo.getHospital(user.getValue().getHospital());
     }
 
     public LiveData<User> getUser() {
         return user;
+    }
+
+    public LiveData<Hospital> getHospital() {
+        return hospital;
     }
 
     //TODO keine Ahnung, ob man das so macht
