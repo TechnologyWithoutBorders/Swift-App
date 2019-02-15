@@ -65,9 +65,9 @@ public class UserRepository {
         return userDao.load(id);
     }
 
-    public LiveData<HospitalDevice> getDevice(int id) {
-        //refreshDevice(id);
-        return deviceDao.load(id);
+    public LiveData<Hospital> getHospital(int id) {
+        refreshHospital(id);
+        return hospitalDao.load(id);
     }
 
     public void updateUser(User user) {
@@ -115,6 +115,43 @@ public class UserRepository {
         });
     }
 
+    private void refreshHospital(final int id) {
+        //runs in a background thread.
+        executor = Executors.newCachedThreadPool();
+
+        executor.execute(() -> {
+            //check if user data has been fetched recently
+            boolean hospitalExists = (hospitalDao.hasHospital(id, System.currentTimeMillis(), 10) != 0);
+
+            if(!hospitalExists) {
+                //refresh the data.
+
+                /*Constraints updateConstraints = new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
+
+                Data inputData = new Data.Builder()
+                        .putInt("id", id)
+                        .build();
+
+                //TODO hier funktioniert die Dependency Injection nicht, der Workaround ist aber ziemlich umständliche
+                OneTimeWorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                        .addTag("update_profile")
+                        .setConstraints(updateConstraints)
+                        .setInputData(inputData)
+                        .build();
+
+                WorkManager.getInstance().enqueue(updateWork);*/
+
+                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+                HospitalRequest hospitalRequest = createHospitalRequest(context, id, executor);
+
+                queue.add(hospitalRequest);
+            }
+        });
+    }
+
     private UserListRequest createUserRequest(Context context, int id, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
@@ -143,23 +180,13 @@ public class UserRepository {
                             // Updates the database. The LiveData object automatically
                             // refreshes, so we don't need to do anything else here.
                             userDao.save(user);
-
-                            boolean hospitalExits = (hospitalDao.hasHospital(user.getHospital(), System.currentTimeMillis(), 10) != 0);
-
-                            if(!hospitalExits) {
-                                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
-
-                                HospitalRequest hospitalRequest = createHospitalRequest(context, user.getHospital(), executor);
-
-                                queue.add(hospitalRequest);
-                            }
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);
                             Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                         }
                     });
 
-                    //executor.shutdown();
+                    executor.shutdown();
                 }
             }, new Response.ErrorListener() {
                 @Override
