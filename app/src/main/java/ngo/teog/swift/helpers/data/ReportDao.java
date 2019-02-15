@@ -16,5 +16,5 @@ public interface ReportDao {
     LiveData<Report> load(int id);
 
     @Query("SELECT COUNT(*) FROM report WHERE id = :id")
-    int hasReport(int id, long currentMillis);
+    int hasReport(int id);
 }
