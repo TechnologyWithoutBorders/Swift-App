@@ -50,7 +50,7 @@ public class HospitalDevice extends SearchObject {
         this.lastUpdate = lastUpdate;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
@@ -78,12 +78,20 @@ public class HospitalDevice extends SearchObject {
         return state;
     }
 
+    public int getHospital() {
+        return hospital;
+    }
+
     public int getMaintenanceInterval() {
         return maintenanceInterval;
     }
 
     public String getWard() {
         return ward;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
     }
 
     @Override
