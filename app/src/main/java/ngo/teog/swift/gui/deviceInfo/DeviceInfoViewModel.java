@@ -25,7 +25,7 @@ public class DeviceInfoViewModel extends ViewModel {
             // doesn't change.
             return;
         }
-        device = userRepo.getDevice(id);
+        //device = userRepo.getDevice(id);
     }
 
     public LiveData<HospitalDevice> getDevice() {
