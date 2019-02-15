@@ -44,12 +44,14 @@ import ngo.teog.swift.helpers.filters.UserFilter;
 public class UserRepository {
 
     private final UserDao userDao;
+    private final HospitalDao hospitalDao;
     private final Context context;
     private ExecutorService executor;
 
     @Inject
-    public UserRepository(UserDao userDao, Context context) {
+    public UserRepository(UserDao userDao, HospitalDao hospitalDao, HospitalDeviceDao hospitalDeviceDao, ReportDao reportDao, Context context) {
         this.userDao = userDao;
+        this.hospitalDao = hospitalDao;
         this.context = context;
         //TODO use previously defined executor
         this.executor = executor;
@@ -60,6 +62,11 @@ public class UserRepository {
         // Returns a LiveData object directly from the database.
         return userDao.load(id);
     }
+
+    /*public LiveData<Hospital> getHospital(int id) {
+        refreshHospital(id);
+        return hospitalDao.load(id);
+    }*/
 
     public void updateUser(User user) {
         ExecutorService executor = Executors.newCachedThreadPool();
