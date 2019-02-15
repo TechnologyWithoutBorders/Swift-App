@@ -21,7 +21,7 @@ public final class Defaults {
     public static final String NOTIFICATION_COUNTER = "NOTIFICATION_COUNTER";
 
     //Paths
-    public static final String BASE_URL = "https://teog.virlep.de/";
+    public static final String BASE_URL = "https://teog.virlep.de/interface/2/";
     public static final String DEVICES_URL = "devices.php";
     public static final String USERS_URL = "users.php";
     public static final String NEWS_URL = "info.php";
