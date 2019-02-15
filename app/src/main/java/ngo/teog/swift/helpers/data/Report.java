@@ -16,8 +16,6 @@ import java.util.Date;
 @Entity
 public class Report implements Serializable {
 
-    public static final SimpleDateFormat reportFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     @PrimaryKey
     private int id;
     private int author;

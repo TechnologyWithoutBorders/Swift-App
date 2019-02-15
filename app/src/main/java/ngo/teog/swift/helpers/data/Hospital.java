@@ -4,7 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 @Entity
 public class Hospital implements Serializable {
@@ -19,7 +18,15 @@ public class Hospital implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
     }
 }
