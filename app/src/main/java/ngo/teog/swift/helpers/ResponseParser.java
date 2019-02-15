@@ -184,7 +184,7 @@ public class ResponseParser {
                     long created = reportObject.getLong(ReportFilter.DATETIME);
                     String authorName = reportObject.getString(UserFilter.FULL_NAME);
 
-                    Report report = new Report(id, author, authorName, device, previousState, currentState, description , created);
+                    Report report = new Report(id, author, device, previousState, currentState, description , created);
                     result.add(report);
                 }
 

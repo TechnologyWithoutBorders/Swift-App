@@ -553,7 +553,7 @@ public class RequestFactory {
                             String description = reportObject.getString(ReportFilter.DESCRIPTION);
                             long lastUpdate = reportObject.getLong("last_update");
 
-                            Report report = new Report(id, author, null, device, previousState, currentState, description , lastUpdate);
+                            Report report = new Report(id, author, device, previousState, currentState, description , lastUpdate);
                             reportList.add(report);
                         }
 
@@ -899,7 +899,7 @@ public class RequestFactory {
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_CREATE_DEVICE, true);
 
         params.put(UserFilter.ID, Integer.toString(userID));
-        params.put(DeviceFilter.ID, Integer.toString(device.getID()));
+        params.put(DeviceFilter.ID, Integer.toString(device.getId()));
         params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
         params.put(DeviceFilter.TYPE, device.getType());
         params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());

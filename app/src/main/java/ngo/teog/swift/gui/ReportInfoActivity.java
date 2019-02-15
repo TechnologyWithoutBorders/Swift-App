@@ -25,8 +25,8 @@ public class ReportInfoActivity extends BaseActivity {
         TextView dateView = findViewById(R.id.dateView);
         dateView.setText(Long.toString(report.getCreated()));
 
-        TextView authorView = findViewById(R.id.authorView);
-        authorView.setText(report.getAuthorName());
+        //TextView authorView = findViewById(R.id.authorView);
+        //authorView.setText(report.getAuthorName());
 
         TextView stateChangeView = findViewById(R.id.stateChangeView);
         stateChangeView.setText(getResources().getStringArray(R.array.device_states)[report.getPreviousState()] + " -> " + getResources().getStringArray(R.array.device_states)[report.getCurrentState()]);
@@ -52,7 +52,7 @@ public class ReportInfoActivity extends BaseActivity {
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this report: http://teog.virlep.de/report/" + Integer.toString(report.getID()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this report: http://teog.virlep.de/report/" + Integer.toString(report.getId()));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share report link"));
                 return true;

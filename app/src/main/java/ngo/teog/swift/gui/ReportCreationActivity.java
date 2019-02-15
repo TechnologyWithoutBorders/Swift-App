@@ -72,7 +72,7 @@ public class ReportCreationActivity extends BaseActivity {
 
         String description = descriptionText.getText().toString();
 
-        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), null, device, oldState, state, description, System.currentTimeMillis());
+        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, System.currentTimeMillis());
 
         RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 

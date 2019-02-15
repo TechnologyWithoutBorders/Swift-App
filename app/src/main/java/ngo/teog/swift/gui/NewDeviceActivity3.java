@@ -116,7 +116,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     private File createImageFile() throws IOException {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        File image = File.createTempFile("image_" + Integer.toString(device.getID()), ".jpg", storageDir);
+        File image = File.createTempFile("image_" + Integer.toString(device.getId()), ".jpg", storageDir);
 
         return image;
     }

@@ -81,9 +81,6 @@ public class NewDeviceActivity2 extends BaseActivity {
         }
     }
 
-
-
-
     public void createDevice(View view) {
         if(typeField.getText().length() > 0) {
             if(serialNumberField.getText().length() > 0) {

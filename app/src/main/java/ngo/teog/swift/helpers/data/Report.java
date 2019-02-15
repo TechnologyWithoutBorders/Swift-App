@@ -39,7 +39,7 @@ public class Report implements Serializable {
         this.created = created;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 

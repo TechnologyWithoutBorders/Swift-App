@@ -21,7 +21,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  * @author Julian Deyerler
  */
 
-@Entity(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "hospital", childColumns = "hospital", onDelete = CASCADE))
+@Entity(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
 public class HospitalDevice extends SearchObject {
     @PrimaryKey
     private int id;

@@ -81,7 +81,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
                     intent.putExtra("OLD_STATUS", device.getState());
                     intent.putExtra("NEW_STATUS", i);
-                    intent.putExtra("DEVICE", device.getID());
+                    intent.putExtra("DEVICE", device.getId());
                     startActivity(intent);
                 } else {
                     triggered = true;
@@ -149,7 +149,7 @@ public class DeviceInfoActivity extends BaseActivity {
             intervalView.setText(Integer.toString(interval) + " Weeks");
         }
 
-        File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
+        File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
 
         if(!image.exists()) {
             globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
@@ -168,7 +168,7 @@ public class DeviceInfoActivity extends BaseActivity {
             globalImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    File image = new File(getFilesDir(), "image_" + Integer.toString(device.getID()) + ".jpg");
+                    File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
 
                     if(image.exists()) {
                         Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
@@ -183,7 +183,7 @@ public class DeviceInfoActivity extends BaseActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, device.getID(), adapter);
+            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, device.getId(), adapter);
 
             reportListProgressbar.setVisibility(View.VISIBLE);
             reportListView.setVisibility(View.INVISIBLE);
@@ -210,7 +210,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 if(DeviceInfoActivity.this.checkForInternetConnection()) {
                     RequestQueue queue = VolleyManager.getInstance(DeviceInfoActivity.this).getRequestQueue();
 
-                    RequestFactory.DefaultRequest request = new RequestFactory().createDeviceUpdateRequest(DeviceInfoActivity.this, intervalProgressbar, intervalView, device.getID(), intervalPicker.getValue());
+                    RequestFactory.DefaultRequest request = new RequestFactory().createDeviceUpdateRequest(DeviceInfoActivity.this, intervalProgressbar, intervalView, device.getId(), intervalPicker.getValue());
 
                     intervalProgressbar.setVisibility(View.VISIBLE);
                     intervalView.setVisibility(View.INVISIBLE);
@@ -233,7 +233,7 @@ public class DeviceInfoActivity extends BaseActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getID());
+            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getId());
 
             progressBar.setVisibility(View.VISIBLE);
             globalImageView.setVisibility(View.GONE);
@@ -264,7 +264,7 @@ public class DeviceInfoActivity extends BaseActivity {
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + Integer.toString(device.getID()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + Integer.toString(device.getId()));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share device link"));
                 return true;
@@ -311,7 +311,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 toState.setImageDrawable(triple1.getStateicon());
                 toState.setColorFilter(triple1.getBackgroundcolor());
 
-                authorView.setText(report.getAuthorName());
+                //authorView.setText(report.getAuthorName());
 
                 long date = report.getCreated();
                 dateView.setText(Long.toString(date));
