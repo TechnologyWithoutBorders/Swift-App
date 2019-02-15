@@ -1,6 +1,7 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.graphics.Bitmap;
 import android.view.MenuItem;
@@ -12,13 +13,15 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.DeviceInfoActivity;
 import ngo.teog.swift.helpers.SearchObject;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
  * @author Julian Deyerler
  */
 
-@Entity
+@Entity(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "hospital", childColumns = "hospital", onDelete = CASCADE))
 public class HospitalDevice extends SearchObject {
     @PrimaryKey
     private int id;

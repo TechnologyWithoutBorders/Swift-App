@@ -1,11 +1,14 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
@@ -13,23 +16,22 @@ import java.util.Date;
  * @author Julian Deyerler
  */
 
-@Entity
+@Entity(foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "author", onDelete = CASCADE),
+@ForeignKey(entity = HospitalDevice.class, parentColumns = "id", childColumns = "device", onDelete = CASCADE)})
 public class Report implements Serializable {
 
     @PrimaryKey
     private int id;
     private int author;
-    private String authorName;
     private int device;
     private int previousState;
     private int currentState;
     private String description;
     private long created;
 
-    public Report(int id, int author, String authorName, int device, int previousState, int currentState, String description, long created) {
+    public Report(int id, int author, int device, int previousState, int currentState, String description, long created) {
         this.id = id;
         this.author = author;
-        this.authorName = authorName;
         this.device = device;
         this.previousState = previousState;
         this.currentState = currentState;
@@ -43,10 +45,6 @@ public class Report implements Serializable {
 
     public int getAuthor() {
         return author;
-    }
-
-    public String getAuthorName() {
-        return authorName;
     }
 
     public int getDevice() {
