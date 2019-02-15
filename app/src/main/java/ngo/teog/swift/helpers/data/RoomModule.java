@@ -31,6 +31,12 @@ public class RoomModule {
 
     @Singleton
     @Provides
+    HospitalDao providesHospitalDao(UserDatabase userDatabase) {
+        return userDatabase.getHospitalDao();
+    }
+
+    @Singleton
+    @Provides
     UserRepository userRepository(UserDao userDao, Context context) {
         return new UserRepository(userDao, context);
     }
