@@ -70,12 +70,6 @@ public class UserProfileActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
-                .build()
-                .inject(this);
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
         viewModel.init(id);
         viewModel.getUser().observe(this, user -> {
