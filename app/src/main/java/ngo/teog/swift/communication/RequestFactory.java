@@ -43,7 +43,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;

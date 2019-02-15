@@ -72,7 +72,7 @@
                 android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".gui.DeviceInfoActivity"
+            android:name=".gui.deviceInfo.DeviceInfoActivity"
             android:label="@string/title_activity_device_info"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
             <!-- The meta-data element is needed for versions lower than 4.1 -->

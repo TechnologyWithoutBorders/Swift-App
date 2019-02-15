@@ -3,14 +3,8 @@ package ngo.teog.swift.helpers.data;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
-import android.graphics.Bitmap;
-import android.view.MenuItem;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import ngo.teog.swift.R;
-import ngo.teog.swift.gui.DeviceInfoActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.SearchObject;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;

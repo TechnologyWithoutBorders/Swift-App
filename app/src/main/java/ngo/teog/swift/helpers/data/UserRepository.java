@@ -45,6 +45,7 @@ public class UserRepository {
 
     private final UserDao userDao;
     private final HospitalDao hospitalDao;
+    private final HospitalDeviceDao deviceDao;
     private final Context context;
     private ExecutorService executor;
 
@@ -52,6 +53,7 @@ public class UserRepository {
     public UserRepository(UserDao userDao, HospitalDao hospitalDao, HospitalDeviceDao hospitalDeviceDao, ReportDao reportDao, Context context) {
         this.userDao = userDao;
         this.hospitalDao = hospitalDao;
+        this.deviceDao = hospitalDeviceDao;
         this.context = context;
         //TODO use previously defined executor
         this.executor = executor;
@@ -63,10 +65,10 @@ public class UserRepository {
         return userDao.load(id);
     }
 
-    /*public LiveData<Hospital> getHospital(int id) {
-        refreshHospital(id);
-        return hospitalDao.load(id);
-    }*/
+    public LiveData<HospitalDevice> getDevice(int id) {
+        //refreshHospital(id);
+        return deviceDao.load(id);
+    }
 
     public void updateUser(User user) {
         ExecutorService executor = Executors.newCachedThreadPool();
