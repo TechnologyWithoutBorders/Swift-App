@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
  */
 
 public final class Defaults {
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     //Preferences
     public static final String PREF_FILE_KEY = "ngo.teog.hstest.PREFERENCE_FILE_KEY";
