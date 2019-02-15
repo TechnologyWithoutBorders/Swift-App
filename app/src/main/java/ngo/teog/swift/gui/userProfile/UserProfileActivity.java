@@ -73,14 +73,17 @@ public class UserProfileActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
         viewModel.init(id);
         viewModel.getUser().observe(this, user -> {
-            Log.d("SAVE_USER", "update");
             if(user != null) {
                 nameView.setText(user.getFullName());
                 telephoneView.setText(user.getPhone());
                 mailView.setText(user.getMail());
                 positionView.setText(user.getPosition());
-            } else {
-                Log.d("SAVE_USER", "user is null");
+            }
+        });
+
+        viewModel.getHospital().observe(this, hospital -> {
+            if(hospital != null) {
+                hospitalView.setText(hospital.getName());
             }
         });
     }
