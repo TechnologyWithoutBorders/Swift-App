@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".gui.UserProfileActivity"
+            android:name=".gui.userProfile.UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
             <!-- The meta-data element is needed for versions lower than 4.1 -->
@@ -99,7 +99,7 @@
                 android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".gui.LoginActivity"
+            android:name=".gui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

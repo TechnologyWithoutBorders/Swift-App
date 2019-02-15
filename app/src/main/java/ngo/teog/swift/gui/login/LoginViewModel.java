@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers.data;
+package ngo.teog.swift.gui.login;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
@@ -9,12 +9,12 @@ import javax.inject.Singleton;
 import ngo.teog.swift.helpers.data.UserRepository;
 import ngo.teog.swift.helpers.data.User;
 
-public class UserProfileViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel {
     private LiveData<User> user;
     private UserRepository userRepo;
 
     @Inject
-    public UserProfileViewModel(UserRepository userRepo) {
+    public LoginViewModel(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
 

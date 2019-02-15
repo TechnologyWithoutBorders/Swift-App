@@ -5,8 +5,7 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import ngo.teog.swift.gui.UserProfileActivity;
-import ngo.teog.swift.gui.main.MainActivity;
+import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 
 @Singleton
 @Component(dependencies = {}, modules = {AppModule.class, RoomModule.class, ViewModelModule.class})

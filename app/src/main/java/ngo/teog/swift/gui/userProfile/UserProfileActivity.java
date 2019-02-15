@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.userProfile;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -19,35 +19,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.ResponseException;
-import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
-import ngo.teog.swift.helpers.data.UserProfileViewModel;
+import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
-import ngo.teog.swift.helpers.data.ViewModelModule;
-import ngo.teog.swift.helpers.filters.UserFilter;
 
 public class UserProfileActivity extends BaseActivity {
 

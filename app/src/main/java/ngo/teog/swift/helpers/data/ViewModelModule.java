@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import ngo.teog.swift.gui.login.LoginViewModel;
+import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 
 @Module
 public abstract class ViewModelModule {
@@ -18,6 +20,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(UserProfileViewModel.class)
     abstract ViewModel userProfileViewModel(UserProfileViewModel userProfileViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginViewModel.class)
+    abstract ViewModel loginViewModel(LoginViewModel loginViewModel);
 
     //Others ViewModels
 }

@@ -29,10 +29,10 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.HospitalActivity;
-import ngo.teog.swift.gui.LoginActivity;
+import ngo.teog.swift.gui.login.LoginActivity;
 import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.UserProfileActivity;
+import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 
 public class MainActivity extends BaseActivity {
