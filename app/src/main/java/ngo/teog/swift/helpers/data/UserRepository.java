@@ -171,11 +171,11 @@ public class UserRepository {
     }
 
     private HospitalRequest createHospitalRequest(Context context, int id, ExecutorService executor) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
         //TODO man könnte auch immer das last_update mitschicken und nur aktualisieren, wenn es neuere Daten gibt -> Netzwerkaufwand minimieren
         //TODO aber eigentlich übertragen wir ja auch jetzt schon ziemlich wenige Daten
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER, true);
+        Map<String, String> params = generateParameterMap(context, "fetch_hospital", true);
         params.put(UserFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
