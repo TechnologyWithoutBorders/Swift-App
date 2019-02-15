@@ -118,16 +118,40 @@ public class ResponseParser {
                     String phone = userObject.getString(UserFilter.PHONE);
                     String mail = userObject.getString(UserFilter.MAIL);
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
-                    long lastUpdate = Long.parseLong(userObject.getString("u_last_update"));
-
                     int hospitalId = userObject.getInt("h_ID");
-                    String hospitalName = userObject.getString("h_name");
                     String position = userObject.getString("u_position");
-
-                    //Hospital hospital = new Hospital(hospitalId, hospitalName);
+                    long lastUpdate = Long.parseLong(userObject.getString("u_last_update"));
 
                     User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
                     result.add(user);
+                }
+
+                return result;
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
+            default:
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
+        }
+    }
+
+    public ArrayList<Hospital> parseHospitalList(JSONObject raw) throws Exception {
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
+        switch(responseCode) {
+            case SwiftResponse.CODE_OK:
+                JSONArray hospitalList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
+
+                ArrayList<Hospital> result = new ArrayList<>();
+
+                for(int i = 0; i < hospitalList.length(); i++) {
+                    JSONObject hospitalObject = hospitalList.getJSONObject(i);
+
+                    int id = hospitalObject.getInt("h_ID");
+                    String name = hospitalObject.getString("h_name");
+                    long lastUpdate = Long.parseLong(hospitalObject.getString("u_last_update"));
+
+                    Hospital hospital = new Hospital(id, name, lastUpdate);
+                    result.add(hospital);
                 }
 
                 return result;
@@ -149,13 +173,9 @@ public class ResponseParser {
             String phone = userObject.getString(UserFilter.PHONE);
             String mail = userObject.getString(UserFilter.MAIL);
             String fullName = userObject.getString(UserFilter.FULL_NAME);
-            long lastUpdate = Long.parseLong(userObject.getString("u_last_update"));
-
             int hospitalId = userObject.getInt("h_ID");
-            String hospitalName = userObject.getString("h_name");
             String position = userObject.getString("u_position");
-
-            //Hospital hospital = new Hospital(hospitalId, hospitalName);
+            long lastUpdate = Long.parseLong(userObject.getString("u_last_update"));
 
             User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
             result.add(user);

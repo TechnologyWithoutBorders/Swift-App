@@ -66,7 +66,7 @@ public class UserRepository {
     }
 
     public LiveData<HospitalDevice> getDevice(int id) {
-        //refreshHospital(id);
+        //refreshDevice(id);
         return deviceDao.load(id);
     }
 
@@ -143,8 +143,60 @@ public class UserRepository {
                             // Updates the database. The LiveData object automatically
                             // refreshes, so we don't need to do anything else here.
                             userDao.save(user);
+
+                            boolean hospitalExits = (hospitalDao.hasHospital(user.getHospital(), System.currentTimeMillis(), 10) != 0);
+
+                            if(!hospitalExits) {
+                                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+                                HospitalRequest hospitalRequest = createHospitalRequest(context, user.getHospital(), executor);
+
+                                queue.add(hospitalRequest);
+                            }
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);
+                            Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    //executor.shutdown();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private HospitalRequest createHospitalRequest(Context context, int id, ExecutorService executor) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        //TODO man könnte auch immer das last_update mitschicken und nur aktualisieren, wenn es neuere Daten gibt -> Netzwerkaufwand minimieren
+        //TODO aber eigentlich übertragen wir ja auch jetzt schon ziemlich wenige Daten
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER, true);
+        params.put(UserFilter.ID, Integer.toString(id));
+
+        JSONObject request = new JSONObject(params);
+
+        return new HospitalRequest(context, url, request, executor);
+    }
+
+    private class HospitalRequest extends JsonObjectRequest {
+
+        private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    executor.execute(() -> {
+                        try {
+                            Hospital hospital = new ResponseParser().parseHospitalList(response).get(0);
+
+                            // Updates the database. The LiveData object automatically
+                            // refreshes, so we don't need to do anything else here.
+                            hospitalDao.save(hospital);
+                        } catch(Exception e) {
                             Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                         }
                     });
