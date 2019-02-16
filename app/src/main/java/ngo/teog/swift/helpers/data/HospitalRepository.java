@@ -41,43 +41,34 @@ import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 @Singleton
-public class UserRepository {
+public class HospitalRepository {
 
-    private final UserDao userDao;
+    private final HospitalDao hospitalDao;
     private final Context context;
     private ExecutorService executor;
 
     @Inject
-    public UserRepository(UserDao userDao, Context context) {
-        this.userDao = userDao;
+    public HospitalRepository(HospitalDao hospitalDao, Context context) {
+        this.hospitalDao = hospitalDao;
         this.context = context;
         //TODO use previously defined executor
         this.executor = executor;
     }
 
-    public LiveData<User> getUser(int id) {
-        refreshUser(id);
-        // Returns a LiveData object directly from the database.
-        return userDao.load(id);
+    public LiveData<Hospital> getHospital(int id) {
+        refreshHospital(id);
+        return hospitalDao.load(id);
     }
 
-    public void updateUser(User user) {
-        ExecutorService executor = Executors.newCachedThreadPool();
-
-        executor.execute(() -> {
-            userDao.save(user);
-        });
-    }
-
-    private void refreshUser(final int id) {
+    private void refreshHospital(final int id) {
         //runs in a background thread.
         executor = Executors.newCachedThreadPool();
 
         executor.execute(() -> {
             //check if user data has been fetched recently
-            boolean userExists = (userDao.hasUser(id, System.currentTimeMillis(), 10) != 0);
+            boolean hospitalExists = (hospitalDao.hasHospital(id, System.currentTimeMillis(), 10) != 0);
 
-            if(!userExists) {
+            if(!hospitalExists) {
                 //refresh the data.
 
                 /*Constraints updateConstraints = new Constraints.Builder()
@@ -99,43 +90,40 @@ public class UserRepository {
 
                 RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-                UserListRequest userListRequest = createUserRequest(context, id, executor);
+                HospitalRequest hospitalRequest = createHospitalRequest(context, id, executor);
 
-                queue.add(userListRequest);
+                queue.add(hospitalRequest);
             }
         });
     }
 
-    private UserListRequest createUserRequest(Context context, int id, ExecutorService executor) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+    private HospitalRequest createHospitalRequest(Context context, int id, ExecutorService executor) {
+        final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
         //TODO man könnte auch immer das last_update mitschicken und nur aktualisieren, wenn es neuere Daten gibt -> Netzwerkaufwand minimieren
         //TODO aber eigentlich übertragen wir ja auch jetzt schon ziemlich wenige Daten
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER, true);
-        params.put(UserFilter.ID, Integer.toString(id));
+        Map<String, String> params = generateParameterMap(context, "fetch_hospital", true);
+        params.put("h_ID", Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
 
-        return new UserListRequest(context, url, request, executor);
+        return new HospitalRequest(context, url, request, executor);
     }
 
-    private class UserListRequest extends JsonObjectRequest {
+    private class HospitalRequest extends JsonObjectRequest {
 
-        private UserListRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
+        private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     executor.execute(() -> {
                         try {
-                            User user = new ResponseParser().parseUserList(response).get(0);
-
-                            //TODO prüfen, ob es lokal einen neueren gibt und wenn ja auf den Server pushen
+                            Hospital hospital = new ResponseParser().parseHospitalList(response).get(0);
 
                             // Updates the database. The LiveData object automatically
                             // refreshes, so we don't need to do anything else here.
-                            userDao.save(user);
+                            hospitalDao.save(hospital);
                         } catch(Exception e) {
-                            Log.e("SAVE_USER", e.getMessage(), e);
                             Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -164,28 +152,5 @@ public class UserRepository {
         }
 
         return parameterMap;
-    }
-
-    private class UpdateWorker extends Worker {
-
-        private Context context;
-
-        public UpdateWorker(Context context, WorkerParameters params) {
-            super(context, params);
-
-            this.context = context;
-        }
-
-        @NonNull
-        @Override
-        public Worker.Result doWork() {
-            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
-
-            UserListRequest userListRequest = createUserRequest(context, this.getInputData().getInt("id", -1), executor);
-
-            queue.add(userListRequest);
-
-            return Result.success();
-        }
     }
 }

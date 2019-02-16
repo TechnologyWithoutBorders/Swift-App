@@ -20,5 +20,7 @@ public interface AppComponent {
 
     UserRepository userRepository();
 
+    HospitalRepository hospitalRepository();
+
     Application application();
 }

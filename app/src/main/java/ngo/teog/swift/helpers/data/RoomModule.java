@@ -49,7 +49,13 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    UserRepository userRepository(UserDao userDao, HospitalDao hospitalDao, HospitalDeviceDao hospitalDeviceDao, ReportDao reportDao, Context context) {
-        return new UserRepository(userDao, hospitalDao, hospitalDeviceDao, reportDao, context);
+    UserRepository userRepository(UserDao userDao, Context context) {
+        return new UserRepository(userDao, context);
+    }
+
+    @Singleton
+    @Provides
+    HospitalRepository hospitalRepository(HospitalDao hospitalDao, Context context) {
+        return new HospitalRepository(hospitalDao, context);
     }
 }

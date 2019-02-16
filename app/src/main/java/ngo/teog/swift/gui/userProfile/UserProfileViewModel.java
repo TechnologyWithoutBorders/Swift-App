@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.helpers.data.Hospital;
+import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.UserRepository;
 import ngo.teog.swift.helpers.data.User;
 
@@ -14,10 +15,12 @@ public class UserProfileViewModel extends ViewModel {
     private LiveData<User> user;
     private LiveData<Hospital> hospital;
     private UserRepository userRepo;
+    private HospitalRepository hospitalRepo;
 
     @Inject
-    public UserProfileViewModel(UserRepository userRepo) {
+    public UserProfileViewModel(UserRepository userRepo, HospitalRepository hospitalRepo) {
         this.userRepo = userRepo;
+        this.hospitalRepo = hospitalRepo;
     }
 
     public void init(int id) {
@@ -27,7 +30,7 @@ public class UserProfileViewModel extends ViewModel {
             return;
         }
         user = userRepo.getUser(id);
-        hospital = userRepo.getHospital(user.getValue().getHospital());
+        hospital = hospitalRepo.getHospital(user.getValue().getHospital());
     }
 
     public LiveData<User> getUser() {
