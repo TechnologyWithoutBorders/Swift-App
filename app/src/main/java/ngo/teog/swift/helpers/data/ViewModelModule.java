@@ -12,13 +12,13 @@ import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 public abstract class ViewModelModule {
 
     @Binds
-    abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory viewModelFactory);
+    public abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory viewModelFactory);
     //You are able to declare ViewModelProvider.Factory dependency in another module. For example in ApplicationModule.
 
     @Binds
     @IntoMap
     @ViewModelKey(UserProfileViewModel.class)
-    abstract ViewModel userProfileViewModel(UserProfileViewModel userProfileViewModel);
+    public abstract ViewModel userProfileViewModel(UserProfileViewModel userProfileViewModel);
 
     //Others ViewModels
 }

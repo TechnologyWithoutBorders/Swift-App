@@ -47,6 +47,7 @@ public class UserProfileActivity extends BaseActivity {
 
     @Inject
     ViewModelFactory viewModelFactory;
+
     private UserProfileViewModel viewModel;
 
     @Override
