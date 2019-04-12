@@ -35,9 +35,13 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
+import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 @Singleton
@@ -66,6 +70,12 @@ public class UserRepository {
 
         executor.execute(() -> {
             userDao.save(user);
+
+            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+            RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(context, null, null, user);
+
+            queue.add(request);
         });
     }
 
