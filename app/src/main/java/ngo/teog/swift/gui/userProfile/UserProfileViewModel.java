@@ -30,7 +30,10 @@ public class UserProfileViewModel extends ViewModel {
             return;
         }
         user = userRepo.getUser(id);
-        hospital = hospitalRepo.getHospital(user.getValue().getHospital());
+
+        if(user.getValue() != null) {
+            hospital = hospitalRepo.getHospital(user.getValue().getHospital());
+        }
     }
 
     public LiveData<User> getUser() {

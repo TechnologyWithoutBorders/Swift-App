@@ -36,7 +36,6 @@ import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.data.AppModule;
-import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
@@ -67,12 +66,6 @@ public class LoginActivity extends BaseActivity {
         passwordField = findViewById(R.id.pwText);
 
         countrySpinner = findViewById(R.id.countrySpinner);
-
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
-                .build()
-                .inject(this);
 
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {

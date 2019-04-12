@@ -37,6 +37,7 @@
         Lena Augustin<br>
         Paul Böhnke<br>
         Arne Bruns<br>
+        Juan Carlos Suarez<br>
         Maximilian Deckelmann<br>
         Sebastian Hofmann<br>
         Julian Kauth<br>
@@ -48,7 +49,7 @@
         Hopefully many more to come… :-)</p>
 
         <p><h3>About TeoG Swift</h3>
-        TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders) short TeoG. Its intendet use is to have a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.
+        TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders) short TeoG. Its intended use is to have a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.
         The code can be downloaded and modified for your own needs at Github (https://github.com/TechnologyWithoutBorders/Swift-App) under the Apache 2.0 License (https://www.apache.org/licenses/LICENSE-2.0).</p>
 
         <h3>Impressum</h3>
@@ -106,6 +107,7 @@
         <item>Germany</item>
         <item>Ghana</item>
         <item>Nepal</item>
+        <item>Test</item>
         <item>Thailand</item>
     </string-array>
 

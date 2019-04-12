@@ -12,7 +12,7 @@ import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 @Component(dependencies = {}, modules = {AppModule.class, RoomModule.class, ViewModelModule.class})
 public interface AppComponent {
 
-    void inject(LoginActivity mainActivity);
+    void inject(UserProfileActivity mainActivity);
 
     UserDao userDao();
 

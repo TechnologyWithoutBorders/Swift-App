@@ -551,7 +551,7 @@ public class RequestFactory {
                             int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                             int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                             String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                            long lastUpdate = reportObject.getLong("last_update");
+                            long lastUpdate = reportObject.getLong("r_last_update");
 
                             Report report = new Report(id, author, device, previousState, currentState, description , lastUpdate);
                             reportList.add(report);
