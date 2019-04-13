@@ -28,7 +28,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.HospitalActivity;
+import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.login.LoginActivity;
 import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;

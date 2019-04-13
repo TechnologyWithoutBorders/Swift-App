@@ -149,7 +149,7 @@
                 android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
-            android:name=".gui.HospitalActivity"
+            android:name=".gui.hospital.HospitalActivity"
             android:label="My Hospital"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
             <!-- The meta-data element is needed for versions lower than 4.1 -->
