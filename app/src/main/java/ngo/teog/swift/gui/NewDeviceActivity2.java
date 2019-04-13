@@ -12,8 +12,6 @@ import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import java.util.Date;
-
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 

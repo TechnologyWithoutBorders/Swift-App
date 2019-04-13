@@ -14,8 +14,6 @@ import android.widget.ProgressBar;
 
 import com.android.volley.RequestQueue;
 
-import java.util.Date;
-
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;

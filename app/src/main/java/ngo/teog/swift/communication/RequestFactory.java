@@ -152,24 +152,6 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createDeviceImageHashRequest(Context context, View disable, final View enable, int id) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch_image_hash", true);
-        params.put(DeviceFilter.ID, Integer.toString(id));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                String imageHash = response.getString(SwiftResponse.DATA_FIELD);
-
-                //TODO
-            }
-        });
-    }
-
     public DefaultRequest createHospitalRequest(final Context context, View disable, final View enable, final TextView nameView, final TextView locationView, final ExpandableListView listView, final int user) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
@@ -427,27 +409,6 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createUserImageRequest(Context context, View disable, final View enable, int id) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER_IMAGE, true);
-        params.put(UserFilter.ID, Integer.toString(id));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                String imageData = response.getString(SwiftResponse.DATA_FIELD);
-
-                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                ((ImageView) enable).setImageBitmap(bitmap);
-            }
-        });
-    }
-
     public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
@@ -649,52 +610,6 @@ public class RequestFactory {
         }
     }
 
-    public class ColleagueRequest extends JsonObjectRequest {
-        public ColleagueRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> userAdapter) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
-                        switch(responseCode) {
-                            case SwiftResponse.CODE_OK:
-                                if(userAdapter != null) {
-                                    userAdapter.clear();
-                                }
-
-                                if(userAdapter != null) {
-                                    userAdapter.addAll(new ResponseParser().parseUserList(response));
-                                }
-
-                                break;
-                            case SwiftResponse.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
-                            case SwiftResponse.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
-                        }
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    userAdapter.clear();
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
     public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<SearchObject> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
@@ -828,35 +743,6 @@ public class RequestFactory {
                 enable.setEnabled(false);
             }
         });
-    }
-
-    public DefaultRequest createDeviceUpdateRequest(final Context context, View disable, final View enable, int deviceID, int maintenanceInterval) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, "update_maintenance_interval", true);
-
-        params.put(DeviceFilter.ID, Integer.toString(deviceID));
-        params.put("d_maintenance_interval", Integer.toString(maintenanceInterval));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ((TextView)enable).setText(Integer.toString(response.getInt("data")) + " Weeks");
-            }
-        });
-    }
-
-    public ReportListRequest createReportListRequest(Context context, View disable, View enable, int deviceID, ArrayAdapter<Report> adapter) {
-        final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
-
-        Map<String, String> params = generateParameterMap(context, ReportFilter.ACTION_FETCH_REPORT_LIST, true);
-        params.put(ReportFilter.DEVICE, Integer.toString(deviceID));
-
-        JSONObject request = new JSONObject(params);
-
-        return new ReportListRequest(context, disable, enable, url, request, adapter);
     }
 
     public class ReportListRequest extends JsonObjectRequest {
