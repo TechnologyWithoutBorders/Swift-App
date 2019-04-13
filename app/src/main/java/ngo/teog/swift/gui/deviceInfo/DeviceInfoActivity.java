@@ -2,14 +2,11 @@ package ngo.teog.swift.gui.deviceInfo;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,28 +17,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
-import ngo.teog.swift.gui.ReportCreationActivity;
 import ngo.teog.swift.gui.ReportInfoActivity;
-import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
-import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.ViewModelFactory;

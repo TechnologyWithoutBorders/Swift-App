@@ -4,10 +4,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import ngo.teog.swift.helpers.data.Hospital;
-import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.UserRepository;
 import ngo.teog.swift.helpers.data.User;
 

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +28,6 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
-import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class UserProfileActivity extends BaseActivity {

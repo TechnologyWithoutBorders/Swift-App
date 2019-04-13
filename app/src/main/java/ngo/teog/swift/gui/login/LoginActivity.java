@@ -1,13 +1,11 @@
 package ngo.teog.swift.gui.login;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,19 +24,12 @@ import android.widget.Toast;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.inject.Inject;
-
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.gui.main.MainActivity;
-import ngo.teog.swift.helpers.data.AppModule;
-import ngo.teog.swift.helpers.data.DaggerAppComponent;
-import ngo.teog.swift.helpers.data.RoomModule;
-import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class LoginActivity extends BaseActivity {
 
