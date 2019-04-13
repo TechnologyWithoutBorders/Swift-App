@@ -1,5 +1,6 @@
 package ngo.teog.swift.gui.hospital;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,16 +16,28 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 
+import javax.inject.Inject;
+
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class HospitalActivity extends BaseActivity {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private HospitalViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +70,22 @@ public class HospitalActivity extends BaseActivity {
         TextView nameView = findViewById(R.id.nameView);
         TextView locationView = findViewById(R.id.locationView);
 
-        ProgressBar hospitalProgressBar = findViewById(R.id.hospitalProgressBar);
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
 
-        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        if(this.checkForInternetConnection()) {
-            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-            RequestFactory.DefaultRequest request = new RequestFactory().createHospitalRequest(this, hospitalProgressBar, contentView, nameView, locationView, hospitalListView, user);
-
-            contentView.setVisibility(View.INVISIBLE);
-            hospitalProgressBar.setVisibility(View.VISIBLE);
-
-            queue.add(request);
-        }
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);
+        viewModel.init(id);
+        viewModel.getHospital().observe(this, hospital -> {
+            if(hospital != null) {
+                nameView.setText(hospital.getName());
+            }
+        });
     }
 
     @Override

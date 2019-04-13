@@ -14,8 +14,8 @@ public interface UserDao {
     @Insert(onConflict = REPLACE)
     void save(User user);
 
-    @Query("SELECT COUNT(*) FROM user WHERE lastUpdate >= :currentMillis-(:timeout*1000)")
-    int getOutdatedUsers(long currentMillis, int timeout);
+    @Query("SELECT * FROM user")
+    List<User> getUsers();
 
     @Query("SELECT * FROM user WHERE id = :id")
     LiveData<User> load(int id);

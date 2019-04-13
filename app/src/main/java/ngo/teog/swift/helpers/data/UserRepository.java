@@ -1,9 +1,12 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -68,8 +71,23 @@ public class UserRepository {
     public LiveData<User> getUser(int id) {
         //TODO aktuell beschränken wir uns auf unser eigenes Krankenhaus
         refreshHospital();
-        // Returns a LiveData object directly from the database.
+
         return userDao.load(id);
+    }
+
+    public LiveData<HospitalInfo> getHospitalInfo(int userID) {
+        /*refreshHospital();
+
+        MutableLiveData<HospitalInfo> result = new MutableLiveData<HospitalInfo>();
+        LiveData<User> user = userDao.load(userID);
+        LiveData<Hospital> hospital = hospitalDao.load(user.getValue().getHospital());//TODO hier wirds null -> macht ja Sinn
+        List<User> users = userDao.getUsers();
+
+        HospitalInfo info = new HospitalInfo(hospital.getValue().getId(), hospital.getValue().getName(), hospital.getValue().getLastUpdate(), users, null);
+
+        result.setValue(info);*/
+
+        return null;
     }
 
     public void updateUser(User user) {//TODO vielleicht sogar mit refreshUsers() in eine gemeinsame syncWithServer()-Methode zusammenführen

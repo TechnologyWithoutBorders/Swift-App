@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 
 @Module
@@ -20,5 +21,8 @@ public abstract class ViewModelModule {
     @ViewModelKey(UserProfileViewModel.class)
     public abstract ViewModel userProfileViewModel(UserProfileViewModel userProfileViewModel);
 
-    //Others ViewModels
+    @Binds
+    @IntoMap
+    @ViewModelKey(HospitalViewModel.class)
+    public abstract ViewModel hospitalViewModel(HospitalViewModel hospitalViewModel);
 }

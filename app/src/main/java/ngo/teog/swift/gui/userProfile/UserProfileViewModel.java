@@ -15,33 +15,24 @@ public class UserProfileViewModel extends ViewModel {
     private LiveData<User> user;
     private LiveData<Hospital> hospital;
     private UserRepository userRepo;
-    private HospitalRepository hospitalRepo;
 
     @Inject
-    public UserProfileViewModel(UserRepository userRepo, HospitalRepository hospitalRepo) {
+    public UserProfileViewModel(UserRepository userRepo) {
         this.userRepo = userRepo;
-        this.hospitalRepo = hospitalRepo;
     }
 
     public void init(int id) {
-        if (this.user != null) {
+        if(this.user != null) {
             // ViewModel is created on a per-Fragment basis, so the userId
             // doesn't change.
             return;
         }
-        user = userRepo.getUser(id);
 
-        if(user.getValue() != null) {
-            hospital = hospitalRepo.getHospital(user.getValue().getHospital());
-        }
+        user = userRepo.getUser(id);
     }
 
     public LiveData<User> getUser() {
         return user;
-    }
-
-    public LiveData<Hospital> getHospital() {
-        return hospital;
     }
 
     //TODO keine Ahnung, ob man das so macht

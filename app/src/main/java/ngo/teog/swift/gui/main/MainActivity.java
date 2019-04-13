@@ -34,6 +34,9 @@ import ngo.teog.swift.gui.NewDeviceActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.RoomModule;
 
 public class MainActivity extends BaseActivity {
 
