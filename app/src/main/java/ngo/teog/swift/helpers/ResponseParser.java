@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -98,6 +99,68 @@ public class ResponseParser {
         }
 
         return result;
+    }
+
+    public HospitalInfo parseHospital(JSONObject raw) throws Exception {
+        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
+        switch(responseCode) {
+            case SwiftResponse.CODE_OK:
+                JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
+
+                int hospitalId = hospitalObject.getInt("id");
+                String name = hospitalObject.getString("name");
+                long hospitalLastUpdate = Defaults.DATE_FORMAT.parse(hospitalObject.getString("last_update")).getTime();
+                JSONArray users = hospitalObject.getJSONArray("users");
+                //JSONArray devices = hospitalObject.getJSONArray("devices");
+
+                List<User> userList = new ArrayList<>(users.length());
+
+                for(int i = 0; i < users.length(); i++) {
+                    JSONObject userObject = users.getJSONObject(i);
+
+                    int id = userObject.getInt(UserFilter.ID);
+                    String phone = userObject.getString(UserFilter.PHONE);
+                    String mail = userObject.getString(UserFilter.MAIL);
+                    String fullName = userObject.getString(UserFilter.FULL_NAME);
+                    int hospital = userObject.getInt("u_hospital");
+                    String position = userObject.getString("u_position");
+                    long lastUpdate = Defaults.DATE_FORMAT.parse(userObject.getString("u_last_update")).getTime();
+
+                    User user = new User(id, phone, mail, fullName, hospital, position, lastUpdate);
+                    userList.add(user);
+                }
+
+                /*List<HospitalDevice> deviceList = new ArrayList<>(devices.length());
+
+                for(int i = 0; i < devices.length(); i++) {
+                    JSONObject deviceObject = devices.getJSONObject(i);
+
+                    int id = deviceObject.getInt(DeviceFilter.ID);
+                    String assetNumber = deviceObject.getString(DeviceFilter.ASSET_NUMBER);
+                    String type = deviceObject.getString(DeviceFilter.TYPE);
+                    String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
+                    String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
+                    String model = deviceObject.getString(DeviceFilter.MODEL);
+                    String ward = deviceObject.getString("d_ward");
+                    int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
+
+                    int hospital = deviceObject.getInt("d_hospital");
+                    int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
+                    long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
+
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastUpdate);
+                    deviceList.add(device);
+                }*/
+
+                HospitalInfo result = new HospitalInfo(hospitalId, name, hospitalLastUpdate, userList, null);
+
+                return result;
+            case SwiftResponse.CODE_FAILED_VISIBLE:
+                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
+            case SwiftResponse.CODE_FAILED_HIDDEN:
+            default:
+                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
+        }
     }
 
     public ArrayList<User> parseUserList(JSONObject raw) throws Exception {
