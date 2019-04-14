@@ -84,6 +84,12 @@ public class HospitalRepository {
         return hospitalDao.loadUserColleagues(userId);
     }
 
+    public LiveData<List<DeviceInfo>> getHospitalDevices(int userId) {
+        refreshHospital(userId);
+
+        return hospitalDao.loadHospitalDevices(userId);
+    }
+
     public void updateUser(User user) {//TODO vielleicht sogar mit refreshUsers() in eine gemeinsame syncWithServer()-Methode zusammenführen
         ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -174,7 +180,7 @@ public class HospitalRepository {
 
                             for(DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
                                 hospitalDao.save(deviceInfo.getDevice());
-                                hospitalDao.save(deviceInfo.getLastReport());
+                                hospitalDao.save(deviceInfo.getReports().get(0));
                             }
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);

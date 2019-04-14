@@ -4,8 +4,11 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
 
 import java.util.List;
+
+import ngo.teog.swift.helpers.DeviceInfo;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
@@ -43,4 +46,8 @@ public interface HospitalDao {
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     LiveData<List<User>> loadUserColleagues(int userId);
+
+    @Transaction
+    @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
+    LiveData<List<DeviceInfo>> loadHospitalDevices(int userId);
 }

@@ -158,8 +158,15 @@ public class ResponseParser {
 
                     Report lastReport = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
 
+                    List<Report> reports = new ArrayList<>();
+                    reports.add(lastReport);
+
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
-                    deviceList.add(new DeviceInfo(device, lastReport));
+
+                    DeviceInfo deviceInfo = new DeviceInfo(device);
+                    deviceInfo.setReports(reports);
+
+                    deviceList.add(deviceInfo);
                 }
 
                 HospitalInfo result = new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, deviceList);

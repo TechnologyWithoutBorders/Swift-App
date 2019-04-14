@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,10 +29,12 @@ import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -50,6 +53,9 @@ public class HospitalActivity extends BaseActivity {
 
         LinearLayout contentView = findViewById(R.id.contentView);
         final ExpandableListView hospitalListView = findViewById(R.id.hospitalList);
+
+        ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
+        hospitalListView.setAdapter(adapter);
 
         hospitalListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
@@ -93,9 +99,13 @@ public class HospitalActivity extends BaseActivity {
         });
         viewModel.getUsers().observe(this, users -> {
            if(users != null) {
-               ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter(users);
-               hospitalListView.setAdapter(adapter);
+               adapter.setUsers(users);
            }
+        });
+        viewModel.getDeviceInfos().observe(this, deviceInfos -> {
+            if(deviceInfos != null) {
+                adapter.setDeviceInfos(deviceInfos);
+            }
         });
     }
 
@@ -120,15 +130,22 @@ public class HospitalActivity extends BaseActivity {
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
-        private List<User> users;
+        private List<User> users = new ArrayList<>();
+        private List<DeviceInfo> deviceInfos = new ArrayList<>();
 
-        private ExpandableHospitalAdapter(List<User> users) {
+        public void setUsers(List<User> users) {
             this.users = users;
+            this.notifyDataSetChanged();
+        }
+
+        public void setDeviceInfos(List<DeviceInfo> deviceInfos) {
+            this.deviceInfos = deviceInfos;
+            this.notifyDataSetChanged();
         }
 
         @Override
         public int getGroupCount() {
-            return 1;
+            return 2;
         }
 
         @Override
@@ -136,6 +153,8 @@ public class HospitalActivity extends BaseActivity {
             switch(i) {
                 case 0:
                     return users.size();
+                case 1:
+                    return deviceInfos.size();
                 default:
                     return 0;
             }
@@ -146,6 +165,8 @@ public class HospitalActivity extends BaseActivity {
             switch(i) {
                 case 0:
                     return "Members";
+                case 1:
+                    return "Devices";
                 default:
                     return null;
             }
@@ -156,6 +177,8 @@ public class HospitalActivity extends BaseActivity {
             switch(groupPosition) {
                 case 0:
                     return users.get(childPosition);
+                case 1:
+                    return deviceInfos.get(childPosition);
                 default:
                     return null;
             }
@@ -192,6 +215,10 @@ public class HospitalActivity extends BaseActivity {
                     nameView.setText("Members");
                     countView.setText(Integer.toString(users.size()));
                     break;
+                case 1:
+                    nameView.setText("Devices");
+                    countView.setText(Integer.toString(deviceInfos.size()));
+                    break;
             }
 
             return convertView;
@@ -217,6 +244,39 @@ public class HospitalActivity extends BaseActivity {
                         nameView.setText(user.getName());
                         positionView.setText(user.getPosition());
                     }
+                    break;
+                case 1:
+                    if(convertView == null || (int)convertView.getTag() != groupPosition) {
+                        LayoutInflater inflater = (LayoutInflater) HospitalActivity.this
+                                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        convertView = inflater.inflate(R.layout.row_todo, parent, false);
+                        convertView.setTag(groupPosition);
+                    }
+
+                    TextView nameView = convertView.findViewById(R.id.nameView);
+                    TextView dateView = convertView.findViewById(R.id.dateView);
+                    TextView statusView = convertView.findViewById(R.id.statusView);
+                    ImageView imageView = convertView.findViewById(R.id.imageView);
+
+                    DeviceInfo deviceInfo = deviceInfos.get(childPosition);
+
+                    if(deviceInfo != null) {
+                        HospitalDevice device = deviceInfo.getDevice();
+                        Report lastReport = deviceInfo.getReports().get(0);//TODO bei mehreren wäre das der erste Report
+
+                        nameView.setText(device.getType());
+
+                        //String dateString = DATE_FORMAT.format(device.getLastReportDate());
+                        //dateView.setText(dateString);
+
+                        DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
+
+                        statusView.setText(triple.getStatestring());
+
+                        imageView.setImageDrawable(triple.getStateicon());
+                        imageView.setBackgroundColor(triple.getBackgroundcolor());
+                    }
+
                     break;
             }
 

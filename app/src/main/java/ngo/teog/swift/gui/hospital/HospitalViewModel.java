@@ -15,12 +15,12 @@ import ngo.teog.swift.helpers.data.User;
 public class HospitalViewModel extends ViewModel {
     private LiveData<Hospital> hospital;
     private LiveData<List<User>> users;
-    private LiveData<DeviceInfo> deviceInfos;
-    private HospitalRepository userRepo;
+    private LiveData<List<DeviceInfo>> deviceInfos;
+    private HospitalRepository hospitalRepo;
 
     @Inject
-    public HospitalViewModel(HospitalRepository userRepo) {
-        this.userRepo = userRepo;
+    public HospitalViewModel(HospitalRepository hospitalRepo) {
+        this.hospitalRepo = hospitalRepo;
     }
 
     public void init(int userId) {
@@ -30,8 +30,9 @@ public class HospitalViewModel extends ViewModel {
             return;
         }
 
-        hospital = userRepo.getUserHospital(userId);
-        users = userRepo.getUserColleagues(userId);
+        hospital = hospitalRepo.getUserHospital(userId);
+        users = hospitalRepo.getUserColleagues(userId);
+        deviceInfos = hospitalRepo.getHospitalDevices(userId);
     }
 
     public LiveData<Hospital> getHospital() {
@@ -40,5 +41,9 @@ public class HospitalViewModel extends ViewModel {
 
     public LiveData<List<User>> getUsers() {
         return users;
+    }
+
+    public LiveData<List<DeviceInfo>> getDeviceInfos() {
+        return deviceInfos;
     }
 }

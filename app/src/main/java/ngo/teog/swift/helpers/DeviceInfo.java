@@ -1,22 +1,36 @@
 package ngo.teog.swift.helpers;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Relation;
+
+import java.util.List;
+
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 
 public class DeviceInfo {
+    @Embedded
     private HospitalDevice device;
-    private Report lastReport;//TODO ne Liste würde mehr Sinn machen
+    @Relation(parentColumn = "id", entityColumn = "device")
+    private List<Report> reports;
 
-    public DeviceInfo(HospitalDevice device, Report lastReport) {
+    public DeviceInfo(HospitalDevice device) {
         this.device = device;
-        this.lastReport = lastReport;
     }
 
     public HospitalDevice getDevice() {
         return device;
     }
 
-    public Report getLastReport() {
-        return lastReport;
+    public void setDevice(HospitalDevice device) {
+        this.device = device;
+    }
+
+    public List<Report> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
     }
 }
