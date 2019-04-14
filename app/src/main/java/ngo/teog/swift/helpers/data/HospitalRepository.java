@@ -43,6 +43,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
@@ -165,9 +166,10 @@ public class HospitalRepository {
                                 hospitalDao.save(user);
                             }
 
-                            /*for(HospitalDevice device : hospitalInfo.getDevices()) {
-                                deviceDao.save(device);
-                            }*/
+                            for(DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
+                                hospitalDao.save(deviceInfo.getDevice());
+                                hospitalDao.save(deviceInfo.getLastReport());
+                            }
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);
                             Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();

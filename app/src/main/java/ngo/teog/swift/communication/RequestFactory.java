@@ -295,7 +295,7 @@ public class RequestFactory {
 
                                 HospitalDevice device = deviceList.get(childPosition);
 
-                                if(device != null) {
+                                /*if(device != null) {
                                     nameView.setText(device.getType());
 
                                     //String dateString = DATE_FORMAT.format(device.getLastReportDate());
@@ -307,7 +307,8 @@ public class RequestFactory {
 
                                     imageView.setImageDrawable(triple.getStateicon());
                                     imageView.setBackgroundColor(triple.getBackgroundcolor());
-                                }
+                                }*/
+
                                 break;
                         }
 

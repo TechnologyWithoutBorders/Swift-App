@@ -58,13 +58,12 @@ public class ResponseParser {
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
                     String ward = deviceObject.getString("d_ward");
-                    int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
 
                     int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
                     long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastUpdate);
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
                     result.add(device);
                 }
 
@@ -90,13 +89,12 @@ public class ResponseParser {
             String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
             String model = deviceObject.getString(DeviceFilter.MODEL);
             String ward = deviceObject.getString("d_ward");
-            int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
 
             int hospital = deviceObject.getInt("d_hospital");
             int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
             long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
-            HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastUpdate);
+            HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
             result.add(device);
         }
 
@@ -114,7 +112,7 @@ public class ResponseParser {
                 String location = hospitalObject.getString("location");
                 long hospitalLastUpdate = Defaults.DATE_FORMAT.parse(hospitalObject.getString("last_update")).getTime();
                 JSONArray users = hospitalObject.getJSONArray("users");
-                //JSONArray devices = hospitalObject.getJSONArray("devices");
+                JSONArray devices = hospitalObject.getJSONArray("devices");
 
                 List<User> userList = new ArrayList<>(users.length());
 
@@ -133,7 +131,7 @@ public class ResponseParser {
                     userList.add(user);
                 }
 
-                /*List<HospitalDevice> deviceList = new ArrayList<>(devices.length());
+                List<DeviceInfo> deviceList = new ArrayList<>(devices.length());
 
                 for(int i = 0; i < devices.length(); i++) {
                     JSONObject deviceObject = devices.getJSONObject(i);
@@ -145,17 +143,26 @@ public class ResponseParser {
                     String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                     String model = deviceObject.getString(DeviceFilter.MODEL);
                     String ward = deviceObject.getString("d_ward");
-                    int currentState = deviceObject.getInt(ReportFilter.CURRENT_STATE);
-
                     int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
                     long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
-                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, currentState, hospital, maintenanceInterval, lastUpdate);
-                    deviceList.add(device);
-                }*/
+                    JSONObject reportObject = deviceObject.getJSONObject("last_report");
+                    int reportId = reportObject.getInt(ReportFilter.ID);
+                    int author = reportObject.getInt(ReportFilter.AUTHOR);
+                    int affectedDevice = reportObject.getInt(ReportFilter.DEVICE);
+                    int previousState = reportObject.getInt("r_previous_state");
+                    int currentState = reportObject.getInt("r_current_state");
+                    String description = reportObject.getString(ReportFilter.DESCRIPTION);
+                    long datetime = Defaults.DATE_FORMAT.parse(reportObject.getString("r_datetime")).getTime();
 
-                HospitalInfo result = new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, null);
+                    Report lastReport = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
+
+                    HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
+                    deviceList.add(new DeviceInfo(device, lastReport));
+                }
+
+                HospitalInfo result = new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, deviceList);
 
                 return result;
             case SwiftResponse.CODE_FAILED_VISIBLE:

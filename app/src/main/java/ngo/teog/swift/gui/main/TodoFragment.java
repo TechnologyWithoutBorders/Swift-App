@@ -140,7 +140,7 @@ public class TodoFragment extends BaseFragment {
 
             HospitalDevice device = (HospitalDevice)this.getItem(position);
 
-            if(device != null) {
+            /*if(device != null) {
                 nameView.setText(device.getType());
 
                 //String dateString = DATE_FORMAT.format(device.getLastReportDate());
@@ -151,7 +151,7 @@ public class TodoFragment extends BaseFragment {
                 statusView.setText(device.getWard());
                 imageView.setImageDrawable(triple.getStateicon());
                 imageView.setBackgroundColor(triple.getBackgroundcolor());
-            }
+            }*/
 
             return convertView;
         }

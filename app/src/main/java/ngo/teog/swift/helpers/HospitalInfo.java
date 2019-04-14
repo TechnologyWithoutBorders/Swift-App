@@ -11,9 +11,9 @@ public class HospitalInfo {
     private String location;
     private long lastUpdate;
     private List<User> users;
-    private List<HospitalDevice> devices;
+    private List<DeviceInfo> devices;
 
-    public HospitalInfo(int id, String name, String location, long lastUpdate, List<User> users, List<HospitalDevice> devices) {
+    public HospitalInfo(int id, String name, String location, long lastUpdate, List<User> users, List<DeviceInfo> devices) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -42,7 +42,7 @@ public class HospitalInfo {
         return users;
     }
 
-    public List<HospitalDevice> getDevices() {
+    public List<DeviceInfo> getDevices() {
         return devices;
     }
 }

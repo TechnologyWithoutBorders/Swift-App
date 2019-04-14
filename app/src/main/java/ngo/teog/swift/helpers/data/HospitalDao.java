@@ -23,6 +23,12 @@ public interface HospitalDao {
     @Insert(onConflict = REPLACE)
     void save(User user);
 
+    @Insert(onConflict = REPLACE)
+    void save(HospitalDevice device);
+
+    @Insert(onConflict = REPLACE)
+    void save(Report report);
+
     @Query("SELECT * FROM users")
     List<User> getUsers();
 
