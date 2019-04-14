@@ -78,8 +78,7 @@ public class HospitalActivity extends BaseActivity {
         viewModel.getHospital().observe(this, hospital -> {
             if(hospital != null) {
                 nameView.setText(hospital.getName());
-            } else {
-                nameView.setText("null");
+                locationView.setText(hospital.getLocation());
             }
         });
     }

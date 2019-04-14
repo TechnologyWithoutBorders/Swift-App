@@ -111,6 +111,7 @@ public class ResponseParser {
 
                 int hospitalId = hospitalObject.getInt("id");
                 String name = hospitalObject.getString("name");
+                String location = hospitalObject.getString("location");
                 long hospitalLastUpdate = Defaults.DATE_FORMAT.parse(hospitalObject.getString("last_update")).getTime();
                 JSONArray users = hospitalObject.getJSONArray("users");
                 //JSONArray devices = hospitalObject.getJSONArray("devices");
@@ -154,7 +155,7 @@ public class ResponseParser {
                     deviceList.add(device);
                 }*/
 
-                HospitalInfo result = new HospitalInfo(hospitalId, name, hospitalLastUpdate, userList, null);
+                HospitalInfo result = new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, null);
 
                 return result;
             case SwiftResponse.CODE_FAILED_VISIBLE:
@@ -186,34 +187,6 @@ public class ResponseParser {
 
                     User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
                     result.add(user);
-                }
-
-                return result;
-            case SwiftResponse.CODE_FAILED_VISIBLE:
-                throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
-            case SwiftResponse.CODE_FAILED_HIDDEN:
-            default:
-                throw new Exception(raw.getString(SwiftResponse.DATA_FIELD));
-        }
-    }
-
-    public ArrayList<Hospital> parseHospitalList(JSONObject raw) throws Exception {
-        int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
-        switch(responseCode) {
-            case SwiftResponse.CODE_OK:
-                JSONArray hospitalList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
-
-                ArrayList<Hospital> result = new ArrayList<>();
-
-                for(int i = 0; i < hospitalList.length(); i++) {
-                    JSONObject hospitalObject = hospitalList.getJSONObject(i);
-
-                    int id = hospitalObject.getInt("h_ID");
-                    String name = hospitalObject.getString("h_name");
-                    long lastUpdate = Defaults.DATE_FORMAT.parse(hospitalObject.getString("h_last_update")).getTime();
-
-                    Hospital hospital = new Hospital(id, name, lastUpdate);
-                    result.add(hospital);
                 }
 
                 return result;

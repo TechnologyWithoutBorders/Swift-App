@@ -10,11 +10,13 @@ public class Hospital {
     @PrimaryKey
     private int id;
     private String name;
+    private String location;
     private long lastUpdate;
 
-    public Hospital(int id, String name, long lastUpdate) {
+    public Hospital(int id, String name, String location, long lastUpdate) {
         this.id = id;
         this.name = name;
+        this.location = location;
         this.lastUpdate = lastUpdate;
     }
 
@@ -24,6 +26,10 @@ public class Hospital {
 
     public String getName() {
         return name;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public long getLastUpdate() {

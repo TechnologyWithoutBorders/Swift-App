@@ -157,7 +157,7 @@ public class UserRepository {
 
                             //TODO prüfen, ob es lokal neuere gibt und wenn ja auf den Server pushen
 
-                            Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLastUpdate());
+                            Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLastUpdate());
 
                             hospitalDao.save(hospital);
 
