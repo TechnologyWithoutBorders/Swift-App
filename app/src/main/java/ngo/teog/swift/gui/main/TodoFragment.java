@@ -1,7 +1,9 @@
 package ngo.teog.swift.gui.main;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -18,7 +20,10 @@ import com.android.volley.RequestQueue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
@@ -29,16 +34,31 @@ import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.hospital.HospitalViewModel;
+import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.UpdateWorker;
+import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class TodoFragment extends BaseFragment {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private TodoViewModel viewModel;
 
     private CustomSimpleArrayAdapter adapter;
     private ListView listView;
     private ProgressBar progressBar;
+
+    private List<DeviceInfo> values = new ArrayList<>();
 
     //TODO Die Konstante muss natürlich hier weg
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -51,7 +71,6 @@ public class TodoFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.maintenanceList);
-        ArrayList<SearchObject> values = new ArrayList<>();
 
         progressBar = view.findViewById(R.id.progressBar);
 
@@ -67,7 +86,7 @@ public class TodoFragment extends BaseFragment {
             }
         });
 
-        final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        /*final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
 
         swipeRefreshLayout.setOnRefreshListener(
             new SwipeRefreshLayout.OnRefreshListener() {
@@ -77,19 +96,36 @@ public class TodoFragment extends BaseFragment {
                     refresh();
                 }
             }
-        );
+        );*/
 
-        refresh();
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getActivity().getApplication()))
+                .roomModule(new RoomModule(getActivity().getApplication()))
+                .build()
+                .inject(this);
+
+        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TodoViewModel.class);
+        viewModel.init(id);
+        viewModel.getDeviceInfos().observe(this, deviceInfos -> {
+            if(deviceInfos != null) {
+                this.values = deviceInfos;
+                adapter.clear();
+                adapter.addAll(deviceInfos);
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        refresh();
+        //refresh();
     }
 
-    private void refresh() {
+    /*private void refresh() {
         Constraints updateConstraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
@@ -113,22 +149,17 @@ public class TodoFragment extends BaseFragment {
 
             queue.add(request);
         }
-    }
+    }*/
 
-    private class CustomSimpleArrayAdapter extends ArrayAdapter<SearchObject> {
-        private final Context context;
-
-        private CustomSimpleArrayAdapter(Context context, ArrayList<SearchObject> values) {
+    private class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {
+        private CustomSimpleArrayAdapter(Context context, List<DeviceInfo> values) {
             super(context, -1, values);
-            this.context = context;
         }
-
-
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
+                LayoutInflater inflater = (LayoutInflater) this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.row_todo, parent, false);
             }
@@ -138,20 +169,23 @@ public class TodoFragment extends BaseFragment {
             TextView statusView = convertView.findViewById(R.id.statusView);
             ImageView imageView = convertView.findViewById(R.id.imageView);
 
-            HospitalDevice device = (HospitalDevice)this.getItem(position);
+            DeviceInfo deviceInfo = this.getItem(position);
 
-            /*if(device != null) {
+            if(deviceInfo != null) {
+                HospitalDevice device = deviceInfo.getDevice();
+                Report lastReport = deviceInfo.getReports().get(0);
+
                 nameView.setText(device.getType());
 
                 //String dateString = DATE_FORMAT.format(device.getLastReportDate());
                 //dateView.setText(dateString);
 
-                DeviceState triple = DeviceState.buildState(device.getState(),this.getContext());
+                DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), this.getContext());
 
                 statusView.setText(device.getWard());
                 imageView.setImageDrawable(triple.getStateicon());
                 imageView.setBackgroundColor(triple.getBackgroundcolor());
-            }*/
+            }
 
             return convertView;
         }

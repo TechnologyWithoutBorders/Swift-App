@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
+import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 
 @Singleton
@@ -14,6 +15,7 @@ public interface AppComponent {
 
     void inject(UserProfileActivity target);
     void inject(HospitalActivity target);
+    void inject(TodoFragment target);
 
     HospitalDatabase userDatabase();
 

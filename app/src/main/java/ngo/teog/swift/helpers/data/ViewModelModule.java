@@ -7,6 +7,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 import ngo.teog.swift.gui.hospital.HospitalViewModel;
+import ngo.teog.swift.gui.main.TodoViewModel;
 import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 
 @Module
@@ -25,4 +26,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HospitalViewModel.class)
     public abstract ViewModel hospitalViewModel(HospitalViewModel hospitalViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TodoViewModel.class)
+    public abstract ViewModel todoViewModel(TodoViewModel todoViewModel);
 }
