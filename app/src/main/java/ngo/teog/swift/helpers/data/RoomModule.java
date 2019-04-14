@@ -11,27 +11,27 @@ import dagger.Provides;
 
 @Module
 public class RoomModule {
-    private UserDatabase userDatabase;
+    private HospitalDatabase hospitalDatabase;
 
     public RoomModule(Application mApplication) {
-        userDatabase = Room.databaseBuilder(mApplication, UserDatabase.class, "user-db").build();
+        hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "user-db").build();
     }
 
     @Singleton
     @Provides
-    UserDatabase providesRoomDatabase() {
-        return userDatabase;
+    HospitalDatabase providesRoomDatabase() {
+        return hospitalDatabase;
     }
 
     @Singleton
     @Provides
-    HospitalDao providesHospitalDao(UserDatabase userDatabase) {
-        return userDatabase.getHospitalDao();
+    HospitalDao providesHospitalDao(HospitalDatabase hospitalDatabase) {
+        return hospitalDatabase.getHospitalDao();
     }
 
     @Singleton
     @Provides
-    UserRepository userRepository(HospitalDao hospitalDao, Context context) {
-        return new UserRepository(hospitalDao, context);
+    HospitalRepository userRepository(HospitalDao hospitalDao, Context context) {
+        return new HospitalRepository(hospitalDao, context);
     }
 }

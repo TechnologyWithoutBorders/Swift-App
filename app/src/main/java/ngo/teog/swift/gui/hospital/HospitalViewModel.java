@@ -1,22 +1,19 @@
 package ngo.teog.swift.gui.hospital;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
-import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.data.Hospital;
-import ngo.teog.swift.helpers.data.User;
-import ngo.teog.swift.helpers.data.UserRepository;
+import ngo.teog.swift.helpers.data.HospitalRepository;
 
 public class HospitalViewModel extends ViewModel {
     private LiveData<Hospital> hospital;
-    private UserRepository userRepo;
+    private HospitalRepository userRepo;
 
     @Inject
-    public HospitalViewModel(UserRepository userRepo) {
+    public HospitalViewModel(HospitalRepository userRepo) {
         this.userRepo = userRepo;
     }
 

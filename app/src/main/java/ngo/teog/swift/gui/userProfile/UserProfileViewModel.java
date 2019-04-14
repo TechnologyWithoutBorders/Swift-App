@@ -6,16 +6,16 @@ import android.arch.lifecycle.ViewModel;
 import javax.inject.Inject;
 
 import ngo.teog.swift.helpers.data.Hospital;
-import ngo.teog.swift.helpers.data.UserRepository;
+import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 
 public class UserProfileViewModel extends ViewModel {
     private LiveData<User> user;
     private LiveData<Hospital> hospital;
-    private UserRepository userRepo;
+    private HospitalRepository userRepo;
 
     @Inject
-    public UserProfileViewModel(UserRepository userRepo) {
+    public UserProfileViewModel(HospitalRepository userRepo) {
         this.userRepo = userRepo;
     }
 

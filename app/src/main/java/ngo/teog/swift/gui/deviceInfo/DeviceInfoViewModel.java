@@ -6,15 +6,15 @@ import android.arch.lifecycle.ViewModel;
 import javax.inject.Inject;
 
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.data.UserRepository;
+import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 
 public class DeviceInfoViewModel extends ViewModel {
     private LiveData<HospitalDevice> device;
-    private UserRepository userRepo;
+    private HospitalRepository userRepo;
 
     @Inject
-    public DeviceInfoViewModel(UserRepository userRepo) {
+    public DeviceInfoViewModel(HospitalRepository userRepo) {
         this.userRepo = userRepo;
     }
 

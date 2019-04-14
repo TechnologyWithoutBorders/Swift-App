@@ -50,14 +50,14 @@ import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 @Singleton
-public class UserRepository {
+public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
     private final Context context;
     private ExecutorService executor;
 
     @Inject
-    public UserRepository(HospitalDao hospitalDao, Context context) {
+    public HospitalRepository(HospitalDao hospitalDao, Context context) {
         this.hospitalDao = hospitalDao;
         this.context = context;
         //TODO use previously defined executor
