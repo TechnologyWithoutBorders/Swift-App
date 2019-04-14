@@ -78,6 +78,12 @@ public class HospitalRepository {
         return hospitalDao.loadUserHospital(userId);
     }
 
+    public LiveData<List<User>> getUserColleagues(int userId) {
+        refreshHospital(userId);
+
+        return hospitalDao.loadUserColleagues(userId);
+    }
+
     public void updateUser(User user) {//TODO vielleicht sogar mit refreshUsers() in eine gemeinsame syncWithServer()-Methode zusammenführen
         ExecutorService executor = Executors.newCachedThreadPool();
 
