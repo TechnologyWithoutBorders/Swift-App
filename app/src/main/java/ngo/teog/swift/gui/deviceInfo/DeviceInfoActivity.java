@@ -21,15 +21,22 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
+import ngo.teog.swift.gui.ReportCreationActivity;
 import ngo.teog.swift.gui.ReportInfoActivity;
+import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -50,9 +57,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private TextView intervalView;
     private ProgressBar intervalProgressbar;
 
-    @Inject
-    ViewModelFactory viewModelFactory;
-    private DeviceInfoViewModel viewModel;
+    private  DeviceInfo deviceInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +72,19 @@ public class DeviceInfoActivity extends BaseActivity {
         intervalProgressbar = findViewById(R.id.intervalProgressbar);
 
         Intent intent = this.getIntent();
-        int deviceId = intent.getIntExtra("device", -1);
+        deviceInfo = (DeviceInfo)intent.getSerializableExtra("device");
 
-        /*statusSpinner = findViewById(R.id.statusSpinner);
+        statusSpinner = findViewById(R.id.statusSpinner);
         statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
-        statusSpinner.setSelection(device.getState());
+        statusSpinner.setSelection(deviceInfo.getReports().get(0).getCurrentState());
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (triggered) {
                     Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                    intent.putExtra("OLD_STATUS", device.getState());
+                    intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getCurrentState());
                     intent.putExtra("NEW_STATUS", i);
-                    intent.putExtra("DEVICE", device.getId());
+                    intent.putExtra("DEVICE", deviceInfo.getDevice().getId());
                     startActivity(intent);
                 } else {
                     triggered = true;
@@ -90,11 +95,11 @@ public class DeviceInfoActivity extends BaseActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
+        });
 
         reportListView = findViewById(R.id.reportList);
 
-        ArrayList<Report> values = new ArrayList<>();
+        /*ArrayList<Report> values = new ArrayList<>();
 
         adapter = new ReportArrayAdapter(this, values);
         reportListView.setAdapter(adapter);
@@ -106,11 +111,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 intent.putExtra("REPORT", (Report) adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
-        });
+        });*/
 
         globalImageView = findViewById(R.id.imageView);
 
-        //TODO Bild nur auf Knopfdruck herunterladen, außerdem per Hash überprüfen, ob es ein neueres gibt
+        //TODO bei Bild per Hash überprüfen, ob es ein neueres gibt
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -129,57 +134,55 @@ public class DeviceInfoActivity extends BaseActivity {
 
         intervalView = findViewById(R.id.intervalView);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
-        viewModel.init(deviceId);
-        viewModel.getDevice().observe(this, device -> {
-            if(device != null) {
-                assetNumberView.setText(device.getAssetNumber());
-                typeView.setText(device.getType());
-                modelView.setText(device.getModel());
-                manufacturerView.setText(device.getManufacturer());
-                serialNumberView.setText(device.getSerialNumber());
-                wardView.setText(device.getWard());
+        if(deviceInfo != null) {
+            HospitalDevice device = deviceInfo.getDevice();
 
-                int interval = device.getMaintenanceInterval();
+            assetNumberView.setText(device.getAssetNumber());
+            typeView.setText(device.getType());
+            modelView.setText(device.getModel());
+            manufacturerView.setText(device.getManufacturer());
+            serialNumberView.setText(device.getSerialNumber());
+            wardView.setText(device.getWard());
 
-                if(interval % 4 == 0) {
-                    intervalView.setText(Integer.toString(interval/4) + " Months");
-                } else {
-                    intervalView.setText(Integer.toString(interval) + " Weeks");
-                }
+            int interval = device.getMaintenanceInterval();
 
-                File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
-
-                if(!image.exists()) {
-                    globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
-
-                    globalImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            downloadImage();
-                        }
-                    });
-                } else {
-                    Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
-                    globalImageView.setImageBitmap(bitmap);
-                    globalImageView.setBackgroundColor(Color.BLACK);
-
-                    globalImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
-
-                            if(image.exists()) {
-                                Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                                intent.putExtra("IMAGE", image);
-
-                                startActivity(intent);
-                            }
-                        }
-                    });
-                }
+            if(interval % 4 == 0) {
+                intervalView.setText(Integer.toString(interval/4) + " Months");
+            } else {
+                intervalView.setText(Integer.toString(interval) + " Weeks");
             }
-        });
+
+            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
+
+            if(!image.exists()) {
+                globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+
+                globalImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        downloadImage();
+                    }
+                });
+            } else {
+                Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+                globalImageView.setImageBitmap(bitmap);
+                globalImageView.setBackgroundColor(Color.BLACK);
+
+                globalImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
+
+                        if(image.exists()) {
+                            Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
+                            intent.putExtra("IMAGE", image);
+
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
+        }
 
         /*if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
@@ -231,16 +234,16 @@ public class DeviceInfoActivity extends BaseActivity {
     }
 
     private void downloadImage() {
-        /*if(this.checkForInternetConnection()) {
+        if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, device.getId());
+            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
 
             progressBar.setVisibility(View.VISIBLE);
             globalImageView.setVisibility(View.GONE);
 
             queue.add(request);
-        }*/
+        }
     }
 
     @Override
@@ -260,12 +263,11 @@ public class DeviceInfoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*// Handle item selection
         switch(item.getItemId()) {
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + Integer.toString(device.getId()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + Integer.toString(deviceInfo.getDevice().getId()));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share device link"));
                 return true;
@@ -274,9 +276,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }*/
-
-        return super.onOptionsItemSelected(item);
+        }
     }
 
     private class ReportArrayAdapter extends ArrayAdapter<Report> {

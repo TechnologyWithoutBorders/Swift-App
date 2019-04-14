@@ -81,7 +81,7 @@ public class TodoFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
-                intent.putExtra("device", (HospitalDevice)adapterView.getItemAtPosition(i));
+                intent.putExtra("device", (DeviceInfo)adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
         });
