@@ -16,8 +16,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  * @author Julian Deyerler
  */
 
-@Entity(foreignKeys = {@ForeignKey(entity = User.class, parentColumns = "id", childColumns = "author", onDelete = CASCADE),
-@ForeignKey(entity = HospitalDevice.class, parentColumns = "id", childColumns = "device", onDelete = CASCADE)})
+@Entity(tableName = "reports")
 public class Report implements Serializable {
 
     @PrimaryKey

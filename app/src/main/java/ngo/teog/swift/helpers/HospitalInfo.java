@@ -13,7 +13,9 @@ public class HospitalInfo {
     private List<HospitalDevice> devices;
 
     public HospitalInfo(int id, String name, long lastUpdate, List<User> users, List<HospitalDevice> devices) {
+        this.id = id;
         this.name = name;
+        this.lastUpdate = lastUpdate;
         this.users = users;
         this.devices = devices;
     }

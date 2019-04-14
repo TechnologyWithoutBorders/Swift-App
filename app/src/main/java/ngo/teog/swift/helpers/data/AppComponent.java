@@ -18,13 +18,9 @@ public interface AppComponent {
     void inject(UserProfileActivity target);
     void inject(HospitalActivity target);
 
-    UserDao userDao();
-
     UserDatabase userDatabase();
 
     UserRepository userRepository();
-
-    HospitalRepository hospitalRepository();
 
     Application application();
 }

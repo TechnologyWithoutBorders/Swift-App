@@ -52,49 +52,36 @@ import ngo.teog.swift.helpers.filters.UserFilter;
 @Singleton
 public class UserRepository {
 
-    private final UserDao userDao;
-    private final HospitalDeviceDao deviceDao;
     private final HospitalDao hospitalDao;
     private final Context context;
     private ExecutorService executor;
 
     @Inject
-    public UserRepository(UserDao userDao, HospitalDao hospitalDao, HospitalDeviceDao deviceDao, Context context) {
-        this.userDao = userDao;
-        this.deviceDao = deviceDao;
+    public UserRepository(HospitalDao hospitalDao, Context context) {
         this.hospitalDao = hospitalDao;
         this.context = context;
         //TODO use previously defined executor
         this.executor = executor;
     }
 
-    public LiveData<User> getUser(int id) {
+    public LiveData<User> getUser(int userId) {
         //TODO aktuell beschränken wir uns auf unser eigenes Krankenhaus
-        refreshHospital();
+        refreshHospital(userId);
 
-        return userDao.load(id);
+        return hospitalDao.loadUser(userId);
     }
 
-    public LiveData<HospitalInfo> getHospitalInfo(int userID) {
-        /*refreshHospital();
+    public LiveData<Hospital> getUserHospital(int userId) {
+        refreshHospital(userId);
 
-        MutableLiveData<HospitalInfo> result = new MutableLiveData<HospitalInfo>();
-        LiveData<User> user = userDao.load(userID);
-        LiveData<Hospital> hospital = hospitalDao.load(user.getValue().getHospital());//TODO hier wirds null -> macht ja Sinn
-        List<User> users = userDao.getUsers();
-
-        HospitalInfo info = new HospitalInfo(hospital.getValue().getId(), hospital.getValue().getName(), hospital.getValue().getLastUpdate(), users, null);
-
-        result.setValue(info);*/
-
-        return null;
+        return hospitalDao.loadUserHospital(userId);
     }
 
     public void updateUser(User user) {//TODO vielleicht sogar mit refreshUsers() in eine gemeinsame syncWithServer()-Methode zusammenführen
         ExecutorService executor = Executors.newCachedThreadPool();
 
         executor.execute(() -> {
-            userDao.save(user);
+            hospitalDao.save(user);
 
             RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
@@ -104,8 +91,7 @@ public class UserRepository {
         });
     }
 
-    private void refreshHospital() {
-        Log.d("FETCHED", "refreshing hospital");
+    private void refreshHospital(int userId) {
         //runs in a background thread.
         executor = Executors.newCachedThreadPool();
 
@@ -132,16 +118,9 @@ public class UserRepository {
 
             WorkManager.getInstance().enqueue(updateWork);*/
 
-            Log.d("FETCHED", "reading preferences");
-
-            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int userID = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-            Log.d("FETCHED", "creating request");
-
             RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-            HospitalRequest hospitalRequest = createHospitalRequest(context, userID, executor);
+            HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
             queue.add(hospitalRequest);
         });
@@ -172,8 +151,6 @@ public class UserRepository {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d("FETCHED", "received response");
-                    Log.d("FETCHED", response.toString());
                     executor.execute(() -> {
                         try {
                             HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
@@ -185,7 +162,7 @@ public class UserRepository {
                             hospitalDao.save(hospital);
 
                             for(User user : hospitalInfo.getUsers()) {
-                                userDao.save(user);
+                                hospitalDao.save(user);
                             }
 
                             /*for(HospitalDevice device : hospitalInfo.getDevices()) {

@@ -25,31 +25,13 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    UserDao providesUserDao(UserDatabase userDatabase) {
-        return userDatabase.getUserDao();
-    }
-
-    @Singleton
-    @Provides
     HospitalDao providesHospitalDao(UserDatabase userDatabase) {
         return userDatabase.getHospitalDao();
     }
 
     @Singleton
     @Provides
-    HospitalDeviceDao providesHospitalDeviceDao(UserDatabase userDatabase) {
-        return userDatabase.getHospitalDeviceDao();
-    }
-
-    @Singleton
-    @Provides
-    ReportDao providesReportDao(UserDatabase userDatabase) {
-        return userDatabase.getReportDao();
-    }
-
-    @Singleton
-    @Provides
-    UserRepository userRepository(UserDao userDao, HospitalDao hospitalDao, HospitalDeviceDao deviceDao, Context context) {
-        return new UserRepository(userDao, hospitalDao, deviceDao, context);
+    UserRepository userRepository(HospitalDao hospitalDao, Context context) {
+        return new UserRepository(hospitalDao, context);
     }
 }
