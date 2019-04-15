@@ -1,6 +1,7 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.userInfo;
 
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -14,10 +15,23 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class UserInfoActivity extends BaseActivity {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private UserInfoViewModel viewModel;
 
     private User user;
 
@@ -27,7 +41,7 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
 
         Intent intent = this.getIntent();
-        user = (User) intent.getSerializableExtra("user");
+        user = (User)intent.getSerializableExtra("user");
 
         final ImageView globalImageView = findViewById(R.id.imageView);
         globalImageView.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +71,20 @@ public class UserInfoActivity extends BaseActivity {
 
         TextView positionView = findViewById(R.id.positionView);
         positionView.setText(user.getPosition());
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserInfoViewModel.class);
+        viewModel.init(user.getHospital());
+        viewModel.getHospital().observe(this, hospital -> {
+            if(hospital != null) {
+                //TODO
+            }
+        });
     }
 
     @Override

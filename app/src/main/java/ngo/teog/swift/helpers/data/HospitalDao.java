@@ -20,6 +20,9 @@ public interface HospitalDao {
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
     LiveData<Hospital> loadUserHospital(int userId);
 
+    @Query("SELECT * FROM hospitals WHERE hospitals.id = :hospitalId")
+    LiveData<Hospital> loadHospital(int hospitalId);
+
     @Query("SELECT COUNT(*) FROM hospitals WHERE id = :id AND lastUpdate >= :currentMillis-(:timeout*1000)")
     int hasHospital(int id, long currentMillis, int timeout);
 

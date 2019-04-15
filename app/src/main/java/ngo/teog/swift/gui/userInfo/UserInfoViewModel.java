@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui.deviceInfo;
+package ngo.teog.swift.gui.userInfo;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
@@ -10,21 +10,21 @@ import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 
-public class DeviceInfoViewModel extends ViewModel {
+public class UserInfoViewModel extends ViewModel {
     private LiveData<Hospital> hospital;
     private HospitalRepository hospitalRepo;
 
     @Inject
-    public DeviceInfoViewModel(HospitalRepository hospitalRepo) {
+    public UserInfoViewModel(HospitalRepository hospitalRepo) {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int hospitalId) {
+    public void init(int id) {
         if(this.hospital != null) {
             return;
         }
 
-        hospital = hospitalRepo.getHospital(hospitalId);
+        hospital = hospitalRepo.getUserHospital(id);
     }
 
     public LiveData<Hospital> getHospital() {

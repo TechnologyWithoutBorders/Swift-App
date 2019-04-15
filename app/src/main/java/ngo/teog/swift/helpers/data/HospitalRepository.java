@@ -65,25 +65,31 @@ public class HospitalRepository {
 
     public LiveData<User> getUser(int userId) {
         //TODO aktuell beschränken wir uns auf unser eigenes Krankenhaus
-        refreshHospital(userId);
+        refreshUserHospital(userId);
 
         return hospitalDao.loadUser(userId);
     }
 
+    public LiveData<Hospital> getHospital(int hospitalId) {
+        //refreshHospital(hospitalId);
+
+        return hospitalDao.loadUserHospital(hospitalId);
+    }
+
     public LiveData<Hospital> getUserHospital(int userId) {
-        refreshHospital(userId);
+        refreshUserHospital(userId);
 
         return hospitalDao.loadUserHospital(userId);
     }
 
     public LiveData<List<User>> getUserColleagues(int userId) {
-        refreshHospital(userId);
+        refreshUserHospital(userId);
 
         return hospitalDao.loadUserColleagues(userId);
     }
 
     public LiveData<List<DeviceInfo>> getHospitalDevices(int userId) {
-        refreshHospital(userId);
+        refreshUserHospital(userId);
 
         return hospitalDao.loadHospitalDevices(userId);
     }
@@ -100,7 +106,7 @@ public class HospitalRepository {
         });
     }
 
-    private void refreshHospital(int userId) {
+    private void refreshUserHospital(int userId) {
         executor.execute(() -> {
             //check if user data has been fetched recently
             //TODO nur wenn eine Internetverbindung besteht und Daten veraltet sind, fetchen

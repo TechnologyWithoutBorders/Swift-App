@@ -109,7 +109,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".gui.UserInfoActivity"
+        <activity android:name=".gui.userInfo.UserInfoActivity"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
         </activity>
         <activity android:name=".gui.ReportCreationActivity"

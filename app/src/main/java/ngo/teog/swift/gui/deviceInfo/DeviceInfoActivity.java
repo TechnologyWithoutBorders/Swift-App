@@ -35,10 +35,14 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.ReportCreationActivity;
 import ngo.teog.swift.gui.ReportInfoActivity;
+import ngo.teog.swift.gui.userInfo.UserInfoViewModel;
 import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class DeviceInfoActivity extends BaseActivity {
@@ -58,6 +62,11 @@ public class DeviceInfoActivity extends BaseActivity {
     private ProgressBar intervalProgressbar;
 
     private  DeviceInfo deviceInfo;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private DeviceInfoViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +137,6 @@ public class DeviceInfoActivity extends BaseActivity {
         TextView serialNumberView = findViewById(R.id.serialNumberView);
 
         TextView hospitalView = findViewById(R.id.hospitalView);
-        //hospitalView.setText(device.getHospital());
 
         TextView wardView = findViewById(R.id.wardView);
 
@@ -183,6 +191,20 @@ public class DeviceInfoActivity extends BaseActivity {
                 });
             }
         }
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
+        viewModel.init(deviceInfo.getDevice().getHospital());
+        viewModel.getHospital().observe(this, hospital -> {
+            if(hospital != null) {
+                hospitalView.setText(hospital.getName());
+            }
+        });
 
         /*if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();

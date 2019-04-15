@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,12 +26,10 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.UserInfoActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.DeviceState;
-import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -72,7 +69,7 @@ public class HospitalActivity extends BaseActivity {
                         break;
                     case 1:
                         Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
-                        intent2.putExtra("device", (HospitalDevice)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition));
+                        intent2.putExtra("device", (DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition));
                         startActivity(intent2);
                         break;
                 }
