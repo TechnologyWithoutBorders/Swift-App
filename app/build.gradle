@@ -4,10 +4,10 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "ngo.teog.swift"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 32
-        versionName "1.0"
+        versionName "1.0 Beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -25,13 +25,14 @@ android {
 
 dependencies {
     def room_version = "1.1.1"
+
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     implementation 'com.google.dagger:dagger:2.20'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.android.volley:volley:1.1.1'
-    implementation 'android.arch.work:work-runtime:1.0.0'
+    implementation 'android.arch.work:work-runtime:1.0.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
