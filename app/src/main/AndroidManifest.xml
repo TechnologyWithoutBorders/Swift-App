@@ -57,46 +57,26 @@
             android:name=".gui.userProfile.UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
             android:name=".gui.NewDeviceActivity"
             android:label="@string/title_activity_create_device"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
             android:name=".gui.deviceInfo.DeviceInfoActivity"
             android:label="@string/title_activity_device_info"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
             android:name=".gui.AboutActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
             android:name=".gui.ImageActivity"
             android:label="Image"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
             android:name=".gui.login.LoginActivity"
@@ -110,10 +90,6 @@
         </activity>
         <activity android:name=".gui.ReportInfoActivity"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
 
         <receiver android:name=".helpers.BootReceiver">
@@ -135,44 +111,24 @@
 
         <activity android:name=".gui.UserInfoActivity"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity android:name=".gui.ReportCreationActivity"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity"
             android:windowSoftInputMode="adjustResize">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity
             android:name=".gui.hospital.HospitalActivity"
             android:label="My Hospital"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity android:name=".gui.NewDeviceActivity2"
             android:label="Enter general data"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity"
             android:windowSoftInputMode="adjustResize">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity android:name=".gui.NewDeviceActivity3"
             android:label="Take picture"
             android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-            <!-- The meta-data element is needed for versions lower than 4.1 -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ngo.teog.swift.gui.main.MainActivity" />
         </activity>
         <activity android:name=".gui.main.CalendarActivity" />
     </application>
