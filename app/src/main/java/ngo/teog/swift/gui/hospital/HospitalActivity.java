@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,6 +40,8 @@ import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
+
+import static ngo.teog.swift.helpers.Defaults.DATE_FORMAT;
 
 public class HospitalActivity extends BaseActivity {
 
@@ -99,11 +103,23 @@ public class HospitalActivity extends BaseActivity {
         });
         viewModel.getUsers().observe(this, users -> {
            if(users != null) {
+               Collections.sort(users, new Comparator<User>() {
+                   @Override
+                   public int compare(User first, User second) {
+                       return first.getName().compareTo(second.getName());
+                   }
+               });
                adapter.setUsers(users);
            }
         });
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
+                Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
+                    @Override
+                    public int compare(DeviceInfo first, DeviceInfo second) {
+                        return first.getDevice().getType().compareTo(second.getDevice().getType());
+                    }
+                });
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
@@ -266,8 +282,8 @@ public class HospitalActivity extends BaseActivity {
 
                         nameView.setText(device.getType());
 
-                        //String dateString = DATE_FORMAT.format(device.getLastReportDate());
-                        //dateView.setText(dateString);
+                        String dateString = DATE_FORMAT.format(lastReport.getCreated());
+                        dateView.setText(dateString);
 
                         DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
 

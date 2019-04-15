@@ -113,7 +113,7 @@ public class TodoFragment extends BaseFragment {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TodoViewModel.class);
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
-            if(deviceInfos != null) {
+            if(deviceInfos != null && deviceInfos.size() > 0) {
                 Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
                     @Override
                     public int compare(DeviceInfo first, DeviceInfo second) {
@@ -194,8 +194,8 @@ public class TodoFragment extends BaseFragment {
 
                 nameView.setText(device.getType());
 
-                //String dateString = DATE_FORMAT.format(device.getLastReportDate());
-                //dateView.setText(dateString);
+                String dateString = DATE_FORMAT.format(lastReport.getCreated());
+                dateView.setText(dateString);
 
                 DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), this.getContext());
 

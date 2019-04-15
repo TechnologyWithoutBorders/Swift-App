@@ -79,7 +79,7 @@ public class UserProfileActivity extends BaseActivity {
         viewModel.init(id);
         viewModel.getUser().observe(this, user -> {
             if(user != null) {
-                nameView.setText(user.getFullName());
+                nameView.setText(user.getName());
                 telephoneView.setText(user.getPhone());
                 mailView.setText(user.getMail());
                 positionView.setText(user.getPosition());

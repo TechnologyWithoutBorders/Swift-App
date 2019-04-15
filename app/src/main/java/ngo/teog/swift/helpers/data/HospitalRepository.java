@@ -55,14 +55,12 @@ public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
     private final Context context;
-    private ExecutorService executor;
+    private ExecutorService executor = Executors.newCachedThreadPool();
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
         this.hospitalDao = hospitalDao;
         this.context = context;
-        //TODO use previously defined executor
-        this.executor = executor;
     }
 
     public LiveData<User> getUser(int userId) {
@@ -91,8 +89,6 @@ public class HospitalRepository {
     }
 
     public void updateUser(User user) {//TODO vielleicht sogar mit refreshUsers() in eine gemeinsame syncWithServer()-Methode zusammenführen
-        ExecutorService executor = Executors.newCachedThreadPool();
-
         executor.execute(() -> {
             hospitalDao.save(user);
 
@@ -105,9 +101,6 @@ public class HospitalRepository {
     }
 
     private void refreshHospital(int userId) {
-        //runs in a background thread.
-        executor = Executors.newCachedThreadPool();
-
         executor.execute(() -> {
             //check if user data has been fetched recently
             //TODO nur wenn eine Internetverbindung besteht und Daten veraltet sind, fetchen
@@ -187,8 +180,6 @@ public class HospitalRepository {
                             Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
                         }
                     });
-
-                    executor.shutdown();
                 }
             }, new Response.ErrorListener() {
                 @Override

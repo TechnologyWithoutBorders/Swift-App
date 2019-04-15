@@ -47,7 +47,7 @@ public class UserInfoActivity extends BaseActivity {
         progressBar.setVisibility(View.INVISIBLE);
 
         TextView nameView = findViewById(R.id.nameView);
-        nameView.setText(user.getFullName());
+        nameView.setText(user.getName());
 
         TextView phoneView = findViewById(R.id.phoneView);
         phoneView.setText(user.getPhone());

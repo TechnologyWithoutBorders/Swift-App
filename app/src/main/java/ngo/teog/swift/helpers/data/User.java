@@ -25,18 +25,18 @@ public class User extends SearchObject {
     private int id;
     private String phone;
     private String mail;
-    private String fullName;
+    private String name;
 
     private int hospital;
 
     private String position;
     private long lastUpdate;
 
-    public User(int id, String phone, String mail, String fullName, int hospital, String position, long lastUpdate) {
+    public User(int id, String phone, String mail, String name, int hospital, String position, long lastUpdate) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
-        this.fullName = fullName;
+        this.name = name;
         this.hospital = hospital;
         this.position = position;
         this.lastUpdate = lastUpdate;
@@ -52,10 +52,6 @@ public class User extends SearchObject {
 
     public String getMail() {
         return mail;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     public int getHospital() {
@@ -76,7 +72,7 @@ public class User extends SearchObject {
 
     @Override
     public String getName() {
-        return fullName;
+        return name;
     }
 
     @Override
