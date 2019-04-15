@@ -20,6 +20,9 @@ import com.android.volley.RequestQueue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -111,9 +114,23 @@ public class TodoFragment extends BaseFragment {
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
+                Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
+                    @Override
+                    public int compare(DeviceInfo first, DeviceInfo second) {
+                        int firstState = first.getReports().get(0).getCurrentState();
+                        int secondState = second.getReports().get(0).getCurrentState();
+
+                        return (firstState-secondState)*-1;
+                    }
+                });
                 this.values = deviceInfos;
                 adapter.clear();
-                adapter.addAll(deviceInfos);
+
+                for(DeviceInfo deviceInfo : deviceInfos) {
+                    if(deviceInfo.getReports().get(0).getCurrentState() == 1 || deviceInfo.getReports().get(0).getCurrentState() == 2) {
+                        adapter.add(deviceInfo);
+                    }
+                }
             }
         });
     }
