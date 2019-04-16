@@ -5,6 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -114,33 +116,16 @@ public class HospitalRepository {
 
     private void refreshUserHospital(int userId) {
         executor.execute(() -> {
-            //check if user data has been fetched recently
-            //TODO nur wenn eine Internetverbindung besteht und Daten veraltet sind, fetchen
+            //TODO check if user data has been fetched recently
 
-            //refresh the data.
+            //refresh
+            if(this.checkForInternetConnection()) {
+                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-            /*Constraints updateConstraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
+                HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
-            Data inputData = new Data.Builder()
-                    .putInt("id", id)
-                    .build();
-
-            //TODO hier funktioniert die Dependency Injection nicht, der Workaround ist aber ziemlich umständlich
-            OneTimeWorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
-                    .addTag("update_profile")
-                    .setConstraints(updateConstraints)
-                    .setInputData(inputData)
-                    .build();
-
-            WorkManager.getInstance().enqueue(updateWork);*/
-
-            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
-
-            HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
-
-            queue.add(hospitalRequest);
+                queue.add(hospitalRequest);
+            }
         });
     }
 
@@ -217,6 +202,23 @@ public class HospitalRepository {
         return parameterMap;
     }
 
+    /*Constraints updateConstraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            Data inputData = new Data.Builder()
+                    .putInt("id", id)
+                    .build();
+
+            //TODO hier funktioniert die Dependency Injection nicht, der Workaround ist aber ziemlich umständlich
+            OneTimeWorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
+                    .addTag("update_profile")
+                    .setConstraints(updateConstraints)
+                    .setInputData(inputData)
+                    .build();
+
+            WorkManager.getInstance().enqueue(updateWork);*/
+
     /*private class UpdateWorker extends Worker {
 
         private Context context;
@@ -239,4 +241,20 @@ public class HospitalRepository {
             return Result.success();
         }
     }*/
+
+    public boolean checkForInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if(cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }
