@@ -117,18 +117,24 @@ public class TodoFragment extends BaseFragment {
                 Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
                     @Override
                     public int compare(DeviceInfo first, DeviceInfo second) {
-                        int firstState = first.getReports().get(0).getCurrentState();
-                        int secondState = second.getReports().get(0).getCurrentState();
+                        if(first.getReports().size() > 0 && second.getReports().size() > 0) {
+                            int firstState = first.getReports().get(0).getCurrentState();
+                            int secondState = second.getReports().get(0).getCurrentState();
 
-                        return (firstState-secondState)*-1;
+                            return (firstState - secondState) * -1;
+                        } else {
+                            return 0;
+                        }
                     }
                 });
                 this.values = deviceInfos;
                 adapter.clear();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    if(deviceInfo.getReports().get(0).getCurrentState() == 1 || deviceInfo.getReports().get(0).getCurrentState() == 2) {
-                        adapter.add(deviceInfo);
+                    if(deviceInfo.getReports().size() > 0) {
+                        if (deviceInfo.getReports().get(0).getCurrentState() == 1 || deviceInfo.getReports().get(0).getCurrentState() == 2) {
+                            adapter.add(deviceInfo);
+                        }
                     }
                 }
             }
