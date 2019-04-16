@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
@@ -265,6 +266,8 @@ public class DeviceInfoActivity extends BaseActivity {
             globalImageView.setVisibility(View.GONE);
 
             queue.add(request);
+        } else {
+            Toast.makeText(this, "no internet connection", Toast.LENGTH_SHORT).show();
         }
     }
 
