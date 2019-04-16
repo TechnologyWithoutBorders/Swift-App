@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
+import ngo.teog.swift.gui.main.BarcodeFragment;
 import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoViewModel;
@@ -21,6 +22,7 @@ public interface AppComponent {
     void inject(TodoFragment target);
     void inject(UserInfoActivity target);
     void inject(DeviceInfoActivity target);
+    void inject(BarcodeFragment target);
 
     HospitalDatabase userDatabase();
 

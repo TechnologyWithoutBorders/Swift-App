@@ -1,6 +1,10 @@
 package ngo.teog.swift.gui.main;
 
 import android.Manifest;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
@@ -20,14 +24,30 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseFragment;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class BarcodeFragment extends BaseFragment {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private BarcodeViewModel viewModel;
 
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
@@ -49,7 +69,7 @@ public class BarcodeFragment extends BaseFragment {
             try {
                 int deviceNumber = Integer.parseInt(result.getText());
 
-                BarcodeFragment.this.invokeFetchRequest(deviceNumber);
+                invokeFetch(deviceNumber);
             } catch(NumberFormatException e) {
                 //ignore
             }
@@ -85,6 +105,14 @@ public class BarcodeFragment extends BaseFragment {
         if(ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
         }
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getActivity().getApplication()))
+                .roomModule(new RoomModule(getActivity().getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BarcodeViewModel.class);
     }
 
     @Override
@@ -100,16 +128,19 @@ public class BarcodeFragment extends BaseFragment {
         barcodeScannerView.pause();
     }
 
-    public void invokeFetchRequest(int id) {
-        RequestQueue queue = VolleyManager.getInstance(getActivity()).getRequestQueue();
-
-        RequestFactory.DefaultRequest request = new RequestFactory().createDeviceOpenRequest(getContext(), progressBar, searchButton, id);
-
-        searchField.setText(Integer.toString(id));
+    public void invokeFetch(int deviceId) {
+        searchField.setText(Integer.toString(deviceId));
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        queue.add(request);
+        viewModel.init(deviceId);
+        viewModel.getDeviceInfo().observe(BarcodeFragment.this, deviceInfo -> {
+            if(deviceInfo != null) {
+                Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
+                intent.putExtra("device", deviceInfo);
+                BarcodeFragment.this.startActivity(intent);
+            }
+        });
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -122,7 +153,7 @@ public class BarcodeFragment extends BaseFragment {
         try {
             int deviceNumber = Integer.parseInt(searchString);
 
-            this.invokeFetchRequest(deviceNumber);
+            this.invokeFetch(deviceNumber);
         } catch(NumberFormatException e) {
             Toast.makeText(this.getContext().getApplicationContext(), "invalid device number", Toast.LENGTH_SHORT).show();
         }

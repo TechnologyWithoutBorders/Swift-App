@@ -41,6 +41,9 @@ public interface HospitalDao {
     @Query("SELECT * FROM users WHERE id = :id")
     LiveData<User> loadUser(int id);
 
+    @Query("SELECT * FROM devices WHERE id = :deviceId")
+    LiveData<DeviceInfo> loadDevice(int deviceId);
+
     @Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastUpdate >= :currentMillis-(:timeout*1000)")
     int hasUser(int id, long currentMillis, int timeout);
 
