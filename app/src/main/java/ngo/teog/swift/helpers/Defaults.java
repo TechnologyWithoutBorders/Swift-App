@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 public final class Defaults {
 
     //Preferences
-    public static final String PREF_FILE_KEY = "ngo.teog.hstest.PREFERENCE_FILE_KEY";
+    public static final String PREF_FILE_KEY = "ngo.teog.swift.PREFERENCE_FILE_KEY";
 
     public static final String ID_PREFERENCE = "ID_PREFERENCE";
     public static final String PW_PREFERENCE = "PW_PREFERENCE";
