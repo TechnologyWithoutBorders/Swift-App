@@ -7,8 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +17,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".gui.StatsActivity"
+            android:label="Statistics"
+            android:parentActivityName=".gui.login.LoginActivity" />
         <activity
             android:name=".gui.main.MainActivity"
             android:label="@string/app_name">
@@ -56,28 +61,23 @@
         <activity
             android:name=".gui.userProfile.UserProfileActivity"
             android:label="@string/title_activity_user_profile"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
             android:name=".gui.NewDeviceActivity"
             android:label="@string/title_activity_create_device"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
             android:name=".gui.deviceInfo.DeviceInfoActivity"
             android:label="@string/title_activity_device_info"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
             android:name=".gui.AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
             android:name=".gui.ImageActivity"
             android:label="Image"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity
             android:name=".gui.login.LoginActivity"
             android:label="@string/title_activity_login"
@@ -88,9 +88,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gui.ReportInfoActivity"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+        <activity
+            android:name=".gui.ReportInfoActivity"
+            android:parentActivityName=".gui.main.MainActivity" />
 
         <receiver android:name=".helpers.BootReceiver">
             <intent-filter>
@@ -109,27 +109,26 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".gui.userInfo.UserInfoActivity"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
-        <activity android:name=".gui.ReportCreationActivity"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+        <activity
+            android:name=".gui.userInfo.UserInfoActivity"
+            android:parentActivityName=".gui.main.MainActivity" />
+        <activity
+            android:name=".gui.ReportCreationActivity"
+            android:parentActivityName=".gui.main.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".gui.hospital.HospitalActivity"
             android:label="My Hospital"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
-        <activity android:name=".gui.NewDeviceActivity2"
+            android:parentActivityName=".gui.main.MainActivity" />
+        <activity
+            android:name=".gui.NewDeviceActivity2"
             android:label="Enter general data"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:name=".gui.NewDeviceActivity3"
+            android:parentActivityName=".gui.main.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".gui.NewDeviceActivity3"
             android:label="Take picture"
-            android:parentActivityName="ngo.teog.swift.gui.main.MainActivity">
-        </activity>
+            android:parentActivityName=".gui.main.MainActivity" />
         <activity android:name=".gui.main.CalendarActivity" />
     </application>
 

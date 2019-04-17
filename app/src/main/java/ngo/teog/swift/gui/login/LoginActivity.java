@@ -28,6 +28,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.StatsActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.gui.main.MainActivity;
 
@@ -98,9 +99,17 @@ public class LoginActivity extends BaseActivity {
             case R.id.info:
                 showInfo(R.string.about_text);
                 return true;
+            case R.id.stats:
+                showStats();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showStats() {
+        Intent intent = new Intent(LoginActivity.this, StatsActivity.class);
+        startActivity(intent);
     }
 
     public void login(View view) {
