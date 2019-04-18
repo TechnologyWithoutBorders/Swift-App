@@ -27,18 +27,21 @@ import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.SearchObject;
+import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.User;
 
 public class SearchFragment extends BaseFragment {
 
     private static final int DEVICE = 0;
     private static final int USER = 1;
 
-    private SearchArrayAdapter adapter;
     private ProgressBar progressBar;
     private EditText searchField;
     private Spinner searchSpinner;
     private Button searchButton;
+    private ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,13 +57,10 @@ public class SearchFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        ListView listView = view.findViewById(R.id.maintenanceList);
-        ArrayList<SearchObject> values = new ArrayList<>();
+        listView = view.findViewById(R.id.maintenanceList);
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        adapter = new SearchArrayAdapter(getContext(), values);
-        listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,14 +95,20 @@ public class SearchFragment extends BaseFragment {
 
                 JsonObjectRequest request = null;
 
-                switch (searchSpinner.getSelectedItemPosition()) {
+                switch(searchSpinner.getSelectedItemPosition()) {
                     case DEVICE:
-                        request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
+                        DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(getContext(), new ArrayList<HospitalDevice>());
+                        listView.setAdapter(deviceAdapter);
+
+                        request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, deviceAdapter);
 
                         break;
 
                     case USER:
-                        request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
+                        UserArrayAdapter userAdapter = new UserArrayAdapter(getContext(), new ArrayList<User>());
+                        listView.setAdapter(userAdapter);
+
+                        request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, userAdapter);
 
                         break;
                 }
@@ -119,35 +125,57 @@ public class SearchFragment extends BaseFragment {
         }
     }
 
-    private class SearchArrayAdapter extends ArrayAdapter<SearchObject> {
-        private final Context context;
+    private class DeviceArrayAdapter extends ArrayAdapter<HospitalDevice> {
 
-        public SearchArrayAdapter(Context context, ArrayList<SearchObject> values) {
+        public DeviceArrayAdapter(Context context, ArrayList<HospitalDevice> values) {
             super(context, -1, values);
-            this.context = context;
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
+                LayoutInflater inflater = (LayoutInflater)this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.row_search, parent, false);
             }
 
-            TextView nameView = convertView.findViewById(R.id.nameView);
-            TextView infoView = convertView.findViewById(R.id.infoView);
+            TextView primaryInfo = convertView.findViewById(R.id.primaryInfo);
+            TextView secondaryInfo = convertView.findViewById(R.id.secondaryInfo);
+            TextView category = convertView.findViewById(R.id.category);
 
-            SearchObject object = this.getItem(position);
+            HospitalDevice device = this.getItem(position);
 
-            if(object != null) {
-                nameView.setText(object.getName());
-                infoView.setText(object.getInformation());
-            } else {
-                nameView.setText("no internet connection");
-                nameView.setTextColor(Color.RED);
-                infoView.setText(null);
+            primaryInfo.setText(device.getManufacturer());
+            secondaryInfo.setText(device.getModel());
+            category.setText(device.getType());
+
+            return convertView;
+        }
+    }
+
+    private class UserArrayAdapter extends ArrayAdapter<User> {
+
+        public UserArrayAdapter(Context context, ArrayList<User> values) {
+            super(context, -1, values);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater)this.getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.row_search, parent, false);
             }
+
+            TextView primaryInfo = convertView.findViewById(R.id.primaryInfo);
+            TextView secondaryInfo = convertView.findViewById(R.id.secondaryInfo);
+            TextView category = convertView.findViewById(R.id.category);
+
+            User user = this.getItem(position);
+
+            primaryInfo.setText(user.getName());
+            secondaryInfo.setText(user.getPosition());
+            //category.setText(user.getHospital());
 
             return convertView;
         }
