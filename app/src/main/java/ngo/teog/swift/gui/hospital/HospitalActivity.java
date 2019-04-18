@@ -38,8 +38,6 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
-import static ngo.teog.swift.helpers.Defaults.DATETIME_FORMAT;
-
 public class HospitalActivity extends BaseActivity {
 
     @Inject
@@ -275,11 +273,11 @@ public class HospitalActivity extends BaseActivity {
 
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();
-                        Report lastReport = deviceInfo.getReports().get(0);//TODO bei mehreren wäre das der erste Report
+                        Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
 
                         nameView.setText(device.getType());
 
-                        String dateString = DATETIME_FORMAT.format(lastReport.getCreated());
+                        String dateString = Defaults.DATE_FORMAT.format(lastReport.getCreated());
                         dateView.setText(dateString);
 
                         DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
