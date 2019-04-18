@@ -1,17 +1,11 @@
 package ngo.teog.swift.helpers;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.User;
@@ -61,7 +55,7 @@ public class ResponseParser {
 
                     int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-                    long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
+                    long lastUpdate = Defaults.DATETIME_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
                     result.add(device);
@@ -92,7 +86,7 @@ public class ResponseParser {
 
             int hospital = deviceObject.getInt("d_hospital");
             int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-            long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
+            long lastUpdate = Defaults.DATETIME_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
             HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
             result.add(device);
@@ -110,7 +104,7 @@ public class ResponseParser {
                 int hospitalId = hospitalObject.getInt("id");
                 String name = hospitalObject.getString("name");
                 String location = hospitalObject.getString("location");
-                long hospitalLastUpdate = Defaults.DATE_FORMAT.parse(hospitalObject.getString("last_update")).getTime();
+                long hospitalLastUpdate = Defaults.DATETIME_FORMAT.parse(hospitalObject.getString("last_update")).getTime();
                 JSONArray users = hospitalObject.getJSONArray("users");
                 JSONArray devices = hospitalObject.getJSONArray("devices");
 
@@ -125,7 +119,7 @@ public class ResponseParser {
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
                     int hospital = userObject.getInt("u_hospital");
                     String position = userObject.getString("u_position");
-                    long lastUpdate = Defaults.DATE_FORMAT.parse(userObject.getString("u_last_update")).getTime();
+                    long lastUpdate = Defaults.DATETIME_FORMAT.parse(userObject.getString("u_last_update")).getTime();
 
                     User user = new User(id, phone, mail, fullName, hospital, position, lastUpdate);
                     userList.add(user);
@@ -145,7 +139,7 @@ public class ResponseParser {
                     String ward = deviceObject.getString("d_ward");
                     int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-                    long lastUpdate = Defaults.DATE_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
+                    long lastUpdate = Defaults.DATETIME_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
                     JSONObject reportObject = deviceObject.getJSONObject("last_report");
                     int reportId = reportObject.getInt(ReportFilter.ID);
@@ -154,7 +148,7 @@ public class ResponseParser {
                     int previousState = reportObject.getInt("r_previous_state");
                     int currentState = reportObject.getInt("r_current_state");
                     String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                    long datetime = Defaults.DATE_FORMAT.parse(reportObject.getString("r_datetime")).getTime();
+                    long datetime = Defaults.DATETIME_FORMAT.parse(reportObject.getString("r_datetime")).getTime();
 
                     Report lastReport = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
 
@@ -197,7 +191,7 @@ public class ResponseParser {
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
                     int hospitalId = userObject.getInt("u_hospital");
                     String position = userObject.getString("u_position");
-                    long lastUpdate = Defaults.DATE_FORMAT.parse(userObject.getString("u_last_update")).getTime();
+                    long lastUpdate = Defaults.DATETIME_FORMAT.parse(userObject.getString("u_last_update")).getTime();
 
                     User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
                     result.add(user);
@@ -224,7 +218,7 @@ public class ResponseParser {
             String fullName = userObject.getString(UserFilter.FULL_NAME);
             int hospitalId = userObject.getInt("h_ID");
             String position = userObject.getString("u_position");
-            long lastUpdate = Defaults.DATE_FORMAT.parse(userObject.getString("u_last_update")).getTime();
+            long lastUpdate = Defaults.DATETIME_FORMAT.parse(userObject.getString("u_last_update")).getTime();
 
             User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
             result.add(user);

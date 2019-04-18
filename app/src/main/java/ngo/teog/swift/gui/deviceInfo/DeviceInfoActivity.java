@@ -25,7 +25,8 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,8 +36,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.ReportCreationActivity;
-import ngo.teog.swift.gui.ReportInfoActivity;
-import ngo.teog.swift.gui.userInfo.UserInfoViewModel;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -201,6 +201,8 @@ public class DeviceInfoActivity extends BaseActivity {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
         viewModel.init(deviceInfo.getDevice().getHospital());
+        adapter = new ReportArrayAdapter(this, deviceInfo.getReports());
+        reportListView.setAdapter(adapter);
         viewModel.getHospital().observe(this, hospital -> {
             if(hospital != null) {
                 hospitalView.setText(hospital.getName());
@@ -307,7 +309,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private class ReportArrayAdapter extends ArrayAdapter<Report> {
         private final Context context;
 
-        private ReportArrayAdapter(Context context, ArrayList<Report> values) {
+        private ReportArrayAdapter(Context context, List<Report> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -339,10 +341,10 @@ public class DeviceInfoActivity extends BaseActivity {
                 toState.setImageDrawable(triple1.getStateicon());
                 toState.setColorFilter(triple1.getBackgroundcolor());
 
-                //authorView.setText(report.getAuthorName());
+                authorView.setText(Integer.toString(report.getAuthor()));
 
                 long date = report.getCreated();
-                dateView.setText(Long.toString(date));
+                dateView.setText(Defaults.DATE_FORMAT.format(new Date(date)));
             }
 
             return convertView;
