@@ -64,9 +64,6 @@ public class TodoFragment extends BaseFragment {
 
     private List<DeviceInfo> values = new ArrayList<>();
 
-    //TODO Die Konstante muss natürlich hier weg
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_todo, container, false);
@@ -212,7 +209,7 @@ public class TodoFragment extends BaseFragment {
 
                 nameView.setText(device.getType());
 
-                String dateString = DATE_FORMAT.format(lastReport.getCreated());
+                String dateString = Defaults.DATE_FORMAT.format(lastReport.getCreated());
                 dateView.setText(dateString);
 
                 DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), this.getContext());
