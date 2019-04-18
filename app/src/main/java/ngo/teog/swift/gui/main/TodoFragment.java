@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,25 +115,36 @@ public class TodoFragment extends BaseFragment {
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {
+                this.values = deviceInfos;
+                adapter.clear();
+
+                for(DeviceInfo deviceInfo : deviceInfos) {
+                    List<Report> reports = deviceInfo.getReports();
+                    Collections.reverse(reports);
+                }
+
                 Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
                     @Override
                     public int compare(DeviceInfo first, DeviceInfo second) {
-                        if(first.getReports().size() > 0 && second.getReports().size() > 0) {
-                            int firstState = first.getReports().get(0).getCurrentState();
-                            int secondState = second.getReports().get(0).getCurrentState();
+                        List<Report> firstReports = first.getReports();
+                        List<Report> secondReports = second.getReports();
 
-                            return (firstState - secondState) * -1;
+                        if(firstReports.size() > 0 && secondReports.size() > 0) {
+                            int firstState = firstReports.get(0).getCurrentState();
+                            int secondState = secondReports.get(0).getCurrentState();
+
+                            return (firstState-secondState)*-1;
                         } else {
                             return 0;
                         }
                     }
                 });
-                this.values = deviceInfos;
-                adapter.clear();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    if(deviceInfo.getReports().size() > 0) {
-                        if (deviceInfo.getReports().get(0).getCurrentState() == 1 || deviceInfo.getReports().get(0).getCurrentState() == 2) {
+                    List<Report> reports = deviceInfo.getReports();
+
+                    if(reports.size() > 0) {
+                        if(reports.get(0).getCurrentState() == 1 || reports.get(0).getCurrentState() == 2) {
                             adapter.add(deviceInfo);
                         }
                     }

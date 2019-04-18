@@ -1,5 +1,7 @@
 package ngo.teog.swift.helpers;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -141,31 +143,34 @@ public class ResponseParser {
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
                     long lastUpdate = Defaults.DATETIME_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
-                    JSONObject reportObject = deviceObject.getJSONObject("last_report");
-                    int reportId = reportObject.getInt(ReportFilter.ID);
-                    int author = reportObject.getInt(ReportFilter.AUTHOR);
-                    int affectedDevice = reportObject.getInt(ReportFilter.DEVICE);
-                    int previousState = reportObject.getInt("r_previous_state");
-                    int currentState = reportObject.getInt("r_current_state");
-                    String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                    long datetime = Defaults.DATETIME_FORMAT.parse(reportObject.getString("r_datetime")).getTime();
+                    JSONArray reports = deviceObject.getJSONArray("reports");
+                    List<Report> reportList = new ArrayList<>();
 
-                    Report lastReport = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
+                    for(int j = 0; j < reports.length(); j++) {
+                        JSONObject reportObject = reports.getJSONObject(j);
 
-                    List<Report> reports = new ArrayList<>();
-                    reports.add(lastReport);
+                        int reportId = reportObject.getInt(ReportFilter.ID);
+                        int author = reportObject.getInt(ReportFilter.AUTHOR);
+                        int affectedDevice = reportObject.getInt(ReportFilter.DEVICE);
+                        int previousState = reportObject.getInt("r_previous_state");
+                        int currentState = reportObject.getInt("r_current_state");
+                        String description = reportObject.getString(ReportFilter.DESCRIPTION);
+                        long datetime = Defaults.DATETIME_FORMAT.parse(reportObject.getString("r_datetime")).getTime();
+
+                        Report report = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
+
+                        reportList.add(report);
+                    }
 
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
 
                     DeviceInfo deviceInfo = new DeviceInfo(device);
-                    deviceInfo.setReports(reports);
+                    deviceInfo.setReports(reportList);
 
                     deviceList.add(deviceInfo);
                 }
 
-                HospitalInfo result = new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, deviceList);
-
-                return result;
+                return new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, deviceList);
             case SwiftResponse.CODE_FAILED_VISIBLE:
                 throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
             case SwiftResponse.CODE_FAILED_HIDDEN:
