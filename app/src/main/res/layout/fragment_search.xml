@@ -5,6 +5,28 @@
     android:padding="16dp"
     android:orientation="vertical">
 
+    <RadioGroup
+        android:id="@+id/categoryGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/deviceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Device"
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/userButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User" />
+    </RadioGroup>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,13 +60,6 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sort by"
-        android:padding="3dp" />
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/maintenanceList"

@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,18 +41,17 @@ public class SearchFragment extends BaseFragment {
 
     private ProgressBar progressBar;
     private EditText searchField;
-    private Spinner searchSpinner;
     private Button searchButton;
     private ListView listView;
+    private RadioButton deviceButton;
+    private RadioButton userButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 
-        searchSpinner = rootView.findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.search_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        searchSpinner.setAdapter(adapter);
+        deviceButton = rootView.findViewById(R.id.deviceButton);
+        userButton = rootView.findViewById(R.id.userButton);
 
         return rootView;
     }
@@ -95,22 +96,16 @@ public class SearchFragment extends BaseFragment {
 
                 JsonObjectRequest request = null;
 
-                switch(searchSpinner.getSelectedItemPosition()) {
-                    case DEVICE:
-                        DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(getContext(), new ArrayList<HospitalDevice>());
-                        listView.setAdapter(deviceAdapter);
+                if(deviceButton.isChecked()) {
+                    DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(getContext(), new ArrayList<HospitalDevice>());
+                    listView.setAdapter(deviceAdapter);
 
-                        request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, deviceAdapter);
+                    request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, deviceAdapter);
+                } else if(userButton.isChecked()) {
+                    UserArrayAdapter userAdapter = new UserArrayAdapter(getContext(), new ArrayList<User>());
+                    listView.setAdapter(userAdapter);
 
-                        break;
-
-                    case USER:
-                        UserArrayAdapter userAdapter = new UserArrayAdapter(getContext(), new ArrayList<User>());
-                        listView.setAdapter(userAdapter);
-
-                        request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, userAdapter);
-
-                        break;
+                    request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, userAdapter);
                 }
 
                 queue.add(request);
