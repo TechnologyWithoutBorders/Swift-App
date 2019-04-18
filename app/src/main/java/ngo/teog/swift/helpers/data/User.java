@@ -3,6 +3,8 @@ package ngo.teog.swift.helpers.data;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.SearchObject;
 
@@ -15,7 +17,7 @@ import ngo.teog.swift.helpers.SearchObject;
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
 
 @Entity(tableName = "users")
-public class User extends SearchObject {
+public class User implements Serializable {
     @PrimaryKey
     private int id;
     private String phone;
@@ -41,6 +43,10 @@ public class User extends SearchObject {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -63,25 +69,5 @@ public class User extends SearchObject {
 
     public void setLastUpdate(long lastUpdate) {
         this.lastUpdate = lastUpdate;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String getInformation() {
-        return "Information";
-    }
-
-    @Override
-    public Class<?> getInfoActivityClass() {
-        return UserInfoActivity.class;
-    }
-
-    @Override
-    public String getExtraIdentifier() {
-        return "user";
     }
 }

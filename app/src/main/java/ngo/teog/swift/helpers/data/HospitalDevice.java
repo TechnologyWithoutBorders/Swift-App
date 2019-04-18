@@ -4,6 +4,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.io.Serializable;
+
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.SearchObject;
 
@@ -17,7 +19,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
 @Entity(tableName = "devices")
-public class HospitalDevice extends SearchObject {
+public class HospitalDevice implements Serializable {
     @PrimaryKey
     private int id;
     private String assetNumber;
@@ -81,25 +83,5 @@ public class HospitalDevice extends SearchObject {
 
     public long getLastUpdate() {
         return lastUpdate;
-    }
-
-    @Override
-    public String getName() {
-        return model;
-    }
-
-    @Override
-    public String getInformation() {
-        return type;
-    }
-
-    @Override
-    public Class<?> getInfoActivityClass() {
-        return DeviceInfoActivity.class;
-    }
-
-    @Override
-    public String getExtraIdentifier() {
-        return "device";
     }
 }
