@@ -16,8 +16,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import java.util.ArrayList;
 
@@ -84,35 +86,34 @@ public class SearchFragment extends BaseFragment {
 
     private void search() {
         if(searchField.getText().length() > 0) {
-            String searchString = searchField.getText().toString();
-            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
+            if(this.checkForInternetConnection()) {
+                String searchString = searchField.getText().toString();
+                RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
 
-            progressBar.setVisibility(View.VISIBLE);
-            searchButton.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
+                searchButton.setVisibility(View.INVISIBLE);
 
-            switch(searchSpinner.getSelectedItemPosition()) {
-                case DEVICE:
-                    if(this.checkForInternetConnection()) {
+                JsonObjectRequest request = null;
 
-                        RequestFactory.DeviceListRequest request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
+                switch (searchSpinner.getSelectedItemPosition()) {
+                    case DEVICE:
+                        request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
 
-                        queue.add(request);
-                    }
+                        break;
 
-                    break;
+                    case USER:
+                        request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
 
-                case USER:
-                    if(this.checkForInternetConnection()) {
-                        RequestFactory.UserListRequest request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, adapter);
+                        break;
+                }
 
-                        queue.add(request);
-                    }
+                queue.add(request);
 
-                    break;
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            } else {
+                Toast.makeText(this.getContext(), "no internet connection", Toast.LENGTH_SHORT).show();
             }
-
-            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
         } else {
             searchField.setError("invalid search value");
         }
