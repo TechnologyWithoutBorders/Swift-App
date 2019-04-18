@@ -14,7 +14,7 @@ public class RoomModule {
     private HospitalDatabase hospitalDatabase;
 
     public RoomModule(Application mApplication) {
-        hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "user-db").build();
+        hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db").build();
     }
 
     @Singleton
