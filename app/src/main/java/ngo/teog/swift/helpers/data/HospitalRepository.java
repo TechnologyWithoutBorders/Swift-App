@@ -170,7 +170,10 @@ public class HospitalRepository {
 
                             for(DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
                                 hospitalDao.save(deviceInfo.getDevice());
-                                hospitalDao.save(deviceInfo.getReports().get(0));
+
+                                List<Report> reports = deviceInfo.getReports();
+
+                                hospitalDao.save(reports);
                             }
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);

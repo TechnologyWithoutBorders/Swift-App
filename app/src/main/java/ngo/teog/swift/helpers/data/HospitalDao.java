@@ -35,6 +35,9 @@ public interface HospitalDao {
     @Insert(onConflict = REPLACE)
     void save(Report report);
 
+    @Insert(onConflict = REPLACE)
+    void save(List<Report> reports);
+
     @Query("SELECT * FROM users")
     List<User> getUsers();
 
