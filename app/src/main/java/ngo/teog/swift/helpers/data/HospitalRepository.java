@@ -175,6 +175,11 @@ public class HospitalRepository {
 
                                 hospitalDao.save(reports);
                             }
+
+                            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
+                            editor.apply();
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);
                             Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
@@ -245,13 +250,13 @@ public class HospitalRepository {
         }
     }*/
 
-    public boolean checkForInternetConnection() {
+    private boolean checkForInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if(cm != null) {
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                 return true;
             } else {
                 return false;
