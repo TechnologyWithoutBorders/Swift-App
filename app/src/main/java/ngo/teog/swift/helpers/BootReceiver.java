@@ -42,7 +42,7 @@ public class BootReceiver extends BroadcastReceiver {
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
-        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 6, TimeUnit.HOURS)
+        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 1, TimeUnit.HOURS)
                 .addTag("update_todo")
                 .setConstraints(updateConstraints)
                 .build();
