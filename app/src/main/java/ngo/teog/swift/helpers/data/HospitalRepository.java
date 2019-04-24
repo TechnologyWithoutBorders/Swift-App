@@ -3,6 +3,7 @@ package ngo.teog.swift.helpers.data;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -20,6 +21,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -138,12 +141,67 @@ public class HospitalRepository {
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
-        //TODO man könnte auch immer das last_update mitschicken und nur aktualisieren, wenn es neuere Daten gibt -> Netzwerkaufwand minimieren
-        //TODO aber eigentlich übertragen wir ja auch jetzt schon ziemlich wenige Daten
+        //TODO immer alles mitschicken, was neuer ist als der last_sync
+        //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
         Map<String, String> params = generateParameterMap(context, "fetch_hospital_info", true);
         params.put(UserFilter.ID, Integer.toString(userID));
 
+        JSONArray jsonHospitals = new JSONArray();
+        JSONArray jsonDevices = new JSONArray();
+        JSONArray jsonUsers = new JSONArray();
+
+        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
+
+        Hospital hospital = hospitalDao.loadUserHospital(userID).getValue();
+
+        if(hospital != null && hospital.getLastUpdate() >= lastUpdate) {
+            jsonHospitals.put(hospital);
+        }
+
+        List<User> users = hospitalDao.loadUserColleagues(userID).getValue();
+
+        if(users != null) {
+            for (User user : users) {
+                if (user.getLastUpdate() >= lastUpdate) {
+                    jsonUsers.put(user);
+                }
+            }
+        }
+
+        List<DeviceInfo> deviceInfos = hospitalDao.loadHospitalDevices(userID).getValue();
+
+        if(deviceInfos != null) {
+            for (DeviceInfo deviceInfo : deviceInfos) {
+                HospitalDevice device = deviceInfo.getDevice();
+
+                if (device.getLastUpdate() >= lastUpdate) {
+                    jsonDevices.put(device);
+                }
+
+                List<Report> reports = deviceInfo.getReports();
+
+                for (Report report : reports) {
+                    if (report.getCreated() >= lastUpdate) {
+                        jsonUsers.put(report);
+                    }
+                }
+            }
+        }
+
+        JSONObject data = new JSONObject();
+
         JSONObject request = new JSONObject(params);
+
+        try {
+            data.put("hospitals", jsonHospitals);
+            data.put("devices", jsonDevices);
+            data.put("users", jsonUsers);
+
+            request.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return new HospitalRequest(context, url, request, executor);
     }
@@ -157,8 +215,6 @@ public class HospitalRepository {
                     executor.execute(() -> {
                         try {
                             HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
-
-                            //TODO prüfen, ob es lokal neuere gibt und wenn ja auf den Server pushen
 
                             Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLastUpdate());
 
@@ -209,46 +265,6 @@ public class HospitalRepository {
 
         return parameterMap;
     }
-
-    /*Constraints updateConstraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
-
-            Data inputData = new Data.Builder()
-                    .putInt("id", id)
-                    .build();
-
-            //TODO hier funktioniert die Dependency Injection nicht, der Workaround ist aber ziemlich umständlich
-            OneTimeWorkRequest updateWork = new OneTimeWorkRequest.Builder(UpdateWorker.class)
-                    .addTag("update_profile")
-                    .setConstraints(updateConstraints)
-                    .setInputData(inputData)
-                    .build();
-
-            WorkManager.getInstance().enqueue(updateWork);*/
-
-    /*private class UpdateWorker extends Worker {
-
-        private Context context;
-
-        public UpdateWorker(Context context, WorkerParameters params) {
-            super(context, params);
-
-            this.context = context;
-        }
-
-        @NonNull
-        @Override
-        public Worker.Result doWork() {
-            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
-
-            UserListRequest userListRequest = createUserRequest(context, this.getInputData().getInt("id", -1), executor);
-
-            queue.add(userListRequest);
-
-            return Result.success();
-        }
-    }*/
 
     private boolean checkForInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
