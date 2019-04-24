@@ -54,10 +54,20 @@ public interface HospitalDao {
     @Query("SELECT hospital from users WHERE id = :id")
     int getHospital(int id);
 
+    @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
+    Hospital getUserHospital(int userId);
+
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     LiveData<List<User>> loadUserColleagues(int userId);
+
+    @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
+    List<User> getUserColleagues(int userId);
 
     @Transaction
     @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     LiveData<List<DeviceInfo>> loadHospitalDevices(int userId);
+
+    @Transaction
+    @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
+    List<DeviceInfo> getHospitalDevices(int userId);
 }

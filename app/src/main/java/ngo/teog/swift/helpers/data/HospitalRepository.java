@@ -153,13 +153,13 @@ public class HospitalRepository {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
 
-        Hospital hospital = hospitalDao.loadUserHospital(userID).getValue();
+        Hospital hospital = hospitalDao.getUserHospital(userID);
 
         if(hospital != null && hospital.getLastUpdate() >= lastUpdate) {
             jsonHospitals.put(hospital);
         }
 
-        List<User> users = hospitalDao.loadUserColleagues(userID).getValue();
+        List<User> users = hospitalDao.getUserColleagues(userID);
 
         if(users != null) {
             for (User user : users) {
@@ -169,7 +169,7 @@ public class HospitalRepository {
             }
         }
 
-        List<DeviceInfo> deviceInfos = hospitalDao.loadHospitalDevices(userID).getValue();
+        List<DeviceInfo> deviceInfos = hospitalDao.getHospitalDevices(userID);
 
         if(deviceInfos != null) {
             for (DeviceInfo deviceInfo : deviceInfos) {
