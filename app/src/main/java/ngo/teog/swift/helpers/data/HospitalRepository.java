@@ -156,7 +156,7 @@ public class HospitalRepository {
             Gson gson = new Gson();
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
-            Map<String, String> params = generateParameterMap(context, "fetch_hospital_info", true);
+            Map<String, String> params = generateParameterMap(context, "sync_hospital_info", true);
             params.put(UserFilter.ID, Integer.toString(userID));
 
             JSONArray jsonHospitals = new JSONArray();
