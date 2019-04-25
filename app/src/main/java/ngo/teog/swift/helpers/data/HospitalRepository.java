@@ -20,11 +20,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,69 +152,73 @@ public class HospitalRepository {
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
-        //TODO immer alles mitschicken, was neuer ist als der last_sync
-        //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
-        Map<String, String> params = generateParameterMap(context, "fetch_hospital_info", true);
-        params.put(UserFilter.ID, Integer.toString(userID));
+        try {
+            Gson gson = new Gson();
 
-        JSONArray jsonHospitals = new JSONArray();
-        JSONArray jsonDevices = new JSONArray();
-        JSONArray jsonUsers = new JSONArray();
+            //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
+            Map<String, String> params = generateParameterMap(context, "fetch_hospital_info", true);
+            params.put(UserFilter.ID, Integer.toString(userID));
 
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
+            JSONArray jsonHospitals = new JSONArray();
+            JSONArray jsonDevices = new JSONArray();
+            JSONArray jsonUsers = new JSONArray();
+            JSONArray jsonReports = new JSONArray();
 
-        Hospital hospital = hospitalDao.getUserHospital(userID);
+            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
 
-        if(hospital != null && hospital.getLastUpdate() >= lastUpdate) {
-            jsonHospitals.put(hospital);
-        }
+            Hospital hospital = hospitalDao.getUserHospital(userID);
 
-        List<User> users = hospitalDao.getUserColleagues(userID);
-
-        if(users != null) {
-            for (User user : users) {
-                if (user.getLastUpdate() >= lastUpdate) {
-                    jsonUsers.put(user);
-                }
+            if(hospital != null && hospital.getLastUpdate() >= lastUpdate) {
+                jsonHospitals.put(new JSONObject(gson.toJson(hospital)));
             }
-        }
 
-        List<DeviceInfo> deviceInfos = hospitalDao.getHospitalDevices(userID);
+            List<User> users = hospitalDao.getUserColleagues(userID);
 
-        if(deviceInfos != null) {
-            for (DeviceInfo deviceInfo : deviceInfos) {
-                HospitalDevice device = deviceInfo.getDevice();
-
-                if (device.getLastUpdate() >= lastUpdate) {
-                    jsonDevices.put(device);
-                }
-
-                List<Report> reports = deviceInfo.getReports();
-
-                for (Report report : reports) {
-                    if (report.getCreated() >= lastUpdate) {
-                        jsonUsers.put(report);
+            if(users != null) {
+                for (User user : users) {
+                    if (user.getLastUpdate() >= lastUpdate) {
+                        jsonUsers.put(new JSONObject(gson.toJson(user)));
                     }
                 }
             }
-        }
 
-        JSONObject data = new JSONObject();
+            List<DeviceInfo> deviceInfos = hospitalDao.getHospitalDevices(userID);
 
-        JSONObject request = new JSONObject(params);
+            if(deviceInfos != null) {
+                for (DeviceInfo deviceInfo : deviceInfos) {
+                    HospitalDevice device = deviceInfo.getDevice();
 
-        try {
+                    if (device.getLastUpdate() >= lastUpdate) {
+                        jsonDevices.put(new JSONObject(gson.toJson(device)));
+                    }
+
+                    List<Report> reports = deviceInfo.getReports();
+
+                    for (Report report : reports) {
+                        if (report.getCreated() >= lastUpdate) {
+                            jsonReports.put(new JSONObject(gson.toJson(report)));
+                        }
+                    }
+                }
+            }
+
+            JSONObject data = new JSONObject();
+
+            JSONObject request = new JSONObject(params);
+
             data.put("hospitals", jsonHospitals);
             data.put("devices", jsonDevices);
             data.put("users", jsonUsers);
+            data.put("reports", jsonReports);
 
             request.put("data", data);
+
+            return new HospitalRequest(context, url, request, executor);
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
-
-        return new HospitalRequest(context, url, request, executor);
     }
 
     private class HospitalRequest extends JsonObjectRequest {
