@@ -501,59 +501,6 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createProfileUpdateRequest(final Context context, View disable, final View enable, User user) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_UPDATE_USER, true);
-
-        params.put(UserFilter.ID, Integer.toString(user.getId()));
-        params.put(UserFilter.PHONE, user.getPhone());
-        params.put("u_position", user.getPosition());
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) {
-                enable.setEnabled(false);
-            }
-        });
-    }
-
-    public class ReportListRequest extends JsonObjectRequest {
-
-        public ReportListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<Report> adapter) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    if(adapter != null) {
-                        adapter.clear();
-                    }
-
-                    try {
-                        if(adapter != null) {
-                            adapter.addAll(new ResponseParser().parseReportList(response));
-                        }
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    adapter.clear();
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
     public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, int userID) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 

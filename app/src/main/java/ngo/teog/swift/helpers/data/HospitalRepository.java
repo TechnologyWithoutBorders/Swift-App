@@ -105,16 +105,25 @@ public class HospitalRepository {
         return hospitalDao.loadHospitalDevices(userId);
     }
 
-    public void updateUser(User user) {//TODO vielleicht sogar mit refreshUsers() in eine gemeinsame syncWithServer()-Methode zusammenführen
+    public void updateUser(User user) {
         executor.execute(() -> {
             hospitalDao.save(user);
 
+            refreshUserHospitalSync(user.getId());
+        });
+    }
+
+    private void refreshUserHospitalSync(int userId) {
+        //TODO check if user data has been fetched recently
+
+        //refresh
+        if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createProfileUpdateRequest(context, null, null, user);
+            HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
-            queue.add(request);
-        });
+            queue.add(hospitalRequest);
+        }
     }
 
     private void refreshUserHospital(int userId) {
