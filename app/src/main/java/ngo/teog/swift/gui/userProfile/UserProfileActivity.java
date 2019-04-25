@@ -40,9 +40,6 @@ public class UserProfileActivity extends BaseActivity {
 
     private ImageView imageView;
 
-    private Button saveButton;
-    private ProgressBar saveProgressBar;
-
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -62,9 +59,6 @@ public class UserProfileActivity extends BaseActivity {
 
         TableLayout tableLayout = findViewById(R.id.tableLayout);
         imageView = findViewById(R.id.imageView);
-
-        saveButton = findViewById(R.id.saveButton);
-        saveProgressBar = findViewById(R.id.saveProgressBar);
 
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
@@ -126,7 +120,7 @@ public class UserProfileActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 telephoneView.setText(input.getText().toString());
-                saveButton.setEnabled(true);
+                save();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -153,7 +147,7 @@ public class UserProfileActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 positionView.setText(input.getText().toString());
-                saveButton.setEnabled(true);
+                save();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -166,13 +160,11 @@ public class UserProfileActivity extends BaseActivity {
         builder.show();
     }
 
-    public void save(View view) {
+    public void save() {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), viewModel.getUser().getValue().getHospital(), positionView.getText().toString(), System.currentTimeMillis());
 
         viewModel.updateUser(user);
-
-        saveButton.setEnabled(false);
     }
 }

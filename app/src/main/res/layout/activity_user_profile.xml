@@ -138,25 +138,4 @@
 
     </TableLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="save"
-            android:onClick="save"
-            android:enabled="false"/>
-
-        <ProgressBar
-            android:id="@+id/saveProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"/>
-
-    </RelativeLayout>
-
 </LinearLayout>
