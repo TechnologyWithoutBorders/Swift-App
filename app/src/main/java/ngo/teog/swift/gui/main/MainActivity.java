@@ -191,14 +191,15 @@ public class MainActivity extends BaseActivity {
     }
 
     public void logout() {
+        //TODO clear database
+
+        //delete shared preferences
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(Defaults.ID_PREFERENCE);
-        editor.remove(Defaults.PW_PREFERENCE);
-        editor.remove(Defaults.COUNTRY_PREFERENCE);
-        editor.remove(Defaults.NOTIFICATION_COUNTER);
+        editor.clear();
         editor.apply();
 
+        //delete files (images)
         for(File file : getFilesDir().listFiles()) {
             file.delete();
         }
