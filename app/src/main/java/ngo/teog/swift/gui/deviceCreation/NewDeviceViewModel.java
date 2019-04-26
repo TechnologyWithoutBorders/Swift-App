@@ -12,6 +12,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 
 public class NewDeviceViewModel extends ViewModel {
+    private LiveData<DeviceInfo> device;
     private HospitalRepository hospitalRepo;
 
     @Inject
@@ -19,7 +20,19 @@ public class NewDeviceViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
+    public void init(int deviceId) {
+        if (this.device != null) {
+            return;
+        }
+
+        device = hospitalRepo.getDevice(deviceId);
+    }
+
     public void createDevice(HospitalDevice device, int userId) {
-        //TODO
+        hospitalRepo.createDevice(device, userId);
+    }
+
+    public LiveData<DeviceInfo> getDevice() {
+        return device;
     }
 }

@@ -51,6 +51,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
@@ -126,6 +127,17 @@ public class HospitalRepository {
 
             queue.add(hospitalRequest);
         }
+    }
+
+    public void createDevice(HospitalDevice device, int userId) {
+        executor.execute(() -> {
+            Report creationReport = new Report(0, userId, device.getId(), 0, 0, "device creation", device.getLastUpdate());
+
+            hospitalDao.save(device);
+            hospitalDao.save(creationReport);
+
+            refreshUserHospitalSync(userId);
+        });
     }
 
     private void refreshUserHospital(int userId) {

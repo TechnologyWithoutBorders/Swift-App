@@ -87,6 +87,9 @@ public class NewDeviceActivity3 extends BaseActivity {
                 .inject(this);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(NewDeviceViewModel.class);
+        viewModel.init(device.getId());
+
+        //TODO bei Änderung des Devices ungleich null soll Device aufpoppen
     }
 
     @Override
