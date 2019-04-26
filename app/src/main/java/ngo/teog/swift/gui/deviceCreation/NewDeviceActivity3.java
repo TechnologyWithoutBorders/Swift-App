@@ -1,5 +1,6 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.deviceCreation;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,11 +27,22 @@ import com.android.volley.RequestQueue;
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class NewDeviceActivity3 extends BaseActivity {
 
@@ -43,6 +55,11 @@ public class NewDeviceActivity3 extends BaseActivity {
     private HospitalDevice device;
 
     private String imagePath = null;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private NewDeviceViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +79,14 @@ public class NewDeviceActivity3 extends BaseActivity {
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(NewDeviceViewModel.class);
     }
 
     @Override
@@ -75,7 +100,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_info, menu);
+        inflater.inflate(R.menu.menu_device_creation3, menu);
 
         return true;
     }
@@ -102,12 +127,7 @@ public class NewDeviceActivity3 extends BaseActivity {
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-            RequestFactory factory = new RequestFactory();
-            RequestFactory.DefaultRequest request = factory.createDeviceCreationRequest(this, progressBar, nextButton, device, bitmap, user);
-
-            queue.add(request);
+            viewModel.createDevice(device, user);
         } else {
             Toast.makeText(this, "no picture attached", Toast.LENGTH_LONG).show();
         }

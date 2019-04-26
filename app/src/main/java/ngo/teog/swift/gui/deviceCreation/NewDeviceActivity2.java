@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.deviceCreation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 
 public class NewDeviceActivity2 extends BaseActivity {
@@ -62,7 +63,7 @@ public class NewDeviceActivity2 extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_device_info, menu);
+        inflater.inflate(R.menu.menu_device_creation2, menu);
 
         return true;
     }

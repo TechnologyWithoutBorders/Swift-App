@@ -63,7 +63,7 @@
             android:label="@string/title_activity_user_profile"
             android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".gui.NewDeviceActivity"
+            android:name=".gui.deviceCreation.NewDeviceActivity"
             android:label="@string/title_activity_create_device"
             android:parentActivityName=".gui.main.MainActivity" />
         <activity
@@ -121,12 +121,12 @@
             android:label="My Hospital"
             android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".gui.NewDeviceActivity2"
+            android:name=".gui.deviceCreation.NewDeviceActivity2"
             android:label="Enter general data"
             android:parentActivityName=".gui.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".gui.NewDeviceActivity3"
+            android:name=".gui.deviceCreation.NewDeviceActivity3"
             android:label="Take picture"
             android:parentActivityName=".gui.main.MainActivity" />
         <activity android:name=".gui.main.CalendarActivity" />

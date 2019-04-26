@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.gui.main.BarcodeViewModel;
@@ -49,4 +50,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DeviceInfoViewModel.class)
     public abstract ViewModel deviceInfoViewModel(DeviceInfoViewModel deviceInfoViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewDeviceViewModel.class)
+    public abstract ViewModel newDeviceViewModel(NewDeviceViewModel newDeviceViewModel);
 }

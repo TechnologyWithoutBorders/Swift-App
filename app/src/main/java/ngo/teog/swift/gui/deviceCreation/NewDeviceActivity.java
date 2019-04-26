@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.deviceCreation;
 
 import android.Manifest;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import java.util.List;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.BaseActivity;
 
 public class NewDeviceActivity extends BaseActivity {
 

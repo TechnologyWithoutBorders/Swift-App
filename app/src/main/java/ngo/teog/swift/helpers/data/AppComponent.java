@@ -5,6 +5,7 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.main.BarcodeFragment;
@@ -23,6 +24,7 @@ public interface AppComponent {
     void inject(UserInfoActivity target);
     void inject(DeviceInfoActivity target);
     void inject(BarcodeFragment target);
+    void inject(NewDeviceActivity3 target);
 
     HospitalDatabase userDatabase();
 

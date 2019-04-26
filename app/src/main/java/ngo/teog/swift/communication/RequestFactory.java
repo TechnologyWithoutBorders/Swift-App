@@ -501,44 +501,6 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createDeviceCreationRequest(final Context context, View disable, View enable, final HospitalDevice device, final Bitmap bitmap, int userID) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_CREATE_DEVICE, true);
-
-        params.put(UserFilter.ID, Integer.toString(userID));
-        params.put(DeviceFilter.ID, Integer.toString(device.getId()));
-        params.put(DeviceFilter.ASSET_NUMBER, device.getAssetNumber());
-        params.put(DeviceFilter.TYPE, device.getType());
-        params.put(DeviceFilter.SERIAL_NUMBER, device.getSerialNumber());
-        params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
-        params.put(DeviceFilter.MODEL, device.getModel());
-        params.put("d_ward", device.getWard());
-        params.put("d_maintenance_interval", Integer.toString(device.getMaintenanceInterval()));
-        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-
-        if(bitmap != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] imageBytes = stream.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-            params.put("image", encodedImage);//TODO die Identifier anders organisieren
-        }
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
-
-                Intent intent = new Intent(context, DeviceInfoActivity.class);
-                intent.putExtra("device", deviceList.get(0));
-                context.startActivity(intent);
-            }
-        });
-    }
-
     public DefaultRequest createReportCreationRequest(final Context context, View disable, View enable, final Report report) {
         final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
 
