@@ -36,6 +36,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.ReportCreationActivity;
+import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -110,19 +111,14 @@ public class DeviceInfoActivity extends BaseActivity {
 
         reportListView = findViewById(R.id.reportList);
 
-        /*ArrayList<Report> values = new ArrayList<>();
-
-        adapter = new ReportArrayAdapter(this, values);
-        reportListView.setAdapter(adapter);
-
         reportListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
-                intent.putExtra("REPORT", (Report) adapterView.getItemAtPosition(i));
+                intent.putExtra("REPORT", (ReportInfo) adapterView.getItemAtPosition(i));
                 startActivity(intent);
             }
-        });*/
+        });
 
         globalImageView = findViewById(R.id.imageView);
 
