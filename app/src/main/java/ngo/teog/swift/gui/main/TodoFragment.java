@@ -118,36 +118,34 @@ public class TodoFragment extends BaseFragment {
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     List<ReportInfo> reports = deviceInfo.getReports();
-                    //Collections.reverse(reports); TODO
+                    Collections.reverse(reports);
                 }
 
                 Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
                     @Override
                     public int compare(DeviceInfo first, DeviceInfo second) {
-                        /*List<Report> firstReports = first.getReports();
-                        List<Report> secondReports = second.getReports();
+                        List<ReportInfo> firstReports = first.getReports();
+                        List<ReportInfo> secondReports = second.getReports();
 
                         if(firstReports.size() > 0 && secondReports.size() > 0) {
-                            int firstState = firstReports.get(0).getCurrentState();
-                            int secondState = secondReports.get(0).getCurrentState();
+                            int firstState = firstReports.get(0).getReport().getCurrentState();
+                            int secondState = secondReports.get(0).getReport().getCurrentState();
 
                             return (firstState-secondState)*-1;
                         } else {
                             return 0;
-                        }*/
-
-                        return 0; //TODO
+                        }
                     }
                 });
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    List<ReportInfo> reports = deviceInfo.getReports();
+                    List<ReportInfo> reportInfos = deviceInfo.getReports();
 
-                    /*if(reports.size() > 0) {
-                        if(reports.get(0).getCurrentState() == 1 || reports.get(0).getCurrentState() == 2) {
+                    if(reportInfos.size() > 0) {
+                        if(reportInfos.get(0).getReport().getCurrentState() == 1 || reportInfos.get(0).getReport().getCurrentState() == 2) {
                             adapter.add(deviceInfo);
                         }
-                    }*///TODO
+                    }
                 }
             }
         });
