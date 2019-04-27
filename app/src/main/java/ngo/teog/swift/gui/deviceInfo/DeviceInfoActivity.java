@@ -209,17 +209,6 @@ public class DeviceInfoActivity extends BaseActivity {
                 hospitalView.setText(hospital.getName());
             }
         });
-
-        /*if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-            RequestFactory.ReportListRequest reportListRequest = new RequestFactory().createReportListRequest(this, reportListProgressbar, reportListView, device.getId(), adapter);
-
-            reportListProgressbar.setVisibility(View.VISIBLE);
-            reportListView.setVisibility(View.INVISIBLE);
-
-            queue.add(reportListRequest);
-        }*/
     }
 
     public void editMaintenanceInterval(View view) {
@@ -344,7 +333,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 toState.setImageDrawable(triple1.getStateicon());
                 toState.setColorFilter(triple1.getBackgroundcolor());
 
-                authorView.setText(Integer.toString(report.getAuthor()));
+                authorView.setText(reportInfo.getAuthors().get(0).getName());
 
                 long date = report.getCreated();
                 dateView.setText(Defaults.DATE_FORMAT.format(new Date(date)));
