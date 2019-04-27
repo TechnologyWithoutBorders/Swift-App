@@ -6,13 +6,12 @@ import android.arch.persistence.room.Relation;
 import java.io.Serializable;
 import java.util.List;
 
-import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.data.Report;
-import ngo.teog.swift.helpers.data.ReportInfo;
-
 public class DeviceInfo implements Serializable {
     @Embedded
     private HospitalDevice device;
+
+    @Relation(parentColumn = "hospital", entityColumn = "id")
+    private List<Hospital> hospitals;
 
     @Relation(parentColumn = "id", entityColumn = "device", entity = Report.class)
     private List<ReportInfo> reports;
@@ -35,5 +34,13 @@ public class DeviceInfo implements Serializable {
 
     public void setReports(List<ReportInfo> reports) {
         this.reports = reports;
+    }
+
+    public List<Hospital> getHospitals() {
+        return hospitals;
+    }
+
+    public void setHospitals(List<Hospital> hospitals) {
+        this.hospitals = hospitals;
     }
 }

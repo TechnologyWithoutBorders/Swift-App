@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "hospitals")
-public class Hospital {
+public class Hospital implements Serializable {
     @PrimaryKey
     private int id;
     private String name;

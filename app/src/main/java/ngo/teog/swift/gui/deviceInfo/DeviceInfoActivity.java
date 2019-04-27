@@ -148,6 +148,7 @@ public class DeviceInfoActivity extends BaseActivity {
             modelView.setText(device.getModel());
             manufacturerView.setText(device.getManufacturer());
             serialNumberView.setText(device.getSerialNumber());
+            hospitalView.setText(deviceInfo.getHospitals().get(0).getName());
             wardView.setText(device.getWard());
 
             int interval = device.getMaintenanceInterval();
@@ -190,21 +191,8 @@ public class DeviceInfoActivity extends BaseActivity {
             }
         }
 
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
-                .build()
-                .inject(this);
-
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
-        viewModel.init(deviceInfo.getDevice().getHospital());
         adapter = new ReportArrayAdapter(this, deviceInfo.getReports());
         reportListView.setAdapter(adapter);
-        viewModel.getHospital().observe(this, hospital -> {
-            if(hospital != null) {
-                hospitalView.setText(hospital.getName());
-            }
-        });
     }
 
     public void editMaintenanceInterval(View view) {
