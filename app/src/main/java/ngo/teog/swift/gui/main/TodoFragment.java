@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,36 +15,22 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.work.Constraints;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.DeviceState;
-import ngo.teog.swift.helpers.UpdateWorker;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;

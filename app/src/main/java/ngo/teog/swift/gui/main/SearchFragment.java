@@ -2,7 +2,6 @@ package ngo.teog.swift.gui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +26,6 @@ import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.User;

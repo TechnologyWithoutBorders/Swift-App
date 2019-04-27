@@ -38,7 +38,7 @@ import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.ReportCreationActivity;
 import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;

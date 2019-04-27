@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.helpers.data;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Relation;

@@ -1,18 +1,11 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,36 +19,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
-import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceInfo;
-import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.HospitalInfo;
-import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 @Singleton

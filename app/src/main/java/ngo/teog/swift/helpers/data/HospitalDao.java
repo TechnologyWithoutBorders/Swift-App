@@ -8,8 +8,6 @@ import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
-import ngo.teog.swift.helpers.DeviceInfo;
-
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao

@@ -22,25 +22,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 

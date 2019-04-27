@@ -2,7 +2,7 @@ package ngo.teog.swift.helpers;
 
 import java.util.List;
 
-import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.User;
 
 public class HospitalInfo {

@@ -28,7 +28,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceInfo;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;

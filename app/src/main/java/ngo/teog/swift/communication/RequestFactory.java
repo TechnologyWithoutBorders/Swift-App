@@ -29,12 +29,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,8 +44,6 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceInfo;
-import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
