@@ -80,12 +80,6 @@ public class UserProfileActivity extends BaseActivity {
                 hospitalView.setText(Integer.toString(user.getHospital()));
             }
         });
-
-        /*viewModel.getHospital().observe(this, hospital -> {
-            if(hospital != null) {
-                hospitalView.setText(hospital.getName());
-            }
-        });*/
     }
 
     @Override
@@ -120,6 +114,34 @@ public class UserProfileActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 telephoneView.setText(input.getText().toString());
+                save();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    public void editMail(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mail Address");
+        builder.setMessage("You will need to remember your new mail address in order to log in.");
+
+        final EditText input = new EditText(this);
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        input.setText(mailView.getText());
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mailView.setText(input.getText().toString());
                 save();
             }
         });
