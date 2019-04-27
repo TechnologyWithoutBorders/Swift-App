@@ -205,10 +205,12 @@ public class HospitalRepository {
                         jsonDevices.put(new JSONObject(gson.toJson(device)));
                     }
 
-                    List<Report> reports = deviceInfo.getReports();
+                    List<ReportInfo> reports = deviceInfo.getReports();
 
-                    for (Report report : reports) {
-                        if (report.getCreated() >= lastUpdate) {
+                    for(ReportInfo reportInfo : reports) {
+                        Report report = reportInfo.getReport();
+
+                        if(report.getCreated() >= lastUpdate) {
                             jsonReports.put(new JSONObject(gson.toJson(report)));
                         }
                     }
@@ -254,9 +256,13 @@ public class HospitalRepository {
                             for(DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
                                 hospitalDao.save(deviceInfo.getDevice());
 
-                                List<Report> reports = deviceInfo.getReports();
+                                List<ReportInfo> reportInfos = deviceInfo.getReports();
 
-                                hospitalDao.save(reports);
+                                for(ReportInfo reportInfo : reportInfos) {
+                                    Report report = reportInfo.getReport();
+
+                                    hospitalDao.save(report);
+                                }
                             }
 
                             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);

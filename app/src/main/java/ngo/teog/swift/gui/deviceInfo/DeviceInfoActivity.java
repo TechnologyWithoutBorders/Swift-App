@@ -43,6 +43,7 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
@@ -86,13 +87,13 @@ public class DeviceInfoActivity extends BaseActivity {
 
         statusSpinner = findViewById(R.id.statusSpinner);
         statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
-        statusSpinner.setSelection(deviceInfo.getReports().get(0).getCurrentState());
+        statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (triggered) {
                     Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                    intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getCurrentState());
+                    intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getReport().getCurrentState());
                     intent.putExtra("NEW_STATUS", i);
                     intent.putExtra("DEVICE", deviceInfo.getDevice().getId());
                     startActivity(intent);
@@ -306,10 +307,10 @@ public class DeviceInfoActivity extends BaseActivity {
         }
     }
 
-    private class ReportArrayAdapter extends ArrayAdapter<Report> {
+    private class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
         private final Context context;
 
-        private ReportArrayAdapter(Context context, List<Report> values) {
+        private ReportArrayAdapter(Context context, List<ReportInfo> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -322,9 +323,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 convertView = inflater.inflate(R.layout.row_reports, parent, false);
             }
 
-            Report report = this.getItem(position);
+            ReportInfo reportInfo = this.getItem(position);
 
-            if(report != null) {
+            if(reportInfo != null) {
+                Report report = reportInfo.getReport();
+
                 TextView authorView = convertView.findViewById(R.id.authorView);
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);

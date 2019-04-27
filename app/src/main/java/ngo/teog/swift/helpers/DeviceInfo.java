@@ -8,12 +8,14 @@ import java.util.List;
 
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.ReportInfo;
 
 public class DeviceInfo implements Serializable {
     @Embedded
     private HospitalDevice device;
-    @Relation(parentColumn = "id", entityColumn = "device")
-    private List<Report> reports;
+
+    @Relation(parentColumn = "id", entityColumn = "device", entity = Report.class)
+    private List<ReportInfo> reports;
 
     public DeviceInfo(HospitalDevice device) {
         this.device = device;
@@ -27,11 +29,11 @@ public class DeviceInfo implements Serializable {
         this.device = device;
     }
 
-    public List<Report> getReports() {
+    public List<ReportInfo> getReports() {
         return reports;
     }
 
-    public void setReports(List<Report> reports) {
+    public void setReports(List<ReportInfo> reports) {
         this.reports = reports;
     }
 }

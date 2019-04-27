@@ -273,7 +273,7 @@ public class HospitalActivity extends BaseActivity {
 
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();
-                        Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
+                        Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size()-1).getReport();
 
                         nameView.setText(device.getType());
 

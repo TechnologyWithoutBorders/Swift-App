@@ -10,6 +10,7 @@ import java.util.List;
 
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.ReportFilter;
@@ -144,7 +145,7 @@ public class ResponseParser {
                     long lastUpdate = Defaults.DATETIME_FORMAT.parse(deviceObject.getString("d_last_update")).getTime();
 
                     JSONArray reports = deviceObject.getJSONArray("reports");
-                    List<Report> reportList = new ArrayList<>();
+                    List<ReportInfo> reportList = new ArrayList<>();
 
                     for(int j = 0; j < reports.length(); j++) {
                         JSONObject reportObject = reports.getJSONObject(j);
@@ -159,7 +160,9 @@ public class ResponseParser {
 
                         Report report = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
 
-                        reportList.add(report);
+                        ReportInfo reportInfo = new ReportInfo(report);
+
+                        reportList.add(reportInfo);
                     }
 
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);

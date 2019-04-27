@@ -48,6 +48,7 @@ import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.UpdateWorker;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
@@ -116,14 +117,14 @@ public class TodoFragment extends BaseFragment {
                 adapter.clear();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    List<Report> reports = deviceInfo.getReports();
-                    Collections.reverse(reports);
+                    List<ReportInfo> reports = deviceInfo.getReports();
+                    //Collections.reverse(reports); TODO
                 }
 
                 Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
                     @Override
                     public int compare(DeviceInfo first, DeviceInfo second) {
-                        List<Report> firstReports = first.getReports();
+                        /*List<Report> firstReports = first.getReports();
                         List<Report> secondReports = second.getReports();
 
                         if(firstReports.size() > 0 && secondReports.size() > 0) {
@@ -133,18 +134,20 @@ public class TodoFragment extends BaseFragment {
                             return (firstState-secondState)*-1;
                         } else {
                             return 0;
-                        }
+                        }*/
+
+                        return 0; //TODO
                     }
                 });
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    List<Report> reports = deviceInfo.getReports();
+                    List<ReportInfo> reports = deviceInfo.getReports();
 
-                    if(reports.size() > 0) {
+                    /*if(reports.size() > 0) {
                         if(reports.get(0).getCurrentState() == 1 || reports.get(0).getCurrentState() == 2) {
                             adapter.add(deviceInfo);
                         }
-                    }
+                    }*///TODO
                 }
             }
         });
@@ -205,7 +208,7 @@ public class TodoFragment extends BaseFragment {
 
             if(deviceInfo != null) {
                 HospitalDevice device = deviceInfo.getDevice();
-                Report lastReport = deviceInfo.getReports().get(0);
+                Report lastReport = deviceInfo.getReports().get(0).getReport();
 
                 nameView.setText(device.getType());
 
