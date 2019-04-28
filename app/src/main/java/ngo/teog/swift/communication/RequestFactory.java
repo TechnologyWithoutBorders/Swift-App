@@ -497,32 +497,6 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createReportCreationRequest(final Context context, View disable, View enable, final Report report) {
-        final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
-
-        Map<String, String> params = generateParameterMap(context, ReportFilter.ACTION_CREATE_REPORT, true);
-
-        params.put(ReportFilter.AUTHOR, Integer.toString(report.getAuthor()));
-        params.put(ReportFilter.DEVICE, Integer.toString(report.getDevice()));
-        params.put(ReportFilter.DESCRIPTION, report.getDescription());
-        params.put(ReportFilter.PREVIOUS_STATE, Integer.toString(report.getPreviousState()));//TODO zur current state umbenennen
-        params.put(ReportFilter.CURRENT_STATE, Integer.toString(report.getCurrentState()));
-        params.put(ReportFilter.DATETIME, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(report.getCreated()));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<Report> reportList = new ResponseParser().parseReportList(response);
-
-                Intent intent = new Intent(context, ReportInfoActivity.class);
-                intent.putExtra("REPORT", reportList.get(0));
-                context.startActivity(intent);
-            }
-        });
-    }
-
     private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
