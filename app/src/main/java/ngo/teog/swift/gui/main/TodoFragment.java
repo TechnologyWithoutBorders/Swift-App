@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -185,6 +186,7 @@ public class TodoFragment extends BaseFragment {
             TextView dateView = convertView.findViewById(R.id.dateView);
             TextView statusView = convertView.findViewById(R.id.statusView);
             ImageView imageView = convertView.findViewById(R.id.imageView);
+            TextView detailView = convertView.findViewById(R.id.detailView);
 
             DeviceInfo deviceInfo = this.getItem(position);
 
@@ -194,8 +196,12 @@ public class TodoFragment extends BaseFragment {
 
                 nameView.setText(device.getType());
 
-                String dateString = Defaults.DATE_FORMAT.format(lastReport.getCreated());
+                long now = new Date().getTime();
+                long reportDate = lastReport.getCreated();
+                String dateString = Long.toString((now-reportDate)/1000/60/60/24) + " d";
                 dateView.setText(dateString);
+
+                detailView.setText(device.getManufacturer() + "\n" + device.getModel());
 
                 DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), this.getContext());
 
