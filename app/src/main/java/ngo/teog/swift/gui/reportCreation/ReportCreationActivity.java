@@ -17,7 +17,10 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.ReportInfoActivity;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel;
+import ngo.teog.swift.gui.login.LoginActivity;
+import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -95,8 +98,10 @@ public class ReportCreationActivity extends BaseActivity {
         saveButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        ReportCreationActivity.this.finish();
+        Intent intent = new Intent(ReportCreationActivity.this, ReportInfoActivity.class);
+        intent.putExtra("REPORT", report);
+        startActivity(intent);
 
-        //TODO open report
+        ReportCreationActivity.this.finish();
     }
 }
