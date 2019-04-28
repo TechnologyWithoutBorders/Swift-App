@@ -124,6 +124,14 @@ public class HospitalRepository {
         });
     }
 
+    public void createReport(Report report, int userId) {
+        executor.execute(() -> {
+            hospitalDao.save(report);
+
+            refreshUserHospitalSync(userId);
+        });
+    }
+
     private void refreshUserHospital(int userId) {
         executor.execute(() -> {
             //TODO check if user data has been fetched recently

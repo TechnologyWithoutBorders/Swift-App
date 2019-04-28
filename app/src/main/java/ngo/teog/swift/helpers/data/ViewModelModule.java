@@ -11,6 +11,7 @@ import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.gui.main.BarcodeViewModel;
 import ngo.teog.swift.gui.main.TodoViewModel;
+import ngo.teog.swift.gui.reportCreation.ReportCreationViewModel;
 import ngo.teog.swift.gui.userInfo.UserInfoViewModel;
 import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 
@@ -55,4 +56,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NewDeviceViewModel.class)
     public abstract ViewModel newDeviceViewModel(NewDeviceViewModel newDeviceViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ReportCreationViewModel.class)
+    public abstract ViewModel reportCreationViewModel(ReportCreationViewModel reportCreationViewModel);
 }

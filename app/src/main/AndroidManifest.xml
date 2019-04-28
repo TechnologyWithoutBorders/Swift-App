@@ -114,7 +114,7 @@
             android:name=".gui.userInfo.UserInfoActivity"
             android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".gui.ReportCreationActivity"
+            android:name=".gui.reportCreation.ReportCreationActivity"
             android:parentActivityName=".gui.main.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity

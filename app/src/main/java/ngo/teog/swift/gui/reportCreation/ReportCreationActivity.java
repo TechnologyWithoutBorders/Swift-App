@@ -1,5 +1,6 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.reportCreation;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,13 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.android.volley.RequestQueue;
+import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class ReportCreationActivity extends BaseActivity {
 
@@ -29,6 +34,11 @@ public class ReportCreationActivity extends BaseActivity {
     private int oldState;
     private int state;
     private int device;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private ReportCreationViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,14 @@ public class ReportCreationActivity extends BaseActivity {
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);
         saveButton = findViewById(R.id.saveButton);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportCreationViewModel.class);
     }
 
     @Override
@@ -72,14 +90,13 @@ public class ReportCreationActivity extends BaseActivity {
 
         Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, System.currentTimeMillis());
 
-        RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-
-        RequestFactory factory = new RequestFactory();
-        RequestFactory.DefaultRequest request = factory.createReportCreationRequest(this, progressBar, saveButton, report);
+        viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
         saveButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        queue.add(request);
+        ReportCreationActivity.this.finish();
+
+        //TODO open report
     }
 }
