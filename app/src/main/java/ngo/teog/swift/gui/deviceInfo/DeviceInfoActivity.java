@@ -2,11 +2,16 @@ package ngo.teog.swift.gui.deviceInfo;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,8 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,10 +44,12 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.ReportCreationActivity;
 import ngo.teog.swift.gui.ReportInfoActivity;
+import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.DeviceState;
@@ -49,6 +58,16 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class DeviceInfoActivity extends BaseActivity {
+
+    private static final int ASSET_NUMBER = 0;
+    private static final int TYPE = 1;
+    private static final int MODEL = 2;
+    private static final int MANUFACTURER = 3;
+    private static final int SERIAL_NUMBER = 4;
+    private static final int WARD = 5;
+    private static final int MAINTENANCE_INTERVAL = 6;
+
+    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Ward", "Maintenance Interval (Weeks)"};
 
     private ReportArrayAdapter adapter;
 
@@ -61,8 +80,13 @@ public class DeviceInfoActivity extends BaseActivity {
     private ProgressBar progressBar;
     private ImageView globalImageView;
 
+    private TextView assetNumberView;
+    private TextView typeView;
+    private TextView modelView;
+    private TextView manufacturerView;
+    private TextView serialNumberView;
+    private TextView wardView;
     private TextView intervalView;
-    private ProgressBar intervalProgressbar;
 
     private  DeviceInfo deviceInfo;
 
@@ -80,8 +104,6 @@ public class DeviceInfoActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_device_info);
-
-        intervalProgressbar = findViewById(R.id.intervalProgressbar);
 
         Intent intent = this.getIntent();
         deviceInfo = (DeviceInfo)intent.getSerializableExtra("device");
@@ -126,17 +148,15 @@ public class DeviceInfoActivity extends BaseActivity {
 
         progressBar = findViewById(R.id.progressBar);
 
-        ProgressBar reportListProgressbar = findViewById(R.id.reportListProgressbar);
-
-        TextView assetNumberView = findViewById(R.id.assetNumberView);
-        TextView typeView = findViewById(R.id.typeView);
-        TextView modelView = findViewById(R.id.modelView);
-        TextView manufacturerView = findViewById(R.id.manufacturerView);
-        TextView serialNumberView = findViewById(R.id.serialNumberView);
+        assetNumberView = findViewById(R.id.assetNumberView);
+        typeView = findViewById(R.id.typeView);
+        modelView = findViewById(R.id.modelView);
+        manufacturerView = findViewById(R.id.manufacturerView);
+        serialNumberView = findViewById(R.id.serialNumberView);
 
         TextView hospitalView = findViewById(R.id.hospitalView);
 
-        TextView wardView = findViewById(R.id.wardView);
+        wardView = findViewById(R.id.wardView);
 
         intervalView = findViewById(R.id.intervalView);
 
@@ -193,43 +213,153 @@ public class DeviceInfoActivity extends BaseActivity {
 
         adapter = new ReportArrayAdapter(this, deviceInfo.getReports());
         reportListView.setAdapter(adapter);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
+    }
+
+    public void editAssetNumber(View view) {
+        this.edit(ASSET_NUMBER, assetNumberView.getText().toString());
+    }
+
+    public void editType(View view) {
+        this.edit(TYPE, typeView.getText().toString());
+    }
+
+    public void editModel(View view) {
+        this.edit(MODEL, modelView.getText().toString());
+    }
+
+    public void editManufacturer(View view) {
+        this.edit(MANUFACTURER, manufacturerView.getText().toString());
+    }
+
+    public void editSerialNumber(View view) {
+        this.edit(SERIAL_NUMBER, serialNumberView.getText().toString());
+    }
+
+    public void editWard(View view) {
+        this.edit(WARD, wardView.getText().toString());
     }
 
     public void editMaintenanceInterval(View view) {
-        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Maintenance Interval (Weeks)");
+        this.edit(MAINTENANCE_INTERVAL, null);
+    }
 
-        final NumberPicker intervalPicker = new NumberPicker(this);
-        intervalPicker.setMinValue(1);
-        intervalPicker.setMaxValue(24);
-        intervalPicker.setValue(device.getMaintenanceInterval());
+    private void edit(int parameter, String presetText) {
+        String titleString = PARAM_TITLES[parameter];
 
-        builder.setView(intervalPicker);
+        final View editView;
 
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        switch(parameter) {
+            case MAINTENANCE_INTERVAL:
+                NumberPicker numberPicker = new NumberPicker(this);
+                numberPicker.setMinValue(1);
+                numberPicker.setMaxValue(24);
+                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
+
+                editView = numberPicker;
+
+                break;
+            default:
+                EditText editText = new EditText(this);
+                editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(30)});
+                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                editText.setText(presetText);
+
+                editView = editText;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(titleString);
+        builder.setView(editView);
+
+        DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(DeviceInfoActivity.this.checkForInternetConnection()) {
-                    RequestQueue queue = VolleyManager.getInstance(DeviceInfoActivity.this).getRequestQueue();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                save(parameter, editView);
+            }
+        };
+        DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        };
 
-                    RequestFactory.DefaultRequest request = new RequestFactory().createDeviceUpdateRequest(DeviceInfoActivity.this, intervalProgressbar, intervalView, device.getId(), intervalPicker.getValue());
+        builder.setPositiveButton("OK", positiveListener);
+        builder.setNegativeButton("Cancel", negativeListener);
 
-                    intervalProgressbar.setVisibility(View.VISIBLE);
-                    intervalView.setVisibility(View.INVISIBLE);
+        builder.show();
+    }
 
-                    queue.add(request);
+    private void save(int parameter, View editView) {
+        HospitalDevice device = deviceInfo.getDevice();
+
+        switch(parameter) {
+            case ASSET_NUMBER:
+                String assetNumber = ((EditText)editView).getText().toString();
+
+                //if we use database queries this value is updated automatically
+                assetNumberView.setText(assetNumber);
+                device.setAssetNumber(assetNumber);
+                break;
+            case TYPE:
+                String type = ((EditText)editView).getText().toString();
+
+                typeView.setText(type);
+                device.setType(type);
+                break;
+            case MODEL:
+                String model = ((EditText)editView).getText().toString();
+
+                modelView.setText(model);
+                device.setModel(model);
+                break;
+            case MANUFACTURER:
+                String manufacturer = ((EditText)editView).getText().toString();
+
+                manufacturerView.setText(manufacturer);
+                device.setManufacturer(manufacturer);
+                break;
+            case SERIAL_NUMBER:
+                String serialNumber = ((EditText)editView).getText().toString();
+
+                serialNumberView.setText(serialNumber);
+                device.setSerialNumber(serialNumber);
+                break;
+            case WARD:
+                String ward = ((EditText)editView).getText().toString();
+
+                wardView.setText(ward);
+                device.setWard(ward);
+                break;
+            case MAINTENANCE_INTERVAL:
+                int interval = ((NumberPicker)editView).getValue();
+
+                device.setMaintenanceInterval(interval);
+
+                if(interval % 4 == 0) {
+                    intervalView.setText(Integer.toString(interval/4) + " Months");
+                } else {
+                    intervalView.setText(Integer.toString(interval) + " Weeks");
                 }
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
 
-        builder.show();*/
+                break;
+        }
+
+        device.setLastUpdate(System.currentTimeMillis());
+
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        viewModel.updateDevice(device, userId);
     }
 
     private void downloadImage() {

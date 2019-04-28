@@ -92,6 +92,14 @@ public class HospitalRepository {
         });
     }
 
+    public void updateDevice(HospitalDevice device, int userId) {
+        executor.execute(() -> {
+            hospitalDao.save(device);
+
+            refreshUserHospitalSync(userId);
+        });
+    }
+
     private void refreshUserHospitalSync(int userId) {
         //TODO check if user data has been fetched recently
 

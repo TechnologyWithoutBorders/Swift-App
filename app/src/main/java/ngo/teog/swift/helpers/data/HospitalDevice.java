@@ -53,20 +53,40 @@ public class HospitalDevice implements Serializable {
         return assetNumber;
     }
 
+    public void setAssetNumber(String assetNumber) {
+        this.assetNumber = assetNumber;
+    }
+
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getSerialNumber() {
         return serialNumber;
     }
 
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
     public String getManufacturer() {
         return manufacturer;
     }
 
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
     public String getModel() {
         return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public int getHospital() {
@@ -77,11 +97,23 @@ public class HospitalDevice implements Serializable {
         return maintenanceInterval;
     }
 
+    public void setMaintenanceInterval(int maintenanceInterval) {
+        this.maintenanceInterval = maintenanceInterval;
+    }
+
     public String getWard() {
         return ward;
     }
 
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
     public long getLastUpdate() {
         return lastUpdate;
+    }
+
+    public void setLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

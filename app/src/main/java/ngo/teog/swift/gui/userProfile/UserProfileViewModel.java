@@ -11,7 +11,6 @@ import ngo.teog.swift.helpers.data.User;
 
 public class UserProfileViewModel extends ViewModel {
     private LiveData<User> user;
-    private LiveData<Hospital> hospital;
     private HospitalRepository userRepo;
 
     @Inject
@@ -33,7 +32,6 @@ public class UserProfileViewModel extends ViewModel {
         return user;
     }
 
-    //TODO keine Ahnung, ob man das so macht
     public void updateUser(User user) {
         userRepo.updateUser(user);
     }
