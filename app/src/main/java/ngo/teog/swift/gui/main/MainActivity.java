@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 
 import java.io.File;
 
+import ngo.teog.swift.MaintenanceActivity;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
@@ -173,9 +174,7 @@ public class MainActivity extends BaseActivity {
                 startAboutActivity();
                 return true;
             case R.id.maintenance:
-                showInfo(R.string.calendar_activity);
-                //startCalendarActivity();
-                //TODO build calendar
+                startMaintenanceActivity();
                 return true;
             case R.id.info:
                 showInfo(R.string.mainactivity);
@@ -225,8 +224,8 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void startCalendarActivity() {
-        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+    public void startMaintenanceActivity() {
+        Intent intent = new Intent(MainActivity.this, MaintenanceActivity.class);
         startActivity(intent);
     }
 }
