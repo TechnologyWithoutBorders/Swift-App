@@ -32,4 +32,8 @@ public class TodoViewModel extends ViewModel {
     public LiveData<List<DeviceInfo>> getDeviceInfos() {
         return deviceInfos;
     }
+
+    public void refreshHospital(int userId) {
+        hospitalRepo.refreshUserHospital(userId);
+    }
 }

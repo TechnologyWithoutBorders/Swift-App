@@ -132,7 +132,7 @@ public class HospitalRepository {
         });
     }
 
-    private void refreshUserHospital(int userId) {
+    public void refreshUserHospital(int userId) {
         executor.execute(() -> {
             //TODO check if user data has been fetched recently
 

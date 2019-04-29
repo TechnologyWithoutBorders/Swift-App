@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class TodoFragment extends BaseFragment {
             }
         });
 
-        /*final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
 
         swipeRefreshLayout.setOnRefreshListener(
             new SwipeRefreshLayout.OnRefreshListener() {
@@ -83,7 +84,7 @@ public class TodoFragment extends BaseFragment {
                     refresh();
                 }
             }
-        );*/
+        );
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getActivity().getApplication()))
@@ -140,34 +141,15 @@ public class TodoFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        //refresh();
+        //TODO refresh();
     }
 
-    /*private void refresh() {
-        Constraints updateConstraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
+    private void refresh() {
+        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        WorkManager.getInstance().cancelAllWorkByTag("update_todo");
-
-        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 6, TimeUnit.HOURS)
-                .addTag("update_todo")
-                .setConstraints(updateConstraints)
-                .build();
-
-        WorkManager.getInstance().enqueue(updateWork);
-
-        progressBar.setVisibility(View.VISIBLE);
-        listView.setVisibility(View.INVISIBLE);
-
-        if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(getContext()).getRequestQueue();
-
-            RequestFactory.DeviceListRequest request = new RequestFactory().createTodoListRequest(getContext(), progressBar, listView, adapter);
-
-            queue.add(request);
-        }
-    }*/
+        viewModel.refreshHospital(userId);
+    }
 
     private class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {
         private CustomSimpleArrayAdapter(Context context, List<DeviceInfo> values) {
