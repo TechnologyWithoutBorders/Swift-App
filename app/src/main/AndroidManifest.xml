@@ -21,7 +21,7 @@
             android:label="Maintenance"
             android:parentActivityName=".gui.main.MainActivity" />
         <activity
-            android:name=".gui.StatsActivity"
+            android:name=".gui.login.StatsActivity"
             android:label="Statistics"
             android:parentActivityName=".gui.login.LoginActivity" />
         <activity
