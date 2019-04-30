@@ -23,6 +23,10 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
 
 import ngo.teog.swift.gui.maintenance.MaintenanceActivity;
 import ngo.teog.swift.communication.RequestFactory;
@@ -35,6 +39,11 @@ import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.HospitalDatabase;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class MainActivity extends BaseActivity {
 
@@ -42,6 +51,9 @@ public class MainActivity extends BaseActivity {
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
     private BarcodeFragment codeFragment;
+
+    @Inject
+    HospitalDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +120,12 @@ public class MainActivity extends BaseActivity {
             mChannel.setDescription(description);
             mNotificationManager.createNotificationChannel(mChannel);
         }
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
@@ -190,7 +208,12 @@ public class MainActivity extends BaseActivity {
     }
 
     public void logout() {
-        //TODO clear database
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        executor.execute(() -> {
+            database.clearAllTables();
+            executor.shutdown();
+        });
 
         //delete shared preferences
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
