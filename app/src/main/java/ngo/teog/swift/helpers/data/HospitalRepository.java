@@ -115,7 +115,7 @@ public class HospitalRepository {
 
     public void createDevice(HospitalDevice device, int userId) {
         executor.execute(() -> {
-            Report creationReport = new Report(0, userId, device.getId(), 0, 0, "device creation", device.getLastUpdate());
+            Report creationReport = new Report(-1, userId, device.getId(), 0, 0, "device creation", device.getLastUpdate());
 
             hospitalDao.save(device);
             hospitalDao.save(creationReport);
