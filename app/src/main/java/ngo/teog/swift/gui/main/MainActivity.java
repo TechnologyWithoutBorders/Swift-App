@@ -24,7 +24,7 @@ import com.android.volley.RequestQueue;
 
 import java.io.File;
 
-import ngo.teog.swift.MaintenanceActivity;
+import ngo.teog.swift.gui.maintenance.MaintenanceActivity;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
