@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -24,6 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
@@ -36,7 +40,7 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
-public class MaintenanceActivity extends AppCompatActivity {
+public class MaintenanceActivity extends BaseActivity {
 
     private static final int DAYS = 7;
 
@@ -113,6 +117,25 @@ public class MaintenanceActivity extends AppCompatActivity {
                 adapter.setDeviceInfos(dayList);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_user_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch(item.getItemId()) {
+            case R.id.info:
+                showInfo(R.string.maintenance_info);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {

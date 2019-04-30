@@ -12,7 +12,7 @@
     <string name="reportInfoActivity">Always consider browsing through the reports in order to get more information about the device before planning your repair.</string>
     <string name="userinfo_activity">You can use this data to contact your colleagues or staff at other hospitals.</string>
     <string name="userprofile_activity">This is your very own user profile. You can add some general information like your telephone number and position here.</string>
-    <string name="calendar_activity">Will be implemented soon</string>
+    <string name="maintenance_info">Coming soon</string>
     <string name="mainactivity"><![CDATA[
         <p><b>Barcode Scanner</b><br>
         The Scanner tab lets you scan registered barcodes and leads you directly to the respective device page. Alternatively you can enter the number of the ID sticker, if scanning is not possible.</p>
