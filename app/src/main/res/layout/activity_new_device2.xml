@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
@@ -79,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:text="Maintenance Intervall" />
+                    android:text="Maintenance Interval" />
 
                 <NumberPicker
                     android:id="@+id/intervalPicker"
@@ -99,12 +97,12 @@
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/buttonArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <Button style="@style/AppTheme.Button"
             android:id="@+id/nextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

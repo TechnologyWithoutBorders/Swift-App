@@ -22,7 +22,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <Button
+        <Button style="@style/AppTheme.Button"
             android:id="@+id/pictureButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,12 +31,12 @@
 
     </LinearLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/buttonArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <Button style="@style/AppTheme.Button"
             android:id="@+id/nextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
