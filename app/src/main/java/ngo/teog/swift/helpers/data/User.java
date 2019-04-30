@@ -5,9 +5,6 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
 
-import ngo.teog.swift.gui.userInfo.UserInfoActivity;
-import ngo.teog.swift.helpers.SearchObject;
-
 /**
  * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.

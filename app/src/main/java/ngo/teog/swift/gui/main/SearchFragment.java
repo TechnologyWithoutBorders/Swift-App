@@ -1,7 +1,6 @@
 package ngo.teog.swift.gui.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.SearchObject;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.User;
 
@@ -62,11 +60,11 @@ public class SearchFragment extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                SearchObject item = (SearchObject)adapterView.getItemAtPosition(i);
+                /*SearchObject item = (SearchObject)adapterView.getItemAtPosition(i);
 
                 Intent intent = new Intent(getContext(), item.getInfoActivityClass());
                 intent.putExtra(item.getExtraIdentifier(), item);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
 
