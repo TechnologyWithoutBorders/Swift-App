@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -30,6 +36,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ImageUploader;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -127,7 +134,20 @@ public class NewDeviceActivity3 extends BaseActivity {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
-            Bitmap bitmap = decode(imagePath, 640);
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            Data imageData = new Data.Builder()
+                    .putString("path", imagePath)
+                    .putInt("device", device.getId())
+                    .build();
+
+            OneTimeWorkRequest uploadWork =
+                    new OneTimeWorkRequest.Builder(ImageUploader.class)
+                            .setConstraints(constraints)
+                            .setInputData(imageData)
+                            .build();
 
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);

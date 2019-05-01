@@ -29,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ import java.util.Map;
 
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.ImageActivity;
+import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
@@ -140,6 +142,41 @@ public class RequestFactory {
             } else {
                 Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public DeviceCreationRequest createDeviceCreationRequest(final Context context, final int deviceId, final Bitmap bitmap) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, "uploadImage", true);
+
+        params.put("device", Integer.toString(deviceId));
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] imageBytes = stream.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        params.put("image", encodedImage);//TODO die Identifier anders organisieren
+
+        JSONObject request = new JSONObject(params);
+
+        return new DeviceCreationRequest(context, url, request);
+    }
+
+    public class DeviceCreationRequest extends JsonObjectRequest {
+
+        public DeviceCreationRequest(final Context context, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    //TODO
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
