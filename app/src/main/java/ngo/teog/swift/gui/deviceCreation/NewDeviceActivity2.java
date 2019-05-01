@@ -12,6 +12,8 @@ import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.util.Date;
+
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -103,7 +105,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                         }
 
                         HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, System.currentTimeMillis());
+                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, new Date().getTime()/1000);
 
                         Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                         intent.putExtra("device", device);

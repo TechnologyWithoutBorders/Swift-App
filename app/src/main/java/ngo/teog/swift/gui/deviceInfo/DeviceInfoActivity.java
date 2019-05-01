@@ -352,7 +352,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 break;
         }
 
-        device.setLastUpdate(System.currentTimeMillis());
+        device.setLastUpdate(new Date().getTime()/1000);
 
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);

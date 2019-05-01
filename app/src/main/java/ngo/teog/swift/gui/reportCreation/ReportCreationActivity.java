@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
@@ -91,7 +93,7 @@ public class ReportCreationActivity extends BaseActivity {
 
         String description = descriptionText.getText().toString();
 
-        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, System.currentTimeMillis());
+        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date().getTime()/1000);
 
         viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
