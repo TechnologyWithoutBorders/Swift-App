@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -50,7 +49,6 @@ public class HospitalActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital);
 
-        LinearLayout contentView = findViewById(R.id.contentView);
         final ExpandableListView hospitalListView = findViewById(R.id.hospitalList);
 
         ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
@@ -260,14 +258,14 @@ public class HospitalActivity extends BaseActivity {
                     if(convertView == null || (int)convertView.getTag() != groupPosition) {
                         LayoutInflater inflater = (LayoutInflater) HospitalActivity.this
                                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        convertView = inflater.inflate(R.layout.row_todo, parent, false);
+                        convertView = inflater.inflate(R.layout.row_device, parent, false);
                         convertView.setTag(groupPosition);
                     }
 
                     TextView nameView = convertView.findViewById(R.id.nameView);
-                    TextView dateView = convertView.findViewById(R.id.dateView);
                     TextView statusView = convertView.findViewById(R.id.statusView);
                     ImageView imageView = convertView.findViewById(R.id.imageView);
+                    TextView detailsView = convertView.findViewById(R.id.detailView);
 
                     DeviceInfo deviceInfo = deviceInfos.get(childPosition);
 
@@ -277,12 +275,11 @@ public class HospitalActivity extends BaseActivity {
 
                         nameView.setText(device.getType());
 
-                        String dateString = Defaults.DATE_FORMAT.format(lastReport.getCreated());
-                        dateView.setText(dateString);
-
                         DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
 
-                        statusView.setText(triple.getStatestring());
+                        statusView.setText(device.getWard());
+
+                        detailsView.setText(device.getManufacturer() + "\n" + device.getModel());
 
                         imageView.setImageDrawable(triple.getStateicon());
                         imageView.setBackgroundColor(triple.getBackgroundcolor());
