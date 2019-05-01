@@ -24,6 +24,10 @@ public interface HospitalDao {
     @Query("SELECT COUNT(*) FROM hospitals WHERE id = :id AND lastUpdate >= :currentMillis-(:timeout*1000)")
     int hasHospital(int id, long currentMillis, int timeout);
 
+    @Transaction
+    @Query("SELECT * FROM users WHERE users.id = :userId")
+    LiveData<UserProfileInfo> loadUserProfile(int userId);
+
     @Insert(onConflict = REPLACE)
     void save(User user);
 

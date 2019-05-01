@@ -66,6 +66,12 @@ public class HospitalRepository {
         return hospitalDao.loadUserHospital(userId);
     }
 
+    public LiveData<UserProfileInfo> getUserProfileInfo(int userId) {
+        refreshUserHospital(userId);
+
+        return hospitalDao.loadUserProfile(userId);
+    }
+
     public LiveData<List<User>> getUserColleagues(int userId) {
         refreshUserHospital(userId);
 

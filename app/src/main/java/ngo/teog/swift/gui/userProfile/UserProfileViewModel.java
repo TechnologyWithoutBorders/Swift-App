@@ -8,31 +8,32 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
+import ngo.teog.swift.helpers.data.UserProfileInfo;
 
 public class UserProfileViewModel extends ViewModel {
-    private LiveData<User> user;
-    private HospitalRepository userRepo;
+    private LiveData<UserProfileInfo> userProfile;
+    private HospitalRepository hospitalRepo;
 
     @Inject
-    public UserProfileViewModel(HospitalRepository userRepo) {
-        this.userRepo = userRepo;
+    public UserProfileViewModel(HospitalRepository hospitalRepo) {
+        this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int id) {
-        if(this.user != null) {
+    public void init(int userId) {
+        if(this.userProfile != null) {
             // ViewModel is created on a per-Fragment basis, so the userId
             // doesn't change.
             return;
         }
 
-        user = userRepo.getUser(id);
+        userProfile = hospitalRepo.getUserProfileInfo(userId);
     }
 
-    public LiveData<User> getUser() {
-        return user;
+    public LiveData<UserProfileInfo> getUserProfile() {
+        return userProfile;
     }
 
     public void updateUser(User user) {
-        userRepo.updateUser(user);
+        hospitalRepo.updateUser(user);
     }
 }
