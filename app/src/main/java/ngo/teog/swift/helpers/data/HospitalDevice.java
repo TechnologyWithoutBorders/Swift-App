@@ -87,6 +87,10 @@ public class HospitalDevice implements Serializable {
         return hospital;
     }
 
+    public void setHospital(int hospital) {
+        this.hospital = hospital;
+    }
+
     public int getMaintenanceInterval() {
         return maintenanceInterval;
     }

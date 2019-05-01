@@ -78,8 +78,18 @@ public class NewDeviceActivity3 extends BaseActivity {
                 .build()
                 .inject(this);
 
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(NewDeviceViewModel.class);
-        viewModel.init(device.getId());
+        viewModel.init(userId, device.getId());
+
+        viewModel.getUser().observe(this, user -> {
+            if(user != null) {
+                device.setHospital(user.getHospital());
+                //TODO sicherstellen, dass das passiert ist, bevor es weitergeht
+            }
+        });
 
         //TODO bei Änderung des Devices ungleich null soll Device aufpoppen
     }

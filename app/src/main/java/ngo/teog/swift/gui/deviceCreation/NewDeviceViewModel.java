@@ -8,9 +8,11 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
+import ngo.teog.swift.helpers.data.User;
 
 public class NewDeviceViewModel extends ViewModel {
     private LiveData<DeviceInfo> device;
+    private LiveData<User> user;
     private HospitalRepository hospitalRepo;
 
     @Inject
@@ -18,11 +20,12 @@ public class NewDeviceViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int deviceId) {
+    public void init(int userId, int deviceId) {
         if (this.device != null) {
             return;
         }
 
+        user = hospitalRepo.getUser(userId);
         device = hospitalRepo.getDevice(deviceId);
     }
 
@@ -33,4 +36,6 @@ public class NewDeviceViewModel extends ViewModel {
     public LiveData<DeviceInfo> getDevice() {
         return device;
     }
+
+    public LiveData<User> getUser() { return user; }
 }

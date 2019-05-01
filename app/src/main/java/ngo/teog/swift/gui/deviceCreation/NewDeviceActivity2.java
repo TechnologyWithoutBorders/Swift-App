@@ -103,7 +103,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                         }
 
                         HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), 0, interval, System.currentTimeMillis());
+                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, System.currentTimeMillis());
 
                         Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                         intent.putExtra("device", device);
