@@ -448,7 +448,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 authorView.setText(reportInfo.getAuthors().get(0).getName());
 
                 long date = report.getCreated();
-                dateView.setText(Defaults.DATE_FORMAT.format(new Date(date)));
+                dateView.setText(Defaults.DATE_FORMAT.format(new Date(date*1000)));
             }
 
             return convertView;
