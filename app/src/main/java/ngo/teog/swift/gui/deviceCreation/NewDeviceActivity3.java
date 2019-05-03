@@ -35,10 +35,14 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.login.LoginActivity;
+import ngo.teog.swift.gui.login.StatsActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ImageUploader;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -98,7 +102,15 @@ public class NewDeviceActivity3 extends BaseActivity {
             }
         });
 
-        //TODO bei Änderung des Devices ungleich null soll Device aufpoppen
+        viewModel.getDevice().observe(this, device -> {
+            if(device != null) {
+                Intent intent = new Intent(NewDeviceActivity3.this, DeviceInfoActivity.class);
+                intent.putExtra("device", device);
+                startActivity(intent);
+
+                NewDeviceActivity3.this.finish();
+            }
+        });
     }
 
     @Override
