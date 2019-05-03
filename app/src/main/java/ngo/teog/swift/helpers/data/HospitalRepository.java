@@ -175,7 +175,7 @@ public class HospitalRepository {
             JSONArray jsonReports = new JSONArray();
 
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
+            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis())/1000;
 
             Hospital hospital = hospitalDao.getUserHospital(userID);
 
