@@ -3,7 +3,6 @@ package ngo.teog.swift.gui.maintenance;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +25,6 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -46,8 +42,6 @@ public class MaintenanceActivity extends BaseActivity {
 
     @Inject
     ViewModelFactory viewModelFactory;
-
-    private MaintenanceViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +62,7 @@ public class MaintenanceActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaintenanceViewModel.class);
+        MaintenanceViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaintenanceViewModel.class);
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
@@ -96,9 +90,7 @@ public class MaintenanceActivity extends BaseActivity {
                             Date nextMaintenance = new Date(created+maintenanceInterval*7*24*60*60);
                             Date calendarDate = cal.getTime();
 
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-                            if(sdf.format(nextMaintenance).equals(sdf.format(calendarDate))) {
+                            if(Defaults.DATE_FORMAT.format(nextMaintenance).equals(Defaults.DATE_FORMAT.format(calendarDate))) {
                                 deviceInfoList.add(deviceInfo);
                             }
                         }
