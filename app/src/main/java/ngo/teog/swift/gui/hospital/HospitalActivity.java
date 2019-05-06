@@ -42,8 +42,6 @@ public class HospitalActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private HospitalViewModel viewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +84,7 @@ public class HospitalActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);
+        HospitalViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);
         viewModel.init(id);
         viewModel.getHospital().observe(this, hospital -> {
             if(hospital != null) {
