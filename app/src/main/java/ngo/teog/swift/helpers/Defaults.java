@@ -28,7 +28,10 @@ public final class Defaults {
     public static final String REPORTS_URL = "reports.php";
     public static final String HOSPITALS_URL = "hospitals.php";
 
-    //default methodes
+    //default methods
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    //identifier keys
+    public static final String DEVICE_KEY = "DEVICE";
 }

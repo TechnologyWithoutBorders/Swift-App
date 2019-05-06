@@ -105,7 +105,7 @@ public class NewDeviceActivity3 extends BaseActivity {
         viewModel.getDevice().observe(this, device -> {
             if(device != null) {
                 Intent intent = new Intent(NewDeviceActivity3.this, DeviceInfoActivity.class);
-                intent.putExtra("device", device);
+                intent.putExtra(Defaults.DEVICE_KEY, device.getDevice().getId());
                 startActivity(intent);
 
                 NewDeviceActivity3.this.finish();

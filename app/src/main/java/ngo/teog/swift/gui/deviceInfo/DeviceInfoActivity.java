@@ -86,7 +86,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private TextView wardView;
     private TextView intervalView;
 
-    private  DeviceInfo deviceInfo;
+    private DeviceInfo deviceInfo;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -104,30 +104,11 @@ public class DeviceInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_device_info);
 
         Intent intent = this.getIntent();
-        deviceInfo = (DeviceInfo)intent.getSerializableExtra("device");
+        //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
+        int deviceId = intent.getIntExtra(Defaults.DEVICE_KEY, -1);
 
         statusSpinner = findViewById(R.id.statusSpinner);
         statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
-        statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
-        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (triggered) {
-                    Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                    intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getReport().getCurrentState());
-                    intent.putExtra("NEW_STATUS", i);
-                    intent.putExtra("DEVICE", deviceInfo.getDevice().getId());
-                    startActivity(intent);
-                } else {
-                    triggered = true;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         reportListView = findViewById(R.id.reportList);
 
@@ -158,60 +139,6 @@ public class DeviceInfoActivity extends BaseActivity {
 
         intervalView = findViewById(R.id.intervalView);
 
-        if(deviceInfo != null) {
-            HospitalDevice device = deviceInfo.getDevice();
-
-            assetNumberView.setText(device.getAssetNumber());
-            typeView.setText(device.getType());
-            modelView.setText(device.getModel());
-            manufacturerView.setText(device.getManufacturer());
-            serialNumberView.setText(device.getSerialNumber());
-            hospitalView.setText(deviceInfo.getHospitals().get(0).getName());
-            wardView.setText(device.getWard());
-
-            int interval = device.getMaintenanceInterval();
-
-            if(interval % 4 == 0) {
-                intervalView.setText(Integer.toString(interval/4) + " Months");
-            } else {
-                intervalView.setText(Integer.toString(interval) + " Weeks");
-            }
-
-            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
-
-            if(!image.exists()) {
-                globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
-
-                globalImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        downloadImage();
-                    }
-                });
-            } else {
-                Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
-                globalImageView.setImageBitmap(bitmap);
-                globalImageView.setBackgroundColor(Color.BLACK);
-
-                globalImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
-
-                        if(image.exists()) {
-                            Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                            intent.putExtra("IMAGE", image);
-
-                            startActivity(intent);
-                        }
-                    }
-                });
-            }
-        }
-
-        adapter = new ReportArrayAdapter(this, deviceInfo.getReports());
-        reportListView.setAdapter(adapter);
-
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
                 .roomModule(new RoomModule(getApplication()))
@@ -219,6 +146,86 @@ public class DeviceInfoActivity extends BaseActivity {
                 .inject(this);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
+        viewModel.init(deviceId);
+
+        viewModel.getDeviceInfo().observe(this, deviceInfo -> {
+            this.deviceInfo = deviceInfo;
+
+            if(deviceInfo != null) {
+                HospitalDevice device = deviceInfo.getDevice();
+
+                statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
+                statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (triggered) {
+                            Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                            intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getReport().getCurrentState());
+                            intent.putExtra("NEW_STATUS", i);
+                            intent.putExtra("DEVICE", deviceInfo.getDevice().getId());
+                            startActivity(intent);
+                        } else {
+                            triggered = true;
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                assetNumberView.setText(device.getAssetNumber());
+                typeView.setText(device.getType());
+                modelView.setText(device.getModel());
+                manufacturerView.setText(device.getManufacturer());
+                serialNumberView.setText(device.getSerialNumber());
+                hospitalView.setText(deviceInfo.getHospitals().get(0).getName());
+                wardView.setText(device.getWard());
+
+                int interval = device.getMaintenanceInterval();
+
+                if(interval % 4 == 0) {
+                    intervalView.setText(Integer.toString(interval/4) + " Months");
+                } else {
+                    intervalView.setText(Integer.toString(interval) + " Weeks");
+                }
+
+                File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
+
+                if(!image.exists()) {
+                    globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+
+                    globalImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            downloadImage();
+                        }
+                    });
+                } else {
+                    Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+                    globalImageView.setImageBitmap(bitmap);
+                    globalImageView.setBackgroundColor(Color.BLACK);
+
+                    globalImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
+
+                            if(image.exists()) {
+                                Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
+                                intent.putExtra("IMAGE", image);
+
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                }
+
+                adapter = new ReportArrayAdapter(this, deviceInfo.getReports());
+                reportListView.setAdapter(adapter);
+            }
+        });
     }
 
     public void editAssetNumber(View view) {
@@ -250,114 +257,118 @@ public class DeviceInfoActivity extends BaseActivity {
     }
 
     private void edit(int parameter, String presetText) {
-        String titleString = PARAM_TITLES[parameter];
+        if(deviceInfo != null) {
+            String titleString = PARAM_TITLES[parameter];
 
-        final View editView;
+            final View editView;
 
-        switch(parameter) {
-            case MAINTENANCE_INTERVAL:
-                NumberPicker numberPicker = new NumberPicker(this);
-                numberPicker.setMinValue(1);
-                numberPicker.setMaxValue(24);
-                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
+            switch(parameter) {
+                case MAINTENANCE_INTERVAL:
+                    NumberPicker numberPicker = new NumberPicker(this);
+                    numberPicker.setMinValue(1);
+                    numberPicker.setMaxValue(24);
+                    numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
 
-                editView = numberPicker;
+                    editView = numberPicker;
 
-                break;
-            default:
-                EditText editText = new EditText(this);
-                editText.setFilters(new InputFilter[] {new InputFilter.LengthFilter(30)});
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                editText.setText(presetText);
+                    break;
+                default:
+                    EditText editText = new EditText(this);
+                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                    editText.setText(presetText);
 
-                editView = editText;
+                    editView = editText;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle(titleString);
+            builder.setView(editView);
+
+            DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    save(parameter, editView);
+                }
+            };
+            DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            };
+
+            builder.setPositiveButton("OK", positiveListener);
+            builder.setNegativeButton("Cancel", negativeListener);
+
+            builder.show();
         }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle(titleString);
-        builder.setView(editView);
-
-        DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                save(parameter, editView);
-            }
-        };
-        DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.cancel();
-            }
-        };
-
-        builder.setPositiveButton("OK", positiveListener);
-        builder.setNegativeButton("Cancel", negativeListener);
-
-        builder.show();
     }
 
     private void save(int parameter, View editView) {
-        HospitalDevice device = deviceInfo.getDevice();
+        if(deviceInfo != null) {
+            HospitalDevice device = deviceInfo.getDevice();
 
-        switch(parameter) {
-            case ASSET_NUMBER:
-                String assetNumber = ((EditText)editView).getText().toString();
+            switch (parameter) {
+                case ASSET_NUMBER:
+                    String assetNumber = ((EditText) editView).getText().toString();
 
-                //if we use database queries this value is updated automatically
-                assetNumberView.setText(assetNumber);
-                device.setAssetNumber(assetNumber);
-                break;
-            case TYPE:
-                String type = ((EditText)editView).getText().toString();
+                    //if we use database queries this value is updated automatically
+                    assetNumberView.setText(assetNumber);
+                    device.setAssetNumber(assetNumber);
+                    break;
+                case TYPE:
+                    String type = ((EditText) editView).getText().toString();
 
-                typeView.setText(type);
-                device.setType(type);
-                break;
-            case MODEL:
-                String model = ((EditText)editView).getText().toString();
+                    typeView.setText(type);
+                    device.setType(type);
+                    break;
+                case MODEL:
+                    String model = ((EditText) editView).getText().toString();
 
-                modelView.setText(model);
-                device.setModel(model);
-                break;
-            case MANUFACTURER:
-                String manufacturer = ((EditText)editView).getText().toString();
+                    modelView.setText(model);
+                    device.setModel(model);
+                    break;
+                case MANUFACTURER:
+                    String manufacturer = ((EditText) editView).getText().toString();
 
-                manufacturerView.setText(manufacturer);
-                device.setManufacturer(manufacturer);
-                break;
-            case SERIAL_NUMBER:
-                String serialNumber = ((EditText)editView).getText().toString();
+                    manufacturerView.setText(manufacturer);
+                    device.setManufacturer(manufacturer);
+                    break;
+                case SERIAL_NUMBER:
+                    String serialNumber = ((EditText) editView).getText().toString();
 
-                serialNumberView.setText(serialNumber);
-                device.setSerialNumber(serialNumber);
-                break;
-            case WARD:
-                String ward = ((EditText)editView).getText().toString();
+                    serialNumberView.setText(serialNumber);
+                    device.setSerialNumber(serialNumber);
+                    break;
+                case WARD:
+                    String ward = ((EditText) editView).getText().toString();
 
-                wardView.setText(ward);
-                device.setWard(ward);
-                break;
-            case MAINTENANCE_INTERVAL:
-                int interval = ((NumberPicker)editView).getValue();
+                    wardView.setText(ward);
+                    device.setWard(ward);
+                    break;
+                case MAINTENANCE_INTERVAL:
+                    int interval = ((NumberPicker) editView).getValue();
 
-                device.setMaintenanceInterval(interval);
+                    device.setMaintenanceInterval(interval);
 
-                if(interval % 4 == 0) {
-                    intervalView.setText(Integer.toString(interval/4) + " Months");
-                } else {
-                    intervalView.setText(Integer.toString(interval) + " Weeks");
-                }
+                    if (interval % 4 == 0) {
+                        intervalView.setText(Integer.toString(interval / 4) + " Months");
+                    } else {
+                        intervalView.setText(Integer.toString(interval) + " Weeks");
+                    }
 
-                break;
+                    break;
+            }
+
+            device.setLastUpdate(new Date().getTime() / 1000);
+
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+            viewModel.updateDevice(device, userId);
         }
-
-        device.setLastUpdate(new Date().getTime()/1000);
-
-        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-        viewModel.updateDevice(device, userId);
     }
 
     private void downloadImage() {
