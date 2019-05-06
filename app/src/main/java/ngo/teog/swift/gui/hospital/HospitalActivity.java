@@ -65,7 +65,7 @@ public class HospitalActivity extends BaseActivity {
                         break;
                     case 1:
                         Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
-                        intent2.putExtra("device", (DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition));
+                        intent2.putExtra(Defaults.DEVICE_KEY, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
                         startActivity(intent2);
                         break;
                 }
