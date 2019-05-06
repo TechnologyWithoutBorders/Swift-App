@@ -43,7 +43,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
-import ngo.teog.swift.gui.ReportInfoActivity;
+import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -116,7 +116,7 @@ public class DeviceInfoActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
-                intent.putExtra("REPORT", (ReportInfo) adapterView.getItemAtPosition(i));
+                intent.putExtra(Defaults.REPORT_ID_KEY, ((ReportInfo)adapterView.getItemAtPosition(i)).getReport().getId());
                 startActivity(intent);
             }
         });

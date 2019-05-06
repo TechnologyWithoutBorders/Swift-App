@@ -19,10 +19,7 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.ReportInfoActivity;
-import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel;
-import ngo.teog.swift.gui.login.LoginActivity;
-import ngo.teog.swift.gui.main.MainActivity;
+import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;

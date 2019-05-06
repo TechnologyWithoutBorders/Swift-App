@@ -92,7 +92,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".gui.ReportInfoActivity"
+            android:name=".gui.reportInfo.ReportInfoActivity"
             android:parentActivityName=".gui.main.MainActivity" />
 
         <receiver android:name=".helpers.BootReceiver">

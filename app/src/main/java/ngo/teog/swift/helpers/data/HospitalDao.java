@@ -37,6 +37,10 @@ public interface HospitalDao {
     @Insert(onConflict = REPLACE)
     void save(Report report);
 
+    @Transaction
+    @Query("SELECT * FROM reports WHERE id = :reportId")
+    LiveData<ReportInfo> loadReportInfo(int reportId);
+
     @Insert(onConflict = REPLACE)
     void save(List<Report> reports);
 

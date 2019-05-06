@@ -90,6 +90,12 @@ public class HospitalRepository {
         return hospitalDao.loadHospitalDevices(userId);
     }
 
+    public LiveData<ReportInfo> loadReportInfo(int userId, int reportId) {
+        refreshUserHospital(userId);
+
+        return hospitalDao.loadReportInfo(reportId);
+    }
+
     public void updateUser(User user) {
         executor.execute(() -> {
             hospitalDao.save(user);

@@ -13,6 +13,7 @@ import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
 import ngo.teog.swift.gui.maintenance.MaintenanceActivity;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
+import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoViewModel;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
@@ -31,6 +32,7 @@ public interface AppComponent {
     void inject(ReportCreationActivity target);
     void inject(MaintenanceActivity target);
     void inject(MainActivity target);
+    void inject(ReportInfoActivity target);
 
     HospitalDatabase userDatabase();
 
