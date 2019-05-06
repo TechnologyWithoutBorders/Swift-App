@@ -105,7 +105,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
         Intent intent = this.getIntent();
         //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
-        int deviceId = intent.getIntExtra(Defaults.DEVICE_KEY, -1);
+        int deviceId = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
 
         statusSpinner = findViewById(R.id.statusSpinner);
         statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));

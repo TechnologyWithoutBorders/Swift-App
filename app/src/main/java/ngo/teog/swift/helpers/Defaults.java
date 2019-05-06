@@ -33,5 +33,7 @@ public final class Defaults {
     public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //identifier keys
-    public static final String DEVICE_KEY = "DEVICE";
+    public static final String DEVICE_ID_KEY = "DEVICE_ID";
+    public static final String USER_ID_KEY = "USER_ID";
+    public static final String REPORT_ID_KEY = "REPORT_ID";
 }
