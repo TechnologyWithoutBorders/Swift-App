@@ -116,4 +116,12 @@
         <item>Months</item>
     </string-array>
 
+    <!-- Hospital Overview -->
+    <string name="hospital_members_heading">Members</string>
+    <string name="hospital_devices_heading">Devices</string>
+
+    <!-- Info Dialog Texts -->
+    <string name="info_dialog_heading">Information</string>
+    <string name="info_dialog_confirmation">Got it!</string>
+
 </resources>

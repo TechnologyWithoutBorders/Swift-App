@@ -15,9 +15,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(Html.fromHtml(getString(stringID)))
-                .setTitle("Information")
+                .setTitle(getString(R.string.info_dialog_heading))
                 .setIcon(R.drawable.ic_info_outline_black_24dp)
-                .setPositiveButton("Got it!", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.info_dialog_confirmation), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //ignore
             }
@@ -33,7 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(cm != null) {
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                 return true;
             } else {
                 return false;

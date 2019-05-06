@@ -169,14 +169,7 @@ public class HospitalActivity extends BaseActivity {
 
         @Override
         public Object getGroup(int i) {
-            switch(i) {
-                case 0:
-                    return "Members";
-                case 1:
-                    return "Devices";
-                default:
-                    return null;
-            }
+            return i;
         }
 
         @Override
@@ -219,11 +212,11 @@ public class HospitalActivity extends BaseActivity {
 
             switch(groupPosition) {
                 case 0:
-                    nameView.setText("Members");
+                    nameView.setText(R.string.hospital_members_heading);
                     countView.setText(Integer.toString(users.size()));
                     break;
                 case 1:
-                    nameView.setText("Devices");
+                    nameView.setText(R.string.hospital_devices_heading);
                     countView.setText(Integer.toString(deviceInfos.size()));
                     break;
             }
