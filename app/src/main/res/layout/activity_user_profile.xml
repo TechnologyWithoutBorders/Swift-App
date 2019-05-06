@@ -66,6 +66,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editPhone"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -92,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
+                android:contentDescription="@string/edit_button_desc"
                 android:onClick="editMail"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
@@ -139,6 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
+                android:contentDescription="@string/edit_button_desc"
                 android:onClick="editPosition"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>

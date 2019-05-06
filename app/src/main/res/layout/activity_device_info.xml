@@ -66,7 +66,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editAssetNumber"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -94,7 +94,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editType"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -122,7 +122,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editModel"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -150,7 +150,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editManufacturer"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -178,7 +178,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editSerialNumber"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -226,7 +226,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editWard"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
@@ -254,7 +254,7 @@
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editMaintenanceInterval"
-                android:contentDescription="edit button"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
 
         </TableRow>

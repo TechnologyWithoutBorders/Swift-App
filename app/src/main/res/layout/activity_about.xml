@@ -12,6 +12,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
+            android:contentDescription="@string/teog_logo"
             android:src="@drawable/teog_logo_official_export_small"
             android:paddingBottom="10dp"/>
 

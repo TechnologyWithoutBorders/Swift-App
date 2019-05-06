@@ -124,4 +124,9 @@
     <string name="info_dialog_heading">Information</string>
     <string name="info_dialog_confirmation">Got it!</string>
 
+    <!-- Button Placeholders -->
+    <string name="edit_button_desc">edit button</string>
+    <string name="teog_logo">TeoG logo</string>
+    <string name="app_logo">app logo</string>
+
 </resources>
