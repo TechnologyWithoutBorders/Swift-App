@@ -2,7 +2,9 @@ package ngo.teog.swift.gui.userInfo;
 
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileViewModel;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -41,7 +44,7 @@ public class UserInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
 
         Intent intent = this.getIntent();
-        user = (User)intent.getSerializableExtra("user");
+        int userId = intent.getIntExtra(Defaults.USER_ID_KEY, -1);
 
         final ImageView globalImageView = findViewById(R.id.imageView);
         globalImageView.setOnClickListener(new View.OnClickListener() {
@@ -57,20 +60,11 @@ public class UserInfoActivity extends BaseActivity {
             }
         });
 
-        ProgressBar progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.INVISIBLE);
-
         TextView nameView = findViewById(R.id.nameView);
-        nameView.setText(user.getName());
-
         TextView phoneView = findViewById(R.id.phoneView);
-        phoneView.setText(user.getPhone());
-
         TextView mailView = findViewById(R.id.mailView);
-        mailView.setText(user.getMail());
-
         TextView positionView = findViewById(R.id.positionView);
-        positionView.setText(user.getPosition());
+        TextView hospitalView = findViewById(R.id.hospitalView);
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -78,11 +72,20 @@ public class UserInfoActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int myId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserInfoViewModel.class);
-        viewModel.init(user.getHospital());
-        viewModel.getHospital().observe(this, hospital -> {
-            if(hospital != null) {
-                //TODO
+        viewModel.init(myId, userId);
+        viewModel.getUserInfo().observe(this, userInfo -> {
+            if(userInfo != null) {
+                this.user = userInfo.getUser();
+
+                nameView.setText(user.getName());
+                phoneView.setText(user.getPhone());
+                mailView.setText(user.getMail());
+                positionView.setText(user.getPosition());
+                hospitalView.setText(userInfo.getHospitals().get(0).getName());
             }
         });
     }

@@ -41,6 +41,10 @@ public interface HospitalDao {
     @Query("SELECT * FROM reports WHERE id = :reportId")
     LiveData<ReportInfo> loadReportInfo(int reportId);
 
+    @Transaction
+    @Query("SELECT * FROM users WHERE id = :userId")
+    LiveData<UserInfo> loadUserInfo(int userId);
+
     @Insert(onConflict = REPLACE)
     void save(List<Report> reports);
 

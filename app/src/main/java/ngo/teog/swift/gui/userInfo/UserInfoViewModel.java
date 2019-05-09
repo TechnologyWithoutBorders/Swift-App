@@ -9,9 +9,10 @@ import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
+import ngo.teog.swift.helpers.data.UserInfo;
 
 public class UserInfoViewModel extends ViewModel {
-    private LiveData<Hospital> hospital;
+    private LiveData<UserInfo> userInfo;
     private HospitalRepository hospitalRepo;
 
     @Inject
@@ -19,15 +20,15 @@ public class UserInfoViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int id) {
-        if(this.hospital != null) {
+    public void init(int myId, int userId) {
+        if(this.userInfo != null) {
             return;
         }
 
-        hospital = hospitalRepo.getUserHospital(id);
+        userInfo = hospitalRepo.getUserInfo(myId, userId);
     }
 
-    public LiveData<Hospital> getHospital() {
-        return hospital;
+    public LiveData<UserInfo> getUserInfo() {
+        return userInfo;
     }
 }

@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.DeviceState;
@@ -57,8 +58,8 @@ public class HospitalActivity extends BaseActivity {
             public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
                 switch(groupPosition) {
                     case 0:
-                        Intent intent = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
-                        intent.putExtra("user", (User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition));
+                        Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
+                        intent.putExtra(Defaults.USER_ID_KEY, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
                         startActivity(intent);
                         break;
                     case 1:
