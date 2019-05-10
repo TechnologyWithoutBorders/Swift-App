@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,7 +134,10 @@ public class HospitalRepository {
 
     public void createDevice(HospitalDevice device, int userId) {
         executor.execute(() -> {
-            Report creationReport = new Report(-1, userId, device.getId(), 0, 0, "device creation", device.getLastUpdate());
+            long lastUpdate = new Date().getTime()/1000;
+
+            Report creationReport = new Report(0, userId, device.getId(), 0, 0, "device creation", lastUpdate);
+            device.setLastUpdate(lastUpdate);
 
             hospitalDao.save(device);
             hospitalDao.save(creationReport);
@@ -187,7 +191,7 @@ public class HospitalRepository {
             JSONArray jsonReports = new JSONArray();
 
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis())/1000;
+            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime())/1000;
 
             Hospital hospital = hospitalDao.getUserHospital(userID);
 
@@ -277,7 +281,7 @@ public class HospitalRepository {
 
                             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putLong(Defaults.LAST_SYNC_PREFERENCE, System.currentTimeMillis());
+                            editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                             editor.apply();
                         } catch(Exception e) {
                             Log.e("SAVE_USER", e.getMessage(), e);
