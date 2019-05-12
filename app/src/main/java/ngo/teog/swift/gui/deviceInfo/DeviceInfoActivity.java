@@ -382,7 +382,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
             queue.add(request);
         } else {
-            Toast.makeText(this, "no internet connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
         }
     }
 

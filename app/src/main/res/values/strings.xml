@@ -76,10 +76,6 @@
         <item>limited use</item>
     </string-array>
 
-
-    <!-- Error messages -->
-    <string name="error_no_internet_connection">no internet connection</string>
-
     <string-array name="search_options">
         <item>Device</item>
         <item>User</item>
@@ -150,5 +146,8 @@
 
     <!-- Hospital Information -->
     <string name="hospital">Hospital</string>
+
+    <!-- Error Messages -->
+    <string name="error_internet_connection">no internet connection</string>
 
 </resources>
