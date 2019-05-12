@@ -13,6 +13,8 @@ import androidx.work.WorkerParameters;
 import com.android.volley.RequestQueue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
@@ -32,38 +34,25 @@ public class ImageUploader extends Worker {
         String imagePath = getInputData().getString("path");
         int deviceId = getInputData().getInt("device", -1);
 
-        Bitmap bitmap = decode(imagePath, 640);
+        try {
+            FileInputStream inputStream = context.openFileInput(imagePath);
 
-        VolleyManager volleyManager = VolleyManager.getInstance(context);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-        RequestQueue queue = volleyManager.getRequestQueue();
+            VolleyManager volleyManager = VolleyManager.getInstance(context);
 
-        RequestFactory factory =  new RequestFactory();
-        RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(context, deviceId, bitmap);
+            RequestQueue queue = volleyManager.getRequestQueue();
 
-        queue.add(request);
+            RequestFactory factory =  new RequestFactory();
+            RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(context, deviceId, bitmap);
 
-        return Result.success();
-    }
+            queue.add(request);
 
-    private Bitmap decode(String filePath, int targetW) {
-        File image = new File(filePath);
+            return Result.success();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
 
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.max(photoW/targetW, photoH/targetW);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        return BitmapFactory.decodeFile(filePath, bmOptions);
+            return Result.failure();
+        }
     }
 }

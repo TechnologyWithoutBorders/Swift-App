@@ -29,6 +29,7 @@ import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -146,12 +147,28 @@ public class NewDeviceActivity3 extends BaseActivity {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
+            Bitmap decodedImage = decode(imagePath, 640);
+            String targetName = "image_" + Integer.toString(device.getId()) + ".jpg";
+
+            FileOutputStream outputStream;
+
+            try {
+                outputStream = this.openFileOutput(targetName, Context.MODE_PRIVATE);
+                decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                outputStream.close();
+
+                File tempFile = new File(imagePath);
+                tempFile.delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             Constraints constraints = new Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build();
 
             Data imageData = new Data.Builder()
-                    .putString("path", imagePath)
+                    .putString("path", targetName)
                     .putInt("device", device.getId())
                     .build();
 
