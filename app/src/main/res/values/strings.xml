@@ -113,5 +113,19 @@
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>
+    <string name="login_country_hint">Country</string>
+    <string name="login_email_hint">E-Mail</string>
+    <string name="login_password_hint">Password</string>
+
+    <!-- Device Information -->
+    <string name="device_image_placeholder">device image</string>
+    <string name="device_asset_number">Asset Number</string>
+    <string name="device_type">Type</string>
+    <string name="device_model">Model</string>
+    <string name="device_manufacturer">Manufacturer</string>
+    <string name="device_serial_number">Serial Number</string>
+    <string name="device_ward">Ward</string>
+    <string name="device_maintenance_interval">Maint. Interval</string>
+    <string name="device_recent_reports">Recent Reports</string>
 
 </resources>

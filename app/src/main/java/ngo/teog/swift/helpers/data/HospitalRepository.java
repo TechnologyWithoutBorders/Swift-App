@@ -242,6 +242,8 @@ public class HospitalRepository {
 
             request.put("data", data);
 
+            Log.d("SYNC_REQUEST", request.toString(4));
+
             return new HospitalRequest(context, url, request, executor);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -257,6 +259,8 @@ public class HospitalRepository {
                 public void onResponse(JSONObject response) {
                     executor.execute(() -> {
                         try {
+                            Log.d("SYNC_RESPONSE", response.toString(4));
+
                             HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
 
                             Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLastUpdate());
