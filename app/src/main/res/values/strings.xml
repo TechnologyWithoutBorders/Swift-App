@@ -113,14 +113,17 @@
     <string name="next_button">Next</string>
     <string name="take_picture_button">Take Picture</string>
     <string name="save_button">Save</string>
+    <string name="search_button">Search</string>
+    <string name="new_device_button">New Device</string>
+    <string name="transition_indicator">---></string>
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>
     <string name="login_country_hint">Country</string>
-    <string name="login_email_hint">E-Mail</string>
     <string name="login_password_hint">Password</string>
 
     <!-- Device Information -->
+    <string name="device">Device</string>
     <string name="device_image_placeholder">device image</string>
     <string name="device_asset_number">Asset Number</string>
     <string name="device_type">Type</string>
@@ -137,5 +140,15 @@
     <string name="report_state_change">State Change</string>
     <string name="report_author">Author</string>
     <string name="report_description_description">provide a short description</string>
+
+    <!-- User Information -->
+    <string name="user">User</string>
+    <string name="user_name">Name</string>
+    <string name="user_telephone">Telephone</string>
+    <string name="user_mail">E-Mail</string>
+    <string name="user_position">Position</string>
+
+    <!-- Hospital Information -->
+    <string name="hospital">Hospital</string>
 
 </resources>

@@ -15,15 +15,13 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textSize="16sp"
-            android:text="[name]"
             android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/secondaryInfo"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:textSize="16sp"
-            android:text="[status]" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -33,7 +31,6 @@
         android:layout_width="match_parent"
         android:textSize="20sp"
         android:layout_gravity="end"
-        android:textAlignment="textEnd"
-        android:text="[category]" />
+        android:textAlignment="textEnd" />
 
 </LinearLayout>

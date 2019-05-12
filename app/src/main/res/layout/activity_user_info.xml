@@ -55,15 +55,14 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Name" />
+                android:text="@string/user_name" />
 
             <TextView
                 android:id="@+id/nameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:text="[name]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -76,14 +75,13 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Telephone" />
+                android:text="@string/user_telephone" />
 
             <TextView
                 android:id="@+id/phoneView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[telephone]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -96,14 +94,13 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="E-Mail" />
+                android:text="@string/user_mail" />
 
             <TextView
                 android:id="@+id/mailView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[mail]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -116,14 +113,13 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Hospital" />
+                android:text="@string/hospital" />
 
             <TextView
                 android:id="@+id/hospitalView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[hospital]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -136,14 +132,13 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Position" />
+                android:text="@string/user_position" />
 
             <TextView
                 android:id="@+id/positionView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[position]" />
+                android:textSize="15sp" />
         </TableRow>
 
     </TableLayout>

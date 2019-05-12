@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:hint="@string/login_email_hint"
+                    android:hint="@string/user_mail"
                     android:inputType="textEmailAddress" />
 
                 <EditText

@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Device"
+            android:text="@string/device"
             android:checked="true"/>
 
         <RadioButton
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="User" />
+            android:text="@string/user" />
     </RadioGroup>
 
     <LinearLayout
@@ -47,7 +47,7 @@
                 android:id="@+id/button22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search"
+                android:text="@string/search_button"
                 android:onClick="startNewDeviceActivity"/>
 
             <ProgressBar
