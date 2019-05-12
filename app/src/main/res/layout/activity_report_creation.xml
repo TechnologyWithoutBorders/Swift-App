@@ -14,14 +14,14 @@
         android:textSize="15sp"
         android:padding="3dp"
         android:textStyle="bold"
-        android:text="Report Description" />
+        android:text="@string/report_description" />
 
     <EditText
         android:id="@+id/descriptionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:hint="provide a short description"
+        android:hint="@string/report_description_description"
         android:maxLength="600"/>
 
     <Space
@@ -39,7 +39,7 @@
             android:onClick="createReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save" />
+            android:text="@string/save_button" />
 
         <ProgressBar
             android:id="@+id/progressBar"

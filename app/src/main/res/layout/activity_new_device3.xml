@@ -25,7 +25,7 @@
             android:id="@+id/pictureButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Take Picture"
+            android:text="@string/take_picture_button"
             android:onClick="dispatchTakePictureIntent"/>
 
     </LinearLayout>
@@ -39,7 +39,7 @@
             android:id="@+id/nextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create"
+            android:text="@string/save_button"
             android:onClick="createDevice"/>
 
         <ProgressBar

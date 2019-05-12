@@ -22,15 +22,14 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Date" />
+                android:text="@string/report_date" />
 
             <TextView
                 android:id="@+id/dateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:text="[date]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -43,14 +42,13 @@
                 android:paddingRight="5dp"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:text="State Change" />
+                android:text="@string/report_state_change" />
 
             <TextView
                 android:id="@+id/stateChangeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[state change]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -63,14 +61,13 @@
                 android:paddingRight="5dp"
                 android:textStyle="bold"
                 android:textSize="15sp"
-                android:text="Author" />
+                android:text="@string/report_author" />
 
             <TextView
                 android:id="@+id/authorView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[author]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -83,16 +80,15 @@
                 android:paddingRight="5dp"
                 android:textStyle="bold"
                 android:textSize="15sp"
-                android:text="Description" />
+                android:text="@string/report_description" />
 
            
         </TableRow>
- <TextView
+            <TextView
                 android:id="@+id/descriptionView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[description]" />
+                android:textSize="15sp" />
     </TableLayout>
 
 </LinearLayout>

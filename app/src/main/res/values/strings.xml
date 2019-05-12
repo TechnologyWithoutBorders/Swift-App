@@ -110,6 +110,9 @@
     <string name="edit_button_desc">edit button</string>
     <string name="teog_logo">TeoG logo</string>
     <string name="app_logo">app logo</string>
+    <string name="next_button">Next</string>
+    <string name="take_picture_button">Take Picture</string>
+    <string name="save_button">Save</string>
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>
@@ -127,5 +130,12 @@
     <string name="device_ward">Ward</string>
     <string name="device_maintenance_interval">Maint. Interval</string>
     <string name="device_recent_reports">Recent Reports</string>
+
+    <!-- Report Information -->
+    <string name="report_description">Description</string>
+    <string name="report_date">Date</string>
+    <string name="report_state_change">State Change</string>
+    <string name="report_author">Author</string>
+    <string name="report_description_description">provide a short description</string>
 
 </resources>
