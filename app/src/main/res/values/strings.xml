@@ -149,5 +149,8 @@
 
     <!-- Error Messages -->
     <string name="error_internet_connection">no internet connection</string>
+    <string name="error_empty_mail">empty mail address</string>
+    <string name="error_empty_password">empty password</string>
+    <string name="generic_error_message">something went wrong</string>
 
 </resources>

@@ -14,7 +14,6 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +32,6 @@ import ngo.teog.swift.gui.main.MainActivity;
 
 public class LoginActivity extends BaseActivity {
 
-    private Button loginButton;
     private EditText mailField;
     private EditText passwordField;
     private LinearLayout form;
@@ -53,7 +51,6 @@ public class LoginActivity extends BaseActivity {
 
         form = findViewById(R.id.form);
 
-        loginButton = findViewById(R.id.loginButton);
         mailField = findViewById(R.id.mailText);
         passwordField = findViewById(R.id.pwText);
 
@@ -126,13 +123,13 @@ public class LoginActivity extends BaseActivity {
 
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } else {
-                    Toast.makeText(this.getApplicationContext(), "no internet connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                passwordField.setError("empty password");
+                passwordField.setError(getText(R.string.error_empty_password));
             }
         } else {
-            mailField.setError("empty mail address");
+            mailField.setError(getText(R.string.error_empty_mail));
         }
     }
 

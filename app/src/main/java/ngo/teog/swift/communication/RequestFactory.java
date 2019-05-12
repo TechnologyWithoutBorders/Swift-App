@@ -42,7 +42,6 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
-import ngo.teog.swift.helpers.Debugging;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.data.User;
@@ -95,11 +94,7 @@ public class RequestFactory {
             } catch(ResponseException e) {
                 Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } catch(Exception e) {
-                if(Debugging.showSystemExceptions) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             }
 
             if(disable != null) {
@@ -135,11 +130,7 @@ public class RequestFactory {
                 enable.setVisibility(View.VISIBLE);
             }
 
-            if(Debugging.showSystemExceptions) {
-                Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -172,7 +163,7 @@ public class RequestFactory {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -467,7 +458,7 @@ public class RequestFactory {
                             adapter.addAll(new ResponseParser().parseUserList(response));
                         }
                     } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                     }
 
                     disable.setVisibility(View.INVISIBLE);
@@ -480,7 +471,7 @@ public class RequestFactory {
 
                     disable.setVisibility(View.INVISIBLE);
                     enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -514,7 +505,7 @@ public class RequestFactory {
                         anim.stop();
                         form.setVisibility(View.VISIBLE);
                     } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                         Log.e("LOGIN", "failed", e);
                         anim.stop();
                         form.setVisibility(View.VISIBLE);
@@ -525,7 +516,7 @@ public class RequestFactory {
                 public void onErrorResponse(VolleyError error) {
                     anim.stop();
                     form.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                     Log.e("LOGIN", error.toString());
                 }
             });
