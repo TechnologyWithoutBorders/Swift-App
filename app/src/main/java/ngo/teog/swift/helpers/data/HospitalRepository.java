@@ -49,7 +49,6 @@ public class HospitalRepository {
     }
 
     public LiveData<User> getUser(int userId) {
-        //TODO aktuell beschränken wir uns auf unser eigenes Krankenhaus
         refreshUserHospital(userId);
 
         return hospitalDao.loadUser(userId);
@@ -148,6 +147,11 @@ public class HospitalRepository {
 
     public void createReport(Report report, int userId) {
         executor.execute(() -> {
+            //TODO muss Transaction sein, aber Vorsicht: Inserts sind synchron, Queries nicht!
+
+            int maxReportId = hospitalDao.getMaxReportId(report.getDevice());
+            report.setId(maxReportId+1);
+
             hospitalDao.save(report);
 
             refreshUserHospitalSync(userId);
@@ -288,15 +292,14 @@ public class HospitalRepository {
                             editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                             editor.apply();
                         } catch(Exception e) {
-                            Log.e("SAVE_USER", e.getMessage(), e);
-                            Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                            Log.e("SYNC", e.getMessage(), e);
                         }
                     });
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context.getApplicationContext(), "something went wrong", Toast.LENGTH_SHORT).show();
+                    Log.e("SYNC", error.getMessage(), error);
                 }
             });
         }

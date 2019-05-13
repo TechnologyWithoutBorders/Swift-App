@@ -48,6 +48,9 @@ public interface HospitalDao {
     @Insert(onConflict = REPLACE)
     void save(List<Report> reports);
 
+    @Query("SELECT MAX(id) FROM reports WHERE device = :deviceId")
+    int getMaxReportId(int deviceId);
+
     @Query("SELECT * FROM users")
     List<User> getUsers();
 
