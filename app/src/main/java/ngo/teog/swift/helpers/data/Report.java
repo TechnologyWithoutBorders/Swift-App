@@ -16,10 +16,9 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
  * @author Julian Deyerler
  */
 
-@Entity(tableName = "reports")
+@Entity(tableName = "reports", primaryKeys = {"id", "device"})
 public class Report implements  Serializable {
 
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private int author;
     private int device;

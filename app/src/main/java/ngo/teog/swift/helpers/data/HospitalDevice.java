@@ -12,9 +12,8 @@ import java.io.Serializable;
  */
 
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
-@Entity(tableName = "devices")
+@Entity(tableName = "devices", primaryKeys = {"id", "hospital"})
 public class HospitalDevice implements Serializable {
-    @PrimaryKey
     private int id;
     private String assetNumber;
     private String type;
