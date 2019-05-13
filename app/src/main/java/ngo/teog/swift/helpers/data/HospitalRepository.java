@@ -136,7 +136,7 @@ public class HospitalRepository {
         executor.execute(() -> {
             long lastUpdate = new Date().getTime()/1000;
 
-            Report creationReport = new Report(0, userId, device.getId(), 0, 0, "device creation", lastUpdate);
+            Report creationReport = new Report(1, userId, device.getId(), 0, 0, "device creation", lastUpdate);
             device.setLastUpdate(lastUpdate);
 
             hospitalDao.save(device);
