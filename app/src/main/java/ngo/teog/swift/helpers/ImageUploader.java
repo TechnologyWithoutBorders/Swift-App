@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
@@ -47,6 +49,8 @@ public class ImageUploader extends Worker {
             RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(context, deviceId, bitmap);
 
             queue.add(request);
+
+            Log.d("IMAGE_UPLOAD", "request created");
 
             return Result.success();
         } catch (FileNotFoundException e) {

@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -137,7 +138,7 @@ public class RequestFactory {
     public DeviceCreationRequest createDeviceCreationRequest(final Context context, final int deviceId, final Bitmap bitmap) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "uploadImage", true);
+        Map<String, String> params = generateParameterMap(context, "create_device", true);
 
         params.put("device", Integer.toString(deviceId));
 
@@ -159,11 +160,16 @@ public class RequestFactory {
                 @Override
                 public void onResponse(JSONObject response) {
                     //TODO
+                    try {
+                        Log.d("IMAGE_UPLOAD", response.toString(4));
+                    } catch (JSONException e) {
+                        Log.e("IMAGE_UPLOAD", "response not readable", e);
+                    }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                    Log.e("IMAGE_UPLOAD", error.toString(), error);
                 }
             });
         }

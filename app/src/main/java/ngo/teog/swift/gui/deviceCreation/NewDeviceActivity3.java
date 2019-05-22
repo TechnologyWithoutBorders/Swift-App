@@ -27,6 +27,7 @@ import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -177,6 +178,8 @@ public class NewDeviceActivity3 extends BaseActivity {
                             .setConstraints(constraints)
                             .setInputData(imageData)
                             .build();
+
+            WorkManager.getInstance().enqueue(uploadWork);
 
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
