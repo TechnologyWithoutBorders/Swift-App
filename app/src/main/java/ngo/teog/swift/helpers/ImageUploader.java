@@ -45,7 +45,7 @@ public class ImageUploader extends Worker {
 
             RequestQueue queue = volleyManager.getRequestQueue();
 
-            RequestFactory factory =  new RequestFactory();
+            RequestFactory factory =  RequestFactory.getInstance();
             RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(context, deviceId, bitmap);
 
             queue.add(request);

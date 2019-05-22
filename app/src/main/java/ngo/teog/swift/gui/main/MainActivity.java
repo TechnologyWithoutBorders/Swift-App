@@ -75,13 +75,14 @@ public class MainActivity extends BaseActivity {
 
                 RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
                 RequestFactory.DefaultRequest request = null;
+                RequestFactory requestFactory = RequestFactory.getInstance();
 
                 if("device".equals(type)) {
-                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber);
+                    request = requestFactory.createDeviceOpenRequest(this, null, null, objectNumber);
                 } else if("user".equals(type)) {
-                    request = new RequestFactory().createUserOpenRequest(this, null, null, objectNumber);
+                    request = requestFactory.createUserOpenRequest(this, null, null, objectNumber);
                 } else if("report".equals(type)) {
-                    request = new RequestFactory().createReportOpenRequest(this, null, null, objectNumber);
+                    request = requestFactory.createReportOpenRequest(this, null, null, objectNumber);
                 }
 
                 queue.add(request);

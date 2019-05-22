@@ -25,7 +25,7 @@ public class UpdateWorker extends Worker {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createWorkRequest(context, preferences.getInt(Defaults.ID_PREFERENCE, -1), preferences.getInt(Defaults.NOTIFICATION_COUNTER, 0));
+            RequestFactory.DefaultRequest request = RequestFactory.getInstance().createWorkRequest(context, preferences.getInt(Defaults.ID_PREFERENCE, -1), preferences.getInt(Defaults.NOTIFICATION_COUNTER, 0));
             VolleyManager.getInstance(context).getRequestQueue().add(request);
 
             return Result.success();

@@ -114,7 +114,7 @@ public class LoginActivity extends BaseActivity {
                 if(checkForInternetConnection()) {
                     AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
 
-                    RequestFactory.LoginRequest request = new RequestFactory().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()), (String)countrySpinner.getSelectedItem());
+                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()), (String)countrySpinner.getSelectedItem());
 
                     form.setVisibility(View.GONE);
 

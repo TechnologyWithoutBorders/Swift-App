@@ -94,12 +94,12 @@ public class SearchFragment extends BaseFragment {
                     DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(getContext(), new ArrayList<HospitalDevice>());
                     listView.setAdapter(deviceAdapter);
 
-                    request = new RequestFactory().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, deviceAdapter);
+                    request = RequestFactory.getInstance().createDeviceSearchRequest(getContext(), progressBar, searchButton, searchString, deviceAdapter);
                 } else if(userButton.isChecked()) {
                     UserArrayAdapter userAdapter = new UserArrayAdapter(getContext(), new ArrayList<User>());
                     listView.setAdapter(userAdapter);
 
-                    request = new RequestFactory().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, userAdapter);
+                    request = RequestFactory.getInstance().createUserSearchRequest(getContext(), progressBar, searchButton, searchString, userAdapter);
                 }
 
                 queue.add(request);

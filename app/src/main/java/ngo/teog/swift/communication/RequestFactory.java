@@ -22,9 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,8 +60,19 @@ import ngo.teog.swift.helpers.ResponseException;
  * @author Julian Deyerler
  */
 
-//TODO könnte auch ein Singleton werden
 public class RequestFactory {
+    private static RequestFactory instance;
+
+    public static synchronized RequestFactory getInstance() {
+        if(instance == null) {
+            instance = new RequestFactory();
+        }
+
+        return instance;
+    }
+
+    private RequestFactory() {}
+
     public class DefaultRequest extends JsonObjectRequest {
         public DefaultRequest(Context context, String url, JSONObject request, View disable, View enable, BaseResponseListener listener) {
             super(Request.Method.POST, url, request, listener, new BaseErrorListener(context, disable, enable));

@@ -375,7 +375,7 @@ public class DeviceInfoActivity extends BaseActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            RequestFactory.DefaultRequest request = new RequestFactory().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
+            RequestFactory.DefaultRequest request = RequestFactory.getInstance().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
 
             progressBar.setVisibility(View.VISIBLE);
             globalImageView.setVisibility(View.GONE);
