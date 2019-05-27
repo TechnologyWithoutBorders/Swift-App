@@ -224,7 +224,7 @@ public class RequestFactory {
 
                         if(image.exists()) {
                             Intent intent = new Intent(context, ImageActivity.class);
-                            intent.putExtra("IMAGE", image);
+                            intent.putExtra(Defaults.IMAGE_KEY, image);
 
                             context.startActivity(intent);
                         }
@@ -249,7 +249,7 @@ public class RequestFactory {
 
                 if(deviceList.size() > 0) {
                     Intent intent = new Intent(context, DeviceInfoActivity.class);
-                    intent.putExtra("device", deviceList.get(0));
+                    intent.putExtra(Defaults.DEVICE_KEY, deviceList.get(0));
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("device not found");
@@ -273,7 +273,7 @@ public class RequestFactory {
 
                 if(userList.size() > 0) {
                     Intent intent = new Intent(context, UserInfoActivity.class);
-                    intent.putExtra("user", userList.get(0));
+                    intent.putExtra(Defaults.USER_KEY, userList.get(0));
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("user not found");
@@ -297,7 +297,7 @@ public class RequestFactory {
 
                 if(reportList.size() > 0) {
                     Intent intent = new Intent(context, ReportInfoActivity.class);
-                    intent.putExtra("REPORT", reportList.get(0));
+                    intent.putExtra(Defaults.REPORT_KEY, reportList.get(0));
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("report not found");
@@ -444,7 +444,8 @@ public class RequestFactory {
 
         params.put(UserFilter.MAIL, mail);
         params.put(UserFilter.PASSWORD, password);
-        params.put("country", country);
+        //Override country, because the shared preferences contain no country at this point
+        params.put(Defaults.COUNTRY_KEY, country);
 
         JSONObject request = new JSONObject(params);
 
@@ -546,8 +547,8 @@ public class RequestFactory {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         HashMap<String, String> parameterMap = new HashMap<>();
-        parameterMap.put("action", action);
-        parameterMap.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
+        parameterMap.put(Defaults.ACTION_KEY, action);
+        parameterMap.put(Defaults.COUNTRY_KEY, preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
 
         if(userValidation) {
             parameterMap.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
