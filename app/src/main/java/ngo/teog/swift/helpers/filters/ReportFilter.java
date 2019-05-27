@@ -14,8 +14,6 @@ public class ReportFilter {
     public static final String DATETIME = "r_datetime";
 
     public static final String ACTION_FETCH_REPORT = "fetch_report";
-    public static final String ACTION_FETCH_REPORT_LIST = "fetch_report_list";
-    public static final String ACTION_CREATE_REPORT = "create_report";
 
     private String type;
     private String value;
