@@ -34,6 +34,10 @@ public final class Defaults {
 
     //identifier keys
     public static final String DEVICE_ID_KEY = "DEVICE_ID";
+    public static final String DEVICE_KEY = "DEVICE";
     public static final String USER_ID_KEY = "USER_ID";
+    public static final String USER = "USER";
     public static final String REPORT_ID_KEY = "REPORT_ID";
+    public static final String REPORT_KEY = "REPORT";
+    public static final String IMAGE_KEY = "IMAGE";
 }

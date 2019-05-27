@@ -22,6 +22,7 @@ import java.util.List;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.helpers.Defaults;
 
 public class NewDeviceActivity extends BaseActivity {
 
@@ -45,7 +46,7 @@ public class NewDeviceActivity extends BaseActivity {
                 int deviceNumber = Integer.parseInt(result.getText());
 
                 Intent intent = new Intent(NewDeviceActivity.this, NewDeviceActivity2.class);
-                intent.putExtra("device_number", deviceNumber);
+                intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
 
                 startActivity(intent);
             } catch(NumberFormatException e) {

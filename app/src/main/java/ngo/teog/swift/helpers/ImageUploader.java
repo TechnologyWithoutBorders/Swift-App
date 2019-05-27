@@ -34,7 +34,7 @@ public class ImageUploader extends Worker {
     @Override
     public Worker.Result doWork() {
         String imagePath = getInputData().getString("path");
-        int deviceId = getInputData().getInt("device", -1);
+        int deviceId = getInputData().getInt(Defaults.DEVICE_ID_KEY, -1);
 
         try {
             FileInputStream inputStream = context.openFileInput(imagePath);

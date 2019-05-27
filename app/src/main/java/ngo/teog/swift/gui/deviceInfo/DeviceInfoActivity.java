@@ -73,8 +73,6 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private Spinner statusSpinner;
 
-    private boolean triggered = false;
-
     private ProgressBar progressBar;
     private ImageView globalImageView;
 
@@ -96,10 +94,6 @@ public class DeviceInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(savedInstanceState != null) {
-            triggered = savedInstanceState.getBoolean("TRIGGERED");
-        }
 
         setContentView(R.layout.activity_device_info);
 
@@ -158,15 +152,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (triggered) {
-                            Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                            intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getReport().getCurrentState());
-                            intent.putExtra("NEW_STATUS", i);
-                            intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
-                            startActivity(intent);
-                        } else {
-                            triggered = true;
-                        }
+                        Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                        intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getReport().getCurrentState());
+                        intent.putExtra("NEW_STATUS", i);
+                        intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
+                        startActivity(intent);
                     }
 
                     @Override
@@ -214,7 +204,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                             if(image.exists()) {
                                 Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                                intent.putExtra("IMAGE", image);
+                                intent.putExtra(Defaults.IMAGE_KEY, image);
 
                                 startActivity(intent);
                             }

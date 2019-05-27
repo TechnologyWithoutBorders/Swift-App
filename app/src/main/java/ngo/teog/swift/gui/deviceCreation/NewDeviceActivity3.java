@@ -74,12 +74,12 @@ public class NewDeviceActivity3 extends BaseActivity {
         imageView = findViewById(R.id.imageView);
 
         if(savedInstanceState != null) {
-            device = (HospitalDevice)savedInstanceState.getSerializable("device");
-            imagePath = savedInstanceState.getString("image");
+            device = (HospitalDevice)savedInstanceState.getSerializable(Defaults.DEVICE_KEY);
+            imagePath = savedInstanceState.getString(Defaults.IMAGE_KEY);
             imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         } else {
             Intent intent = this.getIntent();
-            device = (HospitalDevice)intent.getSerializableExtra("device");
+            device = (HospitalDevice)intent.getSerializableExtra(Defaults.DEVICE_KEY);
         }
 
         nextButton = findViewById(R.id.nextButton);
@@ -117,8 +117,8 @@ public class NewDeviceActivity3 extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("device", device);
-        outState.putString("image", imagePath);
+        outState.putSerializable(Defaults.DEVICE_KEY, device);
+        outState.putString(Defaults.IMAGE_KEY, imagePath);
 
         super.onSaveInstanceState(outState);
     }
@@ -170,7 +170,7 @@ public class NewDeviceActivity3 extends BaseActivity {
 
             Data imageData = new Data.Builder()
                     .putString("path", targetName)
-                    .putInt("device", device.getId())
+                    .putInt(Defaults.DEVICE_ID_KEY, device.getId())
                     .build();
 
             OneTimeWorkRequest uploadWork =

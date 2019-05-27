@@ -50,7 +50,7 @@ public class ReportCreationActivity extends BaseActivity {
         Intent intent = getIntent();
         oldState = intent.getIntExtra("OLD_STATUS", -1);
         state = intent.getIntExtra("NEW_STATUS", -1);
-        device = intent.getIntExtra("DEVICE", -1);
+        device = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
 
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);
@@ -90,7 +90,7 @@ public class ReportCreationActivity extends BaseActivity {
 
         String description = descriptionText.getText().toString();
 
-        Report report = new Report(-1, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date().getTime()/1000);
+        Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date().getTime()/1000);
 
         viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
