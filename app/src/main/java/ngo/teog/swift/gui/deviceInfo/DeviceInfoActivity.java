@@ -42,6 +42,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
@@ -176,9 +177,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 int interval = device.getMaintenanceInterval();
 
                 if(interval % 4 == 0) {
-                    intervalView.setText(Integer.toString(interval/4) + " Months");
+                    intervalView.setText((interval/4) + " Months");
                 } else {
-                    intervalView.setText(Integer.toString(interval) + " Weeks");
+                    intervalView.setText((interval) + " Weeks");
                 }
 
                 File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
@@ -255,8 +256,8 @@ public class DeviceInfoActivity extends BaseActivity {
             switch(parameter) {
                 case MAINTENANCE_INTERVAL:
                     NumberPicker numberPicker = new NumberPicker(this);
-                    numberPicker.setMinValue(1);
-                    numberPicker.setMaxValue(24);
+                    numberPicker.setMinValue(NewDeviceActivity2.MIN_MAINT_INTERVAL);
+                    numberPicker.setMaxValue(NewDeviceActivity2.MAX_MAINT_INTERVAL);
                     numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
 
                     editView = numberPicker;
@@ -289,8 +290,8 @@ public class DeviceInfoActivity extends BaseActivity {
                 }
             };
 
-            builder.setPositiveButton("OK", positiveListener);
-            builder.setNegativeButton("Cancel", negativeListener);
+            builder.setPositiveButton(getText(R.string.dialog_ok_text), positiveListener);
+            builder.setNegativeButton(getText(R.string.dialog_cancel_text), negativeListener);
 
             builder.show();
         }

@@ -36,6 +36,10 @@ public class NewDeviceActivity2 extends BaseActivity {
     private NumberPicker intervalPicker;
     private Spinner weekMonthSpinner;
 
+    public static final int MIN_MAINT_INTERVAL = 1;
+    public static final int DEF_MAINT_INTERVAL = 4;
+    public static final int MAX_MAINT_INTERVAL = 24;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +59,9 @@ public class NewDeviceActivity2 extends BaseActivity {
         progressBar = findViewById(R.id.progressBar);
 
         NumberPicker intervalPicker = findViewById(R.id.intervalPicker);
-        intervalPicker.setMinValue(1);
-        intervalPicker.setMaxValue(24);
-        intervalPicker.setValue(4);
+        intervalPicker.setMinValue(MIN_MAINT_INTERVAL);
+        intervalPicker.setMaxValue(MAX_MAINT_INTERVAL);
+        intervalPicker.setValue(DEF_MAINT_INTERVAL);
 
         Intent intent = this.getIntent();
         deviceNumber = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
@@ -99,7 +103,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
                         int interval;
 
-                        if(((String)weekMonthSpinner.getSelectedItem()).equals("Week")) {
+                        if((weekMonthSpinner.getSelectedItem()).equals("Week")) {
                             interval = intervalPicker.getValue();
                         } else {
                             interval = intervalPicker.getValue()*4;

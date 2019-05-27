@@ -154,4 +154,8 @@
     <string name="error_empty_password">empty password</string>
     <string name="generic_error_message">something went wrong</string>
 
+    <!-- Dialog Texts -->
+    <string name="dialog_cancel_text">Cancel</string>
+    <string name="dialog_ok_text">OK</string>
+
 </resources>
