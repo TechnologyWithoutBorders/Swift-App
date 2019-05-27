@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.support.v4.content.FileProvider;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,13 +37,10 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
-import ngo.teog.swift.gui.login.LoginActivity;
-import ngo.teog.swift.gui.login.StatsActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ImageUploader;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
-import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -169,7 +165,7 @@ public class NewDeviceActivity3 extends BaseActivity {
                     .build();
 
             Data imageData = new Data.Builder()
-                    .putString("path", targetName)
+                    .putString(Defaults.PATH_KEY, targetName)
                     .putInt(Defaults.DEVICE_ID_KEY, device.getId())
                     .build();
 

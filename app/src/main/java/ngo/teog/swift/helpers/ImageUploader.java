@@ -33,7 +33,7 @@ public class ImageUploader extends Worker {
 
     @Override
     public Worker.Result doWork() {
-        String imagePath = getInputData().getString("path");
+        String imagePath = getInputData().getString(Defaults.PATH_KEY);
         int deviceId = getInputData().getInt(Defaults.DEVICE_ID_KEY, -1);
 
         try {

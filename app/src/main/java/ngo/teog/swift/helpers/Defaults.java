@@ -40,6 +40,7 @@ public final class Defaults {
     public static final String REPORT_ID_KEY = "REPORT_ID";
     public static final String REPORT_KEY = "REPORT";
     public static final String IMAGE_KEY = "IMAGE";
+    public static final String PATH_KEY = "PATH";
 
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
