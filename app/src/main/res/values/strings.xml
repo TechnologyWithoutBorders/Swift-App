@@ -95,6 +95,7 @@
     </string-array>
 
     <!-- Hospital Overview -->
+    <string name="hospital_location_symbol">hospital location symbol</string>
     <string name="hospital_members_heading">Members</string>
     <string name="hospital_devices_heading">Devices</string>
 
