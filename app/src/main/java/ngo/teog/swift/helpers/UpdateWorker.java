@@ -12,6 +12,8 @@ import ngo.teog.swift.communication.VolleyManager;
 
 public class UpdateWorker extends Worker {
 
+    public static final String TAG = "update_todo";
+
     private Context context;
 
     public UpdateWorker(Context context, WorkerParameters params) {

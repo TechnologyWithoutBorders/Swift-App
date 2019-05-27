@@ -2,6 +2,7 @@ package ngo.teog.swift.helpers;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.arch.persistence.room.Update;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +44,7 @@ public class BootReceiver extends BroadcastReceiver {
                 .build();
 
         PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 1, TimeUnit.HOURS)
-                .addTag("update_todo")
+                .addTag(UpdateWorker.TAG)
                 .setConstraints(updateConstraints)
                 .build();
 
