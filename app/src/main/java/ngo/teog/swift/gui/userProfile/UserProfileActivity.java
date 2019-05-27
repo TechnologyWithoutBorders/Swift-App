@@ -12,11 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -60,7 +57,6 @@ public class UserProfileActivity extends BaseActivity {
         hospitalView = findViewById(R.id.locationView);
         positionView = findViewById(R.id.positionView);
 
-        TableLayout tableLayout = findViewById(R.id.tableLayout);
         imageView = findViewById(R.id.imageView);
 
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -108,7 +104,7 @@ public class UserProfileActivity extends BaseActivity {
     }
     public void editPhone(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Telephone");
+        builder.setTitle(getText(R.string.user_telephone));
 
         final EditText input = new EditText(this);
         input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
@@ -116,14 +112,14 @@ public class UserProfileActivity extends BaseActivity {
         input.setText(telephoneView.getText());
         builder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getText(R.string.dialog_ok_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 telephoneView.setText(input.getText().toString());
                 save();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_cancel_text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -135,7 +131,7 @@ public class UserProfileActivity extends BaseActivity {
 
     public void editMail(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mail Address");
+        builder.setTitle(getText(R.string.user_mail));
         builder.setMessage("You will need to remember your new mail address in order to log in.");
 
         final EditText input = new EditText(this);
@@ -144,14 +140,14 @@ public class UserProfileActivity extends BaseActivity {
         input.setText(mailView.getText());
         builder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getText(R.string.dialog_ok_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mailView.setText(input.getText().toString());
                 save();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getText(R.string.dialog_cancel_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -163,7 +159,7 @@ public class UserProfileActivity extends BaseActivity {
 
     public void editPosition(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Position");
+        builder.setTitle(getText(R.string.user_position));
 
         final EditText input = new EditText(this);
         input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(30)});
@@ -171,14 +167,14 @@ public class UserProfileActivity extends BaseActivity {
         input.setText(positionView.getText());
         builder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getText(R.string.dialog_ok_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 positionView.setText(input.getText().toString());
                 save();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getText(R.string.dialog_cancel_text), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

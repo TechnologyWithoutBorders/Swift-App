@@ -37,6 +37,9 @@ public class ReportCreationActivity extends BaseActivity {
     private int state;
     private int device;
 
+    public static final String OLD_STATE_KEY = "OLD_STATE";
+    public static final String NEW_STATE_KEY = "NEW_STATE";
+
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -48,8 +51,8 @@ public class ReportCreationActivity extends BaseActivity {
         setContentView(R.layout.activity_report_creation);
 
         Intent intent = getIntent();
-        oldState = intent.getIntExtra("OLD_STATUS", -1);
-        state = intent.getIntExtra("NEW_STATUS", -1);
+        oldState = intent.getIntExtra(OLD_STATE_KEY, -1);
+        state = intent.getIntExtra(NEW_STATE_KEY, -1);
         device = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
 
         descriptionText = findViewById(R.id.descriptionText);
@@ -98,7 +101,7 @@ public class ReportCreationActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         Intent intent = new Intent(ReportCreationActivity.this, ReportInfoActivity.class);
-        intent.putExtra("REPORT", report);
+        intent.putExtra(Defaults.REPORT_KEY, report);
         startActivity(intent);
 
         ReportCreationActivity.this.finish();

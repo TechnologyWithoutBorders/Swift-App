@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -128,7 +129,7 @@ public class BarcodeFragment extends BaseFragment {
         viewModel.getDeviceInfo().observe(BarcodeFragment.this, deviceInfo -> {
             if(deviceInfo != null) {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
-                intent.putExtra("device", deviceInfo);
+                intent.putExtra(Defaults.DEVICE_KEY, deviceInfo);
                 BarcodeFragment.this.startActivity(intent);
             }
         });

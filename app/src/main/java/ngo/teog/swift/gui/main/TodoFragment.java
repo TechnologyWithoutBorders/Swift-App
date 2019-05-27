@@ -47,7 +47,6 @@ public class TodoFragment extends BaseFragment {
 
     private CustomSimpleArrayAdapter adapter;
     private ListView listView;
-    private ProgressBar progressBar;
 
     private List<DeviceInfo> values = new ArrayList<>();
 
@@ -59,8 +58,6 @@ public class TodoFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.maintenanceList);
-
-        progressBar = view.findViewById(R.id.progressBar);
 
         adapter = new CustomSimpleArrayAdapter(getContext(), values);
         listView.setAdapter(adapter);
@@ -141,7 +138,7 @@ public class TodoFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        //TODO refresh();
+        refresh();
     }
 
     private void refresh() {
@@ -180,7 +177,7 @@ public class TodoFragment extends BaseFragment {
 
                 long now = new Date().getTime();
                 long reportDate = lastReport.getCreated();
-                String dateString = Long.toString((now-reportDate)/1000/60/60/24) + " d";
+                String dateString = (now-reportDate)/1000/60/60/24 + " d";
                 dateView.setText(dateString);
 
                 detailView.setText(device.getManufacturer() + "\n" + device.getModel());

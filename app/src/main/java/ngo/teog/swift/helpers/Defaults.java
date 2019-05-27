@@ -44,4 +44,7 @@ public final class Defaults {
 
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
+
+    public static final String URI_TEL_PREFIX = "tel:";
+    public static final String URI_MAILTO_PREFIX = "mailto:";
 }

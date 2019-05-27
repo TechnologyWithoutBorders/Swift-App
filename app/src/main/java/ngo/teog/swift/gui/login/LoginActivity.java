@@ -38,6 +38,8 @@ public class LoginActivity extends BaseActivity {
     private ImageView imageView;
     private Spinner countrySpinner;
 
+    private static final String HASH_FUNCTION = "SHA-256";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +116,7 @@ public class LoginActivity extends BaseActivity {
                 if(checkForInternetConnection()) {
                     AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
 
-                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()), (String)countrySpinner.getSelectedItem());
+                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString(), HASH_FUNCTION), (String)countrySpinner.getSelectedItem());
 
                     form.setVisibility(View.GONE);
 
@@ -138,9 +140,9 @@ public class LoginActivity extends BaseActivity {
      * @param password zu verschlüsselndes Passwort
      * @return Hash
      */
-    private String getHash(String password) {
+    private String getHash(String password, String hashFunction) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance(hashFunction);
 
             digest.reset();
 

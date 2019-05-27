@@ -118,13 +118,13 @@ public class UserInfoActivity extends BaseActivity {
 
     public void invokeCall(View view) {
         Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-        dialIntent.setData(Uri.parse("tel:" + user.getPhone()));
+        dialIntent.setData(Uri.parse(Defaults.URI_TEL_PREFIX + user.getPhone()));
         startActivity(dialIntent);
     }
 
     public void invokeMail(View view) {
         Intent mailIntent = new Intent(Intent.ACTION_VIEW);
-        Uri data = Uri.parse("mailto:" + user.getMail());
+        Uri data = Uri.parse(Defaults.URI_MAILTO_PREFIX + user.getMail());
         mailIntent.setData(data);
         startActivity(mailIntent);
     }

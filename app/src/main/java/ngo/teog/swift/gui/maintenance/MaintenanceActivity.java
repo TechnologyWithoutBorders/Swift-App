@@ -38,7 +38,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class MaintenanceActivity extends BaseActivity {
 
-    private static final int DAYS = 7;
+    private static final int DAY_COUNT = 7;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -66,11 +66,11 @@ public class MaintenanceActivity extends BaseActivity {
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
-                List<List<DeviceInfo>> dayList = new ArrayList<>(DAYS);
+                List<List<DeviceInfo>> dayList = new ArrayList<>(DAY_COUNT);
 
                 //TODO wenn mans hier anders aufbaut und z.b. schon bearbeitete entfernt, wärs deutlich schneller
 
-                for(int i = 0; i < DAYS; i++) {
+                for(int i = 0; i < DAY_COUNT; i++) {
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.DATE, i);
 
@@ -132,22 +132,22 @@ public class MaintenanceActivity extends BaseActivity {
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
 
-        private List<List<DeviceInfo>> deviceInfos = new ArrayList<List<DeviceInfo>>(DAYS);
+        private List<List<DeviceInfo>> deviceInfos = new ArrayList<List<DeviceInfo>>(DAY_COUNT);
 
-        public ExpandableHospitalAdapter() {
-            for(int i = 0; i < DAYS; i++) {
+        private ExpandableHospitalAdapter() {
+            for(int i = 0; i < DAY_COUNT; i++) {
                 deviceInfos.add(new ArrayList<>());
             }
         }
 
-        public void setDeviceInfos(List<List<DeviceInfo>> deviceInfos) {
+        private void setDeviceInfos(List<List<DeviceInfo>> deviceInfos) {
             this.deviceInfos = deviceInfos;
             this.notifyDataSetChanged();
         }
 
         @Override
         public int getGroupCount() {
-            return DAYS;
+            return DAY_COUNT;
         }
 
         @Override
@@ -192,7 +192,7 @@ public class MaintenanceActivity extends BaseActivity {
             TextView countView = convertView.findViewById(R.id.countView);
 
             if(groupPosition == 0) {
-                nameView.setText("Today");
+                nameView.setText(getText(R.string.calendar_today_tag));
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("E yyyy-MM-dd");
                 Calendar c = Calendar.getInstance();
@@ -254,7 +254,7 @@ public class MaintenanceActivity extends BaseActivity {
 
         @Override
         public int getGroupTypeCount() {
-            return DAYS;
+            return DAY_COUNT;
         }
 
         @Override

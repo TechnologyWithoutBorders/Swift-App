@@ -107,7 +107,7 @@ public class SearchFragment extends BaseFragment {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
             } else {
-                Toast.makeText(this.getContext(), "no internet connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
             }
         } else {
             searchField.setError("invalid search value");

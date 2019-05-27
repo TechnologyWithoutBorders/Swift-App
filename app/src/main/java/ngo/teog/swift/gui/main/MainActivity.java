@@ -77,15 +77,17 @@ public class MainActivity extends BaseActivity {
                 RequestFactory.DefaultRequest request = null;
                 RequestFactory requestFactory = RequestFactory.getInstance();
 
-                if("device".equals(type)) {
+                if(Defaults.DEVICE_KEY.equals(type)) {
                     request = requestFactory.createDeviceOpenRequest(this, null, null, objectNumber);
-                } else if("user".equals(type)) {
+                } else if(Defaults.USER_KEY.equals(type)) {
                     request = requestFactory.createUserOpenRequest(this, null, null, objectNumber);
-                } else if("report".equals(type)) {
+                } else if(Defaults.REPORT_KEY.equals(type)) {
                     request = requestFactory.createReportOpenRequest(this, null, null, objectNumber);
                 }
 
-                queue.add(request);
+                if(request != null) {
+                    queue.add(request);
+                }
             } catch(NumberFormatException e) {
                 Toast.makeText(this.getApplicationContext(), "invalid item link", Toast.LENGTH_SHORT).show();
             }

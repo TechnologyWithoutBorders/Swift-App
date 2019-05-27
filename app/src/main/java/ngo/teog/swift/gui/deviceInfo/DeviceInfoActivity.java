@@ -154,8 +154,8 @@ public class DeviceInfoActivity extends BaseActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                        intent.putExtra("OLD_STATUS", deviceInfo.getReports().get(0).getReport().getCurrentState());
-                        intent.putExtra("NEW_STATUS", i);
+                        intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, deviceInfo.getReports().get(0).getReport().getCurrentState());
+                        intent.putExtra(ReportCreationActivity.NEW_STATE_KEY, i);
                         intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
                         startActivity(intent);
                     }
