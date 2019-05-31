@@ -32,6 +32,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -86,6 +89,8 @@ public class DeviceInfoActivity extends BaseActivity {
     private TextView intervalView;
 
     private DeviceInfo deviceInfo;
+
+    private boolean triggered = false;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -149,15 +154,28 @@ public class DeviceInfoActivity extends BaseActivity {
             if(deviceInfo != null) {
                 HospitalDevice device = deviceInfo.getDevice();
 
+                List<ReportInfo> reports = deviceInfo.getReports();
+
+                Collections.sort(reports, new Comparator<ReportInfo>() {
+                    @Override
+                    public int compare(ReportInfo first, ReportInfo second) {
+                        return second.getReport().getId()-first.getReport().getId();
+                    }
+                });
+
                 statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
                 statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                        intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, deviceInfo.getReports().get(0).getReport().getCurrentState());
-                        intent.putExtra(ReportCreationActivity.NEW_STATE_KEY, i);
-                        intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
-                        startActivity(intent);
+                        if(triggered) {
+                            Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                            intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, deviceInfo.getReports().get(0).getReport().getCurrentState());
+                            intent.putExtra(ReportCreationActivity.NEW_STATE_KEY, i);
+                            intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
+                            startActivity(intent);
+                        } else {
+                            triggered = true;
+                        }
                     }
 
                     @Override
@@ -213,10 +231,16 @@ public class DeviceInfoActivity extends BaseActivity {
                     });
                 }
 
-                adapter = new ReportArrayAdapter(this, deviceInfo.getReports());
+                adapter = new ReportArrayAdapter(this, reports);
                 reportListView.setAdapter(adapter);
             }
         });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //TODO refreshen
     }
 
     public void editAssetNumber(View view) {
