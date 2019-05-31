@@ -100,10 +100,6 @@ public class ReportCreationActivity extends BaseActivity {
         saveButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        Intent intent = new Intent(ReportCreationActivity.this, ReportInfoActivity.class);
-        intent.putExtra(Defaults.REPORT_KEY, report);
-        startActivity(intent);
-
         ReportCreationActivity.this.finish();
     }
 }
