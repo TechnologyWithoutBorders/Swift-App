@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ngo.teog.swift.helpers.Defaults;
+
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
@@ -67,5 +69,15 @@ public class Report implements  Serializable {
 
     public long getCreated() {
         return created;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("id: ").append(id).append(Defaults.STRING_SEPARATOR).append("author: ").append(author)
+                .append(Defaults.STRING_SEPARATOR).append("device: ").append(device).append(Defaults.STRING_SEPARATOR)
+                .append("previous state: ").append(previousState).append(Defaults.STRING_SEPARATOR)
+                .append("current state: ").append(currentState).append(Defaults.STRING_SEPARATOR)
+                .append("description: ").append(description).append(Defaults.STRING_SEPARATOR)
+                .append("created: ").append(new Date(created*1000)).toString();
     }
 }
