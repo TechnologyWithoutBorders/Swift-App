@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
@@ -24,9 +25,9 @@ public class User implements Serializable {
     private int hospital;
 
     private String position;
-    private long lastUpdate;
+    private Date lastUpdate;
 
-    public User(int id, String phone, String mail, String name, int hospital, String position, long lastUpdate) {
+    public User(int id, String phone, String mail, String name, int hospital, String position, Date lastUpdate) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
@@ -60,11 +61,11 @@ public class User implements Serializable {
         return position;
     }
 
-    public long getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(long lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 }

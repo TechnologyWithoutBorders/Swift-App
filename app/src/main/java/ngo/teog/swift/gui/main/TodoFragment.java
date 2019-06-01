@@ -176,8 +176,8 @@ public class TodoFragment extends BaseFragment {
                 nameView.setText(device.getType());
 
                 long now = new Date().getTime();
-                long reportDate = lastReport.getCreated();
-                String dateString = (now-reportDate)/1000/60/60/24 + " d";
+                Date reportDate = lastReport.getCreated();
+                String dateString = (now-reportDate.getTime())/1000/60/60/24 + " d";
                 dateView.setText(dateString);
 
                 detailView.setText(device.getManufacturer() + "\n" + device.getModel());

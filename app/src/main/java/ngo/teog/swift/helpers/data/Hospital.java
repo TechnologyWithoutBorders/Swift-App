@@ -4,6 +4,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity(tableName = "hospitals")
 public class Hospital implements Serializable {
@@ -11,9 +12,9 @@ public class Hospital implements Serializable {
     private int id;
     private String name;
     private String location;
-    private long lastUpdate;
+    private Date lastUpdate;
 
-    public Hospital(int id, String name, String location, long lastUpdate) {
+    public Hospital(int id, String name, String location, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -32,7 +33,7 @@ public class Hospital implements Serializable {
         return location;
     }
 
-    public long getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 }

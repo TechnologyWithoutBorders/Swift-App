@@ -1,16 +1,11 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ngo.teog.swift.helpers.Defaults;
-
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 /**
  * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
@@ -27,9 +22,9 @@ public class Report implements  Serializable {
     private int previousState;
     private int currentState;
     private String description;
-    private long created;
+    private Date created;
 
-    public Report(int id, int author, int device, int previousState, int currentState, String description, long created) {
+    public Report(int id, int author, int device, int previousState, int currentState, String description, Date created) {
         this.id = id;
         this.author = author;
         this.device = device;
@@ -67,7 +62,7 @@ public class Report implements  Serializable {
         return description;
     }
 
-    public long getCreated() {
+    public Date getCreated() {
         return created;
     }
 
@@ -78,6 +73,6 @@ public class Report implements  Serializable {
                 .append("previous state: ").append(previousState).append(Defaults.STRING_SEPARATOR)
                 .append("current state: ").append(currentState).append(Defaults.STRING_SEPARATOR)
                 .append("description: ").append(description).append(Defaults.STRING_SEPARATOR)
-                .append("created: ").append(new Date(created*1000)).toString();
+                .append("created: ").append(created).toString();
     }
 }

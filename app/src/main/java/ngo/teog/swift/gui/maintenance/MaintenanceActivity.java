@@ -85,9 +85,9 @@ public class MaintenanceActivity extends BaseActivity {
 
                         if(currentState == 0) {
                             int maintenanceInterval = device.getMaintenanceInterval();
-                            long created = lastReport.getCreated();
+                            Date created = lastReport.getCreated();
 
-                            Date nextMaintenance = new Date(created+maintenanceInterval*7*24*60*60);
+                            Date nextMaintenance = new Date(created.getTime()+maintenanceInterval*7*24*60*60);
                             Date calendarDate = cal.getTime();
 
                             if(Defaults.DATE_FORMAT.format(nextMaintenance).equals(Defaults.DATE_FORMAT.format(calendarDate))) {

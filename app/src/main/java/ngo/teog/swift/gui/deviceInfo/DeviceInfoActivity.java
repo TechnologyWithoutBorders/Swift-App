@@ -377,7 +377,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     break;
             }
 
-            device.setLastUpdate(new Date().getTime() / 1000);
+            device.setLastUpdate(new Date());
 
             SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
@@ -473,8 +473,8 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 authorView.setText(reportInfo.getAuthors().get(0).getName());
 
-                long date = report.getCreated();
-                dateView.setText(Defaults.DATE_FORMAT.format(new Date(date*1000)));
+                Date date = report.getCreated();
+                dateView.setText(Defaults.DATE_FORMAT.format(date));
             }
 
             return convertView;

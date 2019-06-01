@@ -1,5 +1,6 @@
 package ngo.teog.swift.helpers;
 
+import java.util.Date;
 import java.util.List;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
@@ -9,11 +10,11 @@ public class HospitalInfo {
     private int id;
     private String name;
     private String location;
-    private long lastUpdate;
+    private Date lastUpdate;
     private List<User> users;
     private List<DeviceInfo> devices;
 
-    public HospitalInfo(int id, String name, String location, long lastUpdate, List<User> users, List<DeviceInfo> devices) {
+    public HospitalInfo(int id, String name, String location, Date lastUpdate, List<User> users, List<DeviceInfo> devices) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -34,7 +35,7 @@ public class HospitalInfo {
         return location;
     }
 
-    public long getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 

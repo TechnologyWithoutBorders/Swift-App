@@ -19,7 +19,6 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -93,7 +92,7 @@ public class ReportCreationActivity extends BaseActivity {
 
         String description = descriptionText.getText().toString();
 
-        Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date().getTime()/1000);
+        Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date());
 
         viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 

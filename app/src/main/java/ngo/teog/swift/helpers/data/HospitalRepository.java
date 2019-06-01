@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,6 +13,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -133,7 +133,7 @@ public class HospitalRepository {
 
     public void createDevice(HospitalDevice device, int userId) {
         executor.execute(() -> {
-            long lastUpdate = new Date().getTime()/1000;
+            Date lastUpdate = new Date();
 
             Report creationReport = new Report(1, userId, device.getId(), 0, 0, "device creation", lastUpdate);
             device.setLastUpdate(lastUpdate);
@@ -183,7 +183,9 @@ public class HospitalRepository {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
         try {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .setDateFormat(Defaults.DATETIME_FORMAT.toPattern())
+                    .create();
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = generateParameterMap(context, "sync_hospital_info", true);
@@ -195,11 +197,11 @@ public class HospitalRepository {
             JSONArray jsonReports = new JSONArray();
 
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime())/1000;
+            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
 
             Hospital hospital = hospitalDao.getUserHospital(userID);
 
-            if(hospital != null && hospital.getLastUpdate() >= lastUpdate) {
+            if(hospital != null && hospital.getLastUpdate().getTime() >= lastUpdate) {
                 jsonHospitals.put(new JSONObject(gson.toJson(hospital)));
             }
 
@@ -207,7 +209,7 @@ public class HospitalRepository {
 
             if(users != null) {
                 for (User user : users) {
-                    if (user.getLastUpdate() >= lastUpdate) {
+                    if (user.getLastUpdate().getTime() >= lastUpdate) {
                         jsonUsers.put(new JSONObject(gson.toJson(user)));
                     }
                 }
@@ -219,7 +221,7 @@ public class HospitalRepository {
                 for (DeviceInfo deviceInfo : deviceInfos) {
                     HospitalDevice device = deviceInfo.getDevice();
 
-                    if (device.getLastUpdate() >= lastUpdate) {
+                    if (device.getLastUpdate().getTime() >= lastUpdate) {
                         jsonDevices.put(new JSONObject(gson.toJson(device)));
                     }
 
@@ -228,7 +230,7 @@ public class HospitalRepository {
                     for(ReportInfo reportInfo : reports) {
                         Report report = reportInfo.getReport();
 
-                        if(report.getCreated() >= lastUpdate) {
+                        if(report.getCreated().getTime() >= lastUpdate) {
                             jsonReports.put(new JSONObject(gson.toJson(report)));
                         }
                     }

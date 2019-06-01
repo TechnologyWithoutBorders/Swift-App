@@ -1,9 +1,9 @@
 package ngo.teog.swift.helpers.data;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
@@ -23,9 +23,9 @@ public class HospitalDevice implements Serializable {
     private String ward;
     private int hospital;
     private int maintenanceInterval;
-    private long lastUpdate;
+    private Date lastUpdate;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int hospital, int maintenanceInterval, long lastUpdate) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int hospital, int maintenanceInterval, Date lastUpdate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -106,11 +106,11 @@ public class HospitalDevice implements Serializable {
         this.ward = ward;
     }
 
-    public long getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(long lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 }

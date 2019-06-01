@@ -36,6 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -337,7 +338,7 @@ public class RequestFactory {
                             int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                             int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                             String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                            long lastUpdate = reportObject.getLong("r_last_update");
+                            Date lastUpdate = new Date(reportObject.getLong("r_last_update"));
 
                             Report report = new Report(id, author, device, previousState, currentState, description , lastUpdate);
                             reportList.add(report);
