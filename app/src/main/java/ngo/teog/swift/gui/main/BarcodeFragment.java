@@ -129,7 +129,7 @@ public class BarcodeFragment extends BaseFragment {
         viewModel.getDeviceInfo().observe(BarcodeFragment.this, deviceInfo -> {
             if(deviceInfo != null) {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
-                intent.putExtra(Defaults.DEVICE_KEY, deviceInfo);
+                intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
                 BarcodeFragment.this.startActivity(intent);
             } else {
                 Toast.makeText(this.getContext().getApplicationContext(), "device not found", Toast.LENGTH_SHORT).show();
