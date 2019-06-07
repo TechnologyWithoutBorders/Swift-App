@@ -114,7 +114,7 @@ public class MaintenanceActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_user_profile, menu);
+        inflater.inflate(R.menu.menu_maintenance, menu);
         return true;
     }
 
