@@ -1,14 +1,11 @@
 package ngo.teog.swift.gui.userInfo;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
-import ngo.teog.swift.helpers.data.Hospital;
-import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
-import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.UserInfo;
 
 public class UserInfoViewModel extends ViewModel {

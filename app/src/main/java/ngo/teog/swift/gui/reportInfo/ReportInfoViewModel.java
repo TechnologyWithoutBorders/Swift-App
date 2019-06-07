@@ -1,7 +1,7 @@
 package ngo.teog.swift.gui.reportInfo;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 

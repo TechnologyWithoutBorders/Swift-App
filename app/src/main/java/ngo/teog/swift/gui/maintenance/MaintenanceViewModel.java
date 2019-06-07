@@ -1,17 +1,14 @@
 package ngo.teog.swift.gui.maintenance;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
-import ngo.teog.swift.helpers.data.Hospital;
-import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
-import ngo.teog.swift.helpers.data.User;
 
 public class MaintenanceViewModel extends ViewModel {
     private LiveData<List<DeviceInfo>> deviceInfos;

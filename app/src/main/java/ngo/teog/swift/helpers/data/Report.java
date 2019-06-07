@@ -1,6 +1,6 @@
 package ngo.teog.swift.helpers.data;
 
-import android.arch.persistence.room.Entity;
+import androidx.room.Entity;
 
 import java.io.Serializable;
 import java.util.Date;

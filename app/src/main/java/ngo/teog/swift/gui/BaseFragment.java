@@ -3,7 +3,7 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Überklasse für alle Activities. Hier können Funktionen implementiert werden,
