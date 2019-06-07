@@ -120,7 +120,7 @@ public class BarcodeFragment extends BaseFragment {
         barcodeScannerView.pause();
     }
 
-    public void invokeFetch(int deviceId) {
+    private void invokeFetch(int deviceId) {
         searchField.setText(Integer.toString(deviceId));
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
@@ -131,7 +131,13 @@ public class BarcodeFragment extends BaseFragment {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
                 intent.putExtra(Defaults.DEVICE_KEY, deviceInfo);
                 BarcodeFragment.this.startActivity(intent);
+            } else {
+                Toast.makeText(this.getContext().getApplicationContext(), "device not found", Toast.LENGTH_SHORT).show();
             }
+
+            searchField.setText(null);
+            searchButton.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         });
     }
 
@@ -139,7 +145,7 @@ public class BarcodeFragment extends BaseFragment {
         return barcodeScannerView.onKeyDown(keyCode, event);
     }
 
-    public void search() {
+    private void search() {
         String searchString = searchField.getText().toString();
 
         try {
