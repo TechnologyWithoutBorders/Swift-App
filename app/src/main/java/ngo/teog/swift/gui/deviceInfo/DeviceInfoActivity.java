@@ -89,8 +89,6 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private DeviceInfo deviceInfo;
 
-    private volatile boolean triggerEvent = true;
-
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -165,9 +163,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if(deviceInfo.getReports().get(0).getReport().getCurrentState() != i) {
+                        int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
+
+                        if(currentState != i) {
                             Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                            intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, deviceInfo.getReports().get(0).getReport().getCurrentState());
+                            intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, currentState);
                             intent.putExtra(ReportCreationActivity.NEW_STATE_KEY, i);
                             intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
                             startActivity(intent);
