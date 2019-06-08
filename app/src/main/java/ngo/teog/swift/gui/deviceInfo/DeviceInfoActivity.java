@@ -89,7 +89,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private DeviceInfo deviceInfo;
 
-    private boolean triggered = false;
+    private volatile boolean triggerEvent = true;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -162,18 +162,15 @@ public class DeviceInfoActivity extends BaseActivity {
                     }
                 });
 
-                statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
                 statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if(triggered) {
+                        if(deviceInfo.getReports().get(0).getReport().getCurrentState() != i) {
                             Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
                             intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, deviceInfo.getReports().get(0).getReport().getCurrentState());
                             intent.putExtra(ReportCreationActivity.NEW_STATE_KEY, i);
                             intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
                             startActivity(intent);
-                        } else {
-                            triggered = true;
                         }
                     }
 
@@ -182,6 +179,8 @@ public class DeviceInfoActivity extends BaseActivity {
 
                     }
                 });
+
+                statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
 
                 assetNumberView.setText(device.getAssetNumber());
                 typeView.setText(device.getType());
