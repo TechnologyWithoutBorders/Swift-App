@@ -78,8 +78,8 @@ public class HospitalRepository {
         return hospitalDao.loadUserColleagues(userId);
     }
 
-    public LiveData<DeviceInfo> getDevice(int deviceId) {
-        //refreshUserHospital(userId);
+    public LiveData<DeviceInfo> getDevice(int userId, int deviceId) {
+        refreshUserHospital(userId);
 
         return hospitalDao.loadDevice(deviceId);
     }

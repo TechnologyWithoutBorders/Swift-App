@@ -142,8 +142,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
-        viewModel.init(deviceId);
+        viewModel.init(userId, deviceId);
 
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
             this.deviceInfo = deviceInfo;
@@ -233,12 +236,6 @@ public class DeviceInfoActivity extends BaseActivity {
                 reportListView.setAdapter(adapter);
             }
         });
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        //TODO refreshen
     }
 
     public void editAssetNumber(View view) {

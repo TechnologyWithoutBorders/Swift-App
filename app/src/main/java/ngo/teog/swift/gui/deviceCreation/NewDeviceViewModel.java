@@ -26,7 +26,7 @@ public class NewDeviceViewModel extends ViewModel {
         }
 
         user = hospitalRepo.getUser(userId);
-        device = hospitalRepo.getDevice(deviceId);
+        device = hospitalRepo.getDevice(userId, deviceId);
     }
 
     public void createDevice(HospitalDevice device, int userId) {

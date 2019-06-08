@@ -2,7 +2,10 @@ package ngo.teog.swift.gui.main;
 
 import android.Manifest;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import android.os.Bundle;
@@ -125,7 +128,10 @@ public class BarcodeFragment extends BaseFragment {
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        viewModel.init(deviceId);
+        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        viewModel.init(userId, deviceId);
         viewModel.getDeviceInfo().observe(BarcodeFragment.this, deviceInfo -> {
             if(deviceInfo != null) {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);

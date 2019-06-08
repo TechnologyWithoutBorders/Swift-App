@@ -13,14 +13,14 @@ public class DeviceInfoViewModel extends ViewModel {
     private HospitalRepository hospitalRepo;
     private LiveData<DeviceInfo> deviceInfo;
 
-    public void init(int deviceId) {
+    public void init(int userId, int deviceId) {
         if(this.deviceInfo != null) {
             // ViewModel is created on a per-Fragment basis, so the userId
             // doesn't change.
             return;
         }
 
-        deviceInfo = hospitalRepo.getDevice(deviceId);
+        deviceInfo = hospitalRepo.getDevice(userId, deviceId);
     }
 
     @Inject
@@ -34,5 +34,9 @@ public class DeviceInfoViewModel extends ViewModel {
 
     public LiveData<DeviceInfo> getDeviceInfo() {
         return deviceInfo;
+    }
+
+    public void refreshHospital(int userId) {
+        hospitalRepo.refreshUserHospital(userId);
     }
 }
