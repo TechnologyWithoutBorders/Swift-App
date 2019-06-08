@@ -400,13 +400,6 @@ public class DeviceInfoActivity extends BaseActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putBoolean("TRIGGERED", false);
-
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_device_info, menu);
