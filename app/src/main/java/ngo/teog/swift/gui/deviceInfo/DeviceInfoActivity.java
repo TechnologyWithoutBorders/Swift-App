@@ -238,6 +238,20 @@ public class DeviceInfoActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        refresh();
+    }
+
+    private void refresh() {
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        viewModel.refreshHospital(userId);
+    }
+
     public void editAssetNumber(View view) {
         this.edit(ASSET_NUMBER, assetNumberView.getText().toString());
     }
