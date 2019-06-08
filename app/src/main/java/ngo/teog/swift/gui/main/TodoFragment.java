@@ -124,7 +124,9 @@ public class TodoFragment extends BaseFragment {
                     List<ReportInfo> reportInfos = deviceInfo.getReports();
 
                     if(reportInfos.size() > 0) {
-                        if(reportInfos.get(0).getReport().getCurrentState() == 1 || reportInfos.get(0).getReport().getCurrentState() == 2) {
+                        int currentState = reportInfos.get(0).getReport().getCurrentState();
+
+                        if(currentState == 1 || currentState == 2 || currentState == 3) {
                             adapter.add(deviceInfo);
                         }
                     }
