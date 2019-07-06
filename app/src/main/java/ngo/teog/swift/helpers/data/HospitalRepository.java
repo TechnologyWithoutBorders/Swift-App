@@ -269,7 +269,7 @@ public class HospitalRepository {
 
                             HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
 
-                            Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLastUpdate());
+                            Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLongitude(), hospitalInfo.getLatitude(), hospitalInfo.getLastUpdate());
 
                             hospitalDao.save(hospital);
 

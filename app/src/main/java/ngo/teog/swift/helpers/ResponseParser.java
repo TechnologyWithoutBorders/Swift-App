@@ -107,6 +107,8 @@ public class ResponseParser {
                 int hospitalId = hospitalObject.getInt("id");
                 String name = hospitalObject.getString("name");
                 String location = hospitalObject.getString("location");
+                float longitude = Float.parseFloat(hospitalObject.getString("longitude"));
+                float latitude = Float.parseFloat(hospitalObject.getString("latitude"));
                 Date hospitalLastUpdate = Defaults.DATETIME_FORMAT.parse(hospitalObject.getString("last_update"));
                 JSONArray users = hospitalObject.getJSONArray("users");
                 JSONArray devices = hospitalObject.getJSONArray("devices");
@@ -173,7 +175,7 @@ public class ResponseParser {
                     deviceList.add(deviceInfo);
                 }
 
-                return new HospitalInfo(hospitalId, name, location, hospitalLastUpdate, userList, deviceList);
+                return new HospitalInfo(hospitalId, name, location, longitude, latitude, hospitalLastUpdate, userList, deviceList);
             case SwiftResponse.CODE_FAILED_VISIBLE:
                 throw new ResponseException(raw.getString(SwiftResponse.DATA_FIELD));
             case SwiftResponse.CODE_FAILED_HIDDEN:
