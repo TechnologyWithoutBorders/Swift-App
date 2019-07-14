@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -76,6 +77,8 @@ public class HospitalActivity extends BaseActivity {
         TextView nameView = findViewById(R.id.nameView);
         TextView locationView = findViewById(R.id.locationView);
 
+        ImageView mapButton = findViewById(R.id.mapButton);
+
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
                 .roomModule(new RoomModule(getApplication()))
@@ -91,8 +94,21 @@ public class HospitalActivity extends BaseActivity {
             if(hospital != null) {
                 nameView.setText(hospital.getName());
                 locationView.setText(hospital.getLocation());
+
+                mapButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        float latitude = hospital.getLatitude();
+                        float longitude = hospital.getLongitude();
+
+                        String uri = "geo:" + latitude + "," + longitude;
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                        HospitalActivity.this.startActivity(intent);
+                    }
+                });
             }
         });
+
         viewModel.getUsers().observe(this, users -> {
            if(users != null) {
                Collections.sort(users, new Comparator<User>() {
@@ -104,6 +120,7 @@ public class HospitalActivity extends BaseActivity {
                adapter.setUsers(users);
            }
         });
+
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
                 Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
