@@ -101,8 +101,8 @@ public class HospitalActivity extends BaseActivity {
                         float latitude = hospital.getLatitude();
                         float longitude = hospital.getLongitude();
 
-                        String uri = "geo:" + latitude + "," + longitude;
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                        Uri uri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(" + hospital.getName() + ")");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         HospitalActivity.this.startActivity(intent);
                     }
                 });
