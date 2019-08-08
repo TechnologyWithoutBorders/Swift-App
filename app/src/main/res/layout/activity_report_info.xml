@@ -13,7 +13,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black"
+            android:background="@color/grey_table_bar"
             android:padding="3dp">
             <TextView
                 android:layout_width="match_parent"
@@ -81,14 +81,16 @@
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:text="@string/report_description" />
-
            
         </TableRow>
-            <TextView
-                android:id="@+id/descriptionView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/descriptionView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:textSize="15sp" />
     </TableLayout>
 
 </LinearLayout>
