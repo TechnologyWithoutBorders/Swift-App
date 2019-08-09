@@ -201,7 +201,10 @@ public class HospitalRepository {
 
             Hospital hospital = hospitalDao.getUserHospital(userID);
 
-            if(hospital != null && hospital.getLastUpdate().getTime() >= lastUpdate) {
+            //assure that no dataset with invalid timestamp is synchronized to server
+            long now = new Date().getTime();
+
+            if(hospital != null && hospital.getLastUpdate().getTime() >= lastUpdate && hospital.getLastUpdate().getTime() <= now) {
                 jsonHospitals.put(new JSONObject(gson.toJson(hospital)));
             }
 
@@ -209,7 +212,7 @@ public class HospitalRepository {
 
             if(users != null) {
                 for (User user : users) {
-                    if (user.getLastUpdate().getTime() >= lastUpdate) {
+                    if (user.getLastUpdate().getTime() >= lastUpdate && user.getLastUpdate().getTime() <= now) {
                         jsonUsers.put(new JSONObject(gson.toJson(user)));
                     }
                 }
@@ -221,7 +224,7 @@ public class HospitalRepository {
                 for (DeviceInfo deviceInfo : deviceInfos) {
                     HospitalDevice device = deviceInfo.getDevice();
 
-                    if (device.getLastUpdate().getTime() >= lastUpdate) {
+                    if (device.getLastUpdate().getTime() >= lastUpdate && device.getLastUpdate().getTime() <= now) {
                         jsonDevices.put(new JSONObject(gson.toJson(device)));
                     }
 
@@ -230,7 +233,7 @@ public class HospitalRepository {
                     for(ReportInfo reportInfo : reports) {
                         Report report = reportInfo.getReport();
 
-                        if(report.getCreated().getTime() >= lastUpdate) {
+                        if(report.getCreated().getTime() >= lastUpdate && report.getCreated().getTime() <= now) {
                             jsonReports.put(new JSONObject(gson.toJson(report)));
                         }
                     }
