@@ -175,7 +175,7 @@ public class NewDeviceActivity3 extends BaseActivity {
                             .setInputData(imageData)
                             .build();
 
-            WorkManager.getInstance().enqueue(uploadWork);
+            WorkManager.getInstance(this).enqueue(uploadWork);
 
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
