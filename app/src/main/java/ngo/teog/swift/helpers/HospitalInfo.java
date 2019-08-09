@@ -58,4 +58,8 @@ public class HospitalInfo {
     public List<DeviceInfo> getDevices() {
         return devices;
     }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 }

@@ -272,15 +272,29 @@ public class HospitalRepository {
 
                             HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
 
+                            long now = new Date().getTime();
+
+                            if(hospitalInfo.getLastUpdate().getTime() > now) {
+                                hospitalInfo.setLastUpdate(new Date(now));
+                            }
+
                             Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLongitude(), hospitalInfo.getLatitude(), hospitalInfo.getLastUpdate());
 
                             hospitalDao.save(hospital);
 
                             for(User user : hospitalInfo.getUsers()) {
+                                if(user.getLastUpdate().getTime() > now) {
+                                    user.setLastUpdate(new Date(now));
+                                }
+
                                 hospitalDao.save(user);
                             }
 
                             for(DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
+                                if(deviceInfo.getDevice().getLastUpdate().getTime() > now) {
+                                    deviceInfo.getDevice().setLastUpdate(new Date(now));
+                                }
+
                                 hospitalDao.save(deviceInfo.getDevice());
 
                                 List<ReportInfo> reportInfos = deviceInfo.getReports();
