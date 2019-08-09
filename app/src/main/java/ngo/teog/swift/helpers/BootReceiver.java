@@ -48,6 +48,6 @@ public class BootReceiver extends BroadcastReceiver {
                 .setConstraints(updateConstraints)
                 .build();
 
-        WorkManager.getInstance().enqueue(updateWork);
+        WorkManager.getInstance(context).enqueue(updateWork);
     }
 }
