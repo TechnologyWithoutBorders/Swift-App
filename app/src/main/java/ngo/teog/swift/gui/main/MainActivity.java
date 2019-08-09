@@ -49,8 +49,6 @@ public class MainActivity extends BaseActivity {
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
-    private BarcodeFragment codeFragment;
-
     @Inject
     HospitalDatabase database;
 
