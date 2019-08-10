@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui.maintenance;
+package ngo.teog.swift.gui.main;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,12 +10,12 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 
-public class MaintenanceViewModel extends ViewModel {
+public class CalendarViewModel extends ViewModel {
     private LiveData<List<DeviceInfo>> deviceInfos;
     private HospitalRepository hospitalRepo;
 
     @Inject
-    public MaintenanceViewModel(HospitalRepository hospitalRepo) {
+    public CalendarViewModel(HospitalRepository hospitalRepo) {
         this.hospitalRepo = hospitalRepo;
     }
 

@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
-import ngo.teog.swift.gui.maintenance.MaintenanceActivity;
+import ngo.teog.swift.gui.maintenance.SearchActivity;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity {
                 case 1:
                     return new TodoFragment();
                 case 2:
-                    return new SearchFragment();
+                    return new CalendarFragment();
                 default:
                     return null;
             }
@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String[] names = {"Scanner", "Todo", "Search"};
+            String[] names = {"Scanner", "Todo", "Calendar"};
 
             return names[position];
         }
@@ -248,7 +248,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void startMaintenanceActivity() {
-        Intent intent = new Intent(MainActivity.this, MaintenanceActivity.class);
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 }

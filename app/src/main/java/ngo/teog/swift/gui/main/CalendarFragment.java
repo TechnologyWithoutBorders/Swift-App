@@ -1,6 +1,5 @@
-package ngo.teog.swift.gui.maintenance;
+package ngo.teog.swift.gui.main;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,10 +9,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.lifecycle.ViewModelProviders;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,8 +36,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.maintenance.SearchActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -34,35 +50,44 @@ import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
-public class MaintenanceActivity extends BaseActivity {
+public class CalendarFragment extends BaseFragment {
 
     private static final int DAY_COUNT = 7;
+
+    private ExpandableListView hospitalListView;
 
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private TodoViewModel viewModel;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maintenance);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.activity_maintenance, container, false);
 
-        final ExpandableListView hospitalListView = findViewById(R.id.maintenanceCalendar);
+        hospitalListView = rootView.findViewById(R.id.maintenanceCalendar);
 
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
         hospitalListView.setAdapter(adapter);
 
         DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
+                .appModule(new AppModule(getActivity().getApplication()))
+                .roomModule(new RoomModule(getActivity().getApplication()))
                 .build()
                 .inject(this);
 
-        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        MaintenanceViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MaintenanceViewModel.class);
+        CalendarViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(CalendarViewModel.class);
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
@@ -109,25 +134,6 @@ public class MaintenanceActivity extends BaseActivity {
                 adapter.setDeviceInfos(dayList);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_maintenance, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.maintenance_info);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
@@ -183,7 +189,7 @@ public class MaintenanceActivity extends BaseActivity {
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
             if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) MaintenanceActivity.this
+                LayoutInflater inflater = (LayoutInflater) getActivity()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.header_hospital, parent, false);
             }
@@ -209,7 +215,7 @@ public class MaintenanceActivity extends BaseActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             if(convertView == null || (int)convertView.getTag() != groupPosition) {
-                LayoutInflater inflater = (LayoutInflater) MaintenanceActivity.this
+                LayoutInflater inflater = (LayoutInflater) getActivity()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.row_todo, parent, false);
                 convertView.setTag(groupPosition);
@@ -231,7 +237,7 @@ public class MaintenanceActivity extends BaseActivity {
                 String dateString = Defaults.DATE_FORMAT.format(lastReport.getCreated());
                 dateView.setText(dateString);
 
-                DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), MaintenanceActivity.this);
+                DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), getContext());
 
                 statusView.setText(triple.getStatestring());
 
