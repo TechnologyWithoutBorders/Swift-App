@@ -23,6 +23,16 @@
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".gui.maintenance.SearchActivity2"
+            android:label="Search"
+            android:parentActivityName=".gui.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".gui.maintenance.SearchActivity3"
+            android:label="Search"
+            android:parentActivityName=".gui.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name=".gui.login.StatsActivity"
             android:label="Statistics"
