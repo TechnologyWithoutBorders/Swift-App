@@ -12,21 +12,21 @@
         android:textStyle="bold"
         android:text="What are you looking for?" />
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:id="@+id/hospitalButton"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Hospital" />
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:id="@+id/deviceButton"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Device" />
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:id="@+id/userButton"
         android:layout_width="match_parent"
         android:layout_weight="1"

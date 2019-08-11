@@ -12,14 +12,14 @@
         android:textStyle="bold"
         android:text="Where do you want to look?" />
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:id="@+id/localButton"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="My Hospital" />
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:id="@+id/otherButton"
         android:layout_width="match_parent"
         android:layout_weight="1"
