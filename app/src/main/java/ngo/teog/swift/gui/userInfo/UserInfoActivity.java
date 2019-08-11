@@ -41,51 +41,48 @@ public class UserInfoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
-        Intent intent = this.getIntent();
-        int userId = intent.getIntExtra(Defaults.USER_ID_KEY, -1);
-
-        final ImageView globalImageView = findViewById(R.id.imageView);
-        globalImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog imageDialog = new Dialog(UserInfoActivity.this);
-                imageDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-                View dialogView = getLayoutInflater().inflate(R.layout.image_dialog, null);
-                ImageView imageView = dialogView.findViewById(R.id.imageView);
-                imageView.setImageBitmap(((BitmapDrawable) globalImageView.getDrawable()).getBitmap());
-                imageDialog.setContentView(dialogView);
-                imageDialog.show();
-            }
-        });
-
         TextView nameView = findViewById(R.id.nameView);
         TextView phoneView = findViewById(R.id.phoneView);
         TextView mailView = findViewById(R.id.mailView);
         TextView positionView = findViewById(R.id.positionView);
         TextView hospitalView = findViewById(R.id.hospitalView);
 
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
-                .build()
-                .inject(this);
+        Intent intent = this.getIntent();
 
-        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int myId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+        if(intent.hasExtra(Defaults.USER_KEY)) {
+            user = (User)intent.getSerializableExtra(Defaults.USER_KEY);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserInfoViewModel.class);
-        viewModel.init(myId, userId);
-        viewModel.getUserInfo().observe(this, userInfo -> {
-            if(userInfo != null) {
-                this.user = userInfo.getUser();
+            nameView.setText(user.getName());
+            phoneView.setText(user.getPhone());
+            mailView.setText(user.getMail());
+            positionView.setText(user.getPosition());
+            //hospitalView.setText(userInfo.getHospitals().get(0).getName());
+        } else {
+            int userId = intent.getIntExtra(Defaults.USER_ID_KEY, -1);
 
-                nameView.setText(user.getName());
-                phoneView.setText(user.getPhone());
-                mailView.setText(user.getMail());
-                positionView.setText(user.getPosition());
-                hospitalView.setText(userInfo.getHospitals().get(0).getName());
-            }
-        });
+            DaggerAppComponent.builder()
+                    .appModule(new AppModule(getApplication()))
+                    .roomModule(new RoomModule(getApplication()))
+                    .build()
+                    .inject(this);
+
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            int myId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+            viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserInfoViewModel.class);
+            viewModel.init(myId, userId);
+            viewModel.getUserInfo().observe(this, userInfo -> {
+                if(userInfo != null) {
+                    this.user = userInfo.getUser();
+
+                    nameView.setText(user.getName());
+                    phoneView.setText(user.getPhone());
+                    mailView.setText(user.getMail());
+                    positionView.setText(user.getPosition());
+                    hospitalView.setText(userInfo.getHospitals().get(0).getName());
+                }
+            });
+        }
     }
 
     @Override

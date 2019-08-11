@@ -28,6 +28,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.User;
@@ -53,17 +54,6 @@ public class SearchActivity3 extends BaseActivity {
         searchField = findViewById(R.id.searchField);
         searchButton = findViewById(R.id.search_button);
         listView = findViewById(R.id.maintenanceList);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /*SearchObject item = (SearchObject)adapterView.getItemAtPosition(i);
-
-                Intent intent = new Intent(getContext(), item.getInfoActivityClass());
-                intent.putExtra(item.getExtraIdentifier(), item);
-                startActivity(intent);*/
-            }
-        });
 
         searchField.setHint(searchObject);
 
@@ -103,6 +93,17 @@ public class SearchActivity3 extends BaseActivity {
                 } else if(Defaults.USER_KEY.equals(searchObject)) {
                     UserArrayAdapter userAdapter = new UserArrayAdapter(this, new ArrayList<User>());
                     listView.setAdapter(userAdapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            User item = (User)adapterView.getItemAtPosition(i);
+
+                            Intent intent = new Intent(SearchActivity3.this, UserInfoActivity.class);
+                            intent.putExtra(Defaults.USER_KEY, item);
+                            startActivity(intent);
+                        }
+                    });
 
                     request = RequestFactory.getInstance().createUserSearchRequest(this, progressBar, searchButton, searchString, userAdapter);
                 } if(Defaults.HOSPITAL_KEY.equals(searchObject)) {
