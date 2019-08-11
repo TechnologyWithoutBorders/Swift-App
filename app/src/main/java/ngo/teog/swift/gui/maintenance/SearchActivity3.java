@@ -65,6 +65,8 @@ public class SearchActivity3 extends BaseActivity {
             }
         });
 
+        searchField.setHint(searchObject);
+
         if(Defaults.SCOPE_GLOBAL.equals(scope)) {
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,11 +75,53 @@ public class SearchActivity3 extends BaseActivity {
                 }
             });
         } else if(Defaults.SCOPE_LOCAL.equals(scope)) {
-            //TODO
+            searchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    searchOffline(searchObject);
+                }
+            });
         }
     }
 
     private void searchOnline(String searchObject) {
+        if(searchField.getText().length() > 0) {
+            if(this.checkForInternetConnection()) {
+                String searchString = searchField.getText().toString();
+                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+
+                progressBar.setVisibility(View.VISIBLE);
+                searchButton.setVisibility(View.INVISIBLE);
+
+                JsonObjectRequest request = null;
+
+                if(Defaults.DEVICE_KEY.equals(searchObject)) {
+                    DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(this, new ArrayList<HospitalDevice>());
+                    listView.setAdapter(deviceAdapter);
+
+                    request = RequestFactory.getInstance().createDeviceSearchRequest(this, progressBar, searchButton, searchString, deviceAdapter);
+                } else if(Defaults.USER_KEY.equals(searchObject)) {
+                    UserArrayAdapter userAdapter = new UserArrayAdapter(this, new ArrayList<User>());
+                    listView.setAdapter(userAdapter);
+
+                    request = RequestFactory.getInstance().createUserSearchRequest(this, progressBar, searchButton, searchString, userAdapter);
+                } if(Defaults.HOSPITAL_KEY.equals(searchObject)) {
+                    //TODO
+                }
+
+                queue.add(request);
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            } else {
+                Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            searchField.setError("invalid search value");
+        }
+    }
+
+    private void searchOffline(String searchObject) {
         if(searchField.getText().length() > 0) {
             if(this.checkForInternetConnection()) {
                 String searchString = searchField.getText().toString();
