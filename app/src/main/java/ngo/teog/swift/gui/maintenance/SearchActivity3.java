@@ -24,16 +24,28 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.main.TodoViewModel;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class SearchActivity3 extends BaseActivity {
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private SearchViewModel viewModel;
 
     private ProgressBar progressBar;
     private EditText searchField;
@@ -65,6 +77,12 @@ public class SearchActivity3 extends BaseActivity {
                 }
             });
         } else if(Defaults.SCOPE_LOCAL.equals(scope)) {
+            DaggerAppComponent.builder()
+                    .appModule(new AppModule(getApplication()))
+                    .roomModule(new RoomModule(getApplication()))
+                    .build()
+                    .inject(this);
+
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -124,36 +142,7 @@ public class SearchActivity3 extends BaseActivity {
 
     private void searchOffline(String searchObject) {
         if(searchField.getText().length() > 0) {
-            if(this.checkForInternetConnection()) {
-                String searchString = searchField.getText().toString();
-                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-                progressBar.setVisibility(View.VISIBLE);
-                searchButton.setVisibility(View.INVISIBLE);
-
-                JsonObjectRequest request = null;
-
-                if(Defaults.DEVICE_KEY.equals(searchObject)) {
-                    DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(this, new ArrayList<HospitalDevice>());
-                    listView.setAdapter(deviceAdapter);
-
-                    request = RequestFactory.getInstance().createDeviceSearchRequest(this, progressBar, searchButton, searchString, deviceAdapter);
-                } else if(Defaults.USER_KEY.equals(searchObject)) {
-                    UserArrayAdapter userAdapter = new UserArrayAdapter(this, new ArrayList<User>());
-                    listView.setAdapter(userAdapter);
-
-                    request = RequestFactory.getInstance().createUserSearchRequest(this, progressBar, searchButton, searchString, userAdapter);
-                } if(Defaults.HOSPITAL_KEY.equals(searchObject)) {
-                    //TODO
-                }
-
-                queue.add(request);
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(searchField.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
-            } else {
-                Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
-            }
         } else {
             searchField.setError("invalid search value");
         }
