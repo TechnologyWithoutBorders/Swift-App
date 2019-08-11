@@ -5,37 +5,16 @@
     android:padding="16dp"
     android:orientation="vertical">
 
-    <RadioGroup
-        android:id="@+id/categoryGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/deviceButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/device"
-            android:checked="true"/>
-
-        <RadioButton
-            android:id="@+id/userButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/user" />
-    </RadioGroup>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/searchField"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:hint="value"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
@@ -44,7 +23,7 @@
             android:layout_height="wrap_content">
 
             <Button style="@style/AppTheme.Button"
-                android:id="@+id/button22"
+                android:id="@+id/search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/search_button"

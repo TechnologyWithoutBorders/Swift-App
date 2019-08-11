@@ -56,7 +56,8 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity3.class);
-                //intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                intent.putExtra(Defaults.SCOPE, Defaults.SCOPE_GLOBAL);
+                intent.putExtra(Defaults.SEARCH_OBJECT, Defaults.HOSPITAL_KEY);
 
                 startActivity(intent);
             }
@@ -66,7 +67,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity2.class);
-                //intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                intent.putExtra(Defaults.SEARCH_OBJECT, Defaults.DEVICE_KEY);
 
                 startActivity(intent);
             }
@@ -76,7 +77,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity2.class);
-                //intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                intent.putExtra(Defaults.SEARCH_OBJECT, Defaults.USER_KEY);
 
                 startActivity(intent);
             }

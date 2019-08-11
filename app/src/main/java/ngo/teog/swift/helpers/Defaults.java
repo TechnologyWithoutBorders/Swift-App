@@ -42,6 +42,14 @@ public final class Defaults {
     public static final String IMAGE_KEY = "IMAGE";
     public static final String PATH_KEY = "PATH";
 
+    public static final String SCOPE = "SCOPE";
+    public static final String SCOPE_LOCAL = "LOCAL";
+    public static final String SCOPE_GLOBAL = "GLOBAL";
+
+    public static final String HOSPITAL_KEY = "HOSPITAL";
+
+    public static final String SEARCH_OBJECT = "SEARCH_OBJECT";
+
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
 

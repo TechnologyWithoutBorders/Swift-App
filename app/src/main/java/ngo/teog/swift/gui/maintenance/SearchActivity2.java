@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.helpers.Defaults;
 
 public class SearchActivity2 extends BaseActivity {
 
@@ -18,6 +19,10 @@ public class SearchActivity2 extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search2);
 
+        Intent intent = getIntent();
+
+        String searchObject = intent.getStringExtra(Defaults.SEARCH_OBJECT);
+
         Button localButton = findViewById(R.id.localButton);
         Button otherButton = findViewById(R.id.otherButton);
 
@@ -25,7 +30,8 @@ public class SearchActivity2 extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity2.this, SearchActivity3.class);
-                //intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                intent.putExtra(Defaults.SCOPE, Defaults.SCOPE_LOCAL);
+                intent.putExtra(Defaults.SEARCH_OBJECT, searchObject);
 
                 startActivity(intent);
             }
@@ -35,7 +41,8 @@ public class SearchActivity2 extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity2.this, SearchActivity3.class);
-                //intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                intent.putExtra(Defaults.SCOPE, Defaults.SCOPE_GLOBAL);
+                intent.putExtra(Defaults.SEARCH_OBJECT, searchObject);
 
                 startActivity(intent);
             }
