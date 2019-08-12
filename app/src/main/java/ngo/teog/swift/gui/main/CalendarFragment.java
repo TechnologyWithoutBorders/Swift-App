@@ -31,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -124,12 +125,7 @@ public class CalendarFragment extends BaseFragment {
                     dayList.add(deviceInfoList);
                 }
 
-                /*Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
-                    @Override
-                    public int compare(DeviceInfo first, DeviceInfo second) {
-                        return first.getDevice().getType().compareTo(second.getDevice().getType());
-                    }
-                });*/
+                Collections.reverse(dayList);
 
                 adapter.setDeviceInfos(dayList);
             }
