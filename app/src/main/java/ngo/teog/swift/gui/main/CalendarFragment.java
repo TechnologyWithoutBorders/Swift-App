@@ -56,7 +56,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class CalendarFragment extends BaseFragment {
 
-    private static final int DAY_COUNT = 7;
+    private static final int DAY_COUNT = 8;
 
     private ExpandableListView hospitalListView;
 
