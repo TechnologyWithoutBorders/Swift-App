@@ -12,14 +12,14 @@ public class ReportInfoViewModel extends ViewModel {
     private HospitalRepository hospitalRepo;
     private LiveData<ReportInfo> reportInfo;
 
-    public void init(int userId, int reportId) {
+    public void init(int userId, int deviceId, int reportId) {
         if(this.reportInfo != null) {
             // ViewModel is created on a per-Fragment basis, so the userId
             // doesn't change.
             return;
         }
 
-        reportInfo = hospitalRepo.loadReportInfo(userId, reportId);
+        reportInfo = hospitalRepo.loadReportInfo(userId, deviceId, reportId);
     }
 
     @Inject

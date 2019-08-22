@@ -112,8 +112,11 @@ public class DeviceInfoActivity extends BaseActivity {
         reportListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Report report = ((ReportInfo)adapterView.getItemAtPosition(i)).getReport();
+
                 Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
-                intent.putExtra(Defaults.REPORT_ID_KEY, ((ReportInfo)adapterView.getItemAtPosition(i)).getReport().getId());
+                intent.putExtra(Defaults.DEVICE_ID_KEY, report.getDevice());
+                intent.putExtra(Defaults.REPORT_ID_KEY, report.getId());
                 startActivity(intent);
             }
         });

@@ -38,8 +38,8 @@ public interface HospitalDao {
     void save(Report report);
 
     @Transaction
-    @Query("SELECT * FROM reports WHERE id = :reportId")
-    LiveData<ReportInfo> loadReportInfo(int reportId);
+    @Query("SELECT * FROM reports WHERE device = :deviceId AND id = :reportId")
+    LiveData<ReportInfo> loadReportInfo(int deviceId, int reportId);
 
     @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")

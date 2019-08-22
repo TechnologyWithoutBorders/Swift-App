@@ -90,10 +90,10 @@ public class HospitalRepository {
         return hospitalDao.loadHospitalDevices(userId);
     }
 
-    public LiveData<ReportInfo> loadReportInfo(int userId, int reportId) {
+    public LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId) {
         refreshUserHospital(userId);
 
-        return hospitalDao.loadReportInfo(reportId);
+        return hospitalDao.loadReportInfo(deviceId, reportId);
     }
 
     public LiveData<UserInfo> getUserInfo(int myId, int userId) {

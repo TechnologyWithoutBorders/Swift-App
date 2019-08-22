@@ -36,6 +36,7 @@ public class ReportInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_report_info);
 
         Intent intent = this.getIntent();
+        int deviceId = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
         int reportId = intent.getIntExtra(Defaults.REPORT_ID_KEY, -1);
 
         TextView dateView = findViewById(R.id.dateView);
@@ -53,7 +54,7 @@ public class ReportInfoActivity extends BaseActivity {
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         ReportInfoViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportInfoViewModel.class);
-        viewModel.init(userId, reportId);
+        viewModel.init(userId, deviceId, reportId);
 
         viewModel.getReportInfo().observe(this, reportInfo -> {
             if(reportInfo != null) {
