@@ -65,14 +65,4 @@ public class Report implements  Serializable {
     public Date getCreated() {
         return created;
     }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("id: ").append(id).append(Defaults.STRING_SEPARATOR).append("author: ").append(author)
-                .append(Defaults.STRING_SEPARATOR).append("device: ").append(device).append(Defaults.STRING_SEPARATOR)
-                .append("previous state: ").append(previousState).append(Defaults.STRING_SEPARATOR)
-                .append("current state: ").append(currentState).append(Defaults.STRING_SEPARATOR)
-                .append("description: ").append(description).append(Defaults.STRING_SEPARATOR)
-                .append("created: ").append(created).toString();
-    }
 }
