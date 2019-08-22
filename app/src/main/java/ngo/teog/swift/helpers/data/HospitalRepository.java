@@ -184,7 +184,7 @@ public class HospitalRepository {
 
         try {
             Gson gson = new GsonBuilder()
-                    .setDateFormat(Defaults.DATETIME_FORMAT.toPattern())
+                    .setDateFormat(Defaults.DATETIME_PRECISE_FORMAT.toPattern())
                     .create();
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen

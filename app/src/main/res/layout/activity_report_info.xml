@@ -3,94 +3,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    android:padding="5dp">
 
-    <TableLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="Report"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
 
-        <TableRow
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <Space
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/grey_table_bar"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
-                android:textStyle="bold"
-                android:text="@string/report_date" />
+            android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/dateView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:text="@string/report_state_change" />
-
-            <TextView
-                android:id="@+id/stateChangeView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:text="@string/report_author" />
-
-            <TextView
-                android:id="@+id/authorView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingRight="5dp"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:text="@string/report_description" />
-           
-        </TableRow>
+        <ImageView
+            android:id="@+id/fromState"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp" />
 
         <TextView
-            android:id="@+id/descriptionView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:textSize="15sp" />
-    </TableLayout>
+            android:textSize="30sp"
+            android:padding="5dp"
+            android:text="@string/transition_indicator"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/toState"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/authorView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:text="@string/report_description" />
+
+    <TextView
+        android:id="@+id/descriptionView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp" />
 
 </LinearLayout>

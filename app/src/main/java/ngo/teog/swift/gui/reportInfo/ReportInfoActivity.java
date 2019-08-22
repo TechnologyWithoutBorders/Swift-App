@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Report;
@@ -23,6 +25,9 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Activity that sums up all available information about a report.
+ */
 public class ReportInfoActivity extends BaseActivity {
 
     @Inject
@@ -41,7 +46,8 @@ public class ReportInfoActivity extends BaseActivity {
 
         TextView dateView = findViewById(R.id.dateView);
         TextView authorView = findViewById(R.id.authorView);
-        TextView stateChangeView = findViewById(R.id.stateChangeView);
+        ImageView fromState = findViewById(R.id.fromState);
+        ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
 
         DaggerAppComponent.builder()
@@ -63,9 +69,16 @@ public class ReportInfoActivity extends BaseActivity {
                 Report report = reportInfo.getReport();
                 User author = reportInfo.getAuthors().get(0);
 
+                DeviceState previousStateInfo = DeviceState.buildState(report.getPreviousState(),this);
+                fromState.setImageDrawable(previousStateInfo.getStateicon());
+                fromState.setBackgroundColor(previousStateInfo.getBackgroundcolor());
+
+                DeviceState currentStateInfo = DeviceState.buildState(report.getCurrentState(),this);
+                toState.setImageDrawable(currentStateInfo.getStateicon());
+                toState.setBackgroundColor(currentStateInfo.getBackgroundcolor());
+
                 dateView.setText(Defaults.DATETIME_FORMAT.format(report.getCreated()));
                 authorView.setText(author.getName());
-                stateChangeView.setText(getResources().getStringArray(R.array.device_states)[report.getPreviousState()] + " -> " + getResources().getStringArray(R.array.device_states)[report.getCurrentState()]);
                 descriptionView.setText(report.getDescription());
             }
         });

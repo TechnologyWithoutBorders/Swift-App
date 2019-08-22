@@ -58,6 +58,9 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Activity that sums up all available information about a device.
+ */
 public class DeviceInfoActivity extends BaseActivity {
 
     private static final int ASSET_NUMBER = 0;
@@ -439,6 +442,9 @@ public class DeviceInfoActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Adapter for displaying the recent report list.
+     */
     private class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
         private final Context context;
 
@@ -486,6 +492,9 @@ public class DeviceInfoActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Adapter for displaying the device state spinner.
+     */
     private class StatusArrayAdapter extends ArrayAdapter<String> {
 
         private final Context context;

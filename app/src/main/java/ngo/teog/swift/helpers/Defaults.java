@@ -30,7 +30,8 @@ public final class Defaults {
 
     //default methods
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static final SimpleDateFormat DATETIME_PRECISE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //identifier keys
     public static final String DEVICE_ID_KEY = "DEVICE_ID";
