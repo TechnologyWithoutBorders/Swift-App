@@ -25,11 +25,6 @@
     <string name="about_text"><![CDATA[
         <p>In order to register a new user for your hospital please contact swift-app@teog.de</p>
 
-        <p><h1>Technology without Borders</h1>
-        <h2>WG Hospital Support</h2>
-        <h3>Contact</h3>
-        swift-app@teog.de</p>
-
         <p><h3>About TeoG Swift</h3>
         TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders) short TeoG. Its intended use is to have a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.
         The code can be downloaded and modified for your own needs at Github (https://github.com/TechnologyWithoutBorders/Swift-App) under the Apache 2.0 License (https://www.apache.org/licenses/LICENSE-2.0).</p>
@@ -39,6 +34,14 @@
 
         <h3>Third party software</h3>
         coming soon
+        ]]></string>
+
+    <string name="teog_info"><![CDATA[
+        <p><b>Technology without Borders</b><br>
+        WG Hospital Support</p>
+
+        <p>Contact:<br>
+        swift-app@teog.de</p>
         ]]></string>
 
     <!-- Activity names -->

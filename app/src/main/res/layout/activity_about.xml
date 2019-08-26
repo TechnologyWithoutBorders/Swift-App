@@ -9,12 +9,26 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:contentDescription="@string/teog_logo"
-            android:src="@drawable/teog_logo_official_export_small"
-            android:paddingBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="150dp"
+                android:contentDescription="@string/teog_logo"
+                android:src="@drawable/teog_logo_official_export_small"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/teog_info"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/aboutText"

@@ -15,5 +15,8 @@ public class AboutActivity extends BaseActivity {
 
         TextView aboutText = findViewById(R.id.aboutText);
         aboutText.setText(Html.fromHtml(getString(R.string.about_text)));
+
+        TextView teogInfo = findViewById(R.id.teog_info);
+        teogInfo.setText(Html.fromHtml(getString(R.string.teog_info)));
     }
 }
