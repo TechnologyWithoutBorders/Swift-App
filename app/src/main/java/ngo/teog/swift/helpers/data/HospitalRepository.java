@@ -299,6 +299,8 @@ public class HospitalRepository {
 
                                 List<ReportInfo> reportInfos = deviceInfo.getReports();
 
+                                //TODO falls es irgendwann zu viele Reports werden: Zunächst nur den neuesten Report pro Gerät übermitteln und wenn der vom lokalen abweicht, die vollständige Liste nachholen
+
                                 for(ReportInfo reportInfo : reportInfos) {
                                     Report report = reportInfo.getReport();
 
