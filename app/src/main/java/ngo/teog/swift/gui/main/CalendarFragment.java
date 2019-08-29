@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,6 +56,8 @@ import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class CalendarFragment extends BaseFragment {
+
+    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN);
 
     private static final int DAY_COUNT = 8;
 
@@ -116,7 +119,8 @@ public class CalendarFragment extends BaseFragment {
                             Date nextMaintenance = new Date(created.getTime()+maintenanceInterval*7*24*60*60);
                             Date calendarDate = cal.getTime();
 
-                            if(Defaults.DATE_FORMAT.format(nextMaintenance).equals(Defaults.DATE_FORMAT.format(calendarDate))) {
+                            //Dieser Vergleich könnte problematisch sein
+                            if(dateFormat.format(nextMaintenance).equals(dateFormat.format(calendarDate))) {
                                 deviceInfoList.add(deviceInfo);
                             }
                         }
@@ -230,7 +234,7 @@ public class CalendarFragment extends BaseFragment {
 
                 nameView.setText(device.getType());
 
-                String dateString = Defaults.DATE_FORMAT.format(lastReport.getCreated());
+                String dateString = dateFormat.format(lastReport.getCreated());
                 dateView.setText(dateString);
 
                 DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), getContext());

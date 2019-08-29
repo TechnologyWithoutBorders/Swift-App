@@ -1,8 +1,12 @@
 package ngo.teog.swift.helpers;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +49,8 @@ public class ResponseParser {
 
                 ArrayList<HospitalDevice> result = new ArrayList<>();
 
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
                 for(int i = 0; i < deviceList.length(); i++) {
                     JSONObject deviceObject = deviceList.getJSONObject(i);
 
@@ -58,7 +64,7 @@ public class ResponseParser {
 
                     int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-                    Date lastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(deviceObject.getString("d_last_update"));
+                    Date lastUpdate = dateFormat.parse(deviceObject.getString("d_last_update"));
 
                     HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
                     result.add(device);
@@ -76,6 +82,8 @@ public class ResponseParser {
     public ArrayList<HospitalDevice> parseDeviceList(JSONArray deviceList) throws Exception {
         ArrayList<HospitalDevice> result = new ArrayList<>();
 
+        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
         for(int i = 0; i < deviceList.length(); i++) {
             JSONObject deviceObject = deviceList.getJSONObject(i);
 
@@ -89,7 +97,7 @@ public class ResponseParser {
 
             int hospital = deviceObject.getInt("d_hospital");
             int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-            Date lastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(deviceObject.getString("d_last_update"));
+            Date lastUpdate = dateFormat.parse(deviceObject.getString("d_last_update"));
 
             HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
             result.add(device);
@@ -104,12 +112,14 @@ public class ResponseParser {
             case SwiftResponse.CODE_OK:
                 JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
 
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
                 int hospitalId = hospitalObject.getInt("id");
                 String name = hospitalObject.getString("name");
                 String location = hospitalObject.getString("location");
                 float longitude = Float.parseFloat(hospitalObject.getString("longitude"));
                 float latitude = Float.parseFloat(hospitalObject.getString("latitude"));
-                Date hospitalLastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(hospitalObject.getString("last_update"));
+                Date hospitalLastUpdate = dateFormat.parse(hospitalObject.getString("last_update"));
                 JSONArray users = hospitalObject.getJSONArray("users");
                 JSONArray devices = hospitalObject.getJSONArray("devices");
 
@@ -124,7 +134,7 @@ public class ResponseParser {
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
                     int hospital = userObject.getInt("u_hospital");
                     String position = userObject.getString("u_position");
-                    Date lastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(userObject.getString("u_last_update"));
+                    Date lastUpdate = dateFormat.parse(userObject.getString("u_last_update"));
 
                     User user = new User(id, phone, mail, fullName, hospital, position, lastUpdate);
                     userList.add(user);
@@ -144,7 +154,7 @@ public class ResponseParser {
                     String ward = deviceObject.getString("d_ward");
                     int hospital = deviceObject.getInt("d_hospital");
                     int maintenanceInterval = deviceObject.getInt("d_maintenance_interval");
-                    Date lastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(deviceObject.getString("d_last_update"));
+                    Date lastUpdate = dateFormat.parse(deviceObject.getString("d_last_update"));
 
                     JSONArray reports = deviceObject.getJSONArray("reports");
                     List<ReportInfo> reportList = new ArrayList<>();
@@ -158,7 +168,7 @@ public class ResponseParser {
                         int previousState = reportObject.getInt("r_previous_state");
                         int currentState = reportObject.getInt("r_current_state");
                         String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                        Date datetime = Defaults.DATETIME_PRECISE_FORMAT.parse(reportObject.getString("r_datetime"));
+                        Date datetime = dateFormat.parse(reportObject.getString("r_datetime"));
 
                         Report report = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
 
@@ -190,6 +200,8 @@ public class ResponseParser {
             case SwiftResponse.CODE_OK:
                 JSONArray userList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
                 ArrayList<User> result = new ArrayList<>();
 
                 for(int i = 0; i < userList.length(); i++) {
@@ -201,7 +213,7 @@ public class ResponseParser {
                     String fullName = userObject.getString(UserFilter.FULL_NAME);
                     int hospitalId = userObject.getInt("u_hospital");
                     String position = userObject.getString("u_position");
-                    Date lastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(userObject.getString("u_last_update"));
+                    Date lastUpdate = dateFormat.parse(userObject.getString("u_last_update"));
 
                     User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
                     result.add(user);
@@ -219,6 +231,8 @@ public class ResponseParser {
     public ArrayList<User> parseUserList(JSONArray userList) throws Exception {
         ArrayList<User> result = new ArrayList<>();
 
+        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
         for(int i = 0; i < userList.length(); i++) {
             JSONObject userObject = userList.getJSONObject(i);
 
@@ -228,7 +242,7 @@ public class ResponseParser {
             String fullName = userObject.getString(UserFilter.FULL_NAME);
             int hospitalId = userObject.getInt("h_ID");
             String position = userObject.getString("u_position");
-            Date lastUpdate = Defaults.DATETIME_PRECISE_FORMAT.parse(userObject.getString("u_last_update"));
+            Date lastUpdate = dateFormat.parse(userObject.getString("u_last_update"));
 
             User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
             result.add(user);
@@ -243,6 +257,8 @@ public class ResponseParser {
             case SwiftResponse.CODE_OK:
                 JSONArray reportList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
                 ArrayList<Report> result = new ArrayList<>();
 
                 for(int i = 0; i < reportList.length(); i++) {
@@ -254,7 +270,7 @@ public class ResponseParser {
                     int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                     int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                     String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                    Date created = Defaults.DATETIME_PRECISE_FORMAT.parse(reportObject.getString(ReportFilter.DATETIME));
+                    Date created = dateFormat.parse(reportObject.getString(ReportFilter.DATETIME));
                     String authorName = reportObject.getString(UserFilter.FULL_NAME);
 
                     Report report = new Report(id, author, device, previousState, currentState, description , created);

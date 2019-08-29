@@ -11,6 +11,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
@@ -29,6 +32,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  * Activity that sums up all available information about a report.
  */
 public class ReportInfoActivity extends BaseActivity {
+
+    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN);
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -77,7 +82,7 @@ public class ReportInfoActivity extends BaseActivity {
                 toState.setImageDrawable(currentStateInfo.getStateicon());
                 toState.setBackgroundColor(currentStateInfo.getBackgroundcolor());
 
-                dateView.setText(Defaults.DATETIME_FORMAT.format(report.getCreated()));
+                dateView.setText(dateFormat.format(report.getCreated()));
                 authorView.setText(author.getName());
                 descriptionView.setText(report.getDescription());
             }

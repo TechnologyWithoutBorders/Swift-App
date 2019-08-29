@@ -32,6 +32,8 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -453,6 +455,7 @@ public class DeviceInfoActivity extends BaseActivity {
      */
     private class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
         private final Context context;
+        private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN);
 
         private ReportArrayAdapter(Context context, List<ReportInfo> values) {
             super(context, -1, values);
@@ -491,7 +494,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 authorView.setText(reportInfo.getAuthors().get(0).getName());
 
                 Date date = report.getCreated();
-                dateView.setText(Defaults.DATE_FORMAT.format(date));
+                dateView.setText(dateFormat.format(date));
             }
 
             return convertView;

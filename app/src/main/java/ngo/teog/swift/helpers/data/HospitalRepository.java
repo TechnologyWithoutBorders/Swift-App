@@ -19,6 +19,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -184,7 +186,7 @@ public class HospitalRepository {
 
         try {
             Gson gson = new GsonBuilder()
-                    .setDateFormat(Defaults.DATETIME_PRECISE_FORMAT.toPattern())
+                    .setDateFormat(Defaults.DATETIME_PRECISE_PATTERN)
                     .create();
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
