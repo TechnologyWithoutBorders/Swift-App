@@ -206,7 +206,10 @@ public class RequestFactory {
                 FileOutputStream outputStream;
 
                 try {
-                    outputStream = context.openFileOutput("image_" + Integer.toString(id) + ".jpg", Context.MODE_PRIVATE);
+                    File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                    dir.mkdirs();
+
+                    outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
                     outputStream.write(decodedString);
                     outputStream.close();
                 } catch (Exception e) {

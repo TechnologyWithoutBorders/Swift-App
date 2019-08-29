@@ -207,7 +207,10 @@ public class DeviceInfoActivity extends BaseActivity {
                     intervalView.setText((interval) + " Weeks");
                 }
 
-                File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
+                File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                dir.mkdirs();
+
+                File image = new File(dir, device.getId() + ".jpg");
 
                 if(!image.exists()) {
                     globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
@@ -226,7 +229,10 @@ public class DeviceInfoActivity extends BaseActivity {
                     globalImageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            File image = new File(getFilesDir(), "image_" + Integer.toString(device.getId()) + ".jpg");
+                            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                            dir.mkdirs();
+
+                            File image = new File(dir, device.getId() + ".jpg");
 
                             if(image.exists()) {
                                 Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);

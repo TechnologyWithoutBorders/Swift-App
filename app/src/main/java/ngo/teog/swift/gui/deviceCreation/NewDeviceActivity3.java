@@ -145,12 +145,15 @@ public class NewDeviceActivity3 extends BaseActivity {
             progressBar.setVisibility(View.VISIBLE);
 
             Bitmap decodedImage = decode(imagePath, 640);
-            String targetName = "image_" + Integer.toString(device.getId()) + ".jpg";
+            String targetName = device.getId() + ".jpg";
 
             FileOutputStream outputStream;
 
             try {
-                outputStream = this.openFileOutput(targetName, Context.MODE_PRIVATE);
+                File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                dir.mkdirs();
+
+                outputStream = new FileOutputStream(new File(dir, targetName));
                 decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                 outputStream.close();
 
@@ -195,8 +198,6 @@ public class NewDeviceActivity3 extends BaseActivity {
     }
 
     private Bitmap decode(String filePath, int targetW) {
-        File image = new File(filePath);
-
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;

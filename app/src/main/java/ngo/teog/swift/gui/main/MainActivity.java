@@ -222,8 +222,12 @@ public class MainActivity extends BaseActivity {
         editor.apply();
 
         //delete files (images)
-        for(File file : getFilesDir().listFiles()) {
-            file.delete();
+        File imageDir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+
+        if(imageDir.exists()) {
+            for (File file : imageDir.listFiles()) {
+                file.delete();
+            }
         }
 
         Intent intent = new Intent(this, LoginActivity.class);
