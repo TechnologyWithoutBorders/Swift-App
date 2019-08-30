@@ -5,13 +5,13 @@ package ngo.teog.swift.helpers.filters;
  */
 
 public class ReportFilter {
-    public static final String ID = "r_ID";
-    public static final String AUTHOR = "r_author";
-    public static final String DEVICE = "r_device";
-    public static final String DESCRIPTION = "r_description";
-    public static final String PREVIOUS_STATE = "r_previous_state";
-    public static final String CURRENT_STATE = "r_current_state";
-    public static final String DATETIME = "r_datetime";
+    public static final String ID = "id";
+    public static final String AUTHOR = "author";
+    public static final String DEVICE = "device";
+    public static final String DESCRIPTION = "description";
+    public static final String PREVIOUS_STATE = "previous_state";
+    public static final String CURRENT_STATE = "current_state";
+    public static final String DATETIME = "datetime";
 
     public static final String ACTION_FETCH_REPORT = "fetch_report";
 

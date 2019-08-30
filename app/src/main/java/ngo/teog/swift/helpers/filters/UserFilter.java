@@ -8,11 +8,14 @@ package ngo.teog.swift.helpers.filters;
  */
 
 public final class UserFilter {
-    public static final String ID = "u_ID";
-    public static final String FULL_NAME = "u_full_name";
-    public static final String MAIL = "u_mail";
-    public static final String PASSWORD = "u_password";
-    public static final String PHONE = "u_phone";
+    public static final String ID = "id";
+    public static final String FULL_NAME = "full_name";
+    public static final String MAIL = "mail";
+    public static final String PASSWORD = "password";
+    public static final String PHONE = "phone";
+    public static final String HOSPITAL = "hospital";
+    public static final String POSITION = "position";
+    public static final String LAST_UPDATE = "last_update";
 
     public static final String ACTION_LOGIN_USER = "login_user";
     public static final String ACTION_FETCH_USER = "fetch_user";
