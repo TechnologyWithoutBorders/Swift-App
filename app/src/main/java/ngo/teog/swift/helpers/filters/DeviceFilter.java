@@ -7,7 +7,7 @@ package ngo.teog.swift.helpers.filters;
  * Created by Julian on 18.11.2017.
  */
 
-public class DeviceFilter {
+public final class DeviceFilter {
     public static final String ID = "id";
     public static final String ASSET_NUMBER = "asset_no";
     public static final String TYPE = "type";
@@ -22,20 +22,4 @@ public class DeviceFilter {
     public static final String ACTION_FETCH_DEVICE = "fetch_device";
     public static final String ACTION_SEARCH_DEVICE = "search_device";
     public static final String ACTION_FETCH_DEVICE_IMAGE = "fetch_device_image";
-
-    private String type;
-    private String value;
-
-    public DeviceFilter(String type, String value) {
-        this.type = type;
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

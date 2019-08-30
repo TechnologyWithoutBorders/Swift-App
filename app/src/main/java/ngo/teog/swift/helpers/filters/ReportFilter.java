@@ -4,7 +4,7 @@ package ngo.teog.swift.helpers.filters;
  * Created by Julian on 24.03.2018.
  */
 
-public class ReportFilter {
+public final class ReportFilter {
     public static final String ID = "id";
     public static final String AUTHOR = "author";
     public static final String DEVICE = "device";
@@ -14,20 +14,4 @@ public class ReportFilter {
     public static final String DATETIME = "datetime";
 
     public static final String ACTION_FETCH_REPORT = "fetch_report";
-
-    private String type;
-    private String value;
-
-    public ReportFilter(String type, String value) {
-        this.type = type;
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
-    }
 }
