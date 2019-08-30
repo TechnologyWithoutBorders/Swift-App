@@ -109,19 +109,21 @@ public class CalendarFragment extends BaseFragment {
                         HospitalDevice device = deviceInfo.getDevice();
                         List<ReportInfo> reports = deviceInfo.getReports();
 
-                        Report lastReport = reports.get(reports.size()-1).getReport();
-                        int currentState = lastReport.getCurrentState();
+                        if(reports.size() > 0) {
+                            Report lastReport = reports.get(reports.size() - 1).getReport();
+                            int currentState = lastReport.getCurrentState();
 
-                        if(currentState == 0) {
-                            int maintenanceInterval = device.getMaintenanceInterval();
-                            Date created = lastReport.getCreated();
+                            if (currentState == 0) {
+                                int maintenanceInterval = device.getMaintenanceInterval();
+                                Date created = lastReport.getCreated();
 
-                            Date nextMaintenance = new Date(created.getTime()+maintenanceInterval*7*24*60*60);
-                            Date calendarDate = cal.getTime();
+                                Date nextMaintenance = new Date(created.getTime() + maintenanceInterval * 7 * 24 * 60 * 60);
+                                Date calendarDate = cal.getTime();
 
-                            //Dieser Vergleich könnte problematisch sein
-                            if(dateFormat.format(nextMaintenance).equals(dateFormat.format(calendarDate))) {
-                                deviceInfoList.add(deviceInfo);
+                                //Dieser Vergleich könnte problematisch sein
+                                if (dateFormat.format(nextMaintenance).equals(dateFormat.format(calendarDate))) {
+                                    deviceInfoList.add(deviceInfo);
+                                }
                             }
                         }
                     }
