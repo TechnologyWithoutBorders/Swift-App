@@ -6,5 +6,5 @@ public final class HospitalFilter {
     public static final String LOCATION = "location";
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
-    public static final String LAST_UPDATE = "last_update";
+    public static final String LAST_UPDATE = "lastUpdate";
 }
