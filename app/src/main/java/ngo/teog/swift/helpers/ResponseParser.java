@@ -170,7 +170,7 @@ public class ResponseParser {
                         int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                         int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                         String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                        Date datetime = dateFormat.parse(reportObject.getString(ReportFilter.DATETIME));
+                        Date datetime = dateFormat.parse(reportObject.getString(ReportFilter.CREATED));
 
                         Report report = new Report(reportId, author, affectedDevice, previousState, currentState, description, datetime);
 
@@ -272,7 +272,7 @@ public class ResponseParser {
                     int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
                     int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
                     String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                    Date created = dateFormat.parse(reportObject.getString(ReportFilter.DATETIME));
+                    Date created = dateFormat.parse(reportObject.getString(ReportFilter.CREATED));
                     String authorName = reportObject.getString(UserFilter.FULL_NAME);
 
                     Report report = new Report(id, author, device, previousState, currentState, description , created);
