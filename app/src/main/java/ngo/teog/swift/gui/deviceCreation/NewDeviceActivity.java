@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -45,10 +46,14 @@ public class NewDeviceActivity extends BaseActivity {
             try {
                 int deviceNumber = Integer.parseInt(result.getText());
 
-                Intent intent = new Intent(NewDeviceActivity.this, NewDeviceActivity2.class);
-                intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                if(deviceNumber >= 0) {
+                    Intent intent = new Intent(NewDeviceActivity.this, NewDeviceActivity2.class);
+                    intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
 
-                startActivity(intent);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(NewDeviceActivity.this, "invalid device number", Toast.LENGTH_SHORT).show();
+                }
             } catch(NumberFormatException e) {
                 //ignore
             }
