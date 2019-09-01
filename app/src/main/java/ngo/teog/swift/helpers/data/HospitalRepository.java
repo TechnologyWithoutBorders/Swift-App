@@ -335,8 +335,8 @@ public class HospitalRepository {
         parameterMap.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
 
         if(userValidation) {
-            parameterMap.put("validation_id", Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
-            parameterMap.put("validation_pw", preferences.getString(Defaults.PW_PREFERENCE, null));
+            parameterMap.put(Defaults.AUTH_ID_KEY, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
+            parameterMap.put(Defaults.AUTH_PW_KEY, preferences.getString(Defaults.PW_PREFERENCE, null));
         }
 
         return parameterMap;
