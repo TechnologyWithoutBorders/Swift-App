@@ -189,16 +189,17 @@ public class HospitalRepository {
                     .setDateFormat(Defaults.DATETIME_PRECISE_PATTERN)
                     .create();
 
+            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
+
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = generateParameterMap(context, "sync_hospital_info", true);
+            params.put("last_sync", Long.toString(lastUpdate));
 
             JSONArray jsonHospitals = new JSONArray();
             JSONArray jsonDevices = new JSONArray();
             JSONArray jsonUsers = new JSONArray();
             JSONArray jsonReports = new JSONArray();
-
-            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
 
             Hospital hospital = hospitalDao.getUserHospital(userID);
 
@@ -269,7 +270,7 @@ public class HospitalRepository {
                 public void onResponse(JSONObject response) {
                     executor.execute(() -> {
                         try {
-                            Log.d("SYNC_RESPONSE", response.toString(4));
+                            Log.d("SYNC_RESPONSE", "Size: " + response.toString().getBytes().length + "\n" + response.toString(4));
 
                             HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
 
