@@ -184,6 +184,8 @@ public class HospitalRepository {
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
+        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+
         try {
             Gson gson = new GsonBuilder()
                     .setDateFormat(Defaults.DATETIME_PRECISE_PATTERN)
@@ -194,7 +196,7 @@ public class HospitalRepository {
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = generateParameterMap(context, "sync_hospital_info", true);
-            params.put("last_sync", Long.toString(lastUpdate));
+            params.put("last_sync", dateFormat.format(new Date(lastUpdate)));
 
             JSONArray jsonHospitals = new JSONArray();
             JSONArray jsonDevices = new JSONArray();
