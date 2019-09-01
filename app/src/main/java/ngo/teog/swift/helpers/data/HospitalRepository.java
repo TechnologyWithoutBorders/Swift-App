@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -185,6 +186,7 @@ public class HospitalRepository {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         try {
             Gson gson = new GsonBuilder()
