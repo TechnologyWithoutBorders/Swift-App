@@ -257,7 +257,7 @@ public class HospitalRepository {
 
             request.put("data", data);
 
-            Log.d("SYNC_REQUEST", request.toString(4));
+            Log.d("SYNC_REQUEST", "Size: " + request.toString().getBytes().length + "\n" + request.toString(4));
 
             return new HospitalRequest(context, url, request, executor);
         } catch (JSONException e) {
