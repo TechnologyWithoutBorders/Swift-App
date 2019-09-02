@@ -24,6 +24,7 @@ public class HospitalDevice implements Serializable {
     private int hospital;
     private int maintenanceInterval;
     private Date lastUpdate;
+    private Date lastSync;
 
     public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int hospital, int maintenanceInterval, Date lastUpdate) {
         this.id = id;
@@ -36,6 +37,7 @@ public class HospitalDevice implements Serializable {
         this.hospital = hospital;
         this.maintenanceInterval = maintenanceInterval;
         this.lastUpdate = lastUpdate;
+        this.lastSync = new Date();
     }
 
     public int getId() {
@@ -112,5 +114,9 @@ public class HospitalDevice implements Serializable {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public Date getLastSync() {
+        return lastSync;
     }
 }

@@ -26,6 +26,7 @@ public class User implements Serializable {
 
     private String position;
     private Date lastUpdate;
+    private Date lastSync;
 
     public User(int id, String phone, String mail, String name, int hospital, String position, Date lastUpdate) {
         this.id = id;
@@ -35,6 +36,7 @@ public class User implements Serializable {
         this.hospital = hospital;
         this.position = position;
         this.lastUpdate = lastUpdate;
+        this.lastSync = new Date();
     }
 
     public int getId() {
@@ -67,5 +69,9 @@ public class User implements Serializable {
 
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public Date getLastSync() {
+        return lastSync;
     }
 }

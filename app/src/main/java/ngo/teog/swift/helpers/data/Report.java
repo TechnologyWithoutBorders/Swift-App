@@ -23,6 +23,7 @@ public class Report implements  Serializable {
     private int currentState;
     private String description;
     private Date created;
+    private Date lastSync;
 
     public Report(int id, int author, int device, int previousState, int currentState, String description, Date created) {
         this.id = id;
@@ -32,6 +33,7 @@ public class Report implements  Serializable {
         this.currentState = currentState;
         this.description = description;
         this.created = created;
+        this.lastSync = new Date();
     }
 
     public int getId() {
@@ -64,5 +66,9 @@ public class Report implements  Serializable {
 
     public Date getCreated() {
         return created;
+    }
+
+    public Date getLastSync() {
+        return lastSync;
     }
 }

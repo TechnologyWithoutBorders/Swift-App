@@ -15,6 +15,7 @@ public class Hospital implements Serializable {
     private float longitude;
     private float latitude;
     private Date lastUpdate;
+    private Date lastSync;
 
     public Hospital(int id, String name, String location, float longitude, float latitude, Date lastUpdate) {
         this.id = id;
@@ -23,6 +24,7 @@ public class Hospital implements Serializable {
         this.longitude = longitude;
         this.latitude = latitude;
         this.lastUpdate = lastUpdate;
+        this.lastSync = new Date();
     }
 
     public int getId() {
@@ -47,5 +49,9 @@ public class Hospital implements Serializable {
 
     public Date getLastUpdate() {
         return lastUpdate;
+    }
+
+    public Date getLastSync() {
+        return lastSync;
     }
 }
