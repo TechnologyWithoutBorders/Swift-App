@@ -119,4 +119,8 @@ public class HospitalDevice implements Serializable {
     public Date getLastSync() {
         return lastSync;
     }
+
+    public void setLastSync(Date lastSync) {
+        this.lastSync = lastSync;
+    }
 }

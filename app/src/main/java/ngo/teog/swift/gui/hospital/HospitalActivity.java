@@ -280,18 +280,21 @@ public class HospitalActivity extends BaseActivity {
 
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();
-                        Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size()-1).getReport();
-
-                        nameView.setText(device.getType());
-
-                        DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
 
                         statusView.setText(device.getWard());
 
                         detailsView.setText(device.getManufacturer() + "\n" + device.getModel());
 
-                        imageView.setImageDrawable(triple.getStateicon());
-                        imageView.setBackgroundColor(triple.getBackgroundcolor());
+                        nameView.setText(device.getType());
+
+                        if (deviceInfo.getReports().size() > 0) {
+                            Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size() - 1).getReport();
+
+                            DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
+
+                            imageView.setImageDrawable(triple.getStateicon());
+                            imageView.setBackgroundColor(triple.getBackgroundcolor());
+                        }
                     }
 
                     break;
