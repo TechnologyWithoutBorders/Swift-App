@@ -198,9 +198,8 @@ public class HospitalRepository {
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = generateParameterMap(context, "sync_hospital_info", true);
-            params.put("last_sync", dateFormat.format(new Date(lastUpdate)));
+            params.put("lastSync", dateFormat.format(new Date(lastUpdate)));
 
-            JSONArray jsonHospitals = new JSONArray();
             JSONArray jsonDevices = new JSONArray();
             JSONArray jsonUsers = new JSONArray();
             JSONArray jsonReports = new JSONArray();
@@ -209,10 +208,6 @@ public class HospitalRepository {
 
             //assure that no dataset with invalid timestamp is synchronized to server
             long now = new Date().getTime();
-
-            if(hospital != null && hospital.getLastUpdate().getTime() >= lastUpdate && hospital.getLastUpdate().getTime() <= now) {
-                jsonHospitals.put(new JSONObject(gson.toJson(hospital)));
-            }
 
             List<User> users = hospitalDao.getUserColleagues(userID);
 
@@ -250,7 +245,6 @@ public class HospitalRepository {
 
             JSONObject request = new JSONObject(params);
 
-            data.put("hospitals", jsonHospitals);
             data.put("devices", jsonDevices);
             data.put("users", jsonUsers);
             data.put("reports", jsonReports);
