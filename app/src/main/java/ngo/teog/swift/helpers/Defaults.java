@@ -1,7 +1,5 @@
 package ngo.teog.swift.helpers;
 
-import java.text.SimpleDateFormat;
-
 /**
  * Klasse mit globalen Konstanten für bessere Übersicht.
  * Strings sollte man aber eher in der strings.xml unter resources ablegen.

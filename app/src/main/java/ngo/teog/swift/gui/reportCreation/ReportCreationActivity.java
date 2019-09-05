@@ -1,6 +1,5 @@
 package ngo.teog.swift.gui.reportCreation;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+
+import androidx.lifecycle.ViewModelProviders;
 
 import java.util.Date;
 

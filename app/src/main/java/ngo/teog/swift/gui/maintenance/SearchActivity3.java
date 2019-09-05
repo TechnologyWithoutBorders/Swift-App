@@ -30,7 +30,6 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.main.TodoViewModel;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;

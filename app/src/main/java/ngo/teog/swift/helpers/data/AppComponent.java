@@ -12,7 +12,6 @@ import ngo.teog.swift.gui.main.BarcodeFragment;
 import ngo.teog.swift.gui.main.CalendarFragment;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
-import ngo.teog.swift.gui.maintenance.SearchActivity;
 import ngo.teog.swift.gui.maintenance.SearchActivity3;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;

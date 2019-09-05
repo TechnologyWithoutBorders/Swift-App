@@ -1,11 +1,9 @@
 package ngo.teog.swift.gui.main;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,15 +24,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
-import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.data.DeviceInfo;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;

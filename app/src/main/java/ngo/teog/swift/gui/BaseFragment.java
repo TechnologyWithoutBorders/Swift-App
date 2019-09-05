@@ -3,6 +3,7 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
 import androidx.fragment.app.Fragment;
 
 /**

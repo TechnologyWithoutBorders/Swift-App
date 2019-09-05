@@ -1,7 +1,6 @@
 package ngo.teog.swift.helpers.data;
 
 import androidx.room.Embedded;
-import androidx.room.Entity;
 import androidx.room.Relation;
 
 import java.io.Serializable;

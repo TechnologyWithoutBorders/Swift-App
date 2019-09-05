@@ -4,29 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,11 +23,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.gui.maintenance.SearchActivity;
+import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -52,7 +34,6 @@ import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
-import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class CalendarFragment extends BaseFragment {

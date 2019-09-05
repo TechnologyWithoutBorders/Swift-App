@@ -11,8 +11,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.provider.Settings;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.TaskStackBuilder;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -38,22 +39,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
-import ngo.teog.swift.gui.ImageActivity;
-import ngo.teog.swift.gui.userInfo.UserInfoActivity;
-import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.ImageActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
+import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResponseException;
+import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.SwiftResponse;
+import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.filters.ReportFilter;
-import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.filters.UserFilter;
-import ngo.teog.swift.helpers.ResponseException;
 
 /**
  * @author Julian Deyerler

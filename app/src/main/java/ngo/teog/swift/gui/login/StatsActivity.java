@@ -1,7 +1,8 @@
 package ngo.teog.swift.gui.login;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ngo.teog.swift.R;
 

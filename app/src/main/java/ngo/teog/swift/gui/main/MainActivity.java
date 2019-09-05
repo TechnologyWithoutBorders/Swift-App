@@ -8,11 +8,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.android.volley.RequestQueue;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -28,15 +29,15 @@ import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
-import ngo.teog.swift.gui.maintenance.SearchActivity;
+import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.login.LoginActivity;
-import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
-import ngo.teog.swift.R;
+import ngo.teog.swift.gui.maintenance.SearchActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.AppModule;

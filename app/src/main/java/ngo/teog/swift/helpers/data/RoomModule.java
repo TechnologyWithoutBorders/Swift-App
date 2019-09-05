@@ -1,8 +1,9 @@
 package ngo.teog.swift.helpers.data;
 
 import android.app.Application;
-import androidx.room.Room;
 import android.content.Context;
+
+import androidx.room.Room;
 
 import javax.inject.Singleton;
 

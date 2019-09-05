@@ -2,18 +2,17 @@ package ngo.teog.swift.helpers;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import androidx.room.Update;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import java.util.concurrent.TimeUnit;
-
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Julian on 12.12.2017.

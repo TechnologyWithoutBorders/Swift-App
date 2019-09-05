@@ -1,7 +1,5 @@
 package ngo.teog.swift.helpers;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
-import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;

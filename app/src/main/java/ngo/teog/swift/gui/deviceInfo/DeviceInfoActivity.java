@@ -1,6 +1,5 @@
 package ngo.teog.swift.gui.deviceInfo;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -28,6 +26,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.RequestQueue;
 
@@ -50,12 +51,12 @@ import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.data.DeviceInfo;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
-import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;

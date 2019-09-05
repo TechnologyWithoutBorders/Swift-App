@@ -1,6 +1,5 @@
 package ngo.teog.swift.gui.reportInfo;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.lifecycle.ViewModelProviders;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

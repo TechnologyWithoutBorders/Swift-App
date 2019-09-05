@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import ngo.teog.swift.helpers.Defaults;
-
 /**
  * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.

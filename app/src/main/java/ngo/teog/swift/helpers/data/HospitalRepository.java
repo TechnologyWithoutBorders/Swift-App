@@ -1,11 +1,12 @@
 package ngo.teog.swift.helpers.data;
 
-import androidx.lifecycle.LiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import androidx.lifecycle.LiveData;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
