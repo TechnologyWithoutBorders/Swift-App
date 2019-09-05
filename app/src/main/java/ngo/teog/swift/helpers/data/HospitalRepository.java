@@ -32,11 +32,11 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import ngo.teog.swift.R;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.filters.UserFilter;
 
 @Singleton
 public class HospitalRepository {
@@ -55,12 +55,6 @@ public class HospitalRepository {
         refreshUserHospital(userId);
 
         return hospitalDao.loadUser(userId);
-    }
-
-    public LiveData<Hospital> getHospital(int hospitalId) {
-        //refreshHospital(hospitalId);
-
-        return hospitalDao.loadUserHospital(hospitalId);
     }
 
     public LiveData<Hospital> getUserHospital(int userId) {
@@ -138,7 +132,7 @@ public class HospitalRepository {
         executor.execute(() -> {
             Date lastUpdate = new Date();
 
-            Report creationReport = new Report(1, userId, device.getId(), 0, 0, "device creation", lastUpdate);
+            Report creationReport = new Report(1, userId, device.getId(), 0, 0, context.getString(R.string.initial_report_text), lastUpdate);
             device.setLastUpdate(lastUpdate);
 
             hospitalDao.save(device);
@@ -330,8 +324,8 @@ public class HospitalRepository {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         HashMap<String, String> parameterMap = new HashMap<>();
-        parameterMap.put("action", action);
-        parameterMap.put("country", preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
+        parameterMap.put(Defaults.ACTION_KEY, action);
+        parameterMap.put(Defaults.COUNTRY_KEY, preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
 
         if(userValidation) {
             parameterMap.put(Defaults.AUTH_ID_KEY, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));

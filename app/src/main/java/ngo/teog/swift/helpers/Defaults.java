@@ -59,8 +59,6 @@ public final class Defaults {
     public static final String URI_TEL_PREFIX = "tel:";
     public static final String URI_MAILTO_PREFIX = "mailto:";
 
-    public static final String STRING_SEPARATOR = ", ";
-
     public static final String AUTH_ID_KEY = "authId";
     public static final String AUTH_PW_KEY = "authPw";
 }
