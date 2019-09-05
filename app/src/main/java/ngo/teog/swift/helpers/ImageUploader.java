@@ -1,20 +1,15 @@
 package ngo.teog.swift.helpers;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.android.volley.RequestQueue;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -46,7 +41,7 @@ public class ImageUploader extends Worker {
             RequestQueue queue = volleyManager.getRequestQueue();
 
             RequestFactory factory =  RequestFactory.getInstance();
-            RequestFactory.DeviceCreationRequest request = factory.createDeviceCreationRequest(context, deviceId, bitmap);
+            RequestFactory.DeviceImageUploadRequest request = factory.createDeviceImageUploadRequest(context, deviceId, bitmap);
 
             queue.add(request);
 

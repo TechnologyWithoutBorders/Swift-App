@@ -147,7 +147,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceCreationRequest createDeviceCreationRequest(final Context context, final int deviceId, final Bitmap bitmap) {
+    public DeviceImageUploadRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, "create_device", true);
@@ -162,12 +162,12 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceCreationRequest(context, url, request);
+        return new DeviceImageUploadRequest(context, url, request);
     }
 
-    public class DeviceCreationRequest extends JsonObjectRequest {
+    public class DeviceImageUploadRequest extends JsonObjectRequest {
 
-        public DeviceCreationRequest(final Context context, final String url, JSONObject request) {
+        public DeviceImageUploadRequest(final Context context, final String url, JSONObject request) {
             super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
