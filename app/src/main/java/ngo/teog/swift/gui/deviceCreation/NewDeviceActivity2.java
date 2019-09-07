@@ -16,7 +16,7 @@ import java.util.Date;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 
 public class NewDeviceActivity2 extends BaseActivity {
@@ -64,7 +64,7 @@ public class NewDeviceActivity2 extends BaseActivity {
         intervalPicker.setValue(DEF_MAINT_INTERVAL);
 
         Intent intent = this.getIntent();
-        deviceNumber = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
+        deviceNumber = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                                 typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, new Date());
 
                         Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
-                        intent.putExtra(Defaults.DEVICE_KEY, device);
+                        intent.putExtra(ResourceKeys.DEVICE, device);
 
                         startActivity(intent);
                     } else {

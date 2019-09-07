@@ -31,6 +31,7 @@ import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
@@ -61,12 +62,12 @@ public class HospitalActivity extends BaseActivity {
                 switch(groupPosition) {
                     case 0:
                         Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
-                        intent.putExtra(Defaults.USER_ID_KEY, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
+                        intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
                         startActivity(intent);
                         break;
                     case 1:
                         Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
-                        intent2.putExtra(Defaults.DEVICE_ID_KEY, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
+                        intent2.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
                         startActivity(intent2);
                         break;
                 }

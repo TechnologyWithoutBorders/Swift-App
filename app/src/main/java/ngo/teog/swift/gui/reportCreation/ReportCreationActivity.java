@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Report;
@@ -37,9 +38,6 @@ public class ReportCreationActivity extends BaseActivity {
     private int state;
     private int device;
 
-    public static final String OLD_STATE_KEY = "OLD_STATE";
-    public static final String NEW_STATE_KEY = "NEW_STATE";
-
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -51,9 +49,9 @@ public class ReportCreationActivity extends BaseActivity {
         setContentView(R.layout.activity_report_creation);
 
         Intent intent = getIntent();
-        oldState = intent.getIntExtra(OLD_STATE_KEY, -1);
-        state = intent.getIntExtra(NEW_STATE_KEY, -1);
-        device = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
+        oldState = intent.getIntExtra(ResourceKeys.REPORT_OLD_STATE, -1);
+        state = intent.getIntExtra(ResourceKeys.REPORT_NEW_STATE, -1);
+        device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);

@@ -21,6 +21,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Report;
@@ -47,8 +48,8 @@ public class ReportInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_report_info);
 
         Intent intent = this.getIntent();
-        int deviceId = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
-        int reportId = intent.getIntExtra(Defaults.REPORT_ID_KEY, -1);
+        int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        int reportId = intent.getIntExtra(ResourceKeys.REPORT_ID, -1);
 
         TextView dateView = findViewById(R.id.dateView);
         TextView authorView = findViewById(R.id.authorView);

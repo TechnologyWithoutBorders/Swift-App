@@ -32,6 +32,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -135,7 +136,7 @@ public class BarcodeFragment extends BaseFragment {
         viewModel.getDeviceInfo().observe(BarcodeFragment.this, deviceInfo -> {
             if(deviceInfo != null) {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
-                intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
+                intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                 BarcodeFragment.this.startActivity(intent);
             } else {
                 Toast.makeText(this.getContext().getApplicationContext(), "device not found", Toast.LENGTH_SHORT).show();

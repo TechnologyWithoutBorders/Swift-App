@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -27,9 +28,10 @@ public class ImageUploader extends Worker {
     }
 
     @Override
+    @NonNull
     public Worker.Result doWork() {
-        String imagePath = getInputData().getString(Defaults.PATH_KEY);
-        int deviceId = getInputData().getInt(Defaults.DEVICE_ID_KEY, -1);
+        String imagePath = getInputData().getString(ResourceKeys.PATH);
+        int deviceId = getInputData().getInt(ResourceKeys.DEVICE_ID, -1);
 
         try {
             FileInputStream inputStream = context.openFileInput(imagePath);

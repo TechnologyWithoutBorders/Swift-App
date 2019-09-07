@@ -52,6 +52,7 @@ import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
@@ -108,7 +109,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
         Intent intent = this.getIntent();
         //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
-        int deviceId = intent.getIntExtra(Defaults.DEVICE_ID_KEY, -1);
+        int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
         statusSpinner = findViewById(R.id.statusSpinner);
         statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
@@ -121,8 +122,8 @@ public class DeviceInfoActivity extends BaseActivity {
                 Report report = ((ReportInfo)adapterView.getItemAtPosition(i)).getReport();
 
                 Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
-                intent.putExtra(Defaults.DEVICE_ID_KEY, report.getDevice());
-                intent.putExtra(Defaults.REPORT_ID_KEY, report.getId());
+                intent.putExtra(ResourceKeys.DEVICE_ID, report.getDevice());
+                intent.putExtra(ResourceKeys.REPORT_ID, report.getId());
                 startActivity(intent);
             }
         });
@@ -179,9 +180,9 @@ public class DeviceInfoActivity extends BaseActivity {
 
                         if(currentState != i) {
                             Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                            intent.putExtra(ReportCreationActivity.OLD_STATE_KEY, currentState);
-                            intent.putExtra(ReportCreationActivity.NEW_STATE_KEY, i);
-                            intent.putExtra(Defaults.DEVICE_ID_KEY, deviceInfo.getDevice().getId());
+                            intent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
+                            intent.putExtra(ResourceKeys.REPORT_NEW_STATE, i);
+                            intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                             startActivity(intent);
                         }
                     }
@@ -239,7 +240,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                             if(image.exists()) {
                                 Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                                intent.putExtra(Defaults.IMAGE_KEY, image);
+                                intent.putExtra(ResourceKeys.IMAGE, image);
 
                                 startActivity(intent);
                             }

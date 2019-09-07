@@ -45,7 +45,9 @@ import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
+import ngo.teog.swift.helpers.DataAction;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.ResponseException;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.SwiftResponse;
@@ -151,15 +153,15 @@ public class RequestFactory {
     public DeviceImageUploadRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, "create_device", true);
+        Map<String, String> params = generateParameterMap(context, DataAction.UPLOAD_DEVICE_IMAGE, true);
 
-        params.put("device", Integer.toString(deviceId));
+        params.put(ResourceKeys.DEVICE_ID, Integer.toString(deviceId));
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageBytes = stream.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        params.put("image", encodedImage);//TODO die Identifier anders organisieren
+        params.put(ResourceKeys.IMAGE, encodedImage);
 
         JSONObject request = new JSONObject(params);
 
@@ -227,7 +229,7 @@ public class RequestFactory {
 
                         if(image.exists()) {
                             Intent intent = new Intent(context, ImageActivity.class);
-                            intent.putExtra(Defaults.IMAGE_KEY, image);
+                            intent.putExtra(ResourceKeys.IMAGE, image);
 
                             context.startActivity(intent);
                         }
@@ -252,7 +254,7 @@ public class RequestFactory {
 
                 if(deviceList.size() > 0) {
                     Intent intent = new Intent(context, DeviceInfoActivity.class);
-                    intent.putExtra(Defaults.DEVICE_KEY, deviceList.get(0));
+                    intent.putExtra(ResourceKeys.DEVICE, deviceList.get(0));
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("device not found");
@@ -276,7 +278,7 @@ public class RequestFactory {
 
                 if(userList.size() > 0) {
                     Intent intent = new Intent(context, UserInfoActivity.class);
-                    intent.putExtra(Defaults.USER_KEY, userList.get(0));
+                    intent.putExtra(ResourceKeys.USER, userList.get(0));
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("user not found");
@@ -300,7 +302,7 @@ public class RequestFactory {
 
                 if(reportList.size() > 0) {
                     Intent intent = new Intent(context, ReportInfoActivity.class);
-                    intent.putExtra(Defaults.REPORT_KEY, reportList.get(0));
+                    intent.putExtra(ResourceKeys.REPORT, reportList.get(0));
                     context.startActivity(intent);
                 } else {
                     throw new ResponseException("report not found");

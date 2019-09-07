@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -46,8 +47,8 @@ public class UserInfoActivity extends BaseActivity {
 
         Intent intent = this.getIntent();
 
-        if(intent.hasExtra(Defaults.USER_KEY)) {
-            user = (User)intent.getSerializableExtra(Defaults.USER_KEY);
+        if(intent.hasExtra(ResourceKeys.USER)) {
+            user = (User)intent.getSerializableExtra(ResourceKeys.USER);
 
             nameView.setText(user.getName());
             phoneView.setText(user.getPhone());
@@ -55,7 +56,7 @@ public class UserInfoActivity extends BaseActivity {
             positionView.setText(user.getPosition());
             //hospitalView.setText(userInfo.getHospitals().get(0).getName());
         } else {
-            int userId = intent.getIntExtra(Defaults.USER_ID_KEY, -1);
+            int userId = intent.getIntExtra(ResourceKeys.USER_ID, -1);
 
             DaggerAppComponent.builder()
                     .appModule(new AppModule(getApplication()))

@@ -32,6 +32,7 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -102,12 +103,12 @@ public class SearchActivity3 extends BaseActivity {
 
                 JsonObjectRequest request = null;
 
-                if(Defaults.DEVICE_KEY.equals(searchObject)) {
+                if(ResourceKeys.DEVICE.equals(searchObject)) {
                     DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(this, new ArrayList<HospitalDevice>());
                     listView.setAdapter(deviceAdapter);
 
                     request = RequestFactory.getInstance().createDeviceSearchRequest(this, progressBar, searchButton, searchString, deviceAdapter);
-                } else if(Defaults.USER_KEY.equals(searchObject)) {
+                } else if(ResourceKeys.USER.equals(searchObject)) {
                     UserArrayAdapter userAdapter = new UserArrayAdapter(this, new ArrayList<User>());
                     listView.setAdapter(userAdapter);
 
@@ -117,13 +118,13 @@ public class SearchActivity3 extends BaseActivity {
                             User item = (User)adapterView.getItemAtPosition(i);
 
                             Intent intent = new Intent(SearchActivity3.this, UserInfoActivity.class);
-                            intent.putExtra(Defaults.USER_KEY, item);
+                            intent.putExtra(ResourceKeys.USER, item);
                             startActivity(intent);
                         }
                     });
 
                     request = RequestFactory.getInstance().createUserSearchRequest(this, progressBar, searchButton, searchString, userAdapter);
-                } if(Defaults.HOSPITAL_KEY.equals(searchObject)) {
+                } if(ResourceKeys.HOSPITAL.equals(searchObject)) {
                     //TODO
                 }
 

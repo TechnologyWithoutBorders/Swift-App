@@ -39,6 +39,7 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ImageUploader;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -70,12 +71,12 @@ public class NewDeviceActivity3 extends BaseActivity {
         imageView = findViewById(R.id.imageView);
 
         if(savedInstanceState != null) {
-            device = (HospitalDevice)savedInstanceState.getSerializable(Defaults.DEVICE_KEY);
-            imagePath = savedInstanceState.getString(Defaults.IMAGE_KEY);
+            device = (HospitalDevice)savedInstanceState.getSerializable(ResourceKeys.DEVICE);
+            imagePath = savedInstanceState.getString(ResourceKeys.IMAGE);
             imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         } else {
             Intent intent = this.getIntent();
-            device = (HospitalDevice)intent.getSerializableExtra(Defaults.DEVICE_KEY);
+            device = (HospitalDevice)intent.getSerializableExtra(ResourceKeys.DEVICE);
         }
 
         nextButton = findViewById(R.id.nextButton);
@@ -103,7 +104,7 @@ public class NewDeviceActivity3 extends BaseActivity {
         viewModel.getDevice().observe(this, device -> {
             if(device != null) {
                 Intent intent = new Intent(NewDeviceActivity3.this, DeviceInfoActivity.class);
-                intent.putExtra(Defaults.DEVICE_ID_KEY, device.getDevice().getId());
+                intent.putExtra(ResourceKeys.DEVICE_ID, device.getDevice().getId());
                 startActivity(intent);
 
                 NewDeviceActivity3.this.finish();
@@ -113,8 +114,8 @@ public class NewDeviceActivity3 extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(Defaults.DEVICE_KEY, device);
-        outState.putString(Defaults.IMAGE_KEY, imagePath);
+        outState.putSerializable(ResourceKeys.DEVICE, device);
+        outState.putString(ResourceKeys.IMAGE, imagePath);
 
         super.onSaveInstanceState(outState);
     }
@@ -168,8 +169,8 @@ public class NewDeviceActivity3 extends BaseActivity {
                     .build();
 
             Data imageData = new Data.Builder()
-                    .putString(Defaults.PATH_KEY, targetName)
-                    .putInt(Defaults.DEVICE_ID_KEY, device.getId())
+                    .putString(ResourceKeys.PATH, targetName)
+                    .putInt(ResourceKeys.DEVICE_ID, device.getId())
                     .build();
 
             OneTimeWorkRequest uploadWork =
@@ -218,9 +219,11 @@ public class NewDeviceActivity3 extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             imageView.setImageBitmap(decode(imagePath, 640));
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void dispatchTakePictureIntent(View view) {

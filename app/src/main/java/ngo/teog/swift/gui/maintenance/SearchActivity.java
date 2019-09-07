@@ -11,6 +11,7 @@ import android.widget.Button;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 
 public class SearchActivity extends BaseActivity {
 
@@ -28,7 +29,7 @@ public class SearchActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity3.class);
                 intent.putExtra(Defaults.SCOPE, Defaults.SCOPE_GLOBAL);
-                intent.putExtra(Defaults.SEARCH_OBJECT, Defaults.HOSPITAL_KEY);
+                intent.putExtra(Defaults.SEARCH_OBJECT, ResourceKeys.HOSPITAL);
 
                 startActivity(intent);
             }
@@ -38,7 +39,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity2.class);
-                intent.putExtra(Defaults.SEARCH_OBJECT, Defaults.DEVICE_KEY);
+                intent.putExtra(Defaults.SEARCH_OBJECT, ResourceKeys.DEVICE);
 
                 startActivity(intent);
             }
@@ -48,7 +49,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SearchActivity.this, SearchActivity2.class);
-                intent.putExtra(Defaults.SEARCH_OBJECT, Defaults.USER_KEY);
+                intent.putExtra(Defaults.SEARCH_OBJECT, ResourceKeys.USER);
 
                 startActivity(intent);
             }

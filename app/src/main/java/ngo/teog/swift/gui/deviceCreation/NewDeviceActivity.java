@@ -24,7 +24,7 @@ import java.util.List;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 
 public class NewDeviceActivity extends BaseActivity {
 
@@ -49,7 +49,7 @@ public class NewDeviceActivity extends BaseActivity {
 
                 if(deviceNumber >= 0) {
                     Intent intent = new Intent(NewDeviceActivity.this, NewDeviceActivity2.class);
-                    intent.putExtra(Defaults.DEVICE_ID_KEY, deviceNumber);
+                    intent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
 
                     startActivity(intent);
                 } else {

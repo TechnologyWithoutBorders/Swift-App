@@ -40,6 +40,7 @@ import ngo.teog.swift.gui.login.LoginActivity;
 import ngo.teog.swift.gui.maintenance.SearchActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDatabase;
@@ -75,11 +76,11 @@ public class MainActivity extends BaseActivity {
                 RequestFactory.DefaultRequest request = null;
                 RequestFactory requestFactory = RequestFactory.getInstance();
 
-                if(Defaults.DEVICE_KEY.equals(type)) {
+                if(ResourceKeys.DEVICE.equals(type)) {
                     request = requestFactory.createDeviceOpenRequest(this, null, null, objectNumber);
-                } else if(Defaults.USER_KEY.equals(type)) {
+                } else if(ResourceKeys.USER.equals(type)) {
                     request = requestFactory.createUserOpenRequest(this, null, null, objectNumber);
-                } else if(Defaults.REPORT_KEY.equals(type)) {
+                } else if(ResourceKeys.REPORT.equals(type)) {
                     request = requestFactory.createReportOpenRequest(this, null, null, objectNumber);
                 }
 

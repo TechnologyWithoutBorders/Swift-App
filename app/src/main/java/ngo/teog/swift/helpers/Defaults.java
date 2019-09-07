@@ -33,23 +33,11 @@ public final class Defaults {
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final String DATETIME_PRECISE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    //identifier keys
-    public static final String DEVICE_ID_KEY = "DEVICE_ID";
-    public static final String DEVICE_KEY = "DEVICE";
-    public static final String USER_ID_KEY = "USER_ID";
-    public static final String USER_KEY = "USER";
-    public static final String REPORT_ID_KEY = "REPORT_ID";
-    public static final String REPORT_KEY = "REPORT";
-    public static final String IMAGE_KEY = "IMAGE";
-    public static final String PATH_KEY = "PATH";
+    public static final String SCOPE = "scope";
+    public static final String SCOPE_LOCAL = "local";
+    public static final String SCOPE_GLOBAL = "global";
 
-    public static final String SCOPE = "SCOPE";
-    public static final String SCOPE_LOCAL = "LOCAL";
-    public static final String SCOPE_GLOBAL = "GLOBAL";
-
-    public static final String HOSPITAL_KEY = "HOSPITAL";
-
-    public static final String SEARCH_OBJECT = "SEARCH_OBJECT";
+    public static final String SEARCH_OBJECT = "search_object";
 
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
