@@ -38,15 +38,6 @@ public class BootReceiver extends BroadcastReceiver {
             mNotificationManager.createNotificationChannel(mChannel);
         }
 
-        Constraints updateConstraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 1, TimeUnit.HOURS)
-                .addTag(UpdateWorker.TAG)
-                .setConstraints(updateConstraints)
-                .build();
-
-        WorkManager.getInstance(context).enqueue(updateWork);
+        //here would the PeriodicWorkRequest go
     }
 }
