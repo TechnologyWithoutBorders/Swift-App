@@ -164,28 +164,20 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceImageUploadRequest(context, url, request);
+        return new DeviceImageUploadRequest(url, request);
     }
 
     public class DeviceImageUploadRequest extends JsonObjectRequest {
 
-        public DeviceImageUploadRequest(final Context context, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    //TODO
-                    try {
-                        Log.d("IMAGE_UPLOAD", response.toString(4));
-                    } catch (JSONException e) {
-                        Log.e("IMAGE_UPLOAD", "response not readable", e);
-                    }
+        public DeviceImageUploadRequest(final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, response -> {
+                //TODO
+                try {
+                    Log.d("IMAGE_UPLOAD", response.toString(4));
+                } catch (JSONException e) {
+                    Log.e("IMAGE_UPLOAD", "response not readable", e);
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("IMAGE_UPLOAD", error.toString(), error);
-                }
-            });
+            }, error -> Log.e("IMAGE_UPLOAD", error.toString(), error));
         }
     }
 
@@ -225,17 +217,14 @@ public class RequestFactory {
                 ((ImageView) enable).setImageBitmap(bitmap);
                 enable.setBackgroundColor(Color.BLACK);
 
-                enable.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        File image = new File(context.getFilesDir(), "image_" + Integer.toString(id) + ".jpg");
+                enable.setOnClickListener(view -> {
+                    File image = new File(context.getFilesDir(), "image_" + Integer.toString(id) + ".jpg");
 
-                        if(image.exists()) {
-                            Intent intent = new Intent(context, ImageActivity.class);
-                            intent.putExtra(ResourceKeys.IMAGE, image);
+                    if(image.exists()) {
+                        Intent intent = new Intent(context, ImageActivity.class);
+                        intent.putExtra(ResourceKeys.IMAGE, image);
 
-                            context.startActivity(intent);
-                        }
+                        context.startActivity(intent);
                     }
                 });
             }
@@ -390,46 +379,40 @@ public class RequestFactory {
     public class DeviceListRequest extends JsonObjectRequest {
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
-                        switch(responseCode) {
-                            case SwiftResponse.CODE_OK:
-                                if(adapter != null) {
-                                    adapter.clear();
-                                }
+            super(Request.Method.POST, url, request, response -> {
+                try {
+                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+                    switch(responseCode) {
+                        case SwiftResponse.CODE_OK:
+                            if(adapter != null) {
+                                adapter.clear();
+                            }
 
-                                if(adapter != null) {
-                                    adapter.addAll(new ResponseParser().parseDeviceList(response));
-                                }
+                            if(adapter != null) {
+                                adapter.addAll(new ResponseParser().parseDeviceList(response));
+                            }
 
-                                break;
-                            case SwiftResponse.CODE_FAILED_VISIBLE:
-                                throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
-                            case SwiftResponse.CODE_FAILED_HIDDEN:
-                            default:
-                                throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
-                        }
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            break;
+                        case SwiftResponse.CODE_FAILED_VISIBLE:
+                            throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                        case SwiftResponse.CODE_FAILED_HIDDEN:
+                        default:
+                            throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                     }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
+                } catch(ResponseException e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    adapter.clear();
 
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                    Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                disable.setVisibility(View.INVISIBLE);
+                enable.setVisibility(View.VISIBLE);
+            }, error -> {
+                adapter.clear();
+
+                disable.setVisibility(View.INVISIBLE);
+                enable.setVisibility(View.VISIBLE);
+                Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -474,33 +457,27 @@ public class RequestFactory {
     public class UserListRequest extends JsonObjectRequest {
 
         public UserListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    if(adapter != null) {
-                        adapter.clear();
-                    }
-
-                    try {
-                        if(adapter != null) {
-                            adapter.addAll(new ResponseParser().parseUserList(response));
-                        }
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                    }
-
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+            super(Request.Method.POST, url, request, response -> {
+                if(adapter != null) {
                     adapter.clear();
+                }
 
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
+                try {
+                    if(adapter != null) {
+                        adapter.addAll(new ResponseParser().parseUserList(response));
+                    }
+                } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
+
+                disable.setVisibility(View.INVISIBLE);
+                enable.setVisibility(View.VISIBLE);
+            }, error -> {
+                adapter.clear();
+
+                disable.setVisibility(View.INVISIBLE);
+                enable.setVisibility(View.VISIBLE);
+                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -509,42 +486,36 @@ public class RequestFactory {
 
         //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
         public LoginRequest(final Activity context, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password, final String country) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        int id = new ResponseParser().parseLoginResponse(response);
+            super(Request.Method.POST, url, request, response -> {
+                try {
+                    int id = new ResponseParser().parseLoginResponse(response);
 
-                        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt(Defaults.ID_PREFERENCE, id);
-                        editor.putString(Defaults.PW_PREFERENCE, password);
-                        editor.putString(Defaults.COUNTRY_PREFERENCE, country);
-                        editor.putInt(Defaults.NOTIFICATION_COUNTER, 0);
-                        editor.apply();
+                    SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt(Defaults.ID_PREFERENCE, id);
+                    editor.putString(Defaults.PW_PREFERENCE, password);
+                    editor.putString(Defaults.COUNTRY_PREFERENCE, country);
+                    editor.putInt(Defaults.NOTIFICATION_COUNTER, 0);
+                    editor.apply();
 
-                        Intent intent = new Intent(context, MainActivity.class);
-                        context.startActivity(intent);
+                    Intent intent = new Intent(context, MainActivity.class);
+                    context.startActivity(intent);
 
-                        //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
-                        context.finish();
-                    } catch(ResponseException e) {
-                        Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        anim.stop();
-                        form.setVisibility(View.VISIBLE);
-                    } catch(Exception e) {
-                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                        anim.stop();
-                        form.setVisibility(View.VISIBLE);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+                    //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
+                    context.finish();
+                } catch(ResponseException e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     anim.stop();
                     form.setVisibility(View.VISIBLE);
+                } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                    anim.stop();
+                    form.setVisibility(View.VISIBLE);
                 }
+            }, error -> {
+                anim.stop();
+                form.setVisibility(View.VISIBLE);
+                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }
     }

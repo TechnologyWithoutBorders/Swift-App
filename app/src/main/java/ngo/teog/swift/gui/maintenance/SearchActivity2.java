@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 import ngo.teog.swift.R;
@@ -26,26 +25,20 @@ public class SearchActivity2 extends BaseActivity {
         Button localButton = findViewById(R.id.localButton);
         Button otherButton = findViewById(R.id.otherButton);
 
-        localButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchActivity2.this, SearchActivity3.class);
-                intent.putExtra(Defaults.SCOPE, Defaults.SCOPE_LOCAL);
-                intent.putExtra(Defaults.SEARCH_OBJECT, searchObject);
+        localButton.setOnClickListener(view -> {
+            Intent intent1 = new Intent(SearchActivity2.this, SearchActivity3.class);
+            intent1.putExtra(Defaults.SCOPE, Defaults.SCOPE_LOCAL);
+            intent1.putExtra(Defaults.SEARCH_OBJECT, searchObject);
 
-                startActivity(intent);
-            }
+            startActivity(intent1);
         });
 
-        otherButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SearchActivity2.this, SearchActivity3.class);
-                intent.putExtra(Defaults.SCOPE, Defaults.SCOPE_GLOBAL);
-                intent.putExtra(Defaults.SEARCH_OBJECT, searchObject);
+        otherButton.setOnClickListener(view -> {
+            Intent intent12 = new Intent(SearchActivity2.this, SearchActivity3.class);
+            intent12.putExtra(Defaults.SCOPE, Defaults.SCOPE_GLOBAL);
+            intent12.putExtra(Defaults.SEARCH_OBJECT, searchObject);
 
-                startActivity(intent);
-            }
+            startActivity(intent12);
         });
     }
 
@@ -58,13 +51,6 @@ public class SearchActivity2 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.maintenance_info);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item, R.string.maintenance_info);
     }
 }

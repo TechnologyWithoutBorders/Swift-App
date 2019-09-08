@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.google.zxing.ResultPoint;
@@ -29,7 +30,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
@@ -38,7 +38,7 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
-public class BarcodeFragment extends BaseFragment {
+public class BarcodeFragment extends Fragment {
 
     @Inject
     ViewModelFactory viewModelFactory;

@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,24 +55,21 @@ public class HospitalActivity extends BaseActivity {
         ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
         hospitalListView.setAdapter(adapter);
 
-        hospitalListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View view, int groupPosition, int childPosition, long id) {
-                switch(groupPosition) {
-                    case 0:
-                        Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
-                        intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
-                        startActivity(intent);
-                        break;
-                    case 1:
-                        Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
-                        intent2.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
-                        startActivity(intent2);
-                        break;
-                }
-
-                return false;
+        hospitalListView.setOnChildClickListener((parent, view, groupPosition, childPosition, id) -> {
+            switch(groupPosition) {
+                case 0:
+                    Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
+                    intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
+                    startActivity(intent);
+                    break;
+                case 1:
+                    Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
+                    intent2.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
+                    startActivity(intent2);
+                    break;
             }
+
+            return false;
         });
 
         TextView nameView = findViewById(R.id.nameView);
@@ -97,40 +93,27 @@ public class HospitalActivity extends BaseActivity {
                 nameView.setText(hospital.getName());
                 locationView.setText(hospital.getLocation());
 
-                mapButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        float latitude = hospital.getLatitude();
-                        float longitude = hospital.getLongitude();
+                mapButton.setOnClickListener(view -> {
+                    float latitude = hospital.getLatitude();
+                    float longitude = hospital.getLongitude();
 
-                        Uri uri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(" + hospital.getName() + ")");
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        HospitalActivity.this.startActivity(intent);
-                    }
+                    Uri uri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(" + hospital.getName() + ")");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    HospitalActivity.this.startActivity(intent);
                 });
             }
         });
 
         viewModel.getUsers().observe(this, users -> {
            if(users != null) {
-               Collections.sort(users, new Comparator<User>() {
-                   @Override
-                   public int compare(User first, User second) {
-                       return first.getName().compareTo(second.getName());
-                   }
-               });
+               Collections.sort(users, (first, second) -> first.getName().compareTo(second.getName()));
                adapter.setUsers(users);
            }
         });
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
-                Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
-                    @Override
-                    public int compare(DeviceInfo first, DeviceInfo second) {
-                        return first.getDevice().getType().compareTo(second.getDevice().getType());
-                    }
-                });
+                Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().compareTo(second.getDevice().getType()));
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
@@ -143,17 +126,9 @@ public class HospitalActivity extends BaseActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.hospital_activity);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item, R.string.hospital_activity);
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {

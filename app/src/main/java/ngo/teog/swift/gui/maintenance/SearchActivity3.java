@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -70,12 +72,7 @@ public class SearchActivity3 extends BaseActivity {
         searchField.setHint(searchObject);
 
         if(Defaults.SCOPE_GLOBAL.equals(scope)) {
-            searchButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchOnline(searchObject);
-                }
-            });
+            searchButton.setOnClickListener(view -> searchOnline(searchObject));
         } else if(Defaults.SCOPE_LOCAL.equals(scope)) {
             DaggerAppComponent.builder()
                     .appModule(new AppModule(getApplication()))
@@ -83,12 +80,7 @@ public class SearchActivity3 extends BaseActivity {
                     .build()
                     .inject(this);
 
-            searchButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchOffline(searchObject);
-                }
-            });
+            searchButton.setOnClickListener(view -> searchOffline(searchObject));
         }
     }
 
@@ -104,23 +96,20 @@ public class SearchActivity3 extends BaseActivity {
                 JsonObjectRequest request = null;
 
                 if(ResourceKeys.DEVICE.equals(searchObject)) {
-                    DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(this, new ArrayList<HospitalDevice>());
+                    DeviceArrayAdapter deviceAdapter = new DeviceArrayAdapter(this, new ArrayList<>());
                     listView.setAdapter(deviceAdapter);
 
                     request = RequestFactory.getInstance().createDeviceSearchRequest(this, progressBar, searchButton, searchString, deviceAdapter);
                 } else if(ResourceKeys.USER.equals(searchObject)) {
-                    UserArrayAdapter userAdapter = new UserArrayAdapter(this, new ArrayList<User>());
+                    UserArrayAdapter userAdapter = new UserArrayAdapter(this, new ArrayList<>());
                     listView.setAdapter(userAdapter);
 
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            User item = (User)adapterView.getItemAtPosition(i);
+                    listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                        User item = (User)adapterView.getItemAtPosition(i);
 
-                            Intent intent = new Intent(SearchActivity3.this, UserInfoActivity.class);
-                            intent.putExtra(ResourceKeys.USER, item);
-                            startActivity(intent);
-                        }
+                        Intent intent = new Intent(SearchActivity3.this, UserInfoActivity.class);
+                        intent.putExtra(ResourceKeys.USER, item);
+                        startActivity(intent);
                     });
 
                     request = RequestFactory.getInstance().createUserSearchRequest(this, progressBar, searchButton, searchString, userAdapter);
@@ -157,14 +146,7 @@ public class SearchActivity3 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.maintenance_info);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item, R.string.maintenance_info);
     }
 
     private class DeviceArrayAdapter extends ArrayAdapter<HospitalDevice> {
@@ -174,7 +156,8 @@ public class SearchActivity3 extends BaseActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater)this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -202,7 +185,8 @@ public class SearchActivity3 extends BaseActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater)this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

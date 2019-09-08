@@ -73,14 +73,11 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
 
-            //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
+            //finish activity, so it is removed from the stack
             LoginActivity.this.finish();
         } else {
-            // Create an ArrayAdapter using the string array and a default spinner layout
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.countries_options, android.R.layout.simple_spinner_item);
-            // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
             countrySpinner.setAdapter(adapter);
         }
     }

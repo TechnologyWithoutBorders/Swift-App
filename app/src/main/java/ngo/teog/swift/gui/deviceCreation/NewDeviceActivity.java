@@ -8,8 +8,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -27,9 +25,6 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.ResourceKeys;
 
 public class NewDeviceActivity extends BaseActivity {
-
-    private Button nextButton;
-    private ProgressBar progressBar;
 
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
@@ -73,18 +68,9 @@ public class NewDeviceActivity extends BaseActivity {
         return true;
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-                case R.id.info:
-                showInfo(R.string.newdevice_activity_1);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item, R.string.newdevice_activity_1);
     }
 
     @Override
@@ -92,9 +78,6 @@ public class NewDeviceActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_new_device);
-
-        nextButton = findViewById(R.id.nextButton);
-        progressBar = findViewById(R.id.progressBar);
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);

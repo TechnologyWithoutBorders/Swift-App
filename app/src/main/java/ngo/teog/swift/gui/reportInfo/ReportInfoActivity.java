@@ -35,7 +35,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class ReportInfoActivity extends BaseActivity {
 
-    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN);
+    private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN);
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -100,20 +100,16 @@ public class ReportInfoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.reportInfoActivity);
-                return true;
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this report: http://teog.virlep.de/report/" + Integer.toString(reportInfo.getReport().getId()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this report: http://teog.virlep.de/report/" + reportInfo.getReport().getId());
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share report link"));
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item, R.string.reportInfoActivity);
         }
     }
 }

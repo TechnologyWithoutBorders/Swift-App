@@ -94,18 +94,15 @@ public class UserInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.userinfo_activity);
-                return true;
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + Integer.toString(user.getId()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + user.getId());
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share user link"));
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item, R.string.userinfo_activity);
         }
     }
 

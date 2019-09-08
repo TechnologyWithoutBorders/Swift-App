@@ -19,8 +19,6 @@ public class BarcodeViewModel extends ViewModel {
 
     public void init(int userId, int deviceId) {
         if(this.deviceInfo != null) {
-            // ViewModel is created on a per-Fragment basis, so the userId
-            // doesn't change.
             return;
         }
 

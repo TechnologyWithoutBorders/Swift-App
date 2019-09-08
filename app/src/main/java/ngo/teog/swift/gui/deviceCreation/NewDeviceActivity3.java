@@ -130,14 +130,7 @@ public class NewDeviceActivity3 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.newdevice_activity_3);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item, R.string.newdevice_activity_3);
     }
 
     public void createDevice(View view) {
@@ -152,15 +145,19 @@ public class NewDeviceActivity3 extends BaseActivity {
 
             try {
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                dir.mkdirs();
+                boolean dirsMade = dir.mkdirs();
 
-                outputStream = new FileOutputStream(new File(dir, targetName));
-                decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                outputStream.close();
+                if(dirsMade) {
+                    outputStream = new FileOutputStream(new File(dir, targetName));
+                    decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    outputStream.close();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.directory_not_accessible), Toast.LENGTH_LONG).show();
+                }
 
                 File tempFile = new File(imagePath);
                 tempFile.delete();
-            } catch (Exception e) {
+            } catch(Exception e) {
                 e.printStackTrace();
             }
 
@@ -193,9 +190,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     private File createImageFile() throws IOException {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        File image = File.createTempFile("image_" + Integer.toString(device.getId()), ".jpg", storageDir);
-
-        return image;
+        return File.createTempFile("image_" + Integer.toString(device.getId()), ".jpg", storageDir);
     }
 
     private Bitmap decode(String filePath, int targetW) {
@@ -233,20 +228,18 @@ public class NewDeviceActivity3 extends BaseActivity {
             File imageFile = createImageFile();
             imagePath = imageFile.getAbsolutePath();
 
-            if(imageFile != null) {
-                Uri photoURI;
+            Uri photoURI;
 
-                if(Build.VERSION.SDK_INT >= 24) {
-                    photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);
-                } else {
-                    photoURI = Uri.fromFile(imageFile);
-                }
+            if(Build.VERSION.SDK_INT >= 24) {
+                photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);
+            } else {
+                photoURI = Uri.fromFile(imageFile);
+            }
 
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
-                if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
+            if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         } catch(Exception e) {
             Log.e("ERROR", e.getMessage(), e);

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -131,11 +132,14 @@ public class MainActivity extends BaseActivity {
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
+        private final String[] PAGE_NAMES = {"Scanner", "Todo", "Calendar"};
+
         public DemoCollectionPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override
+        @NonNull
         public Fragment getItem(int i) {
             switch(i) {
                 case 0:
@@ -144,9 +148,10 @@ public class MainActivity extends BaseActivity {
                     return new TodoFragment();
                 case 2:
                     return new CalendarFragment();
-                default:
-                    return null;
             }
+
+            //necessary, because method is annotated with @NonNull
+            return new TodoFragment();
         }
 
         @Override
@@ -156,9 +161,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String[] names = {"Scanner", "Todo", "Calendar"};
-
-            return names[position];
+            return PAGE_NAMES[position];
         }
     }
 
@@ -227,7 +230,7 @@ public class MainActivity extends BaseActivity {
         File imageDir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
 
         if(imageDir.exists()) {
-            for (File file : imageDir.listFiles()) {
+            for(File file : imageDir.listFiles()) {
                 file.delete();
             }
         }

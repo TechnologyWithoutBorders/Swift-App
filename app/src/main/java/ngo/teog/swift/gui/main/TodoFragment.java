@@ -7,25 +7,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
@@ -39,7 +38,7 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
-public class TodoFragment extends BaseFragment {
+public class TodoFragment extends Fragment {
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -47,7 +46,6 @@ public class TodoFragment extends BaseFragment {
     private TodoViewModel viewModel;
 
     private CustomSimpleArrayAdapter adapter;
-    private ListView listView;
 
     private List<DeviceInfo> values = new ArrayList<>();
 
@@ -58,30 +56,24 @@ public class TodoFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        listView = view.findViewById(R.id.maintenanceList);
+        ListView listView = view.findViewById(R.id.maintenanceList);
 
         adapter = new CustomSimpleArrayAdapter(getContext(), values);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
-                intent.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)adapterView.getItemAtPosition(i)).getDevice().getId());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
+            intent.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)adapterView.getItemAtPosition(i)).getDevice().getId());
+            startActivity(intent);
         });
 
         final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
 
         swipeRefreshLayout.setOnRefreshListener(
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
+                () -> {
                     swipeRefreshLayout.setRefreshing(false);
                     refresh();
                 }
-            }
         );
 
         DaggerAppComponent.builder()
@@ -105,20 +97,17 @@ public class TodoFragment extends BaseFragment {
                     Collections.reverse(reports);
                 }
 
-                Collections.sort(deviceInfos, new Comparator<DeviceInfo>() {
-                    @Override
-                    public int compare(DeviceInfo first, DeviceInfo second) {
-                        List<ReportInfo> firstReports = first.getReports();
-                        List<ReportInfo> secondReports = second.getReports();
+                Collections.sort(deviceInfos, (first, second) -> {
+                    List<ReportInfo> firstReports = first.getReports();
+                    List<ReportInfo> secondReports = second.getReports();
 
-                        if(firstReports.size() > 0 && secondReports.size() > 0) {
-                            int firstState = firstReports.get(0).getReport().getCurrentState();
-                            int secondState = secondReports.get(0).getReport().getCurrentState();
+                    if(firstReports.size() > 0 && secondReports.size() > 0) {
+                        int firstState = firstReports.get(0).getReport().getCurrentState();
+                        int secondState = secondReports.get(0).getReport().getCurrentState();
 
-                            return (firstState-secondState)*-1;
-                        } else {
-                            return 0;
-                        }
+                        return (firstState-secondState)*-1;
+                    } else {
+                        return 0;
                     }
                 });
 
@@ -157,7 +146,8 @@ public class TodoFragment extends BaseFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -36,7 +37,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -116,16 +116,13 @@ public class DeviceInfoActivity extends BaseActivity {
 
         reportListView = findViewById(R.id.reportList);
 
-        reportListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Report report = ((ReportInfo)adapterView.getItemAtPosition(i)).getReport();
+        reportListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Report report = ((ReportInfo)adapterView.getItemAtPosition(i)).getReport();
 
-                Intent intent = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
-                intent.putExtra(ResourceKeys.DEVICE_ID, report.getDevice());
-                intent.putExtra(ResourceKeys.REPORT_ID, report.getId());
-                startActivity(intent);
-            }
+            Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
+            intent1.putExtra(ResourceKeys.DEVICE_ID, report.getDevice());
+            intent1.putExtra(ResourceKeys.REPORT_ID, report.getId());
+            startActivity(intent1);
         });
 
         globalImageView = findViewById(R.id.imageView);
@@ -166,12 +163,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 List<ReportInfo> reports = deviceInfo.getReports();
 
-                Collections.sort(reports, new Comparator<ReportInfo>() {
-                    @Override
-                    public int compare(ReportInfo first, ReportInfo second) {
-                        return second.getReport().getId()-first.getReport().getId();
-                    }
-                });
+                Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
 
                 statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -219,31 +211,23 @@ public class DeviceInfoActivity extends BaseActivity {
                 if(!image.exists()) {
                     globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
 
-                    globalImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            downloadImage();
-                        }
-                    });
+                    globalImageView.setOnClickListener(view -> downloadImage());
                 } else {
                     Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
                     globalImageView.setImageBitmap(bitmap);
                     globalImageView.setBackgroundColor(Color.BLACK);
 
-                    globalImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                            dir.mkdirs();
+                    globalImageView.setOnClickListener(view -> {
+                        File dir1 = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                        dir1.mkdirs();
 
-                            File image = new File(dir, device.getId() + ".jpg");
+                        File image1 = new File(dir1, device.getId() + ".jpg");
 
-                            if(image.exists()) {
-                                Intent intent = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                                intent.putExtra(ResourceKeys.IMAGE, image);
+                        if(image1.exists()) {
+                            Intent intent12 = new Intent(DeviceInfoActivity.this, ImageActivity.class);
+                            intent12.putExtra(ResourceKeys.IMAGE, image1);
 
-                                startActivity(intent);
-                            }
+                            startActivity(intent12);
                         }
                     });
                 }
@@ -326,18 +310,8 @@ public class DeviceInfoActivity extends BaseActivity {
             builder.setTitle(titleString);
             builder.setView(editView);
 
-            DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    save(parameter, editView);
-                }
-            };
-            DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
-                }
-            };
+            DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> save(parameter, editView);
+            DialogInterface.OnClickListener negativeListener = (dialogInterface, i) -> dialogInterface.cancel();
 
             builder.setPositiveButton(getText(R.string.dialog_ok_text), positiveListener);
             builder.setNegativeButton(getText(R.string.dialog_cancel_text), negativeListener);
@@ -394,9 +368,9 @@ public class DeviceInfoActivity extends BaseActivity {
                     device.setMaintenanceInterval(interval);
 
                     if (interval % 4 == 0) {
-                        intervalView.setText(Integer.toString(interval / 4) + " Months");
+                        intervalView.setText(interval / 4 + " Months");
                     } else {
-                        intervalView.setText(Integer.toString(interval) + " Weeks");
+                        intervalView.setText(interval + " Weeks");
                     }
 
                     break;
@@ -440,15 +414,12 @@ public class DeviceInfoActivity extends BaseActivity {
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + Integer.toString(deviceInfo.getDevice().getId()));
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + deviceInfo.getDevice().getId());
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share device link"));
                 return true;
-            case R.id.info:
-                showInfo(R.string.deviceinfo_activity);
-                return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item, R.string.deviceinfo_activity);
         }
     }
 
@@ -465,7 +436,8 @@ public class DeviceInfoActivity extends BaseActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -536,12 +508,13 @@ public class DeviceInfoActivity extends BaseActivity {
         }
 
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             return getCustomView(position, convertView, parent);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             return getCustomView(position, convertView, parent);
         }
     }

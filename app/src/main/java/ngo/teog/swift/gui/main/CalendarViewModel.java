@@ -21,8 +21,6 @@ public class CalendarViewModel extends ViewModel {
 
     public void init(int userId) {
         if(this.deviceInfos != null) {
-            // ViewModel is created on a per-Fragment basis, so the userId
-            // doesn't change.
             return;
         }
 

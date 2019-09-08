@@ -11,6 +11,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.text.DateFormat;
@@ -24,7 +25,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.BaseFragment;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -36,9 +36,9 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
-public class CalendarFragment extends BaseFragment {
+public class CalendarFragment extends Fragment {
 
-    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN);
+    private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN);
 
     private static final int DAY_COUNT = 8;
 

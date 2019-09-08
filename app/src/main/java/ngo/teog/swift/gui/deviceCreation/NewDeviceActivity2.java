@@ -77,14 +77,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-                case R.id.info:
-                showInfo(R.string.newdevice_activity_2);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item, R.string.newdevice_activity_2);
     }
 
     public void createDevice(View view) {
