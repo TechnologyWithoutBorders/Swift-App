@@ -61,7 +61,6 @@ import ngo.teog.swift.helpers.filters.UserFilter;
 /**
  * @author Julian Deyerler
  */
-
 public class RequestFactory {
     private static RequestFactory instance;
 
@@ -190,7 +189,7 @@ public class RequestFactory {
         }
     }
 
-    public DefaultRequest createDeviceImageRequest(final DeviceInfoActivity context, View disable, final View enable, final int id) {
+    public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE_IMAGE, true);
@@ -210,11 +209,15 @@ public class RequestFactory {
 
                 try {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    dir.mkdirs();
+                    boolean dirsMade = dir.mkdirs();
 
-                    outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
-                    outputStream.write(decodedString);
-                    outputStream.close();
+                    if(dirsMade) {
+                        outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
+                        outputStream.write(decodedString);
+                        outputStream.close();
+                    } else {
+                        Toast.makeText(context.getApplicationContext(), "could not access directory", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -531,7 +534,6 @@ public class RequestFactory {
                         form.setVisibility(View.VISIBLE);
                     } catch(Exception e) {
                         Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                        Log.e("LOGIN", "failed", e);
                         anim.stop();
                         form.setVisibility(View.VISIBLE);
                     }
@@ -542,13 +544,12 @@ public class RequestFactory {
                     anim.stop();
                     form.setVisibility(View.VISIBLE);
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                    Log.e("LOGIN", error.toString());
                 }
             });
         }
     }
 
-    private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
+    public static HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         HashMap<String, String> parameterMap = new HashMap<>();

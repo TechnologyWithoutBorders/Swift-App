@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -34,9 +33,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.ResponseParser;
 
 @Singleton
@@ -171,12 +173,6 @@ public class HospitalRepository {
         });
     }
 
-    /**
-     * Aktualisiert die Benutzer des eigenen Krankenhauses und zusätzlich den angefragter Benutzer
-     * @param context
-     * @param executor
-     * @return
-     */
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
@@ -192,14 +188,12 @@ public class HospitalRepository {
             long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
-            Map<String, String> params = generateParameterMap(context, "sync_hospital_info", true);
+            Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
             params.put("lastSync", dateFormat.format(new Date(lastUpdate)));
 
             JSONArray jsonDevices = new JSONArray();
             JSONArray jsonUsers = new JSONArray();
             JSONArray jsonReports = new JSONArray();
-
-            Hospital hospital = hospitalDao.getUserHospital(userID);
 
             //assure that no dataset with invalid timestamp is synchronized to server
             long now = new Date().getTime();
@@ -240,11 +234,11 @@ public class HospitalRepository {
 
             JSONObject request = new JSONObject(params);
 
-            data.put("devices", jsonDevices);
-            data.put("users", jsonUsers);
-            data.put("reports", jsonReports);
+            data.put(ResourceKeys.DEVICES, jsonDevices);
+            data.put(ResourceKeys.USERS, jsonUsers);
+            data.put(ResourceKeys.REPORTS, jsonReports);
 
-            request.put("data", data);
+            request.put(ResourceKeys.DATA, data);
 
             Log.d("SYNC_REQUEST", "Size: " + request.toString().getBytes().length + "\n" + request.toString(4));
 
@@ -294,8 +288,6 @@ public class HospitalRepository {
 
                                 List<ReportInfo> reportInfos = deviceInfo.getReports();
 
-                                //TODO falls es irgendwann zu viele Reports werden: Zunächst nur den neuesten Report pro Gerät übermitteln und wenn der vom lokalen abweicht, die vollständige Liste nachholen
-
                                 for(ReportInfo reportInfo : reportInfos) {
                                     Report report = reportInfo.getReport();
 
@@ -321,32 +313,13 @@ public class HospitalRepository {
         }
     }
 
-    private HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
-        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-
-        HashMap<String, String> parameterMap = new HashMap<>();
-        parameterMap.put(Defaults.ACTION_KEY, action);
-        parameterMap.put(Defaults.COUNTRY_KEY, preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
-
-        if(userValidation) {
-            parameterMap.put(Defaults.AUTH_ID_KEY, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
-            parameterMap.put(Defaults.AUTH_PW_KEY, preferences.getString(Defaults.PW_PREFERENCE, null));
-        }
-
-        return parameterMap;
-    }
-
     private boolean checkForInternetConnection() {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if(cm != null) {
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
-            if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-                return true;
-            } else {
-                return false;
-            }
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         } else {
             return false;
         }

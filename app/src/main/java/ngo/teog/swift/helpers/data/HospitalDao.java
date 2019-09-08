@@ -18,12 +18,6 @@ public interface HospitalDao {
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
     LiveData<Hospital> loadUserHospital(int userId);
 
-    @Query("SELECT * FROM hospitals WHERE hospitals.id = :hospitalId")
-    LiveData<Hospital> loadHospital(int hospitalId);
-
-    @Query("SELECT COUNT(*) FROM hospitals WHERE id = :id AND lastUpdate >= :currentMillis-(:timeout*1000)")
-    int hasHospital(int id, long currentMillis, int timeout);
-
     @Transaction
     @Query("SELECT * FROM users WHERE users.id = :userId")
     LiveData<UserProfileInfo> loadUserProfile(int userId);
@@ -45,9 +39,6 @@ public interface HospitalDao {
     @Query("SELECT * FROM users WHERE id = :userId")
     LiveData<UserInfo> loadUserInfo(int userId);
 
-    @Insert(onConflict = REPLACE)
-    void save(List<Report> reports);
-
     @Query("SELECT MAX(id) FROM reports WHERE device = :deviceId")
     int getMaxReportId(int deviceId);
 
@@ -61,11 +52,8 @@ public interface HospitalDao {
     @Query("SELECT * FROM devices WHERE id = :deviceId")
     LiveData<DeviceInfo> loadDevice(int deviceId);
 
-    @Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastUpdate >= :currentMillis-(:timeout*1000)")
+    @Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastSync >= :currentMillis-(:timeout*1000)")
     int hasUser(int id, long currentMillis, int timeout);
-
-    @Query("SELECT hospital from users WHERE id = :id")
-    int getHospital(int id);
 
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
     Hospital getUserHospital(int userId);

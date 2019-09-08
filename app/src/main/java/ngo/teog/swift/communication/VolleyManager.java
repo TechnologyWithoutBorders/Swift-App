@@ -6,11 +6,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Schnittstelle für die Volley-Request-Queue. Ist ein Singleton, weil es pro Anwendung
- * nur eine Request-Queue geben soll.
- * Created by Julian on 24.11.2017.
+ * Singleton, grants access to the Google Volley request queue used for network communication.
+ * @author Julian Deyerler
  */
-
 public class VolleyManager {
     private static VolleyManager instance;
     private RequestQueue requestQueue;
