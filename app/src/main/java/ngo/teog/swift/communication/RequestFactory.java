@@ -201,15 +201,11 @@ public class RequestFactory {
 
                 try {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    boolean dirsMade = dir.mkdirs();
+                    dir.mkdirs();
 
-                    if(dirsMade) {
-                        outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
-                        outputStream.write(decodedString);
-                        outputStream.close();
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), "could not access directory", Toast.LENGTH_LONG).show();
-                    }
+                    outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
+                    outputStream.write(decodedString);
+                    outputStream.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

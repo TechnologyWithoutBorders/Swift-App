@@ -145,15 +145,10 @@ public class NewDeviceActivity3 extends BaseActivity {
 
             try {
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                boolean dirsMade = dir.mkdirs();
 
-                if(dirsMade) {
-                    outputStream = new FileOutputStream(new File(dir, targetName));
-                    decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    outputStream.close();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.directory_not_accessible), Toast.LENGTH_LONG).show();
-                }
+                outputStream = new FileOutputStream(new File(dir, targetName));
+                decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                outputStream.close();
 
                 File tempFile = new File(imagePath);
                 tempFile.delete();
