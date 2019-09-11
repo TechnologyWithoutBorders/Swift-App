@@ -253,34 +253,34 @@ public class DeviceInfoActivity extends BaseActivity {
     }
 
     public void editAssetNumber(View view) {
-        this.edit(ASSET_NUMBER, assetNumberView.getText().toString());
+        this.edit(ASSET_NUMBER, assetNumberView.getText().toString(), 25);
     }
 
     public void editType(View view) {
-        this.edit(TYPE, typeView.getText().toString());
+        this.edit(TYPE, typeView.getText().toString(), 25);
     }
 
     public void editModel(View view) {
-        this.edit(MODEL, modelView.getText().toString());
+        this.edit(MODEL, modelView.getText().toString(), 25);
     }
 
     public void editManufacturer(View view) {
-        this.edit(MANUFACTURER, manufacturerView.getText().toString());
+        this.edit(MANUFACTURER, manufacturerView.getText().toString(), 25);
     }
 
     public void editSerialNumber(View view) {
-        this.edit(SERIAL_NUMBER, serialNumberView.getText().toString());
+        this.edit(SERIAL_NUMBER, serialNumberView.getText().toString(), 25);
     }
 
     public void editWard(View view) {
-        this.edit(WARD, wardView.getText().toString());
+        this.edit(WARD, wardView.getText().toString(), 25);
     }
 
     public void editMaintenanceInterval(View view) {
-        this.edit(MAINTENANCE_INTERVAL, null);
+        this.edit(MAINTENANCE_INTERVAL, null, 0);
     }
 
-    private void edit(int parameter, String presetText) {
+    private void edit(int parameter, String presetText, int maxLength) {
         if(deviceInfo != null) {
             String titleString = PARAM_TITLES[parameter];
 
@@ -298,7 +298,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     break;
                 default:
                     EditText editText = new EditText(this);
-                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
                     editText.setInputType(InputType.TYPE_CLASS_TEXT);
                     editText.setText(presetText);
 

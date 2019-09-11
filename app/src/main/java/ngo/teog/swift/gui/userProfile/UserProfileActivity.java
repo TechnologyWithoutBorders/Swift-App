@@ -116,7 +116,7 @@ public class UserProfileActivity extends BaseActivity {
         builder.setMessage("You will need to remember your new mail address in order to log in.");
 
         final EditText input = new EditText(this);
-        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(50)});
         input.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         input.setText(mailView.getText());
         builder.setView(input);

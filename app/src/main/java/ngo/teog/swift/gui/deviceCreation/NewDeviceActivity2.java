@@ -2,6 +2,7 @@ package ngo.teog.swift.gui.deviceCreation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,11 +47,17 @@ public class NewDeviceActivity2 extends BaseActivity {
         setContentView(R.layout.activity_new_device2);
 
         assetNumberField = findViewById(R.id.assetNumberText);
+        assetNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         typeField = findViewById(R.id.typeText);
+        typeField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         serialNumberField = findViewById(R.id.serialNumberText);
+        serialNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         manufacturerField = findViewById(R.id.manufacturerText);
+        manufacturerField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         modelField = findViewById(R.id.modelText);
+        modelField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         wardField = findViewById(R.id.wardText);
+        wardField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
 
         intervalPicker = findViewById(R.id.intervalPicker);
         weekMonthSpinner = findViewById(R.id.spinner2);
@@ -82,41 +89,37 @@ public class NewDeviceActivity2 extends BaseActivity {
 
     public void createDevice(View view) {
         if(typeField.getText().length() > 0) {
-            if(serialNumberField.getText().length() > 0) {
-                if(manufacturerField.getText().length() > 0) {
-                    if(modelField.getText().length() > 0) {
-                        nextButton.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.VISIBLE);
+            if(manufacturerField.getText().length() > 0) {
+                if(modelField.getText().length() > 0) {
+                    nextButton.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                        String assetNumber = assetNumberField.getText().toString();
+                    String assetNumber = assetNumberField.getText().toString();
 
-                        if(assetNumber.length() == 0) {
-                            assetNumber = Integer.toString(deviceNumber);
-                        }
-
-                        int interval;
-
-                        if((weekMonthSpinner.getSelectedItem()).equals("Week")) {
-                            interval = intervalPicker.getValue();
-                        } else {
-                            interval = intervalPicker.getValue()*4;
-                        }
-
-                        HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, new Date());
-
-                        Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
-                        intent.putExtra(ResourceKeys.DEVICE, device);
-
-                        startActivity(intent);
-                    } else {
-                        modelField.setError("empty model");
+                    if(assetNumber.length() == 0) {
+                        assetNumber = Integer.toString(deviceNumber);
                     }
+
+                    int interval;
+
+                    if((weekMonthSpinner.getSelectedItem()).equals("Week")) {
+                        interval = intervalPicker.getValue();
+                    } else {
+                        interval = intervalPicker.getValue()*4;
+                    }
+
+                    HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
+                            typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, new Date());
+
+                    Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
+                    intent.putExtra(ResourceKeys.DEVICE, device);
+
+                    startActivity(intent);
                 } else {
-                    manufacturerField.setError("empty manufacturer");
+                    modelField.setError("empty model");
                 }
             } else {
-                serialNumberField.setError("empty serial number");
+                manufacturerField.setError("empty manufacturer");
             }
         } else {
             typeField.setError("empty type");
