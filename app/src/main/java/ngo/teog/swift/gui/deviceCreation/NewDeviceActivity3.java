@@ -185,7 +185,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     private File createImageFile() throws IOException {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        return File.createTempFile("image_" + Integer.toString(device.getId()), ".jpg", storageDir);
+        return File.createTempFile("image_" + device.getId(), ".jpg", storageDir);
     }
 
     private Bitmap decode(String filePath, int targetW) {

@@ -214,7 +214,8 @@ public class RequestFactory {
                 enable.setBackgroundColor(Color.BLACK);
 
                 enable.setOnClickListener(view -> {
-                    File image = new File(context.getFilesDir(), "image_" + Integer.toString(id) + ".jpg");
+                    File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                    File image = new File(dir, "image_" + id + ".jpg");
 
                     if(image.exists()) {
                         Intent intent = new Intent(context, ImageActivity.class);
