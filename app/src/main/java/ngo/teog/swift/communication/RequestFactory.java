@@ -215,7 +215,7 @@ public class RequestFactory {
 
                 enable.setOnClickListener(view -> {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    File image = new File(dir, "image_" + id + ".jpg");
+                    File image = new File(dir, id + ".jpg");
 
                     if(image.exists()) {
                         Intent intent = new Intent(context, ImageActivity.class);
