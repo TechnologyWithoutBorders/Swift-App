@@ -51,16 +51,19 @@ public class CalendarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_maintenance, container, false);
+        final View rootView = inflater.inflate(R.layout.coming_soon_dummy, container, false);
 
-        hospitalListView = rootView.findViewById(R.id.maintenanceCalendar);
+        //hospitalListView = rootView.findViewById(R.id.maintenanceCalendar);
+
+        TextView infoView = rootView.findViewById(R.id.infoView);
+        infoView.setText("calendar");
 
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
+        /*ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
         hospitalListView.setAdapter(adapter);
 
         DaggerAppComponent.builder()
@@ -116,7 +119,7 @@ public class CalendarFragment extends Fragment {
 
                 adapter.setDeviceInfos(dayList);
             }
-        });
+        });*/
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
