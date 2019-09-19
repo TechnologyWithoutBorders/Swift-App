@@ -106,10 +106,10 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="@string/device_model" />
+                android:text="@string/device_manufacturer" />
 
             <TextView
-                android:id="@+id/modelView"
+                android:id="@+id/manufacturerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp" />
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
-                android:onClick="editModel"
+                android:onClick="editManufacturer"
                 android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
@@ -133,10 +133,10 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="@string/device_manufacturer" />
+                android:text="@string/device_model" />
 
             <TextView
-                android:id="@+id/manufacturerView"
+                android:id="@+id/modelView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp" />
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
-                android:onClick="editManufacturer"
+                android:onClick="editModel"
                 android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
