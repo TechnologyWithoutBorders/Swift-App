@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -49,6 +50,7 @@ public class ResponseParser {
                 ArrayList<HospitalDevice> result = new ArrayList<>();
 
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
                 for(int i = 0; i < deviceList.length(); i++) {
                     JSONObject deviceObject = deviceList.getJSONObject(i);
@@ -82,6 +84,7 @@ public class ResponseParser {
         ArrayList<HospitalDevice> result = new ArrayList<>();
 
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         for(int i = 0; i < deviceList.length(); i++) {
             JSONObject deviceObject = deviceList.getJSONObject(i);
@@ -112,6 +115,7 @@ public class ResponseParser {
                 JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
 
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
                 int hospitalId = hospitalObject.getInt(HospitalFilter.ID);
                 String name = hospitalObject.getString(HospitalFilter.NAME);
@@ -200,6 +204,7 @@ public class ResponseParser {
                 JSONArray userList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
                 ArrayList<User> result = new ArrayList<>();
 
@@ -231,6 +236,7 @@ public class ResponseParser {
         ArrayList<User> result = new ArrayList<>();
 
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         for(int i = 0; i < userList.length(); i++) {
             JSONObject userObject = userList.getJSONObject(i);
@@ -257,6 +263,7 @@ public class ResponseParser {
                 JSONArray reportList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
                 ArrayList<Report> result = new ArrayList<>();
 
