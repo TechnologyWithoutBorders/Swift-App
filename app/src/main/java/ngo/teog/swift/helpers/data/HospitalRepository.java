@@ -182,6 +182,7 @@ public class HospitalRepository {
         try {
             Gson gson = new GsonBuilder()
                     .setDateFormat(Defaults.DATETIME_PRECISE_PATTERN)
+                    .registerTypeAdapter(Date.class, new UtcDateTypeAdapter())
                     .create();
 
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -202,7 +203,7 @@ public class HospitalRepository {
 
             if(users != null) {
                 for (User user : users) {
-                    if (user.getLastUpdate().getTime() >= lastUpdate && user.getLastUpdate().getTime() <= now) {
+                    if(user.getLastUpdate().getTime() >= lastUpdate && user.getLastUpdate().getTime() <= now) {
                         jsonUsers.put(new JSONObject(gson.toJson(user)));
                     }
                 }

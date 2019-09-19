@@ -25,7 +25,7 @@ android {
 
 dependencies {
     def room_version = "2.1.0"
-    def gson_version = "2.8.2"
+    def gson_version = "2.8.5"
     def volley_version = "1.1.1"
     def zxing_version = "3.5.0"
     def dagger_version = "2.20"
