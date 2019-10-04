@@ -64,6 +64,13 @@
                     android:layout_marginBottom="8dp"
                     android:hint="@string/login_password_hint"
                     android:inputType="textPassword" />
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot your password?"
+                    android:textColor="#002aff"
+                    android:onClick="restorePassword"/>
 
                 <Button style="@style/AppTheme.Button"
                     android:id="@+id/loginButton"

@@ -1,10 +1,12 @@
 package ngo.teog.swift.gui.login;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,8 +19,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import java.security.MessageDigest;
@@ -131,6 +135,28 @@ public class LoginActivity extends BaseActivity {
         } else {
             mailField.setError(getText(R.string.error_empty_mail));
         }
+    }
+
+    public void restorePassword(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Restore password");
+
+        TextView tv = new TextView(this);
+        tv.setText("wanna reset?");
+
+        builder.setView(tv);
+
+        DialogInterface.OnClickListener positiveListener = (dialogInterface, i) ->
+                //TODO request an interface für passwort-reset
+                Log.d("bla", "bla");
+
+        DialogInterface.OnClickListener negativeListener = (dialogInterface, i) -> dialogInterface.cancel();
+
+        builder.setPositiveButton(getText(R.string.dialog_ok_text), positiveListener);
+        builder.setNegativeButton(getText(R.string.dialog_cancel_text), negativeListener);
+
+        builder.show();
     }
 
     /**
