@@ -440,6 +440,20 @@ public class RequestFactory {
         return new LoginRequest(context, anim, form, url, request, password, country);
     }
 
+    public PasswordResetRequest createPasswordResetRequest(Context context, String mail, String country) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_RESET_PASSWORD, false);
+
+        params.put(UserFilter.MAIL, mail);
+        //Override country, because the shared preferences contain no country at this point
+        params.put(Defaults.COUNTRY_KEY, country);
+
+        JSONObject request = new JSONObject(params);
+
+        return new PasswordResetRequest(context, url, request, country);
+    }
+
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<User> adapter) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
@@ -512,6 +526,16 @@ public class RequestFactory {
             }, error -> {
                 anim.stop();
                 form.setVisibility(View.VISIBLE);
+                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+            });
+        }
+    }
+
+    public class PasswordResetRequest extends JsonObjectRequest {
+        public PasswordResetRequest(final Context context, final String url, JSONObject request, final String country) {
+            super(Request.Method.POST, url, request, response -> {
+                Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+            }, error -> {
                 Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }

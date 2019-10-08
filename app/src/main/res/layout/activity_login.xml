@@ -68,9 +68,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Forgot your password?"
+                    android:text="Forgot your password?\nPlease select your country, enter your e-mail address and click here."
                     android:textColor="#002aff"
-                    android:onClick="restorePassword"/>
+                    android:onClick="resetPassword"/>
 
                 <Button style="@style/AppTheme.Button"
                     android:id="@+id/loginButton"

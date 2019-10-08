@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -137,26 +139,36 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void restorePassword(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    public void resetPassword(View view) {
+        String country = (String)countrySpinner.getSelectedItem();
 
-        builder.setTitle("Restore password");
+        if(mailField.getText().length() > 0) {
+            String mail = mailField.getText().toString();
 
-        TextView tv = new TextView(this);
-        tv.setText("wanna reset?");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setView(tv);
+            builder.setTitle("Reset password");
+            builder.setMessage("Do you want to reset your password?\nA new one will be sent to:\n" + mail);
 
-        DialogInterface.OnClickListener positiveListener = (dialogInterface, i) ->
-                //TODO request an interface für passwort-reset
-                Log.d("bla", "bla");
+            DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> {
+                if(checkForInternetConnection()) {
+                    RequestFactory.PasswordResetRequest request = RequestFactory.getInstance().createPasswordResetRequest(this, mail, country);
 
-        DialogInterface.OnClickListener negativeListener = (dialogInterface, i) -> dialogInterface.cancel();
+                    VolleyManager.getInstance(this).getRequestQueue().add(request);
+                } else {
+                    Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                }
+            };
 
-        builder.setPositiveButton(getText(R.string.dialog_ok_text), positiveListener);
-        builder.setNegativeButton(getText(R.string.dialog_cancel_text), negativeListener);
+            DialogInterface.OnClickListener negativeListener = (dialogInterface, i) -> dialogInterface.cancel();
 
-        builder.show();
+            builder.setPositiveButton(getText(R.string.dialog_ok_text), positiveListener);
+            builder.setNegativeButton(getText(R.string.dialog_cancel_text), negativeListener);
+
+            builder.show();
+        } else {
+            mailField.setError("please enter your e-mail address first");
+        }
     }
 
     /**
