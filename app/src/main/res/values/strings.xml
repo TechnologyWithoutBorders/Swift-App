@@ -18,16 +18,15 @@
         The Scanner tab lets you scan registered barcodes and leads you directly to the respective device page. Alternatively you can enter the number of the ID sticker, if scanning is not possible.</p>
         <p><b>TODO List</b><br>
         The TODO tab gives you an overview of all devices that are broken or up for maintenance. If a colleague is already working on a case, it will be displayed as <i>in progress</i>.</p>
-        <p><b>Search</b><br>
-        The Search tab enables you to walk through the devices and users registered in the database.</p>
+        <p><b>Calendar</b><br>
+        The calendar will provide you an overview of the next upcoming maintenance activities.</p>
     ]]></string>
 
     <string name="about_text"><![CDATA[
-        <p>In order to register a new user for your hospital please contact swift-app@teog.de</p>
+        <p>In order to register a new user for your hospital, please contact swift-app@teog.de</p>
 
         <p><h3>About TeoG Swift</h3>
-        TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders) short TeoG. Its intended use is to have a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.
-        The code can be downloaded and modified for your own needs at Github (https://github.com/TechnologyWithoutBorders/Swift-App) under the Apache 2.0 License (https://www.apache.org/licenses/LICENSE-2.0).</p>
+        TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders). Its intended use is to establish a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.</p>
 
         <p><h3>Imprint, Disclaimer, Privacy policy</h3>
         <a href="https://www.teog.ngo/verein-2/#anker8">Online</a></p>
