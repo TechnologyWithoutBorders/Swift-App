@@ -210,7 +210,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageView.setImageBitmap(decode(imagePath, 640));
+            imageView.setImageBitmap(decode(imagePath, 800));
         }
 
         super.onActivityResult(requestCode, resultCode, data);
