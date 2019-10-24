@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
@@ -84,6 +85,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private Spinner statusSpinner;
 
     private ProgressBar progressBar;
+    private LinearLayout dummyImageView;
     private ImageView globalImageView;
 
     private TextView assetNumberView;
@@ -125,6 +127,7 @@ public class DeviceInfoActivity extends BaseActivity {
             startActivity(intent1);
         });
 
+        dummyImageView = findViewById(R.id.downloadImageView);
         globalImageView = findViewById(R.id.imageView);
 
         //TODO bei Bild per Hash überprüfen, ob es ein neueres gibt
@@ -209,9 +212,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 File image = new File(dir, device.getId() + ".jpg");
 
                 if(!image.exists()) {
-                    globalImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_file_download_black_24dp));
+                    globalImageView.setVisibility(View.GONE);
 
-                    globalImageView.setOnClickListener(view -> downloadImage());
+                    dummyImageView.setOnClickListener(view -> downloadImage());
                 } else {
                     Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
                     globalImageView.setImageBitmap(bitmap);
@@ -392,7 +395,7 @@ public class DeviceInfoActivity extends BaseActivity {
             RequestFactory.DefaultRequest request = RequestFactory.getInstance().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
 
             progressBar.setVisibility(View.VISIBLE);
-            globalImageView.setVisibility(View.GONE);
+            dummyImageView.setVisibility(View.GONE);
 
             queue.add(request);
         } else {
