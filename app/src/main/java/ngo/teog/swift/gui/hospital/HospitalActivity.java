@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,12 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,10 +76,29 @@ public class HospitalActivity extends BaseActivity {
             return false;
         });
 
+        EditText searchView = findViewById(R.id.search_view);
+
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                adapter.filter(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         TextView nameView = findViewById(R.id.nameView);
         TextView locationView = findViewById(R.id.locationView);
 
-        ImageView mapButton = findViewById(R.id.mapButton);
+        TextView mapButton = findViewById(R.id.map_button);
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -133,15 +156,52 @@ public class HospitalActivity extends BaseActivity {
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
         private List<User> users = new ArrayList<>();
+        private List<User> filteredUsers = new ArrayList<>();
         private List<DeviceInfo> deviceInfos = new ArrayList<>();
+        private List<DeviceInfo> filteredDeviceInfos = new ArrayList<>();
 
         public void setUsers(List<User> users) {
             this.users = users;
+
+            filteredUsers = new ArrayList<>(users);
+
             this.notifyDataSetChanged();
         }
 
         public void setDeviceInfos(List<DeviceInfo> deviceInfos) {
             this.deviceInfos = deviceInfos;
+
+            filteredDeviceInfos = new ArrayList<>(deviceInfos);
+
+            this.notifyDataSetChanged();
+        }
+
+        public void filter(String searchString) {
+            String matchingString = searchString.toLowerCase();
+
+            filteredUsers = new ArrayList<>();
+            filteredDeviceInfos = new ArrayList<>();
+
+            //first filter users by name
+            for (User user : users) {
+                if (user.getName().toLowerCase().contains(matchingString)) {
+                    filteredUsers.add(user);
+                }
+            }
+
+            //now filter devices by type, model and manufacturer
+            for (DeviceInfo deviceInfo : deviceInfos) {
+                HospitalDevice device = deviceInfo.getDevice();
+
+                String type = device.getType().toLowerCase();
+                String manufacturer = device.getManufacturer().toLowerCase();
+                String model = device.getModel().toLowerCase();
+
+                if(type.contains(matchingString) || manufacturer.contains(matchingString) || model.contains(matchingString)) {
+                    filteredDeviceInfos.add(deviceInfo);
+                }
+            }
+
             this.notifyDataSetChanged();
         }
 
@@ -154,9 +214,9 @@ public class HospitalActivity extends BaseActivity {
         public int getChildrenCount(int i) {
             switch(i) {
                 case 0:
-                    return users.size();
+                    return filteredUsers.size();
                 case 1:
-                    return deviceInfos.size();
+                    return filteredDeviceInfos.size();
                 default:
                     return 0;
             }
@@ -171,9 +231,9 @@ public class HospitalActivity extends BaseActivity {
         public Object getChild(int groupPosition, int childPosition) {
             switch(groupPosition) {
                 case 0:
-                    return users.get(childPosition);
+                    return filteredUsers.get(childPosition);
                 case 1:
-                    return deviceInfos.get(childPosition);
+                    return filteredDeviceInfos.get(childPosition);
                 default:
                     return null;
             }
@@ -208,11 +268,11 @@ public class HospitalActivity extends BaseActivity {
             switch(groupPosition) {
                 case 0:
                     nameView.setText(R.string.hospital_members_heading);
-                    countView.setText(Integer.toString(users.size()));
+                    countView.setText(Integer.toString(filteredUsers.size()));
                     break;
                 case 1:
                     nameView.setText(R.string.hospital_devices_heading);
-                    countView.setText(Integer.toString(deviceInfos.size()));
+                    countView.setText(Integer.toString(filteredDeviceInfos.size()));
                     break;
             }
 
@@ -230,7 +290,7 @@ public class HospitalActivity extends BaseActivity {
                         convertView.setTag(groupPosition);
                     }
 
-                    User user = users.get(childPosition);
+                    User user = filteredUsers.get(childPosition);
 
                     if(user != null) {
                         TextView nameView = convertView.findViewById(R.id.nameView);
@@ -253,7 +313,7 @@ public class HospitalActivity extends BaseActivity {
                     ImageView imageView = convertView.findViewById(R.id.imageView);
                     TextView detailsView = convertView.findViewById(R.id.detailView);
 
-                    DeviceInfo deviceInfo = deviceInfos.get(childPosition);
+                    DeviceInfo deviceInfo = filteredDeviceInfos.get(childPosition);
 
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();

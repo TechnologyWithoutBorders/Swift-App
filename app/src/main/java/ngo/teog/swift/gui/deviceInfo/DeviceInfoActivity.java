@@ -85,7 +85,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private Spinner statusSpinner;
 
     private ProgressBar progressBar;
-    private LinearLayout dummyImageView;
+    private TextView dummyImageView;
     private ImageView globalImageView;
 
     private TextView assetNumberView;
@@ -212,10 +212,13 @@ public class DeviceInfoActivity extends BaseActivity {
                 File image = new File(dir, device.getId() + ".jpg");
 
                 if(!image.exists()) {
-                    globalImageView.setVisibility(View.GONE);
+                    globalImageView.setVisibility(View.INVISIBLE);
 
                     dummyImageView.setOnClickListener(view -> downloadImage());
                 } else {
+                    dummyImageView.setVisibility(View.INVISIBLE);
+                    globalImageView.setVisibility(View.VISIBLE);
+
                     Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
                     globalImageView.setImageBitmap(bitmap);
                     globalImageView.setBackgroundColor(Color.BLACK);

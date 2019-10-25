@@ -41,15 +41,22 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/mapButton"
+        <TextView
+            android:id="@+id/map_button"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:padding="8dp"
-            android:contentDescription="hospital map link"
-            app:srcCompat="@drawable/ic_my_location_black_24dp" />
+            android:text="Map"
+            android:textAlignment="center"
+            android:drawableTop="@drawable/ic_my_location_black_24dp" />
 
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="filter..."/>
 
     <ExpandableListView
         android:id="@+id/hospitalList"
