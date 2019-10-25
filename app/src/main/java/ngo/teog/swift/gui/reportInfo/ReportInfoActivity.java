@@ -101,13 +101,6 @@ public class ReportInfoActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.share:
-                Intent intent = new Intent(Intent.ACTION_SEND);
-
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this report: http://teog.virlep.de/report/" + reportInfo.getReport().getId());//TODO hospital id is missing
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "Share report link"));
-                return true;
             default:
                 return super.onOptionsItemSelected(item, R.string.reportInfoActivity);
         }
