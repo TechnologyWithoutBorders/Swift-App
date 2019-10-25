@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.android.volley.RequestQueue;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -36,9 +38,12 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.login.LoginActivity;
 import ngo.teog.swift.gui.maintenance.SearchActivity;
+import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
+import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
@@ -69,26 +74,37 @@ public class MainActivity extends BaseActivity {
             //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
 
             try {
-                String type = appLinkData.getPathSegments().get(appLinkData.getPathSegments().size()-2);
+                List<String> pathSegments = appLinkData.getPathSegments();
 
-                int objectNumber = Integer.parseInt(appLinkData.getLastPathSegment());
+                //Scheme: /<type>/<hospital>/<device/user>/[<report>]
 
-                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-                RequestFactory.DefaultRequest request = null;
-                RequestFactory requestFactory = RequestFactory.getInstance();
+                String type = pathSegments.get(0);
+                int hospital = Integer.parseInt(pathSegments.get(1));
+
+                Intent openIntent = null;
 
                 if(ResourceKeys.DEVICE.equals(type)) {
-                    request = requestFactory.createDeviceOpenRequest(this, null, null, objectNumber);
+                    int deviceNumber = Integer.parseInt(pathSegments.get(2));
+
+                    openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
                 } else if(ResourceKeys.USER.equals(type)) {
-                    request = requestFactory.createUserOpenRequest(this, null, null, objectNumber);
+                    int userNumber = Integer.parseInt(pathSegments.get(2));
+
+                    openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+                    openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
                 } else if(ResourceKeys.REPORT.equals(type)) {
-                    request = requestFactory.createReportOpenRequest(this, null, null, objectNumber);
+                    int deviceNumber = Integer.parseInt(pathSegments.get(2));
+                    int reportNumber = Integer.parseInt(pathSegments.get(3));
+
+                    openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
+                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                    openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
                 }
 
-                if(request != null) {
-                    queue.add(request);
-                }
-            } catch(NumberFormatException e) {
+                startActivity(openIntent);
+
+            } catch(Exception e) {
                 Toast.makeText(this.getApplicationContext(), "invalid item link", Toast.LENGTH_SHORT).show();
             }
         }

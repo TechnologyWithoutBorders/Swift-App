@@ -97,7 +97,7 @@ public class UserInfoActivity extends BaseActivity {
             case R.id.share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + user.getId());
+                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + user.getHospital() + "/" + user.getId());
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share user link"));
                 return true;
