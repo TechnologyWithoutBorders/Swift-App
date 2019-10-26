@@ -12,69 +12,36 @@
     <string name="reportInfoActivity">Always consider browsing through the reports in order to get more information about the device before planning your repair.</string>
     <string name="userinfo_activity">You can use this data to contact your colleagues or staff at other hospitals.</string>
     <string name="userprofile_activity">This is your very own user profile. You can add some general information like your telephone number and position here.</string>
-    <string name="calendar_activity">Will be implemented soon</string>
+    <string name="maintenance_info">Coming soon</string>
     <string name="mainactivity"><![CDATA[
         <p><b>Barcode Scanner</b><br>
         The Scanner tab lets you scan registered barcodes and leads you directly to the respective device page. Alternatively you can enter the number of the ID sticker, if scanning is not possible.</p>
         <p><b>TODO List</b><br>
         The TODO tab gives you an overview of all devices that are broken or up for maintenance. If a colleague is already working on a case, it will be displayed as <i>in progress</i>.</p>
-        <p><b>Search</b><br>
-        The Search tab enables you to walk through the devices and users registered in the database.</p>
+        <p><b>Calendar</b><br>
+        The calendar will provide you an overview of the next upcoming maintenance activities.</p>
     ]]></string>
 
     <string name="about_text"><![CDATA[
-        <p>In order to register a new user for your hospital please contact swift-app@teog.de</p>
-
-        <p><h1>Technology without Borders</h1>
-        <h2>WG Hospital Support</h2>
-        <h3>Contact</h3>
-        swift-app@teog.de
-        <h3>Overall Coordination</h3>
-        Andreas Vierling
-        <h3>Lead Development</h3>
-        Julian Deyerler
-        <h3>Testers</h3>
-        Lena Augustin<br>
-        Paul Böhnke<br>
-        Arne Bruns<br>
-        Maximilian Deckelmann<br>
-        Sebastian Hofmann<br>
-        Julian Kauth<br>
-        Lukas Köferl<br>
-        Simon Meilinger<br>
-        Nhat Nguyen<br>
-        Felix Tuchnitz<br>
-        Ina Reichmann<br><br>
-        Hopefully many more to come… :-)</p>
+        <p>In order to register a new user for your hospital, please contact swift-app@teog.de</p>
 
         <p><h3>About TeoG Swift</h3>
-        TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders) short TeoG. Its intendet use is to have a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.
-        The code can be downloaded and modified for your own needs at Github (https://github.com/TechnologyWithoutBorders/Swift-App) under the Apache 2.0 License (https://www.apache.org/licenses/LICENSE-2.0).</p>
+        TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders). Its intended use is to establish a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.</p>
 
-        <h3>Impressum</h3>
-        <a href="https://www.teog.ngo/verein-2/#anker8">Online</a><br>
-        Angaben gemäß § 5 TMG
-        <h4>Kontakt:</h4>
-        Technik ohne Grenzen e.V.<br>
-        Richard-Strauß-Str. 38 | 91315 Höchstadt<br>
-        Tel: +49 9193 – 4288 | Fax: +49 9193 – 4284<br>
-        E-Mail: info@teog.de | Web: www.teog.de<br>
-        <h4>Registereintrag</h4>
-        Eintragung im Vereinsregister Registergericht: Fürth Registernummer: VR 200 486<br>
-        Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz: 216 / 111 / 00 865<br>
-        <h4>Haftungsausschluss</h4>
-        <h5>Haftung für Inhalte</h5>
-        Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.<br>
-        Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen. Haftung für Links Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen. Urheberrecht Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen. Quelle: http://rechtsanwalt-schwenke.de/
-        <h5>Haftung für Links</h5>
-        Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
-        <h5>Urheberrecht</h5>
-        Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
-        <h5>Datenschutz</h5>
-        Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf unseren Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder eMail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.
-        Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
-        Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Die Betreiber der Seiten behalten sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.
-        Geltungsbereich Diese Datenschutzerklärung klärt Nutzer über die Art, den Umfang und Zwecke der Erhebung und Verwendung personenbezogener Daten durch den verantwortlichen Anbieter (Adresse siehe oben) auf dieser Website (im folgenden “Angebot”) auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG). Zugriffsdaten/ Server-Logfiles Der Anbieter (beziehungsweise sein Webspace-Provider) erhebt Daten über jeden Zugriff auf das Angebot (so genannte Serverlogfiles). Zu den Zugriffsdaten gehören: Name der abgerufenen Webseite, Datei, Datum und Uhrzeit des Abrufs, übertragene Datenmenge, Meldung über erfolgreichen Abruf, Browsertyp nebst Version, das Betriebssystem des Nutzers, Referrer URL (die zuvor besuchte Seite), IP-Adresse und der anfragende Provider. Der Anbieter verwendet die Protokolldaten nur für statistische Auswertungen zum Zweck des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieterbehält sich jedoch vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht. Umgang mit personenbezogenen Daten Personenbezogene Daten sind Informationen, mit deren Hilfe eine Person bestimmbar ist, also Angaben, die zurück zu einer Person verfolgt werden können. Dazu gehören der Name, die Emailadresse oder die Telefonnummer. Aber auch Daten über Vorlieben, Hobbies, Mitgliedschaften oder welche Webseiten von jemandem angesehen wurden zählen zu personenbezogenen Daten. Personenbezogene Daten werden von dem Anbieter nur dann erhoben, genutzt und weiter gegeben, wenn dies gesetzlich erlaubt ist oder die Nutzer in die Datenerhebung einwilligen. Kontaktaufnahme Bei der Kontaktaufnahme mit dem Anbieter (zum Beispiel per Kontaktformular oder E-Mail) werden die Angaben des Nutzers zwecks Bearbeitung der Anfrage sowie für den Fall, dass Anschlussfragen entstehen, gespeichert. Kommentare und Beiträge Wenn Nutzer Kommentare im Blog oder sonstige Beiträge hinterlassen, werden ihre IP-Adressen gespeichert. Das erfolgt zur Sicherheit des Anbieters, falls jemand in Kommentaren und Beiträgen widerrechtliche Inhalte schreibt (Beleidigungen, verbotene politische Propaganda, etc.). In diesem Fall kann der Anbieter selbst für den Kommentar oder Beitrag belangt werden und ist daher an der Identität des Verfassers interessiert. Newsletter Mit dem Newsletter informieren wir Sie über uns und unsere Angebote. Wenn Sie den Newsletter empfangen möchten, benötigen wir von Ihnen eine valide Email-Adresse sowie Informationen, die uns die Überprüfung gestatten, dass Sie der Inhaber der angegebenen Email-Adresse sind bzw. deren Inhaber mit dem Empfang des Newsletters einverstanden ist. Weitere Daten werden nicht erhoben. Diese Daten werden nur für den Versand der Newsletter verwendet und werden nicht an Dritte weiter gegeben. Mit der Anmeldung zum Newsletter speichern wir Ihre IP-Adresse und das Datum der Anmeldung. Diese Speicherung dient alleine dem Nachweis im Fall, dass ein Dritter eine Emailadresse missbraucht und sich ohne Wissen des Berechtigten für den Newsletterempfang anmeldet. Ihre Einwilligung zur Speicherung der Daten, der Email-Adresse sowie deren Nutzung zum Versand des Newsletters können Sie jederzeit widerrufen. Der Widerruf kann über einen Link in den Newslettern selbst, in Ihrem Profilbereich oder per Mitteilung an die oben stehenden Kontaktmöglichkeiten erfolgen. Einbindung von Diensten und Inhalten Dritter Es kann vorkommen, dass innerhalb dieses Onlineangebotes Inhalte Dritter, wie zum Beispiel Videos von YouTube, Kartenmaterial von Google-Maps, RSS-Feeds oder Grafiken von anderen Webseiten eingebunden werden. Dies setzt immer voraus, dass die Anbieter dieser Inhalte (nachfolgend bezeichnet als “Dritt-Anbieter”) die IP-Adresse der Nutzer wahr nehmen. Denn ohne die IP-Adresse, könnten sie die Inhalte nicht an den Browser des jeweiligen Nutzers senden. Die IP-Adresse ist damit für die Darstellung dieser Inhalte erforderlich. Wir bemühen uns nur solche Inhalte zu verwenden, deren jeweilige Anbieter die IP-Adresse lediglich zur Auslieferung der Inhalte verwenden. Jedoch haben wir keinen Einfluss darauf, falls die Dritt-Anbieter die IP-Adresse z.B. für statistische Zwecke speichern. Soweit dies uns bekannt ist, klären wir die Nutzer darüber auf. Cookies Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer (PC, Smartphone o.ä.) spezifische, auf das Gerät bezogene Informationen zu speichern. Sie dienen zum einem der Benutzerfreundlichkeit von Webseiten und damit den Nutzern (z.B. Speicherung von Logindaten). Zum anderen dienen sie, um die statistische Daten der Webseitennutzung zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen eine Option mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird. Allerdings wird darauf hingewiesen, dass die Nutzung und insbesondere der Nutzungskomfort ohne Cookies eingeschränkt werden. Sie können viele Online-Anzeigen-Cookies von Unternehmen über die US-amerikanische Seite http://www.aboutads.info/choices/ oder die EU-Seite http://www.youronlinechoices.com/uk/your-ad-choices/ verwalten. Registrierfunktion Die im Rahmen der Registrierung eingegebenen Daten werden für die Zwecke der Nutzung des Angebotes verwendet. Die Nutzer können über angebots- oder registrierungsrelevante Informationen, wie Änderungen des Angebotsumfangs oder technische Umstände per E-Mail informiert werden. Die erhobenen Daten sind aus der Eingabemaske im Rahmen der Registrierung ersichtlich. Dazu gehören Benutzername, Vorname, Nachname, Spitzname, Mailadresse, Website (optional) und biographische Angaben (optional). Verwendung von Facebook Social Plugins Dieses Angebot verwendet Social Plugins (“Plugins”) des sozialen Netzwerkes facebook.com, welches von der Facebook Inc., 1601 S. California Ave, Palo Alto, CA 94304, USA betrieben wird (“Facebook”). Die Plugins sind an einem der Facebook Logos erkennbar (weißes „f“ auf blauer Kachel oder ein „Daumen hoch“-Zeichen) oder sind mit dem Zusatz “Facebook Social Plugin” gekennzeichnet. Die Liste und das Aussehen der Facebook Social Plugins kann hier eingesehen werden: https://developers.facebook.com/docs/plugins/. Wenn ein Nutzer eine Webseite dieses Angebots aufruft, die ein solches Plugin enthält, baut sein Browser eine direkte Verbindung mit den Servern von Facebook auf. Der Inhalt des Plugins wird von Facebook direkt an Ihren Browser übermittelt und von diesem in die Webseite eingebunden. Der Anbieter hat daher keinen Einfluss auf den Umfang der Daten, die Facebook mit Hilfe dieses Plugins erhebt und informiert die Nutzer daher entsprechend seinem Kenntnisstand: Durch die Einbindung der Plugins erhält Facebook die Information, dass ein Nutzer die entsprechende Seite des Angebots aufgerufen hat. Ist der Nutzer bei Facebook eingeloggt, kann Facebook den Besuch seinem Facebook-Konto zuordnen. Wenn Nutzer mit den Plugins interagieren, zum Beispiel den Like Button betätigen oder einen Kommentar abgeben, wird die entsprechende Information von Ihrem Browser direkt an Facebook übermittelt und dort gespeichert. Falls ein Nutzer kein Mitglied von Facebook ist, besteht trotzdem die Möglichkeit, dass Facebook seine IP-Adresse in Erfahrung bringt und speichert. Laut Facebook wird in Deutschland nur eine anonymisierte IP-Adresse gespeichert. Zweck und Umfang der Datenerhebung und die weitere Verarbeitung und Nutzung der Daten durch Facebook sowie die diesbezüglichen Rechte und Einstellungsmöglichkeiten zum Schutz der Privatsphäre der Nutzer , können diese den Datenschutzhinweisen von Facebook entnehmen: https://www.facebook.com/about/privacy/. Wenn ein Nutzer Facebookmitglied ist und nicht möchte, dass Facebook über dieses Angebot Daten über ihn sammelt und mit seinen bei Facebook gespeicherten Mitgliedsdaten verknüpft, muss er sich vor dem Besuch des Internetauftritts bei Facebook ausloggen. Jetpack/Wordpress.com-Stats Dieses Angebot nutzt http://wordpress.org/extend/plugins/jetpack/, ein Tool zur statistischen Auswertung der Besucherzugriffe, betrieben von http://automattic.com, Inc., 60 29th Street #343, San Francisco, CA 94110-4929, USA, unter Einsatz der Trackingtechnologie von http://www.quantcast.com, Inc., 201 3rd St, Floor 2, San Francisco, CA 94103-3153, USA. WordPress.com-Stats verwendet sog. “Cookies”, Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieses Internetangebotes werden auf einem Server in den USA gespeichert. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Sie können die Installation der Cookies durch eine entsprechende Einstellung Ihrer Browser Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem Fall gegebenenfalls nicht sämtliche Funktionen dieser Website vollumfänglich nutzen können. Sie können der Erhebung und Nutzung der Daten durch Quantcast mit Wirkung für die Zukunft widersprechen, indem Sie an dieser Stelle durch einen Klick auf den Link “Click here to opt-out” ein Opt-Out-Cookie in Ihrem Browser setzen: http://www.quantcast.com/opt-out. Sollten Sie alle Cookies auf Ihrem Rechner löschen, müssen Sie das Opt-Out-Cookie erneut setzen. Widerruf, Änderungen, Berichtigungen und Aktualisierungen Der Nutzer hat das Recht, auf Antrag unentgeltlich Auskunft zu erhalten über die personenbezogenen Daten, die über ihn gespeichert wurden. Zusätzlich hat der Nutzer das Recht auf Berichtigung unrichtiger Daten, Sperrung und Löschung seiner personenbezogenen Daten, soweit dem keine gesetzliche Aufbewahrungspflicht entgegensteht. Quelle: http://rechtsanwalt-schwenke.de/]]></string>
+        <p><h3>Imprint, Disclaimer, Privacy policy</h3>
+        <a href="https://www.teog.ngo/verein-2/#anker8">Online</a></p>
+
+        <h3>Third party software</h3>
+        coming soon
+        ]]></string>
+
+    <string name="teog_info"><![CDATA[
+        <p><b>Technology without Borders</b><br>
+        WG Hospital Support</p>
+
+        <p>Contact:<br>
+        swift-app@teog.de</p>
+        ]]></string>
 
     <!-- Activity names -->
     <string name="title_activity_user_profile">My Profile</string>
@@ -93,10 +60,6 @@
         <item>limited use</item>
     </string-array>
 
-
-    <!-- Error messages -->
-    <string name="error_no_internet_connection">no internet connection</string>
-
     <string-array name="search_options">
         <item>Device</item>
         <item>User</item>
@@ -106,6 +69,7 @@
         <item>Germany</item>
         <item>Ghana</item>
         <item>Nepal</item>
+        <item>Test</item>
         <item>Thailand</item>
     </string-array>
 
@@ -113,5 +77,75 @@
         <item>Weeks</item>
         <item>Months</item>
     </string-array>
+
+    <!-- Hospital Overview -->
+    <string name="hospital_location_symbol">hospital location symbol</string>
+    <string name="hospital_members_heading">Members</string>
+    <string name="hospital_devices_heading">Devices</string>
+
+    <!-- Maintenance Calendar -->
+    <string name="calendar_today_tag">Today</string>
+
+    <!-- Info Dialog Texts -->
+    <string name="info_dialog_heading">Information</string>
+    <string name="info_dialog_confirmation">Got it!</string>
+
+    <!-- Button Placeholders -->
+    <string name="edit_button_desc">edit button</string>
+    <string name="teog_logo">TeoG logo</string>
+    <string name="app_logo">app logo</string>
+    <string name="next_button">Next</string>
+    <string name="take_picture_button">Take Picture</string>
+    <string name="save_button">Save</string>
+    <string name="search_button">Search</string>
+    <string name="new_device_button">New Device</string>
+    <string name="transition_indicator">---></string>
+
+    <!-- Login Screen -->
+    <string name="login_button_text">Login</string>
+    <string name="login_country_hint">Country</string>
+    <string name="login_password_hint">Password</string>
+
+    <!-- Device Information -->
+    <string name="device">Device</string>
+    <string name="device_image_placeholder">device image</string>
+    <string name="device_asset_number">Asset Number</string>
+    <string name="device_type">Type</string>
+    <string name="device_model">Model</string>
+    <string name="device_manufacturer">Manufacturer</string>
+    <string name="device_serial_number">Serial Number</string>
+    <string name="device_ward">Ward</string>
+    <string name="device_maintenance_interval">Maint. Interval</string>
+    <string name="device_recent_reports">Recent Reports</string>
+
+    <!-- Report Information -->
+    <string name="report_description">Description</string>
+    <string name="report_date">Date</string>
+    <string name="report_state_change">State Change</string>
+    <string name="report_author">Author</string>
+    <string name="report_description_description">provide a short description</string>
+
+    <!-- User Information -->
+    <string name="user">User</string>
+    <string name="user_name">Name</string>
+    <string name="user_telephone">Telephone</string>
+    <string name="user_mail">E-Mail</string>
+    <string name="user_position">Position</string>
+
+    <!-- Hospital Information -->
+    <string name="hospital">Hospital</string>
+
+    <!-- Error Messages -->
+    <string name="error_internet_connection">no internet connection</string>
+    <string name="error_empty_mail">empty mail address</string>
+    <string name="error_empty_password">empty password</string>
+    <string name="generic_error_message">something went wrong</string>
+    <string name="directory_not_accessible">directory could not be accessed</string>
+
+    <!-- Dialog Texts -->
+    <string name="dialog_cancel_text">Cancel</string>
+    <string name="dialog_ok_text">OK</string>
+
+    <string name="initial_report_text">device creation</string>
 
 </resources>

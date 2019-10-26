@@ -3,24 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="center"
     android:padding="3dp">
 
-    <TextView
-        android:id="@+id/nameView"
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:textSize="20sp"
-        android:text="[name]"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/primaryInfo"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/secondaryInfo"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/infoView"
+        android:id="@+id/category"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textSize="20sp"
         android:layout_gravity="end"
-        android:textAlignment="textEnd"
-        android:text="[date]" />
+        android:textAlignment="textEnd" />
 
 </LinearLayout>

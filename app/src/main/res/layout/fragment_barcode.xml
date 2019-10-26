@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/grey"
     android:orientation="vertical">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
@@ -14,7 +15,7 @@
         app:zxing_preview_scaling_strategy="centerCrop"
         android:paddingBottom="10dp"/>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
@@ -28,15 +29,15 @@
             android:layout_height="wrap_content"
             android:inputType="number" />
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <Button
+            <Button style="@style/AppTheme.Button"
                 android:id="@+id/search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search" />
+                android:text="@string/search_button" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

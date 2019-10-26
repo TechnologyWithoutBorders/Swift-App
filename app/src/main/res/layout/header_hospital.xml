@@ -15,8 +15,7 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:text="[Tag]" />
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft" />
 
     <TextView
         android:id="@+id/countView"
@@ -24,6 +23,5 @@
         android:layout_height="wrap_content"
         android:textColor="#FFFFFF"
         android:textSize="17sp"
-        android:textStyle="bold"
-        android:text="x" />
+        android:textStyle="bold" />
 </LinearLayout>

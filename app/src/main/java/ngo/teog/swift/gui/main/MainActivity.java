@@ -8,11 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,27 +16,49 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.android.volley.RequestQueue;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
+import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.HospitalActivity;
-import ngo.teog.swift.gui.LoginActivity;
-import ngo.teog.swift.gui.NewDeviceActivity;
-import ngo.teog.swift.R;
-import ngo.teog.swift.gui.UserProfileActivity;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.hospital.HospitalActivity;
+import ngo.teog.swift.gui.login.LoginActivity;
+import ngo.teog.swift.gui.maintenance.SearchActivity;
+import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
+import ngo.teog.swift.gui.userInfo.UserInfoActivity;
+import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.HospitalDatabase;
+import ngo.teog.swift.helpers.data.RoomModule;
 
 public class MainActivity extends BaseActivity {
 
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
-    private BarcodeFragment codeFragment;
+    @Inject
+    HospitalDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +74,37 @@ public class MainActivity extends BaseActivity {
             //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
 
             try {
-                String type = appLinkData.getPathSegments().get(appLinkData.getPathSegments().size()-2);
+                List<String> pathSegments = appLinkData.getPathSegments();
 
-                int objectNumber = Integer.parseInt(appLinkData.getLastPathSegment());
+                //Scheme: /<type>/<hospital>/<device/user>/[<report>]
 
-                RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
-                RequestFactory.DefaultRequest request = null;
+                String type = pathSegments.get(0);
+                int hospital = Integer.parseInt(pathSegments.get(1));
 
-                if("device".equals(type)) {
-                    request = new RequestFactory().createDeviceOpenRequest(this, null, null, objectNumber);
-                } else if("user".equals(type)) {
-                    request = new RequestFactory().createUserOpenRequest(this, null, null, objectNumber);
-                } else if("report".equals(type)) {
-                    request = new RequestFactory().createReportOpenRequest(this, null, null, objectNumber);
+                Intent openIntent = null;
+
+                if(ResourceKeys.DEVICE.equals(type)) {
+                    int deviceNumber = Integer.parseInt(pathSegments.get(2));
+
+                    openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                } else if(ResourceKeys.USER.equals(type)) {
+                    int userNumber = Integer.parseInt(pathSegments.get(2));
+
+                    openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+                    openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
+                } else if(ResourceKeys.REPORT.equals(type)) {
+                    int deviceNumber = Integer.parseInt(pathSegments.get(2));
+                    int reportNumber = Integer.parseInt(pathSegments.get(3));
+
+                    openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
+                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                    openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
                 }
 
-                queue.add(request);
-            } catch(NumberFormatException e) {
+                startActivity(openIntent);
+
+            } catch(Exception e) {
                 Toast.makeText(this.getApplicationContext(), "invalid item link", Toast.LENGTH_SHORT).show();
             }
         }
@@ -107,14 +139,23 @@ public class MainActivity extends BaseActivity {
             mChannel.setDescription(description);
             mNotificationManager.createNotificationChannel(mChannel);
         }
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
+        private final String[] PAGE_NAMES = {"Scanner", "Todo", "Calendar"};
+
         public DemoCollectionPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override
+        @NonNull
         public Fragment getItem(int i) {
             switch(i) {
                 case 0:
@@ -122,10 +163,11 @@ public class MainActivity extends BaseActivity {
                 case 1:
                     return new TodoFragment();
                 case 2:
-                    return new SearchFragment();
-                default:
-                    return null;
+                    return new CalendarFragment();
             }
+
+            //necessary, because method is annotated with @NonNull
+            return new TodoFragment();
         }
 
         @Override
@@ -135,9 +177,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String[] names = {"Scanner", "Todo", "Search"};
-
-            return names[position];
+            return PAGE_NAMES[position];
         }
     }
 
@@ -173,9 +213,7 @@ public class MainActivity extends BaseActivity {
                 startAboutActivity();
                 return true;
             case R.id.maintenance:
-                showInfo(R.string.calendar_activity);
-                //startCalendarActivity();
-                //TODO build calendar
+                startMaintenanceActivity();
                 return true;
             case R.id.info:
                 showInfo(R.string.mainactivity);
@@ -191,16 +229,26 @@ public class MainActivity extends BaseActivity {
     }
 
     public void logout() {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+
+        executor.execute(() -> {
+            database.clearAllTables();
+            executor.shutdown();
+        });
+
+        //delete shared preferences
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(Defaults.ID_PREFERENCE);
-        editor.remove(Defaults.PW_PREFERENCE);
-        editor.remove(Defaults.COUNTRY_PREFERENCE);
-        editor.remove(Defaults.NOTIFICATION_COUNTER);
+        editor.clear();
         editor.apply();
 
-        for(File file : getFilesDir().listFiles()) {
-            file.delete();
+        //delete files (images)
+        File imageDir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+
+        if(imageDir.exists()) {
+            for(File file : imageDir.listFiles()) {
+                file.delete();
+            }
         }
 
         Intent intent = new Intent(this, LoginActivity.class);
@@ -224,8 +272,8 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void startCalendarActivity() {
-        Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+    public void startMaintenanceActivity() {
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 }

@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="--->" />
+            android:text="@string/transition_indicator" />
 
         <ImageView
             android:id="@+id/toState"
@@ -33,8 +33,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:textAlignment="center"
-        android:layout_height="wrap_content"
-        android:text="[author]"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/dateView"
@@ -42,7 +41,6 @@
         android:layout_weight="1"
         android:textAlignment="viewEnd"
         android:layout_gravity="end"
-        android:layout_height="wrap_content"
-        android:text="[date]"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

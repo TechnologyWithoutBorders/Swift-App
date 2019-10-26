@@ -7,12 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import java.util.concurrent.TimeUnit;
-
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Julian on 12.12.2017.
@@ -38,15 +38,6 @@ public class BootReceiver extends BroadcastReceiver {
             mNotificationManager.createNotificationChannel(mChannel);
         }
 
-        Constraints updateConstraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        PeriodicWorkRequest updateWork = new PeriodicWorkRequest.Builder(UpdateWorker.class, 6, TimeUnit.HOURS)
-                .addTag("update_todo")
-                .setConstraints(updateConstraints)
-                .build();
-
-        WorkManager.getInstance().enqueue(updateWork);
+        //here would the PeriodicWorkRequest go
     }
 }

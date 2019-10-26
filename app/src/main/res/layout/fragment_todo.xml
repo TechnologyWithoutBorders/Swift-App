@@ -5,23 +5,22 @@
     android:padding="16dp"
     android:orientation="vertical">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+            <ListView
                 android:id="@+id/maintenanceList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -33,10 +32,10 @@
 
     </RelativeLayout>
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New Device"
+        android:text="@string/new_device_button"
         android:onClick="startNewDeviceActivity"/>
 
 </LinearLayout>

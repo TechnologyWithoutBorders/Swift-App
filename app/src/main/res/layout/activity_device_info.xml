@@ -5,15 +5,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="150dp">
+
+        <TextView
+            android:id="@+id/downloadImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_file_download_black_24dp"
+            android:textAlignment="center"
+            android:layout_centerInParent="true"
+            android:text="tap icon to download image" />
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:contentDescription="@string/device_image_placeholder"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -50,15 +61,22 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Asset Number" />
+                android:text="@string/device_asset_number" />
 
             <TextView
                 android:id="@+id/assetNumberView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:text="[asset number]" />
+                android:textSize="15sp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editAssetNumber"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
         <TableRow
@@ -71,14 +89,21 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Type" />
+                android:text="@string/device_type" />
 
             <TextView
                 android:id="@+id/typeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[device type]" />
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editType"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
         <TableRow
@@ -91,34 +116,21 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Model" />
-
-            <TextView
-                android:id="@+id/modelView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[device model]" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
-                android:textStyle="bold"
-                android:text="Manufacturer" />
+                android:text="@string/device_manufacturer" />
 
             <TextView
                 android:id="@+id/manufacturerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[manufacturer]" />
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editManufacturer"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
         <TableRow
@@ -131,14 +143,48 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Serial Number" />
+                android:text="@string/device_model" />
+
+            <TextView
+                android:id="@+id/modelView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editModel"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:paddingRight="5dp"
+                android:textStyle="bold"
+                android:text="@string/device_serial_number" />
 
             <TextView
                 android:id="@+id/serialNumberView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[serial number]" />
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editSerialNumber"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
         <TableRow
@@ -151,14 +197,13 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Hospital" />
+                android:text="@string/hospital" />
 
             <TextView
                 android:id="@+id/hospitalView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[hospital]" />
+                android:textSize="15sp" />
         </TableRow>
 
         <TableRow
@@ -171,14 +216,21 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Ward" />
+                android:text="@string/device_ward" />
 
             <TextView
                 android:id="@+id/wardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="[hospital]" />
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editWard"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>
 
         <TableRow
@@ -191,32 +243,20 @@
                 android:textSize="15sp"
                 android:paddingRight="5dp"
                 android:textStyle="bold"
-                android:text="Maint. Interval" />
+                android:text="@string/device_maintenance_interval" />
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <TextView
+                android:id="@+id/intervalView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/intervalView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="[interval]" />
-
-                <ProgressBar
-                    android:id="@+id/intervalProgressbar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible" />
-            </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingRight="7dp"
                 android:onClick="editMaintenanceInterval"
+                android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
 
         </TableRow>
@@ -226,7 +266,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recent Reports"
+        android:text="@string/device_recent_reports"
         android:textColor="#FFFFFF"
         android:background="@color/grey_table_bar"
         android:textStyle="bold"
@@ -244,7 +284,7 @@
             android:layout_height="wrap_content"
             android:visibility="invisible" />
 
-        <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        <ListView
             android:id="@+id/reportList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

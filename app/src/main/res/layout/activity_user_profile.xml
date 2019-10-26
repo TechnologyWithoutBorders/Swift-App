@@ -13,162 +13,134 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout"
+        android:stretchColumns="1">
 
-        <TableLayout
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tableLayout"
-            android:stretchColumns="1">
-
-            <TableRow
+            android:background="@color/grey_table_bar"
+            android:padding="3dp">
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_table_bar"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="Name"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:paddingRight="5dp"/>
+                android:textColor="@color/white"
+                android:text="@string/user_name"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:paddingRight="5dp"/>
 
-                <TextView
-                    android:id="@+id/nameView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:text="[name]" />
-            </TableRow>
-
-            <TableRow
+            <TextView
+                android:id="@+id/nameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Telephone"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:paddingRight="5dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="15sp" />
+        </TableRow>
 
-                <TextView
-                    android:id="@+id/phoneView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="[phone number]" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingRight="7dp"
-                    android:onClick="editPhone"
-                    app:srcCompat="@drawable/ic_edit_black_24dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="E-Mail"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:paddingRight="5dp"/>
-
-                <TextView
-                    android:id="@+id/mailView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="[mail]" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Hospital"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:paddingRight="5dp"/>
-
-                <TextView
-                    android:id="@+id/locationView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="[location]" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Position"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:paddingRight="5dp"/>
-
-                <TextView
-                    android:id="@+id/positionView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="[position]" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingRight="7dp"
-                    android:onClick="editPosition"
-                    app:srcCompat="@drawable/ic_edit_black_24dp" />
-            </TableRow>
-
-        </TableLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/saveButton"
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="save"
-            android:onClick="save"
-            android:enabled="false"/>
+            android:padding="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user_telephone"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:paddingRight="5dp"/>
 
-        <ProgressBar
-            android:id="@+id/saveProgressBar"
-            style="?android:attr/progressBarStyle"
+            <TextView
+                android:id="@+id/phoneView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:onClick="editPhone"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+        </TableRow>
+
+        <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:padding="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user_mail"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:paddingRight="5dp"/>
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/mailView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:contentDescription="@string/edit_button_desc"
+                android:onClick="editMail"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hospital"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:paddingRight="5dp"/>
+
+            <TextView
+                android:id="@+id/locationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user_position"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:paddingRight="5dp"/>
+
+            <TextView
+                android:id="@+id/positionView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="7dp"
+                android:contentDescription="@string/edit_button_desc"
+                android:onClick="editPosition"
+                app:srcCompat="@drawable/ic_edit_black_24dp" />
+        </TableRow>
+
+    </TableLayout>
 
 </LinearLayout>

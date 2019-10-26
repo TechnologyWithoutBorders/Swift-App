@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -14,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.helpers.ResourceKeys;
 
 public class ImageActivity extends BaseActivity {
     @Override
@@ -22,7 +20,7 @@ public class ImageActivity extends BaseActivity {
         setContentView(R.layout.fragment_image_dialog);
 
         Intent intent = this.getIntent();
-        File image = (File)intent.getSerializableExtra("IMAGE");
+        File image = (File)intent.getSerializableExtra(ResourceKeys.IMAGE);
 
         try {
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(image));

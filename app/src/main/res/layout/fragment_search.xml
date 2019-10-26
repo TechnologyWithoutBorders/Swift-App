@@ -5,27 +5,28 @@
     android:padding="16dp"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/searchField"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:hint="value"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/button22"
+            <Button style="@style/AppTheme.Button"
+                android:id="@+id/search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search"
+                android:text="@string/search_button"
                 android:onClick="startNewDeviceActivity"/>
 
             <ProgressBar
@@ -39,14 +40,7 @@
 
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sort by"
-        android:padding="3dp" />
-
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ListView
         android:id="@+id/maintenanceList"
         android:layout_width="match_parent"
         android:layout_weight="1"

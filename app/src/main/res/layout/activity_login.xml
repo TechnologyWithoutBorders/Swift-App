@@ -27,6 +27,7 @@
                 android:layout_width="125dp"
                 android:layout_height="125dp"
                 android:layout_marginTop="15dp"
+                android:contentDescription="@string/app_logo"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="30dp" />
 
@@ -39,7 +40,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Country"/>
+                    android:hint="@string/login_country_hint"/>
 
                 <Spinner
                     android:id="@+id/countrySpinner"
@@ -52,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:hint="E-Mail"
+                    android:hint="@string/user_mail"
                     android:inputType="textEmailAddress" />
 
                 <EditText
@@ -61,14 +62,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:hint="Password"
+                    android:hint="@string/login_password_hint"
                     android:inputType="textPassword" />
+                
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot your password?\nPlease select your country, enter your e-mail address and click here."
+                    android:textColor="#002aff"
+                    android:onClick="resetPassword"/>
 
-                <Button
+                <Button style="@style/AppTheme.Button"
                     android:id="@+id/loginButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Login"
+                    android:text="@string/login_button_text"
                     android:onClick="login"
                     android:padding="15dp"
                     android:layout_marginTop="30dp"/>
