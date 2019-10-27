@@ -6,8 +6,8 @@ android {
         applicationId "ngo.teog.swift"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 59
-        versionName "1.0.1"
+        versionCode 60
+        versionName "1.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    def room_version = "2.1.0"
+    def room_version = "2.2.1"
     def gson_version = "2.8.5"
     def volley_version = "1.1.1"
     def zxing_version = "3.5.0"
