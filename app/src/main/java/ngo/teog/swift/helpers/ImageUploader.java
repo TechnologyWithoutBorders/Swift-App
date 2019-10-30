@@ -17,14 +17,19 @@ import java.io.FileNotFoundException;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 
+/**
+ * Worker used for uploading device images.
+ * @author nitelow
+ */
 public class ImageUploader extends Worker {
 
-    private Context context;
-
+    /**
+     * Creates a new ImageUploader.
+     * @param context Context
+     * @param params Worker parameters
+     */
     public ImageUploader(Context context, WorkerParameters params) {
         super(context, params);
-
-        this.context = context;
     }
 
     @Override
@@ -34,25 +39,21 @@ public class ImageUploader extends Worker {
         int deviceId = getInputData().getInt(ResourceKeys.DEVICE_ID, -1);
 
         try {
-            FileInputStream inputStream = context.openFileInput(imagePath);
+            FileInputStream inputStream = this.getApplicationContext().openFileInput(imagePath);
 
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-            VolleyManager volleyManager = VolleyManager.getInstance(context);
+            VolleyManager volleyManager = VolleyManager.getInstance(this.getApplicationContext());
 
             RequestQueue queue = volleyManager.getRequestQueue();
 
             RequestFactory factory =  RequestFactory.getInstance();
-            RequestFactory.DeviceImageUploadRequest request = factory.createDeviceImageUploadRequest(context, deviceId, bitmap);
+            RequestFactory.DeviceImageUploadRequest request = factory.createDeviceImageUploadRequest(this.getApplicationContext(), deviceId, bitmap);
 
             queue.add(request);
 
-            Log.d("IMAGE_UPLOAD", "request created");
-
             return Result.success();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-
+        } catch (Exception e) {
             return Result.failure();
         }
     }
