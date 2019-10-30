@@ -7,7 +7,7 @@ import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.User;
 
 /**
- * Contains all necessary information about a hospital.
+ * Contains all necessary information (including member and devices) about a hospital.
  * This class does not implement any database attributes and is therefore not used
  * for database communication.
  * @author nitelow
@@ -22,6 +22,17 @@ public class HospitalInfo {
     private List<User> users;
     private List<DeviceInfo> devices;
 
+    /**
+     * Creates a new hospital info object.
+     * @param id ID
+     * @param name Name
+     * @param location Location
+     * @param longitude Longitude of location
+     * @param latitude Latitude of location
+     * @param lastUpdate last time the hospital has been updated
+     * @param users list of members
+     * @param devices list of devices
+     */
     public HospitalInfo(int id, String name, String location, float longitude, float latitude, Date lastUpdate, List<User> users, List<DeviceInfo> devices) {
         this.id = id;
         this.name = name;
