@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +32,7 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -327,10 +326,10 @@ public class HospitalActivity extends BaseActivity {
                         if (deviceInfo.getReports().size() > 0) {
                             Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size() - 1).getReport();
 
-                            DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), HospitalActivity.this);
+                            DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), HospitalActivity.this);
 
-                            imageView.setImageDrawable(triple.getStateicon());
-                            imageView.setBackgroundColor(triple.getBackgroundcolor());
+                            imageView.setImageDrawable(triple.getStateIcon());
+                            imageView.setBackgroundColor(triple.getBackgroundColor());
                         }
                     }
 

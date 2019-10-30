@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -175,11 +175,11 @@ public class TodoFragment extends Fragment {
 
                 detailView.setText(device.getManufacturer() + "\n" + device.getModel());
 
-                DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), this.getContext());
+                DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), this.getContext());
 
                 statusView.setText(device.getWard());
-                imageView.setImageDrawable(triple.getStateicon());
-                imageView.setBackgroundColor(triple.getBackgroundcolor());
+                imageView.setImageDrawable(triple.getStateIcon());
+                imageView.setBackgroundColor(triple.getBackgroundColor());
             }
 
             return convertView;

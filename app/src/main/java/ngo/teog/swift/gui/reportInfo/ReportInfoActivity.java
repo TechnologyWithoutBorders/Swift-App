@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -76,13 +76,13 @@ public class ReportInfoActivity extends BaseActivity {
                 Report report = reportInfo.getReport();
                 User author = reportInfo.getAuthors().get(0);
 
-                DeviceState previousStateInfo = DeviceState.buildState(report.getPreviousState(),this);
-                fromState.setImageDrawable(previousStateInfo.getStateicon());
-                fromState.setBackgroundColor(previousStateInfo.getBackgroundcolor());
+                DeviceStateVisuals previousStateInfo = new DeviceStateVisuals(report.getPreviousState(),this);
+                fromState.setImageDrawable(previousStateInfo.getStateIcon());
+                fromState.setBackgroundColor(previousStateInfo.getBackgroundColor());
 
-                DeviceState currentStateInfo = DeviceState.buildState(report.getCurrentState(),this);
-                toState.setImageDrawable(currentStateInfo.getStateicon());
-                toState.setBackgroundColor(currentStateInfo.getBackgroundcolor());
+                DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(),this);
+                toState.setImageDrawable(currentStateInfo.getStateIcon());
+                toState.setBackgroundColor(currentStateInfo.getBackgroundColor());
 
                 dateView.setText(dateFormat.format(report.getCreated()));
                 authorView.setText(author.getName());

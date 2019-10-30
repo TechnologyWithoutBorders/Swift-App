@@ -1,7 +1,6 @@
 package ngo.teog.swift.gui.main;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,28 +11,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceState;
-import ngo.teog.swift.helpers.data.AppModule;
-import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
-import ngo.teog.swift.helpers.data.ReportInfo;
-import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class CalendarFragment extends Fragment {
@@ -223,12 +215,12 @@ public class CalendarFragment extends Fragment {
                 String dateString = dateFormat.format(lastReport.getCreated());
                 dateView.setText(dateString);
 
-                DeviceState triple = DeviceState.buildState(lastReport.getCurrentState(), getContext());
+                DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), getContext());
 
-                statusView.setText(triple.getStatestring());
+                statusView.setText(triple.getStateString());
 
-                imageView.setImageDrawable(triple.getStateicon());
-                imageView.setBackgroundColor(triple.getBackgroundcolor());
+                imageView.setImageDrawable(triple.getStateIcon());
+                imageView.setBackgroundColor(triple.getBackgroundColor());
             }
 
             return convertView;

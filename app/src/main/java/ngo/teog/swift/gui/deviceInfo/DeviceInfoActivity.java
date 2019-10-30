@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
@@ -52,7 +51,7 @@ import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -459,17 +458,17 @@ public class DeviceInfoActivity extends BaseActivity {
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);
 
-                DeviceState triple = DeviceState.buildState(report.getPreviousState(),this.getContext());
+                DeviceStateVisuals triple = new DeviceStateVisuals(report.getPreviousState(),this.getContext());
 
-                fromState.setImageDrawable(triple.getStateicon());
-                fromState.setColorFilter(triple.getBackgroundcolor());
+                fromState.setImageDrawable(triple.getStateIcon());
+                fromState.setColorFilter(triple.getBackgroundColor());
 
                 ImageView toState = convertView.findViewById(R.id.toState);
 
-                DeviceState triple1 = DeviceState.buildState(report.getCurrentState(),this.getContext());
+                DeviceStateVisuals triple1 = new DeviceStateVisuals(report.getCurrentState(),this.getContext());
 
-                toState.setImageDrawable(triple1.getStateicon());
-                toState.setColorFilter(triple1.getBackgroundcolor());
+                toState.setImageDrawable(triple1.getStateIcon());
+                toState.setColorFilter(triple1.getBackgroundColor());
 
                 authorView.setText(reportInfo.getAuthors().get(0).getName());
 
@@ -505,10 +504,10 @@ public class DeviceInfoActivity extends BaseActivity {
 
             ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
 
-            DeviceState triple = DeviceState.buildState(position,this.getContext());
+            DeviceStateVisuals triple = new DeviceStateVisuals(position,this.getContext());
 
-            statusImageView.setImageDrawable(triple.getStateicon());
-            statusImageView.setBackgroundColor(triple.getBackgroundcolor());
+            statusImageView.setImageDrawable(triple.getStateIcon());
+            statusImageView.setBackgroundColor(triple.getBackgroundColor());
 
             return convertView;
         }
