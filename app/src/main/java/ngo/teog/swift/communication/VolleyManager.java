@@ -7,12 +7,17 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Singleton, grants access to the Google Volley request queue used for network communication.
- * @author Julian Deyerler
+ * @author nitelow
  */
 public class VolleyManager {
     private static VolleyManager instance;
     private RequestQueue requestQueue;
 
+    /**
+     * Returns an instance of VolleyManager and creates one if necessary.
+     * @param context Context
+     * @return Instance
+     */
     public static synchronized VolleyManager getInstance(Context context) {
         if(instance == null) {
             instance = new VolleyManager(context);
@@ -25,6 +30,10 @@ public class VolleyManager {
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
     }
 
+    /**
+     * Returns request queue for network requests.
+     * @return Request queue
+     */
     public RequestQueue getRequestQueue() {
         return requestQueue;
     }
