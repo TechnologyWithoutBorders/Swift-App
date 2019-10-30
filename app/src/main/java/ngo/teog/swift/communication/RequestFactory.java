@@ -276,103 +276,6 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createReportOpenRequest(final Context context, View disable, View enable, int id) {
-        final String url = Defaults.BASE_URL + Defaults.REPORTS_URL;
-
-        Map<String, String> params = generateParameterMap(context, ReportFilter.ACTION_FETCH_REPORT, true);
-        params.put(ReportFilter.ID, Integer.toString(id));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<Report> reportList = new ResponseParser().parseReportList(response);
-
-                if(reportList.size() > 0) {
-                    Intent intent = new Intent(context, ReportInfoActivity.class);
-                    intent.putExtra(ResourceKeys.REPORT, reportList.get(0));
-                    context.startActivity(intent);
-                } else {
-                    throw new ResponseException("report not found");
-                }
-            }
-        });
-    }
-
-    public DefaultRequest createWorkRequest(final Context context, int id, final int notificationCounter) {
-        final String url = Defaults.BASE_URL + Defaults.NEWS_URL;
-
-        Map<String, String> params = generateParameterMap(context, "fetch_work", true);
-        params.put(UserFilter.ID, Integer.toString(id));
-        params.put("notification_counter", Integer.toString(notificationCounter));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, null, null, new BaseResponseListener(context, null, null) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<Report> reportList = new ArrayList<>();
-
-                int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
-                switch(responseCode) {
-                    case SwiftResponse.CODE_OK:
-                        JSONObject data = response.getJSONObject(SwiftResponse.DATA_FIELD);
-                        int notificationID = data.getInt("notification_counter");
-
-                        JSONArray jsonReportList = data.getJSONArray("report_list");
-
-                        for(int i = 0; i < jsonReportList.length(); i++) {
-                            JSONObject reportObject = jsonReportList.getJSONObject(i);
-
-                            int id = reportObject.getInt(ReportFilter.ID);
-                            int author = reportObject.getInt(ReportFilter.AUTHOR);
-                            int device = reportObject.getInt(ReportFilter.DEVICE);
-                            int previousState = reportObject.getInt(ReportFilter.PREVIOUS_STATE);
-                            int currentState = reportObject.getInt(ReportFilter.CURRENT_STATE);
-                            String description = reportObject.getString(ReportFilter.DESCRIPTION);
-                            Date lastUpdate = new Date(reportObject.getLong("r_last_update"));
-
-                            Report report = new Report(id, author, device, previousState, currentState, description , lastUpdate);
-                            reportList.add(report);
-                        }
-
-                        if(reportList.size() > 0) {
-                            final String CHANNEL_ID = "work_channel";
-                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                                    .setSmallIcon(R.drawable.ic_stat_name)
-                                    .setContentTitle("TeoG Swift")
-                                    .setVibrate(new long[] {0, 1000})
-                                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                                    .setContentText(reportList.size() + " devices need your attention.")
-                                    .setAutoCancel(true);
-                            Intent resultIntent = new Intent(context, MainActivity.class);
-
-                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                            stackBuilder.addParentStack(MainActivity.class);
-                            stackBuilder.addNextIntent(resultIntent);
-                            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                            mBuilder.setContentIntent(resultPendingIntent);
-                            NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-                            mNotificationManager.notify(0, mBuilder.build());
-                        }
-
-                        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt(Defaults.NOTIFICATION_COUNTER, notificationID);
-                        editor.apply();
-
-                        break;
-                    case SwiftResponse.CODE_FAILED_VISIBLE:
-                        throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
-                    case SwiftResponse.CODE_FAILED_HIDDEN:
-                    default:
-                        throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
-                }
-            }
-        });
-    }
-
     public class DeviceListRequest extends JsonObjectRequest {
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
@@ -506,7 +409,6 @@ public class RequestFactory {
                     editor.putInt(Defaults.ID_PREFERENCE, id);
                     editor.putString(Defaults.PW_PREFERENCE, password);
                     editor.putString(Defaults.COUNTRY_PREFERENCE, country);
-                    editor.putInt(Defaults.NOTIFICATION_COUNTER, 0);
                     editor.apply();
 
                     Intent intent = new Intent(context, MainActivity.class);
