@@ -534,7 +534,25 @@ public class RequestFactory {
     public class PasswordResetRequest extends JsonObjectRequest {
         public PasswordResetRequest(final Context context, final String url, JSONObject request, final String country) {
             super(Request.Method.POST, url, request, response -> {
-                Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+                try {
+                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+
+                    switch(responseCode) {
+                        case SwiftResponse.CODE_OK:
+                            Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+
+                            break;
+                        case SwiftResponse.CODE_FAILED_VISIBLE:
+                            throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                        case SwiftResponse.CODE_FAILED_HIDDEN:
+                        default:
+                            throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
+                    }
+                } catch(ResponseException e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                }
             }, error -> {
                 Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
