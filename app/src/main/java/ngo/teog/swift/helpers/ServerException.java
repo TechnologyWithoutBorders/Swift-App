@@ -5,13 +5,17 @@ package ngo.teog.swift.helpers;
  * @author nitelow
  */
 
-public class ResponseException extends Exception {
+public class ServerException extends Exception {
 
     /**
-     * Creates a new ResponseException.
+     * Creates a new InvisibleResponseException.
      * @param message Message
      */
-    public ResponseException(String message) {
+    public ServerException(String message) {
         super(message);
+    }
+
+    public ServerException(Throwable e) {
+        super(e);
     }
 }

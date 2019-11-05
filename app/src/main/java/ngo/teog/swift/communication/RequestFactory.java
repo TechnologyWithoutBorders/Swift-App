@@ -39,7 +39,7 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
-import ngo.teog.swift.helpers.ResponseException;
+import ngo.teog.swift.helpers.TransparentServerException;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.SwiftResponse;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -90,12 +90,12 @@ public class RequestFactory {
 
                         break;
                     case SwiftResponse.CODE_FAILED_VISIBLE:
-                        throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                        throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
                     case SwiftResponse.CODE_FAILED_HIDDEN:
                     default:
                         throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                 }
-            } catch(ResponseException e) {
+            } catch(TransparentServerException e) {
                 Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } catch(Exception e) {
                 Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
@@ -235,7 +235,7 @@ public class RequestFactory {
                     intent.putExtra(ResourceKeys.DEVICE, deviceList.get(0));
                     context.startActivity(intent);
                 } else {
-                    throw new ResponseException("device not found");
+                    throw new TransparentServerException("device not found");
                 }
             }
         });
@@ -259,7 +259,7 @@ public class RequestFactory {
                     intent.putExtra(ResourceKeys.USER, userList.get(0));
                     context.startActivity(intent);
                 } else {
-                    throw new ResponseException("user not found");
+                    throw new TransparentServerException("user not found");
                 }
             }
         });
@@ -283,12 +283,12 @@ public class RequestFactory {
 
                             break;
                         case SwiftResponse.CODE_FAILED_VISIBLE:
-                            throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
                         case SwiftResponse.CODE_FAILED_HIDDEN:
                         default:
                             throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                     }
-                } catch(ResponseException e) {
+                } catch(TransparentServerException e) {
                     Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -405,7 +405,7 @@ public class RequestFactory {
 
                     //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
                     context.finish();
-                } catch(ResponseException e) {
+                } catch(TransparentServerException e) {
                     Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     anim.stop();
                     form.setVisibility(View.VISIBLE);
@@ -434,12 +434,12 @@ public class RequestFactory {
 
                             break;
                         case SwiftResponse.CODE_FAILED_VISIBLE:
-                            throw new ResponseException(response.getString(SwiftResponse.DATA_FIELD));
+                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
                         case SwiftResponse.CODE_FAILED_HIDDEN:
                         default:
                             throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
                     }
-                } catch(ResponseException e) {
+                } catch(TransparentServerException e) {
                     Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
