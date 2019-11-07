@@ -3,7 +3,6 @@ package ngo.teog.swift.helpers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -12,7 +11,6 @@ import androidx.work.WorkerParameters;
 import com.android.volley.RequestQueue;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
