@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ngo.teog.swift.R;
@@ -39,6 +40,7 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.ServerException;
 import ngo.teog.swift.helpers.TransparentServerException;
 import ngo.teog.swift.helpers.ResponseParser;
 import ngo.teog.swift.helpers.SwiftResponse;
@@ -217,91 +219,35 @@ public class RequestFactory {
         });
     }
 
-    public DefaultRequest createDeviceOpenRequest(final Context context, View disable, View enable, int id) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE, true);
-        params.put(DeviceFilter.ID, Integer.toString(id));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<HospitalDevice> deviceList = new ResponseParser().parseDeviceList(response);
-
-                if(deviceList.size() > 0) {
-                    Intent intent = new Intent(context, DeviceInfoActivity.class);
-                    intent.putExtra(ResourceKeys.DEVICE, deviceList.get(0));
-                    context.startActivity(intent);
-                } else {
-                    throw new TransparentServerException("device not found");
-                }
-            }
-        });
-    }
-
-    public DefaultRequest createUserOpenRequest(final Context context, View disable, View enable, int id) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_FETCH_USER, true);
-        params.put(UserFilter.ID, Integer.toString(id));
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                ArrayList<User> userList = new ResponseParser().parseUserList(response);
-
-                if(userList.size() > 0) {
-                    Intent intent = new Intent(context, UserInfoActivity.class);
-                    intent.putExtra(ResourceKeys.USER, userList.get(0));
-                    context.startActivity(intent);
-                } else {
-                    throw new TransparentServerException("user not found");
-                }
-            }
-        });
-    }
-
     public class DeviceListRequest extends JsonObjectRequest {
 
         public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
             super(Request.Method.POST, url, request, response -> {
                 try {
-                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
-                    switch(responseCode) {
-                        case SwiftResponse.CODE_OK:
-                            if(adapter != null) {
-                                adapter.clear();
-                            }
+                    List<HospitalDevice> deviceList = ResponseParser.parseDeviceList(response);
 
-                            if(adapter != null) {
-                                adapter.addAll(new ResponseParser().parseDeviceList(response));
-                            }
-
-                            break;
-                        case SwiftResponse.CODE_FAILED_VISIBLE:
-                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
-                        case SwiftResponse.CODE_FAILED_HIDDEN:
-                        default:
-                            throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
+                    if(adapter != null) {
+                        adapter.clear();
+                        adapter.addAll(deviceList);
                     }
                 } catch(TransparentServerException e) {
                     Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch(ServerException e) {
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.server_comm_error_message), Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
 
                 disable.setVisibility(View.INVISIBLE);
                 enable.setVisibility(View.VISIBLE);
             }, error -> {
-                adapter.clear();
+                if(adapter != null) {
+                    adapter.clear();
+                }
 
                 disable.setVisibility(View.INVISIBLE);
                 enable.setVisibility(View.VISIBLE);
-                Toast.makeText(context.getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -343,7 +289,7 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new PasswordResetRequest(context, url, request, country);
+        return new PasswordResetRequest(context, url, request);
     }
 
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<User> adapter) {
@@ -361,25 +307,31 @@ public class RequestFactory {
 
         public UserListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
             super(Request.Method.POST, url, request, response -> {
+                try {
+                    List<User> userList = ResponseParser.parseUserList(response);
+
+                    if(adapter != null) {
+                        adapter.clear();
+                        adapter.addAll(userList);
+                    }
+                } catch(TransparentServerException e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch(ServerException e) {
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.server_comm_error_message), Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                } finally {
+                    disable.setVisibility(View.INVISIBLE);
+                    enable.setVisibility(View.VISIBLE);
+                }
+            }, error -> {
                 if(adapter != null) {
                     adapter.clear();
                 }
 
-                try {
-                    if(adapter != null) {
-                        adapter.addAll(new ResponseParser().parseUserList(response));
-                    }
-                } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                }
-
                 disable.setVisibility(View.INVISIBLE);
                 enable.setVisibility(View.VISIBLE);
-            }, error -> {
-                adapter.clear();
 
-                disable.setVisibility(View.INVISIBLE);
-                enable.setVisibility(View.VISIBLE);
                 Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }
@@ -387,43 +339,48 @@ public class RequestFactory {
 
     public class LoginRequest extends JsonObjectRequest {
 
-        //Der Kontext muss hier eine Activity sein, da diese am Ende gefinishet wird.
-        public LoginRequest(final Activity context, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password, final String country) {
+        //use activity instead of plain context, because it must be removed from the stack afterwards
+        public LoginRequest(final Activity activity, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password, final String country) {
             super(Request.Method.POST, url, request, response -> {
                 try {
-                    int id = new ResponseParser().parseLoginResponse(response);
+                    int id = ResponseParser.parseLoginResponse(response);
 
-                    SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    SharedPreferences preferences = activity.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putInt(Defaults.ID_PREFERENCE, id);
                     editor.putString(Defaults.PW_PREFERENCE, password);
                     editor.putString(Defaults.COUNTRY_PREFERENCE, country);
                     editor.apply();
 
-                    Intent intent = new Intent(context, MainActivity.class);
-                    context.startActivity(intent);
+                    Intent intent = new Intent(activity, MainActivity.class);
+                    activity.startActivity(intent);
 
-                    //finishen nicht vergessen, damit die Activity aus dem Stack entfernt wird
-                    context.finish();
+                    //remove activity from stack
+                    activity.finish();
                 } catch(TransparentServerException e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    //this typically applies if the login data was incorrect
+                    Toast.makeText(activity.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    anim.stop();
+                    form.setVisibility(View.VISIBLE);
+                } catch(ServerException e) {
+                    Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.server_comm_error_message), Toast.LENGTH_SHORT).show();
                     anim.stop();
                     form.setVisibility(View.VISIBLE);
                 } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                     anim.stop();
                     form.setVisibility(View.VISIBLE);
                 }
             }, error -> {
                 anim.stop();
                 form.setVisibility(View.VISIBLE);
-                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }
     }
 
     public class PasswordResetRequest extends JsonObjectRequest {
-        public PasswordResetRequest(final Context context, final String url, JSONObject request, final String country) {
+        public PasswordResetRequest(final Context context, final String url, JSONObject request) {
             super(Request.Method.POST, url, request, response -> {
                 try {
                     int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
@@ -437,7 +394,7 @@ public class RequestFactory {
                             throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
                         case SwiftResponse.CODE_FAILED_HIDDEN:
                         default:
-                            throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
+                            throw new ServerException(response.getString(SwiftResponse.DATA_FIELD));
                     }
                 } catch(TransparentServerException e) {
                     Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -34,7 +34,7 @@ public class ResponseParser {
      * @throws ServerException if server indicates an error that should <b>not</b> be visible to the user
      * @throws TransparentServerException if server indicates an error that should be visible to the user
      */
-    private void probeResponseCode(JSONObject raw) throws ServerException, TransparentServerException {
+    private static void probeResponseCode(JSONObject raw) throws ServerException, TransparentServerException {
         try {
             int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
 
@@ -60,7 +60,7 @@ public class ResponseParser {
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if user authentication has failed
      */
-    public int parseLoginResponse(JSONObject raw) throws ServerException, TransparentServerException {
+    public static int parseLoginResponse(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
         try {
@@ -77,7 +77,7 @@ public class ResponseParser {
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if some transparent error has happened
      */
-    public ArrayList<HospitalDevice> parseDeviceList(JSONObject raw) throws ServerException, TransparentServerException {
+    public static List<HospitalDevice> parseDeviceList(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
         try {
@@ -121,7 +121,7 @@ public class ResponseParser {
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if some transparent error has happened
      */
-    public HospitalInfo parseHospital(JSONObject raw) throws ServerException, TransparentServerException {
+    public static HospitalInfo parseHospital(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
         try {
@@ -214,7 +214,7 @@ public class ResponseParser {
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if some transparent error has happened
      */
-    public ArrayList<User> parseUserList(JSONObject raw) throws ServerException, TransparentServerException {
+    public static List<User> parseUserList(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
         try {

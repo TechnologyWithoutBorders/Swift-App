@@ -140,6 +140,7 @@
     <string name="error_empty_mail">empty mail address</string>
     <string name="error_empty_password">empty password</string>
     <string name="generic_error_message">something went wrong</string>
+    <string name="server_comm_error_message">server communication problems</string>
     <string name="directory_not_accessible">directory could not be accessed</string>
 
     <!-- Dialog Texts -->

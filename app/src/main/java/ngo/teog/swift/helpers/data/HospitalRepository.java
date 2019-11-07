@@ -40,6 +40,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.ResponseParser;
+import ngo.teog.swift.helpers.TransparentServerException;
 
 @Singleton
 public class HospitalRepository {
@@ -241,8 +242,6 @@ public class HospitalRepository {
 
             request.put(ResourceKeys.DATA, data);
 
-            Log.d("SYNC_REQUEST", "Size: " + request.toString().getBytes().length + "\n" + request.toString(4));
-
             return new HospitalRequest(context, url, request, executor);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -258,13 +257,11 @@ public class HospitalRepository {
                 public void onResponse(JSONObject response) {
                     executor.execute(() -> {
                         try {
-                            Log.d("SYNC_RESPONSE", "Size: " + response.toString().getBytes().length + "\n" + response.toString(4));
-
-                            HospitalInfo hospitalInfo = new ResponseParser().parseHospital(response);
+                            HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
 
                             long now = new Date().getTime();
 
-                            if(hospitalInfo.getLastUpdate().getTime() > now) {
+                            if (hospitalInfo.getLastUpdate().getTime() > now) {
                                 hospitalInfo.setLastUpdate(new Date(now));
                             }
 
@@ -272,16 +269,16 @@ public class HospitalRepository {
 
                             hospitalDao.save(hospital);
 
-                            for(User user : hospitalInfo.getUsers()) {
-                                if(user.getLastUpdate().getTime() > now) {
+                            for (User user : hospitalInfo.getUsers()) {
+                                if (user.getLastUpdate().getTime() > now) {
                                     user.setLastUpdate(new Date(now));
                                 }
 
                                 hospitalDao.save(user);
                             }
 
-                            for(DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
-                                if(deviceInfo.getDevice().getLastUpdate().getTime() > now) {
+                            for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
+                                if (deviceInfo.getDevice().getLastUpdate().getTime() > now) {
                                     deviceInfo.getDevice().setLastUpdate(new Date(now));
                                 }
 
@@ -289,7 +286,7 @@ public class HospitalRepository {
 
                                 List<ReportInfo> reportInfos = deviceInfo.getReports();
 
-                                for(ReportInfo reportInfo : reportInfos) {
+                                for (ReportInfo reportInfo : reportInfos) {
                                     Report report = reportInfo.getReport();
 
                                     hospitalDao.save(report);
@@ -301,14 +298,14 @@ public class HospitalRepository {
                             editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                             editor.apply();
                         } catch(Exception e) {
-                            Log.e("SYNC", e.getMessage(), e);
+                            //we cannot show any information to the user from here as it runs in an extra thread
                         }
                     });
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("SYNC", error.getMessage(), error);
+                    //we cannot show any information to the user from here as it runs in an extra thread
                 }
             });
         }
