@@ -6,6 +6,10 @@ import android.widget.TextView;
 
 import ngo.teog.swift.R;
 
+/**
+ * Activity that shows some general information about the application.
+ * @author nitelow
+ */
 public class AboutActivity extends BaseActivity {
 
     @Override

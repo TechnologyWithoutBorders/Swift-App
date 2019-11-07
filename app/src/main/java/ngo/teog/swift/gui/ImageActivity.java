@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,10 @@ import java.io.FileNotFoundException;
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.ResourceKeys;
 
+/**
+ * Activity that displays an image delivered via the intent.
+ * @author nitelow
+ */
 public class ImageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +32,8 @@ public class ImageActivity extends BaseActivity {
 
             ImageView imageView = findViewById(R.id.imageView);
             imageView.setImageBitmap(b);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch(FileNotFoundException e) {
+            Toast.makeText(this.getApplicationContext(), this.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
         }
     }
 }
