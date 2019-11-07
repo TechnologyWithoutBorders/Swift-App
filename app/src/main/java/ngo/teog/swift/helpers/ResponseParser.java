@@ -73,7 +73,7 @@ public class ResponseParser {
     /**
      * Extracts a device list from a suiting server response.
      * @param raw JSON-formatted server response
-     * @return device list
+     * @return Device list
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if some transparent error has happened
      */
@@ -113,6 +113,14 @@ public class ResponseParser {
         }
     }
 
+    /**
+     * Extracts information about a hospital from a suiting server response.<br>
+     * The result includes the users, devices and reports assigned to the hospital.
+     * @param raw JSON-formatted server response
+     * @return Hospital information
+     * @throws ServerException if some internal server error has occurred
+     * @throws TransparentServerException if some transparent error has happened
+     */
     public HospitalInfo parseHospital(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
@@ -199,6 +207,13 @@ public class ResponseParser {
         }
     }
 
+    /**
+     * Extracts a user list from a suiting server response.
+     * @param raw JSON-formatted server response
+     * @return User list
+     * @throws ServerException if some internal server error has occurred
+     * @throws TransparentServerException if some transparent error has happened
+     */
     public ArrayList<User> parseUserList(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
