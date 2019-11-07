@@ -1,7 +1,7 @@
 package ngo.teog.swift.helpers;
 
 /**
- * Exception that indicates an error during parsing of a server response.
+ * Exception that wraps an error message from the server that should be shown to the user.
  * @author nitelow
  */
 

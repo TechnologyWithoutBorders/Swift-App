@@ -8,13 +8,17 @@ package ngo.teog.swift.helpers;
 public class ServerException extends Exception {
 
     /**
-     * Creates a new InvisibleResponseException.
+     * Creates a new ServerException.
      * @param message Message
      */
     public ServerException(String message) {
         super(message);
     }
 
+    /**
+     * Creates a new ServerException that wraps the given throwable.
+     * @param e Throwable
+     */
     public ServerException(Throwable e) {
         super(e);
     }
