@@ -4,11 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,6 +52,15 @@ public class LoginActivity extends BaseActivity {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_login);
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            TextView versionView = findViewById(R.id.version_view);
+            versionView.setText("v" + version);
+        } catch(PackageManager.NameNotFoundException e) {
+            //ignore
+        }
 
         imageView = findViewById(R.id.imageView2);
 
@@ -120,7 +128,7 @@ public class LoginActivity extends BaseActivity {
                 if(checkForInternetConnection()) {
                     AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
 
-                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString(), HASH_FUNCTION), (String)countrySpinner.getSelectedItem());
+                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailField.getText().toString(), getHash(passwordField.getText().toString()), (String)countrySpinner.getSelectedItem());
 
                     form.setVisibility(View.GONE);
 
@@ -176,9 +184,9 @@ public class LoginActivity extends BaseActivity {
      * @param password zu verschlüsselndes Passwort
      * @return Hash
      */
-    private String getHash(String password, String hashFunction) {
+    private String getHash(String password) {
         try {
-            MessageDigest digest = MessageDigest.getInstance(hashFunction);
+            MessageDigest digest = MessageDigest.getInstance(HASH_FUNCTION);
 
             digest.reset();
 
