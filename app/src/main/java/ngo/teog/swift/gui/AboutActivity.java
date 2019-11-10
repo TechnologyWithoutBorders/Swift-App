@@ -22,5 +22,8 @@ public class AboutActivity extends BaseActivity {
 
         TextView teogInfo = findViewById(R.id.teog_info);
         teogInfo.setText(Html.fromHtml(getString(R.string.teog_info)));
+
+        TextView privacyPolicyView = findViewById(R.id.privacy_policy_view);
+        privacyPolicyView.setText(Html.fromHtml(getString(R.string.privacy_policy)));
     }
 }

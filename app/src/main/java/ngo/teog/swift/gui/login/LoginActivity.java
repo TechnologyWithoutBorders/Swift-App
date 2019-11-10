@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.info:
-                showInfo(R.string.about_text);
+                showInfo(R.string.about_text, R.string.privacy_policy);
                 return true;
             case R.id.stats:
                 showStats();

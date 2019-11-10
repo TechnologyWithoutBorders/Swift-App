@@ -17,10 +17,16 @@ import ngo.teog.swift.R;
  * @author nitelow
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    public void showInfo(int stringId) {
+    public void showInfo(int... stringIds) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setMessage(Html.fromHtml(getString(stringId)))
+        StringBuilder info = new StringBuilder();
+
+        for(int id : stringIds) {
+            info.append(Html.fromHtml(getString(id)));
+        }
+
+        builder.setMessage(info)
                 .setTitle(getString(R.string.info_dialog_heading))
                 .setIcon(R.drawable.ic_info_outline_black_24dp)
                 .setPositiveButton(getString(R.string.info_dialog_confirmation), (dialog, id) -> {
