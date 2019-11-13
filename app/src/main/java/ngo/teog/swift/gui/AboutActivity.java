@@ -1,5 +1,7 @@
 package ngo.teog.swift.gui;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
@@ -16,6 +18,15 @@ public class AboutActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            TextView versionView = findViewById(R.id.version_view);
+            versionView.setText("TeoG Swift v" + version);
+        } catch(PackageManager.NameNotFoundException e) {
+            //ignore
+        }
 
         TextView aboutText = findViewById(R.id.aboutText);
         aboutText.setText(Html.fromHtml(getString(R.string.about_text)));
