@@ -92,6 +92,10 @@ public class HospitalDevice implements Serializable {
         this.hospital = hospital;
     }
 
+    /**
+     * Returns the maintenance interval in weeks.
+     * @return Maintenance interval
+     */
     public int getMaintenanceInterval() {
         return maintenanceInterval;
     }
