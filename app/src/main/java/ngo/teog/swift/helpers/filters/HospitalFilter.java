@@ -1,5 +1,8 @@
 package ngo.teog.swift.helpers.filters;
 
+/**
+ * @author nitelow
+ */
 public final class HospitalFilter {
     public static final String ID = "id";
     public static final String NAME = "name";

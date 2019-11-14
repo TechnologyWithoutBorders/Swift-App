@@ -1,10 +1,7 @@
 package ngo.teog.swift.helpers.filters;
 
 /**
- * Filterklasse für die Auswahl von Geräten.
- * Definiert alle verfügbaren Filter (die Konstanten ganz oben) und
- * verknüpft die Filter mit den zugehörigen Werten.
- * Created by Julian on 18.11.2017.
+ * @author nitelow
  */
 
 public final class DeviceFilter {

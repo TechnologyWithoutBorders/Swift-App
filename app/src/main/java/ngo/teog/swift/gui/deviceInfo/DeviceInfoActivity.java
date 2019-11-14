@@ -39,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -433,7 +434,7 @@ public class DeviceInfoActivity extends BaseActivity {
      */
     private class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
         private final Context context;
-        private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN);
+        private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN, Locale.getDefault());
 
         private ReportArrayAdapter(Context context, List<ReportInfo> values) {
             super(context, -1, values);

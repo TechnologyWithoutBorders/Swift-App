@@ -1,9 +1,8 @@
 package ngo.teog.swift.helpers.filters;
 
 /**
- * Created by Julian on 24.03.2018.
+ * @author nitelow
  */
-
 public final class ReportFilter {
     public static final String ID = "id";
     public static final String AUTHOR = "author";

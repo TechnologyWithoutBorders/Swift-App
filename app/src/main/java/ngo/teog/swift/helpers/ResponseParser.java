@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
@@ -85,7 +86,7 @@ public class ResponseParser {
 
             ArrayList<HospitalDevice> result = new ArrayList<>();
 
-            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             for (int i = 0; i < deviceList.length(); i++) {

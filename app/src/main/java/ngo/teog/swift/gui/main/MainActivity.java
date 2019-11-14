@@ -1,14 +1,10 @@
 package ngo.teog.swift.gui.main;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +18,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.android.volley.RequestQueue;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
@@ -33,8 +28,6 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.AboutActivity;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
@@ -122,22 +115,6 @@ public class MainActivity extends BaseActivity {
             tabLayout.addTab(
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
-        }
-
-        if(Build.VERSION.SDK_INT >= 26) {
-            NotificationManager mNotificationManager =
-                    (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
-            // The id of the channel.
-            String id = "work_channel";
-            // The user-visible name of the channel.
-            CharSequence name = "Work";
-            // The user-visible description of the channel.
-            String description = "Description";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel mChannel = new NotificationChannel(id, name, importance);
-            // Configure the notification channel.
-            mChannel.setDescription(description);
-            mNotificationManager.createNotificationChannel(mChannel);
         }
 
         DaggerAppComponent.builder()

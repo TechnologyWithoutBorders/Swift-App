@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
@@ -40,7 +38,6 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.ResponseParser;
-import ngo.teog.swift.helpers.TransparentServerException;
 
 @Singleton
 public class HospitalRepository {
@@ -128,7 +125,9 @@ public class HospitalRepository {
 
             HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
-            queue.add(hospitalRequest);
+            if(hospitalRequest != null) {
+                queue.add(hospitalRequest);
+            }
         }
     }
 
@@ -169,7 +168,9 @@ public class HospitalRepository {
 
                 HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
-                queue.add(hospitalRequest);
+                if(hospitalRequest != null) {
+                    queue.add(hospitalRequest);
+                }
             }
         });
     }
@@ -177,7 +178,7 @@ public class HospitalRepository {
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
-        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         try {
@@ -243,8 +244,7 @@ public class HospitalRepository {
             request.put(ResourceKeys.DATA, data);
 
             return new HospitalRequest(context, url, request, executor);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch(JSONException e) {
             return null;
         }
     }
@@ -252,61 +252,53 @@ public class HospitalRepository {
     private class HospitalRequest extends JsonObjectRequest {
 
         private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
-            super(Request.Method.POST, url, request, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    executor.execute(() -> {
-                        try {
-                            HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
+            super(Request.Method.POST, url, request, response -> executor.execute(() -> {
+                try {
+                    HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
 
-                            long now = new Date().getTime();
+                    long now = new Date().getTime();
 
-                            if (hospitalInfo.getLastUpdate().getTime() > now) {
-                                hospitalInfo.setLastUpdate(new Date(now));
-                            }
+                    if (hospitalInfo.getLastUpdate().getTime() > now) {
+                        hospitalInfo.setLastUpdate(new Date(now));
+                    }
 
-                            Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLongitude(), hospitalInfo.getLatitude(), hospitalInfo.getLastUpdate());
+                    Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLongitude(), hospitalInfo.getLatitude(), hospitalInfo.getLastUpdate());
 
-                            hospitalDao.save(hospital);
+                    hospitalDao.save(hospital);
 
-                            for (User user : hospitalInfo.getUsers()) {
-                                if (user.getLastUpdate().getTime() > now) {
-                                    user.setLastUpdate(new Date(now));
-                                }
-
-                                hospitalDao.save(user);
-                            }
-
-                            for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
-                                if (deviceInfo.getDevice().getLastUpdate().getTime() > now) {
-                                    deviceInfo.getDevice().setLastUpdate(new Date(now));
-                                }
-
-                                hospitalDao.save(deviceInfo.getDevice());
-
-                                List<ReportInfo> reportInfos = deviceInfo.getReports();
-
-                                for (ReportInfo reportInfo : reportInfos) {
-                                    Report report = reportInfo.getReport();
-
-                                    hospitalDao.save(report);
-                                }
-                            }
-
-                            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
-                            editor.apply();
-                        } catch(Exception e) {
-                            //we cannot show any information to the user from here as it runs in an extra thread
+                    for (User user : hospitalInfo.getUsers()) {
+                        if (user.getLastUpdate().getTime() > now) {
+                            user.setLastUpdate(new Date(now));
                         }
-                    });
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+
+                        hospitalDao.save(user);
+                    }
+
+                    for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
+                        if (deviceInfo.getDevice().getLastUpdate().getTime() > now) {
+                            deviceInfo.getDevice().setLastUpdate(new Date(now));
+                        }
+
+                        hospitalDao.save(deviceInfo.getDevice());
+
+                        List<ReportInfo> reportInfos = deviceInfo.getReports();
+
+                        for (ReportInfo reportInfo : reportInfos) {
+                            Report report = reportInfo.getReport();
+
+                            hospitalDao.save(report);
+                        }
+                    }
+
+                    SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
+                    editor.apply();
+                } catch(Exception e) {
                     //we cannot show any information to the user from here as it runs in an extra thread
                 }
+            }), error -> {
+                //we cannot show any information to the user from here as it runs in an extra thread
             });
         }
     }

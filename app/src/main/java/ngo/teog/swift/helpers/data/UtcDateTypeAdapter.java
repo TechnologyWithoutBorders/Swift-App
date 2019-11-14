@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import com.google.gson.JsonParseException;
@@ -14,6 +15,8 @@ import com.google.gson.stream.JsonWriter;
 
 import ngo.teog.swift.helpers.Defaults;
 
+import static com.google.gson.stream.JsonToken.NULL;
+
 public final class UtcDateTypeAdapter extends TypeAdapter<Date> {
 
     @Override
@@ -21,7 +24,7 @@ public final class UtcDateTypeAdapter extends TypeAdapter<Date> {
         if (date == null) {
             out.nullValue();
         } else {
-            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             String value = dateFormat.format(date);
@@ -31,17 +34,16 @@ public final class UtcDateTypeAdapter extends TypeAdapter<Date> {
 
     @Override
     public Date read(JsonReader in) throws IOException {
-        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+        DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         try {
-            switch (in.peek()) {
-                case NULL:
-                    in.nextNull();
-                    return null;
-                default:
-                    String date = in.nextString();
-                    return dateFormat.parse(date);
+            if(in.peek() == NULL) {
+                in.nextNull();
+                return null;
+            } else {
+                String date = in.nextString();
+                return dateFormat.parse(date);
             }
         } catch (ParseException e) {
             throw new JsonParseException(e);

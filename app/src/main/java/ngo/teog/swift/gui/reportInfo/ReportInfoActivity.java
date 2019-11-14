@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -35,7 +36,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class ReportInfoActivity extends BaseActivity {
 
-    private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN);
+    private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
 
     @Inject
     ViewModelFactory viewModelFactory;
