@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -27,16 +29,13 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ImageActivity;
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.main.MainActivity;
-import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
@@ -66,7 +65,7 @@ public class RequestFactory {
     private RequestFactory() {}
 
     public class DefaultRequest extends JsonObjectRequest {
-        public DefaultRequest(Context context, String url, JSONObject request, View disable, View enable, BaseResponseListener listener) {
+        public DefaultRequest(Context context, String url, JSONObject request, @Nullable View disable, @Nullable View enable, BaseResponseListener listener) {
             super(Request.Method.POST, url, request, listener, new BaseErrorListener(context, disable, enable));
         }
     }
@@ -76,7 +75,7 @@ public class RequestFactory {
         private View disable;
         private View enable;
 
-        public BaseResponseListener(Context context, View disable, View enable) {
+        public BaseResponseListener(Context context, @Nullable View disable, @Nullable View enable) {
             this.context = context;
             this.disable = disable;
             this.enable = enable;
@@ -120,10 +119,14 @@ public class RequestFactory {
         private View disable;
         private View enable;
 
-        public BaseErrorListener(Context context, View disable, View enable) {
+        public BaseErrorListener(Context context, @Nullable View disable, @Nullable View enable) {
             this.context = context;
             this.disable = disable;
             this.enable = enable;
+        }
+
+        public BaseErrorListener(Context context) {
+            this.context = context;
         }
 
         @Override
@@ -221,7 +224,7 @@ public class RequestFactory {
 
     public class DeviceListRequest extends JsonObjectRequest {
 
-        public DeviceListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
+        public DeviceListRequest(final Context context, @Nullable final View disable, @Nullable final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
             super(Request.Method.POST, url, request, response -> {
                 try {
                     List<HospitalDevice> deviceList = ResponseParser.parseDeviceList(response);
@@ -238,15 +241,26 @@ public class RequestFactory {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
 
-                disable.setVisibility(View.INVISIBLE);
-                enable.setVisibility(View.VISIBLE);
+                if(disable != null) {
+                    disable.setVisibility(View.INVISIBLE);
+                }
+
+                if(enable != null) {
+                    enable.setVisibility(View.VISIBLE);
+                }
             }, error -> {
                 if(adapter != null) {
                     adapter.clear();
                 }
 
-                disable.setVisibility(View.INVISIBLE);
-                enable.setVisibility(View.VISIBLE);
+                if(disable != null) {
+                    disable.setVisibility(View.INVISIBLE);
+                }
+
+                if(enable != null) {
+                    enable.setVisibility(View.VISIBLE);
+                }
+
                 Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
         }
@@ -305,7 +319,7 @@ public class RequestFactory {
 
     public class UserListRequest extends JsonObjectRequest {
 
-        public UserListRequest(final Context context, final View disable, final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
+        public UserListRequest(final Context context, @Nullable final View disable, @Nullable final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
             super(Request.Method.POST, url, request, response -> {
                 try {
                     List<User> userList = ResponseParser.parseUserList(response);
@@ -321,16 +335,26 @@ public class RequestFactory {
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 } finally {
-                    disable.setVisibility(View.INVISIBLE);
-                    enable.setVisibility(View.VISIBLE);
+                    if(disable != null) {
+                        disable.setVisibility(View.INVISIBLE);
+                    }
+
+                    if(enable != null) {
+                        enable.setVisibility(View.VISIBLE);
+                    }
                 }
             }, error -> {
                 if(adapter != null) {
                     adapter.clear();
                 }
 
-                disable.setVisibility(View.INVISIBLE);
-                enable.setVisibility(View.VISIBLE);
+                if(disable != null) {
+                    disable.setVisibility(View.INVISIBLE);
+                }
+
+                if(enable != null) {
+                    enable.setVisibility(View.VISIBLE);
+                }
 
                 Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
             });
