@@ -91,27 +91,29 @@ public class CalendarFragment extends Fragment {
                     List<ReportInfo> reports = deviceInfo.getReports();
                     Collections.reverse(reports);
 
-                    int newestState = reports.get(0).getReport().getCurrentState();
-                    Date lastMaintenance = null;
+                    if(reports.size() > 0) {
+                        int newestState = reports.get(0).getReport().getCurrentState();
+                        Date lastMaintenance = null;
 
-                    //ignore devices in the to-do list and salvage devices
-                    if(newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
-                        //look for last maintenance/repair or creation
-                        for(ReportInfo info : reports) {
-                            Report report = info.getReport();
-                            int previousState = report.getPreviousState();
-                            int currentState = report.getCurrentState();
+                        //ignore devices in the to-do list and salvage devices
+                        if (newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
+                            //look for last maintenance/repair or creation
+                            for (ReportInfo info : reports) {
+                                Report report = info.getReport();
+                                int previousState = report.getPreviousState();
+                                int currentState = report.getCurrentState();
 
-                            if(previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
-                                lastMaintenance = report.getCreated();
-                                break;
+                                if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
+                                    lastMaintenance = report.getCreated();
+                                    break;
+                                }
                             }
-                        }
 
-                        if(lastMaintenance != null) {
-                            int daysOver = (int)((now.getTime() - lastMaintenance.getTime())/1000/60/60/24);
+                            if (lastMaintenance != null) {
+                                int daysOver = (int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24);
 
-                            adapter.add(new MaintenanceInfo(deviceInfo, daysOver));
+                                adapter.add(new MaintenanceInfo(deviceInfo, daysOver));
+                            }
                         }
                     }
                 }
