@@ -1,6 +1,7 @@
 package ngo.teog.swift.gui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -25,8 +26,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
@@ -60,6 +63,12 @@ public class CalendarFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         CustomSimpleArrayAdapter adapter = new CustomSimpleArrayAdapter(getContext(), values);
         hospitalListView.setAdapter(adapter);
+
+        hospitalListView.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
+            intent.putExtra(ResourceKeys.DEVICE_ID, ((MaintenanceInfo)adapterView.getItemAtPosition(i)).getDeviceInfo().getDevice().getId());
+            startActivity(intent);
+        });
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getActivity().getApplication()))
