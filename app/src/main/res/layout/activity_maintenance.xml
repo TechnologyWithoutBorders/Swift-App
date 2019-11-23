@@ -7,9 +7,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Devices up for maintenance:"
+        android:text="Devices up for maintenance"
         android:padding="5dp"
         android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@color/grey_table_bar"
         android:textStyle="bold" />
 
     <ListView
