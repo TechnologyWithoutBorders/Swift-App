@@ -43,8 +43,6 @@ public class CalendarFragment extends Fragment {
 
     private ListView hospitalListView;
 
-    private List<MaintenanceInfo> values = new ArrayList<>();
-
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -61,7 +59,7 @@ public class CalendarFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        CustomSimpleArrayAdapter adapter = new CustomSimpleArrayAdapter(getContext(), values);
+        CustomSimpleArrayAdapter adapter = new CustomSimpleArrayAdapter(getContext());
         hospitalListView.setAdapter(adapter);
 
         hospitalListView.setOnItemClickListener((adapterView, view1, i, l) -> {
@@ -84,12 +82,15 @@ public class CalendarFragment extends Fragment {
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {
                 adapter.clear();
+                List<MaintenanceInfo> values = new ArrayList<>();
 
                 Date now = new Date();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     List<ReportInfo> reports = deviceInfo.getReports();
                     Collections.reverse(reports);
+
+                    HospitalDevice device = deviceInfo.getDevice();
 
                     if(reports.size() > 0) {
                         int newestState = reports.get(0).getReport().getCurrentState();
@@ -110,34 +111,24 @@ public class CalendarFragment extends Fragment {
                             }
 
                             if (lastMaintenance != null) {
-                                int daysOver = (int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24);
+                                int daysLeft = (device.getMaintenanceInterval()*7)-((int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24));
 
-                                adapter.add(new MaintenanceInfo(deviceInfo, daysOver));
+                                values.add(new MaintenanceInfo(deviceInfo, daysLeft));
                             }
                         }
                     }
                 }
 
-                /*Collections.sort(deviceInfos, (first, second) -> {
-                    List<ReportInfo> firstReports = first.getReports();
-                    List<ReportInfo> secondReports = second.getReports();
+                Collections.sort(values, (first, second) -> (first.getDaysLeft()-second.getDaysLeft()));
 
-                    if(firstReports.size() > 0 && secondReports.size() > 0) {
-                        int firstState = firstReports.get(0).getReport().getCurrentState();
-                        int secondState = secondReports.get(0).getReport().getCurrentState();
-
-                        return (firstState-secondState)*-1;
-                    } else {
-                        return 0;
-                    }
-                });*/
+                adapter.addAll(values);
             }
         });
     }
 
     private class CustomSimpleArrayAdapter extends ArrayAdapter<MaintenanceInfo> {
-        private CustomSimpleArrayAdapter(Context context, List<MaintenanceInfo> values) {
-            super(context, -1, values);
+        private CustomSimpleArrayAdapter(Context context) {
+            super(context, -1);
         }
 
         @Override
@@ -160,7 +151,7 @@ public class CalendarFragment extends Fragment {
 
                 HospitalDevice device = deviceInfo.getDevice();
 
-                int daysLeft = device.getMaintenanceInterval()*7-maintenanceInfo.getDaysOver();
+                int daysLeft = maintenanceInfo.getDaysLeft();
 
                 String dateString = daysLeft + " days left";
 
@@ -176,7 +167,7 @@ public class CalendarFragment extends Fragment {
                     maintenanceBar.setProgress(0);
                     maintenanceBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
                 } else {
-                    maintenanceBar.setProgress(100-(int)(((float)maintenanceInfo.getDaysOver()/(device.getMaintenanceInterval()*7))*100));
+                    maintenanceBar.setProgress((int)(((float)maintenanceInfo.getDaysLeft()/(device.getMaintenanceInterval()*7))*100));
                     maintenanceBar.getProgressDrawable().setColorFilter(null);
                 }
             }
@@ -187,19 +178,19 @@ public class CalendarFragment extends Fragment {
 
     private class MaintenanceInfo {
         private DeviceInfo deviceInfo;
-        private int daysOver;
+        private int daysLeft;
 
-        private MaintenanceInfo(DeviceInfo deviceInfo, int daysOver) {
+        private MaintenanceInfo(DeviceInfo deviceInfo, int daysLeft) {
             this.deviceInfo = deviceInfo;
-            this.daysOver = daysOver;
+            this.daysLeft = daysLeft;
         }
 
         private DeviceInfo getDeviceInfo() {
             return deviceInfo;
         }
 
-        private int getDaysOver() {
-            return daysOver;
+        private int getDaysLeft() {
+            return daysLeft;
         }
     }
 }
