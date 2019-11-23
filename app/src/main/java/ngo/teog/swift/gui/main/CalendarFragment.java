@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,21 +17,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
-import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
@@ -45,10 +37,6 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class CalendarFragment extends Fragment {
-
-    private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN, Locale.getDefault());
-
-    private static final int DAY_COUNT = 8;
 
     private ListView hospitalListView;
 
@@ -91,9 +79,6 @@ public class CalendarFragment extends Fragment {
                 Date now = new Date();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    HospitalDevice device = deviceInfo.getDevice();
-                    int maintenanceInterval = device.getMaintenanceInterval();
-
                     List<ReportInfo> reports = deviceInfo.getReports();
                     Collections.reverse(reports);
 
@@ -154,7 +139,6 @@ public class CalendarFragment extends Fragment {
             }
 
             TextView nameView = convertView.findViewById(R.id.nameView);
-            TextView dateView = convertView.findViewById(R.id.dateView);
             TextView statusView = convertView.findViewById(R.id.statusView);
             ProgressBar maintenanceBar = convertView.findViewById(R.id.maintenance_bar);
 
@@ -165,18 +149,19 @@ public class CalendarFragment extends Fragment {
 
                 HospitalDevice device = deviceInfo.getDevice();
 
+                int daysLeft = device.getMaintenanceInterval()*7-maintenanceInfo.getDaysOver();
+
+                String dateString = daysLeft + " days left";
+
+                statusView.setText(dateString);
+
                 nameView.setText(device.getType());
 
-                String dateString = maintenanceInfo.getDaysOver() + "/" + device.getMaintenanceInterval()*7 + " d";
-                dateView.setText(dateString);
-
-                statusView.setText(device.getWard());
-
-                if(maintenanceInfo.getDaysOver() > device.getMaintenanceInterval()*7) {
-                    maintenanceBar.setProgress(100);
+                if(daysLeft <= 0) {
+                    maintenanceBar.setProgress(0);
                     maintenanceBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
                 } else {
-                    maintenanceBar.setProgress((int)(((float)maintenanceInfo.getDaysOver()/(device.getMaintenanceInterval()*7))*100));
+                    maintenanceBar.setProgress(100-(int)(((float)maintenanceInfo.getDaysOver()/(device.getMaintenanceInterval()*7))*100));
                 }
             }
 
@@ -188,16 +173,16 @@ public class CalendarFragment extends Fragment {
         private DeviceInfo deviceInfo;
         private int daysOver;
 
-        public MaintenanceInfo(DeviceInfo deviceInfo, int daysOver) {
+        private MaintenanceInfo(DeviceInfo deviceInfo, int daysOver) {
             this.deviceInfo = deviceInfo;
             this.daysOver = daysOver;
         }
 
-        public DeviceInfo getDeviceInfo() {
+        private DeviceInfo getDeviceInfo() {
             return deviceInfo;
         }
 
-        public int getDaysOver() {
+        private int getDaysOver() {
             return daysOver;
         }
     }
