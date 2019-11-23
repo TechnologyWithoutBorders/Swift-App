@@ -164,6 +164,10 @@ public class CalendarFragment extends Fragment {
 
                 String dateString = daysLeft + " days left";
 
+                if(daysLeft < 0) {
+                    dateString = Math.abs(daysLeft) + " days over";
+                }
+
                 statusView.setText(dateString);
 
                 nameView.setText(device.getType());
@@ -173,6 +177,7 @@ public class CalendarFragment extends Fragment {
                     maintenanceBar.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
                 } else {
                     maintenanceBar.setProgress(100-(int)(((float)maintenanceInfo.getDaysOver()/(device.getMaintenanceInterval()*7))*100));
+                    maintenanceBar.getProgressDrawable().setColorFilter(null);
                 }
             }
 
