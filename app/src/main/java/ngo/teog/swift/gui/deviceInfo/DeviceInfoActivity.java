@@ -232,6 +232,7 @@ public class DeviceInfoActivity extends BaseActivity {
                         if(image1.exists()) {
                             Intent intent12 = new Intent(DeviceInfoActivity.this, ImageActivity.class);
                             intent12.putExtra(ResourceKeys.IMAGE, image1);
+                            intent12.putExtra(ResourceKeys.DEVICE_ID, device.getId());
 
                             startActivity(intent12);
                         }

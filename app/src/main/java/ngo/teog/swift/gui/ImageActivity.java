@@ -1,17 +1,28 @@
 package ngo.teog.swift.gui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 
 /**
@@ -19,6 +30,9 @@ import ngo.teog.swift.helpers.ResourceKeys;
  * @author nitelow
  */
 public class ImageActivity extends BaseActivity {
+    private Bitmap bitmap;
+    private int device;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +41,65 @@ public class ImageActivity extends BaseActivity {
         Intent intent = this.getIntent();
         File image = (File)intent.getSerializableExtra(ResourceKeys.IMAGE);
 
+        device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+
         try {
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(image));
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(image));
 
             ImageView imageView = findViewById(R.id.imageView);
-            imageView.setImageBitmap(b);
+            imageView.setImageBitmap(bitmap);
         } catch(FileNotFoundException e) {
             Toast.makeText(this.getApplicationContext(), this.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_device_image, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.edit:
+                return true;
+            case R.id.refresh:
+                if(this.checkForInternetConnection()) {
+                    //in order to minimize traffic, we request a hash of the image and then decide whether to download the image
+
+                    //compute hash of local image
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] bitmapBytes = baos.toByteArray();
+
+                    try {
+                        MessageDigest digest = MessageDigest.getInstance("MD5");
+
+                        digest.reset();
+
+                        byte[] result = digest.digest(bitmapBytes);
+
+                        StringBuilder sb = new StringBuilder();
+
+                        for(byte b : result) {
+                            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+                        }
+
+                        RequestFactory.ImageHashRequest request = RequestFactory.getInstance().createImageHashRequest(this, device);
+
+                        VolleyManager.getInstance(this).getRequestQueue().add(request);
+                    } catch (NoSuchAlgorithmException e1) {
+                        Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(this.getApplicationContext(), getString(R.string.error_internet_connection), Toast.LENGTH_LONG).show();
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item, R.string.deviceinfo_activity);//TODO Info anpassen
         }
     }
 }

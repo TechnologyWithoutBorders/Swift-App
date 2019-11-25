@@ -304,6 +304,18 @@ public class RequestFactory {
         return new PasswordResetRequest(context, url, request);
     }
 
+    public ImageHashRequest createImageHashRequest(Context context, int device) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
+
+        params.put(DeviceFilter.ID, Integer.toString(device));
+
+        JSONObject request = new JSONObject(params);
+
+        return new ImageHashRequest(context, url, request);
+    }
+
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<User> adapter) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
@@ -410,6 +422,32 @@ public class RequestFactory {
                     switch(responseCode) {
                         case SwiftResponse.CODE_OK:
                             Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+
+                            break;
+                        case SwiftResponse.CODE_FAILED_VISIBLE:
+                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
+                        case SwiftResponse.CODE_FAILED_HIDDEN:
+                        default:
+                            throw new ServerException(response.getString(SwiftResponse.DATA_FIELD));
+                    }
+                } catch(TransparentServerException e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                }
+            }, error -> Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    public class ImageHashRequest extends JsonObjectRequest {
+        public ImageHashRequest(final Context context, final String url, JSONObject request) {
+            super(Request.Method.POST, url, request, response -> {
+                try {
+                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+
+                    switch(responseCode) {
+                        case SwiftResponse.CODE_OK:
+                            //TODO
 
                             break;
                         case SwiftResponse.CODE_FAILED_VISIBLE:
