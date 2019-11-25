@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,8 @@ import ngo.teog.swift.helpers.filters.DeviceFilter;
 import ngo.teog.swift.helpers.filters.UserFilter;
 
 /**
- * @author Julian Deyerler
+ * Singleton class that creates HTTPS requests for communication with the server.
+ * @author nitelow
  */
 public class RequestFactory {
     private static RequestFactory instance;
@@ -125,10 +127,6 @@ public class RequestFactory {
             this.enable = enable;
         }
 
-        public BaseErrorListener(Context context) {
-            this.context = context;
-        }
-
         @Override
         public void onErrorResponse(VolleyError error) {
             if(disable != null) {
@@ -150,9 +148,14 @@ public class RequestFactory {
 
         params.put(ResourceKeys.DEVICE_ID, Integer.toString(deviceId));
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();//TODO closen
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageBytes = stream.toByteArray();
+        try {
+            stream.close();
+        } catch(IOException e) {
+            //ignore
+        }
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         params.put(ResourceKeys.IMAGE, encodedImage);
 
@@ -425,20 +428,26 @@ public class RequestFactory {
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
-            }, error -> {
-                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-            });
+            }, error -> Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show());
         }
     }
 
-    public static HashMap<String, String> generateParameterMap(Context context, String action, boolean userValidation) {
+    /**
+     * Generates a map for the request parameters. It will already contain the parameters
+     * for the designated action, the country key and - if activated - the user authentication parameters.
+     * @param context Context
+     * @param action designated server action
+     * @param userAuthentication adds user authentication parameters to map if true
+     * @return Map with some standard parameters
+     */
+    public static HashMap<String, String> generateParameterMap(Context context, String action, boolean userAuthentication) {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         HashMap<String, String> parameterMap = new HashMap<>();
         parameterMap.put(Defaults.ACTION_KEY, action);
         parameterMap.put(Defaults.COUNTRY_KEY, preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
 
-        if(userValidation) {
+        if(userAuthentication) {
             parameterMap.put(Defaults.AUTH_ID_KEY, Integer.toString(preferences.getInt(Defaults.ID_PREFERENCE, -1)));
             parameterMap.put(Defaults.AUTH_PW_KEY, preferences.getString(Defaults.PW_PREFERENCE, null));
         }
