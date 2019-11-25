@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.communication;
 
 /**
  * Contains some identifiers for referencing segments of a server response.

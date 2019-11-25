@@ -37,7 +37,7 @@ import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
-import ngo.teog.swift.helpers.ResponseParser;
+import ngo.teog.swift.communication.ResponseParser;
 
 @Singleton
 public class HospitalRepository {

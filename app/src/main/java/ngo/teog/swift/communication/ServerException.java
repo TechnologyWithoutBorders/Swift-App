@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.communication;
 
 /**
  * Exception that indicates an error during parsing of a server response.

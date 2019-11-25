@@ -1,4 +1,4 @@
-package ngo.teog.swift.helpers;
+package ngo.teog.swift.communication;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.HospitalInfo;
+import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
