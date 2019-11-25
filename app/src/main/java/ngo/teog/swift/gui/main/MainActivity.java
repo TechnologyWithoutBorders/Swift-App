@@ -69,26 +69,26 @@ public class MainActivity extends BaseActivity {
             try {
                 List<String> pathSegments = appLinkData.getPathSegments();
 
-                //Scheme: /<type>/<hospital>/<device/user>/[<report>]
+                //Scheme: /<type>/<country>/<hospital>/<device/user>/[<report>]
 
                 String type = pathSegments.get(0);
-                int hospital = Integer.parseInt(pathSegments.get(1));
+                int hospital = Integer.parseInt(pathSegments.get(2));
 
                 Intent openIntent = null;
 
                 if(ResourceKeys.DEVICE.equals(type)) {
-                    int deviceNumber = Integer.parseInt(pathSegments.get(2));
+                    int deviceNumber = Integer.parseInt(pathSegments.get(3));
 
                     openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
                     openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
                 } else if(ResourceKeys.USER.equals(type)) {
-                    int userNumber = Integer.parseInt(pathSegments.get(2));
+                    int userNumber = Integer.parseInt(pathSegments.get(3));
 
                     openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
                     openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
                 } else if(ResourceKeys.REPORT.equals(type)) {
-                    int deviceNumber = Integer.parseInt(pathSegments.get(2));
-                    int reportNumber = Integer.parseInt(pathSegments.get(3));
+                    int deviceNumber = Integer.parseInt(pathSegments.get(3));
+                    int reportNumber = Integer.parseInt(pathSegments.get(4));
 
                     openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
                     openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
