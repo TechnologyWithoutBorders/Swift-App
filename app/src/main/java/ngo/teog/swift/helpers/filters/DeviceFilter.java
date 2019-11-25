@@ -15,8 +15,4 @@ public final class DeviceFilter {
     public static final String HOSPITAL = "hospital";
     public static final String MAINTENANCE_INTERVAL = "maintenanceInterval";
     public static final String LAST_UPDATE = "lastUpdate";
-
-    public static final String ACTION_FETCH_DEVICE = "fetch_device";
-    public static final String ACTION_SEARCH_DEVICE = "search_device";
-    public static final String ACTION_FETCH_DEVICE_IMAGE = "fetch_device_image";
 }

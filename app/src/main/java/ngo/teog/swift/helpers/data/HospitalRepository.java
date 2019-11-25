@@ -33,7 +33,7 @@ import javax.inject.Singleton;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.helpers.DataAction;
+import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;

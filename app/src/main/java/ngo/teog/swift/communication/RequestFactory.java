@@ -37,7 +37,6 @@ import java.util.Map;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.main.MainActivity;
-import ngo.teog.swift.helpers.DataAction;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.ServerException;
@@ -181,7 +180,7 @@ public class RequestFactory {
     public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_FETCH_DEVICE_IMAGE, true);
+        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE, true);
         params.put(DeviceFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -272,7 +271,7 @@ public class RequestFactory {
     public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<HospitalDevice> adapter) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, DeviceFilter.ACTION_SEARCH_DEVICE, true);
+        Map<String, String> params = generateParameterMap(context, DeviceAction.SEARCH_DEVICE, true);
         params.put(DeviceFilter.TYPE, searchValue);
 
         JSONObject request = new JSONObject(params);
@@ -283,7 +282,7 @@ public class RequestFactory {
     public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_LOGIN_USER, false);
+        Map<String, String> params = generateParameterMap(context, UserAction.LOGIN_USER, false);
 
         params.put(UserFilter.MAIL, mail);
         params.put(UserFilter.PASSWORD, password);
@@ -298,7 +297,7 @@ public class RequestFactory {
     public PasswordResetRequest createPasswordResetRequest(Context context, String mail, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_RESET_PASSWORD, false);
+        Map<String, String> params = generateParameterMap(context, UserAction.RESET_PASSWORD, false);
 
         params.put(UserFilter.MAIL, mail);
         //Override country, because the shared preferences contain no country at this point
@@ -312,7 +311,7 @@ public class RequestFactory {
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<User> adapter) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserFilter.ACTION_SEARCH_USER, true);
+        Map<String, String> params = generateParameterMap(context, UserAction.SEARCH_USER, true);
         params.put(UserFilter.FULL_NAME, searchValue);
 
         JSONObject request = new JSONObject(params);
