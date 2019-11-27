@@ -304,12 +304,13 @@ public class RequestFactory {
         return new PasswordResetRequest(context, url, request);
     }
 
-    public ImageHashRequest createImageHashRequest(Context context, int device) {
+    public ImageHashRequest createImageHashRequest(Context context, int device, String hash) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
 
         params.put(DeviceFilter.ID, Integer.toString(device));
+        params.put(ResourceKeys.IMAGE_HASH, hash);
 
         JSONObject request = new JSONObject(params);
 
@@ -448,6 +449,7 @@ public class RequestFactory {
                     switch(responseCode) {
                         case SwiftResponse.CODE_OK:
                             //TODO
+                            Toast.makeText(context.getApplicationContext(), response.getString(SwiftResponse.DATA_FIELD), Toast.LENGTH_SHORT).show();
 
                             break;
                         case SwiftResponse.CODE_FAILED_VISIBLE:

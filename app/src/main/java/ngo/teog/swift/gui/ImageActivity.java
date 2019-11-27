@@ -16,6 +16,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -69,28 +72,39 @@ public class ImageActivity extends BaseActivity {
                 if(this.checkForInternetConnection()) {
                     //in order to minimize traffic, we request a hash of the image and then decide whether to download the image
 
-                    //compute hash of local image
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] bitmapBytes = baos.toByteArray();
+                    File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                    dir.mkdirs();
 
+                    File image = new File(dir, device + ".jpg");
+
+                    ByteArrayOutputStream baos;
+
+                    byte[] buffer = new byte[(int)image.length()];
+
+                    //compute hash of local image
                     try {
+                        InputStream is = new FileInputStream(image);
+                        is.read(buffer);
+                        is.close();
+
                         MessageDigest digest = MessageDigest.getInstance("MD5");
 
                         digest.reset();
 
-                        byte[] result = digest.digest(bitmapBytes);
+                        byte[] result = digest.digest(buffer);
 
                         StringBuilder sb = new StringBuilder();
 
-                        for(byte b : result) {
+                        for (byte b : result) {
                             sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
                         }
 
-                        RequestFactory.ImageHashRequest request = RequestFactory.getInstance().createImageHashRequest(this, device);
+                        RequestFactory.ImageHashRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString());
 
                         VolleyManager.getInstance(this).getRequestQueue().add(request);
-                    } catch (NoSuchAlgorithmException e1) {
+                    } catch(FileNotFoundException e1) {
+                        Toast.makeText(this.getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
+                    } catch(NoSuchAlgorithmException | IOException e1) {
                         Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                     }
                 } else {

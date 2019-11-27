@@ -35,6 +35,8 @@ public final class ResourceKeys {
     /** Identifier for all kinds of images */
     public static final String IMAGE = "image";
 
+    public static final String IMAGE_HASH = "image_hash";//TODO der müsste eher wo anders hin
+
     /** Identifier for all kinds of paths */
     public static final String PATH = "path";
 
