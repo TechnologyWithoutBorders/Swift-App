@@ -1,8 +1,6 @@
 package ngo.teog.swift.gui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,13 +10,11 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -33,7 +29,6 @@ import ngo.teog.swift.helpers.ResourceKeys;
  * @author nitelow
  */
 public class ImageActivity extends BaseActivity {
-    private Bitmap bitmap;
     private int device;
 
     @Override
@@ -47,7 +42,7 @@ public class ImageActivity extends BaseActivity {
         device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
         try {
-            bitmap = BitmapFactory.decodeStream(new FileInputStream(image));
+            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(image));
 
             ImageView imageView = findViewById(R.id.imageView);
             imageView.setImageBitmap(bitmap);
@@ -77,15 +72,17 @@ public class ImageActivity extends BaseActivity {
 
                     File image = new File(dir, device + ".jpg");
 
-                    ByteArrayOutputStream baos;
-
                     byte[] buffer = new byte[(int)image.length()];
 
                     //compute hash of local image
                     try {
                         InputStream is = new FileInputStream(image);
-                        is.read(buffer);
+                        int bytesRead = is.read(buffer);
                         is.close();
+
+                        if(bytesRead < image.length()) {
+                            throw new IOException("too few bytes read");
+                        }
 
                         MessageDigest digest = MessageDigest.getInstance("MD5");
 
