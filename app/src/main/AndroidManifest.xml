@@ -106,6 +106,12 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"/>
         <activity
+            android:name=".gui.ImageCaptureActivity"
+            android:label="Take image"
+            android:parentActivityName=".gui.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity
             android:name=".gui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize"

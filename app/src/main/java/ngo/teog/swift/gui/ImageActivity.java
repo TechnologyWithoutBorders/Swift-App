@@ -21,6 +21,8 @@ import java.security.NoSuchAlgorithmException;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 
@@ -62,6 +64,11 @@ public class ImageActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.edit:
+                Intent intent = new Intent(this, ImageCaptureActivity.class);
+                intent.putExtra(ResourceKeys.DEVICE, device);
+
+                startActivity(intent);
+
                 return true;
             case R.id.refresh:
                 if(this.checkForInternetConnection()) {
