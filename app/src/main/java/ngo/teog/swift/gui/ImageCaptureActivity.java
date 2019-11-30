@@ -29,8 +29,10 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.inject.Inject;
 
@@ -111,33 +113,35 @@ public class ImageCaptureActivity extends BaseActivity {
 
             try {
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                File image = new File(dir, targetName);
 
-                outputStream = new FileOutputStream(new File(dir, targetName));
+                outputStream = new FileOutputStream(image);
                 decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                 outputStream.close();
 
                 File tempFile = new File(imagePath);
                 tempFile.delete();
+
+                Constraints constraints = new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
+
+                Data imageData = new Data.Builder()
+                        .putString(ResourceKeys.PATH, targetName)
+                        .putInt(ResourceKeys.DEVICE_ID, device)
+                        .build();
+
+                OneTimeWorkRequest uploadWork =
+                        new OneTimeWorkRequest.Builder(ImageUploader.class)
+                                .setConstraints(constraints)
+                                .setInputData(imageData)
+                                .build();
+
+                WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
-                e.printStackTrace();
+                Log.e("IMAGE_UPLOAD", "not created", e);
             }
 
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
-
-            Data imageData = new Data.Builder()
-                    .putString(ResourceKeys.PATH, targetName)
-                    .putInt(ResourceKeys.DEVICE_ID, device)
-                    .build();
-
-            OneTimeWorkRequest uploadWork =
-                    new OneTimeWorkRequest.Builder(ImageUploader.class)
-                            .setConstraints(constraints)
-                            .setInputData(imageData)
-                            .build();
-
-            WorkManager.getInstance(this).enqueue(uploadWork);
             this.finish();
         } else {
             Toast.makeText(this, "no picture attached", Toast.LENGTH_LONG).show();

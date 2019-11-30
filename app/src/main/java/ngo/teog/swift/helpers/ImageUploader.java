@@ -3,6 +3,7 @@ package ngo.teog.swift.helpers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -10,6 +11,7 @@ import androidx.work.WorkerParameters;
 
 import com.android.volley.RequestQueue;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import ngo.teog.swift.communication.RequestFactory;
@@ -33,11 +35,14 @@ public class ImageUploader extends Worker {
     @Override
     @NonNull
     public Worker.Result doWork() {
-        String imagePath = getInputData().getString(ResourceKeys.PATH);
+        String targetName = getInputData().getString(ResourceKeys.PATH);
         int deviceId = getInputData().getInt(ResourceKeys.DEVICE_ID, -1);
 
         try {
-            FileInputStream inputStream = this.getApplicationContext().openFileInput(imagePath);
+            File dir = new File(getApplicationContext().getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+            File image = new File(dir, targetName);
+
+            FileInputStream inputStream = new FileInputStream(image.getPath());
 
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
@@ -52,6 +57,7 @@ public class ImageUploader extends Worker {
 
             return Result.success();
         } catch (Exception e) {
+            Log.e("IMAGE_UPLOAD", "not created", e);
             return Result.failure();
         }
     }

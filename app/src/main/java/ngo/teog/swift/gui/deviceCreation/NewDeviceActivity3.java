@@ -29,8 +29,10 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.inject.Inject;
 
@@ -145,33 +147,34 @@ public class NewDeviceActivity3 extends BaseActivity {
 
             try {
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                File image = new File(dir, targetName);
 
-                outputStream = new FileOutputStream(new File(dir, targetName));
+                outputStream = new FileOutputStream(image);
                 decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                 outputStream.close();
 
                 File tempFile = new File(imagePath);
                 tempFile.delete();
+
+                Constraints constraints = new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
+
+                Data imageData = new Data.Builder()
+                        .putString(ResourceKeys.PATH, targetName)
+                        .putInt(ResourceKeys.DEVICE_ID, device.getId())
+                        .build();
+
+                OneTimeWorkRequest uploadWork =
+                        new OneTimeWorkRequest.Builder(ImageUploader.class)
+                                .setConstraints(constraints)
+                                .setInputData(imageData)
+                                .build();
+
+                WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
-                e.printStackTrace();
+                Log.e("IMAGE_UPLOAD", "not created", e);
             }
-
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
-
-            Data imageData = new Data.Builder()
-                    .putString(ResourceKeys.PATH, targetName)
-                    .putInt(ResourceKeys.DEVICE_ID, device.getId())
-                    .build();
-
-            OneTimeWorkRequest uploadWork =
-                    new OneTimeWorkRequest.Builder(ImageUploader.class)
-                            .setConstraints(constraints)
-                            .setInputData(imageData)
-                            .build();
-
-            WorkManager.getInstance(this).enqueue(uploadWork);
 
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
