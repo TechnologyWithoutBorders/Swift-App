@@ -8,6 +8,8 @@ import androidx.room.Transaction;
 
 import java.util.List;
 
+import ngo.teog.swift.helpers.export.HospitalDump;
+
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
@@ -21,6 +23,10 @@ public interface HospitalDao {
     @Transaction
     @Query("SELECT * FROM users WHERE users.id = :userId")
     LiveData<UserProfileInfo> loadUserProfile(int userId);
+
+    @Transaction
+    @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
+    LiveData<HospitalDump> loadHospitalDump(int userId);
 
     @Insert(onConflict = REPLACE)
     void save(User user);

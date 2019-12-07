@@ -38,6 +38,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.communication.ResponseParser;
+import ngo.teog.swift.helpers.export.HospitalDump;
 
 @Singleton
 public class HospitalRepository {
@@ -50,6 +51,10 @@ public class HospitalRepository {
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
         this.hospitalDao = hospitalDao;
         this.context = context;
+    }
+
+    public LiveData<HospitalDump> getHospitalDump(int userId) {
+        return hospitalDao.loadHospitalDump(userId);
     }
 
     public LiveData<User> getUser(int userId) {
