@@ -18,4 +18,16 @@ public class HospitalDump {
 
     @Relation(parentColumn = "id", entityColumn = "hospital", entity = HospitalDevice.class)
     private List<DeviceDump> devices;
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public void setDevices(List<DeviceDump> devices) {
+        this.devices = devices;
+    }
 }

@@ -150,7 +150,15 @@ public class HospitalActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item, R.string.hospital_activity);
+        if(item.getItemId() == R.id.advanded) {
+            Intent intent = new Intent(this, AdvancedHospitalActivity.class);
+
+            startActivity(intent);
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item, R.string.hospital_activity);
+        }
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {

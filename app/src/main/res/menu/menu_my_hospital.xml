@@ -6,4 +6,8 @@
         android:icon="@drawable/ic_info_outline_white_24dp"
         android:title="information"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/advanded"
+        android:title="advanced"
+        app:showAsAction="never" />
 </menu>
