@@ -4,7 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {User.class, Hospital.class, HospitalDevice.class, Report.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Hospital.class, HospitalDevice.class, Report.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class HospitalDatabase extends RoomDatabase {
     public abstract HospitalDao getHospitalDao();

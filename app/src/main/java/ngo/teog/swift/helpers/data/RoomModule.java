@@ -3,7 +3,10 @@ package ngo.teog.swift.helpers.data;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import javax.inject.Singleton;
 
@@ -15,7 +18,9 @@ public class RoomModule {
     private HospitalDatabase hospitalDatabase;
 
     public RoomModule(Application mApplication) {
-        hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db").build();
+        hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
+                .addMigrations(MIGRATION_1_2)
+                .build();
     }
 
     @Singleton
@@ -35,4 +40,11 @@ public class RoomModule {
     HospitalRepository userRepository(HospitalDao hospitalDao, Context context) {
         return new HospitalRepository(hospitalDao, context);
     }
+
+    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //ignore as no noteworthy changes took place
+        }
+    };
 }
