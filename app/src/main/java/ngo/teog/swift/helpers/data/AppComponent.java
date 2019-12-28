@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.hospital.AdvancedHospitalActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.main.BarcodeFragment;
 import ngo.teog.swift.gui.main.CalendarFragment;
@@ -24,6 +25,7 @@ public interface AppComponent {
 
     void inject(UserProfileActivity target);
     void inject(HospitalActivity target);
+    void inject(AdvancedHospitalActivity target);
     void inject(TodoFragment target);
     void inject(UserInfoActivity target);
     void inject(DeviceInfoActivity target);
