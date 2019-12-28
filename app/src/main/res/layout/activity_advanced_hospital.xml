@@ -26,12 +26,14 @@
         android:text="User management" />
 
     <EditText
+        android:id="@+id/nameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="@string/user_name" />
 
     <EditText
+        android:id="@+id/mailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
@@ -40,5 +42,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="create" />
+        android:text="create"
+        android:onClick="createUser" />
 </LinearLayout>

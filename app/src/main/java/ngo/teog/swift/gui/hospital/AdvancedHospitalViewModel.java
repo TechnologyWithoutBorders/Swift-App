@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
+import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.User;
 
 public class AdvancedHospitalViewModel extends ViewModel {
@@ -37,5 +38,9 @@ public class AdvancedHospitalViewModel extends ViewModel {
 
     public LiveData<List<User>> getUsers() {
         return users;
+    }
+
+    public void createUser(User user, int userId) {
+        hospitalRepo.createUser(user, userId);
     }
 }
