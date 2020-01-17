@@ -22,7 +22,9 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -115,18 +117,25 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
-                List<String> wardSuggestions = new ArrayList<>();
+                Map<String, Integer> wardCountMap = new HashMap<>();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     String ward = deviceInfo.getDevice().getWard();
 
-                    if(!wardSuggestions.contains(ward)) {
-                        wardSuggestions.add(ward);
+                    if(wardCountMap.containsKey(ward)) {
+                        wardCountMap.put(ward, wardCountMap.get(ward)+1);
+                    } else {
+                        wardCountMap.put(ward, 1);
                     }
                 }
 
                 wardAdapter.clear();
-                wardAdapter.addAll(wardSuggestions);
+
+                for(Map.Entry<String, Integer> entry : wardCountMap.entrySet()) {
+                    if(entry.getValue() >= 3) {
+                        wardAdapter.add(entry.getKey());
+                    }
+                }
             }
         });
     }
