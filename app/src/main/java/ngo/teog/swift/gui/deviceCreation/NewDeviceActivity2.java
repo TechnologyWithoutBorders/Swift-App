@@ -19,6 +19,8 @@ import android.widget.Spinner;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import org.apache.commons.text.WordUtils;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -137,10 +139,10 @@ public class NewDeviceActivity2 extends BaseActivity {
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     HospitalDevice device = deviceInfo.getDevice();
 
-                    String type = device.getType();
-                    String manufacturer = device.getManufacturer();
+                    String type = WordUtils.capitalize(device.getType());
+                    String manufacturer = WordUtils.capitalize(device.getManufacturer());
                     String model = device.getModel();
-                    String ward = device.getWard();
+                    String ward = WordUtils.capitalize(device.getWard());
 
                     updateSuggestionMap(typeCountMap, type);
                     updateSuggestionMap(manufacturerCountMap, manufacturer);
