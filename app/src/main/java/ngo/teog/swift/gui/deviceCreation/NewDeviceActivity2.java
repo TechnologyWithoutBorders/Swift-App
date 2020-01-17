@@ -19,11 +19,8 @@ import android.widget.Spinner;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -32,13 +29,11 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
@@ -50,12 +45,19 @@ public class NewDeviceActivity2 extends BaseActivity {
     private int deviceNumber;
 
     private EditText assetNumberField;
-    private EditText typeField;
-    private EditText serialNumberField;
-    private EditText manufacturerField;
-    private EditText modelField;
-    private AutoCompleteTextView wardField;
 
+    private AutoCompleteTextView typeField;
+    private ArrayAdapter<String> typeAdapter;
+
+    private EditText serialNumberField;
+
+    private AutoCompleteTextView manufacturerField;
+    private ArrayAdapter<String> manufacturerAdapter;
+
+    private AutoCompleteTextView modelField;
+    private ArrayAdapter<String> modelAdapter;
+
+    private AutoCompleteTextView wardField;
     private ArrayAdapter<String> wardAdapter;
 
     private NumberPicker intervalPicker;
@@ -75,14 +77,24 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         assetNumberField = findViewById(R.id.assetNumberText);
         assetNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+
         typeField = findViewById(R.id.typeText);
         typeField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+        typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
+        typeField.setAdapter(typeAdapter);
+
         serialNumberField = findViewById(R.id.serialNumberText);
         serialNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+
         manufacturerField = findViewById(R.id.manufacturerText);
         manufacturerField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+        manufacturerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
+        manufacturerField.setAdapter(manufacturerAdapter);
+
         modelField = findViewById(R.id.modelText);
         modelField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+        modelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
+        modelField.setAdapter(modelAdapter);
 
         wardField = findViewById(R.id.wardText);
         wardField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
@@ -117,19 +129,49 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
+                Map<String, Integer> typeCountMap = new HashMap<>();
+                Map<String, Integer> manufacturerCountMap = new HashMap<>();
+                Map<String, Integer> modelCountMap = new HashMap<>();
                 Map<String, Integer> wardCountMap = new HashMap<>();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    String ward = deviceInfo.getDevice().getWard();
+                    HospitalDevice device = deviceInfo.getDevice();
 
-                    if(wardCountMap.containsKey(ward)) {
-                        wardCountMap.put(ward, wardCountMap.get(ward)+1);
-                    } else {
-                        wardCountMap.put(ward, 1);
+                    String type = device.getType();
+                    String manufacturer = device.getManufacturer();
+                    String model = device.getModel();
+                    String ward = device.getWard();
+
+                    updateSuggestionMap(typeCountMap, type);
+                    updateSuggestionMap(manufacturerCountMap, manufacturer);
+                    updateSuggestionMap(modelCountMap, model);
+                    updateSuggestionMap(wardCountMap, ward);
+                }
+
+                //Make sure each value is present at least three times, so spelling mistakes do not spread
+
+                typeAdapter.clear();
+                manufacturerAdapter.clear();
+                modelAdapter.clear();
+                wardAdapter.clear();
+
+                for(Map.Entry<String, Integer> entry : typeCountMap.entrySet()) {
+                    if(entry.getValue() >= 3) {
+                        typeAdapter.add(entry.getKey());
                     }
                 }
 
-                wardAdapter.clear();
+                for(Map.Entry<String, Integer> entry : manufacturerCountMap.entrySet()) {
+                    if(entry.getValue() >= 3) {
+                        manufacturerAdapter.add(entry.getKey());
+                    }
+                }
+
+                for(Map.Entry<String, Integer> entry : modelCountMap.entrySet()) {
+                    if(entry.getValue() >= 3) {
+                        modelAdapter.add(entry.getKey());
+                    }
+                }
 
                 for(Map.Entry<String, Integer> entry : wardCountMap.entrySet()) {
                     if(entry.getValue() >= 3) {
@@ -138,6 +180,14 @@ public class NewDeviceActivity2 extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void updateSuggestionMap(Map<String, Integer> map, String key) {
+        if(map.containsKey(key)) {
+            map.put(key, map.get(key)+1);
+        } else {
+            map.put(key, 1);
+        }
     }
 
     @Override
