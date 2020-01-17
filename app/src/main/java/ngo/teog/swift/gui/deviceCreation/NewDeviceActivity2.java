@@ -139,10 +139,10 @@ public class NewDeviceActivity2 extends BaseActivity {
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     HospitalDevice device = deviceInfo.getDevice();
 
-                    String type = WordUtils.capitalize(device.getType());
-                    String manufacturer = WordUtils.capitalize(device.getManufacturer());
-                    String model = device.getModel();
-                    String ward = WordUtils.capitalize(device.getWard());
+                    String type = WordUtils.capitalize(device.getType().trim());
+                    String manufacturer = WordUtils.capitalize(device.getManufacturer().trim());
+                    String model = device.getModel().trim();
+                    String ward = WordUtils.capitalize(device.getWard().trim());
 
                     updateSuggestionMap(typeCountMap, type);
                     updateSuggestionMap(manufacturerCountMap, manufacturer);
