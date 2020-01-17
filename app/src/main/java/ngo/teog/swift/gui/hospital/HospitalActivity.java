@@ -32,6 +32,7 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -39,6 +40,7 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -99,6 +101,44 @@ public class HospitalActivity extends BaseActivity {
 
         TextView mapButton = findViewById(R.id.map_button);
 
+        //TODO in Methode ausgliedern
+
+        ImageView workingView = findViewById(R.id.working_image);
+        DeviceStateVisuals workingParams = new DeviceStateVisuals(DeviceState.WORKING, this);
+        workingView.setImageDrawable(workingParams.getStateIcon());
+        workingView.setColorFilter(workingParams.getBackgroundColor());
+        TextView workingCounter = findViewById(R.id.working_count);
+
+        ImageView maintenanceView = findViewById(R.id.maintenance_image);
+        DeviceStateVisuals maintenanceParams = new DeviceStateVisuals(DeviceState.MAINTENANCE, this);
+        maintenanceView.setImageDrawable(maintenanceParams.getStateIcon());
+        maintenanceView.setColorFilter(maintenanceParams.getBackgroundColor());
+        TextView maintenanceCounter = findViewById(R.id.maintenance_count);
+
+        ImageView repairView = findViewById(R.id.repair_image);
+        DeviceStateVisuals repairParams = new DeviceStateVisuals(DeviceState.BROKEN, this);
+        repairView.setImageDrawable(repairParams.getStateIcon());
+        repairView.setColorFilter(repairParams.getBackgroundColor());
+        TextView repairCounter = findViewById(R.id.repair_count);
+
+        ImageView progressView = findViewById(R.id.in_progress_image);
+        DeviceStateVisuals progressParams = new DeviceStateVisuals(DeviceState.IN_PROGRESS, this);
+        progressView.setImageDrawable(progressParams.getStateIcon());
+        progressView.setColorFilter(progressParams.getBackgroundColor());
+        TextView progressCounter = findViewById(R.id.in_progress_count);
+
+        ImageView brokenView = findViewById(R.id.broken_image);
+        DeviceStateVisuals brokenParams = new DeviceStateVisuals(DeviceState.SALVAGE, this);
+        brokenView.setImageDrawable(brokenParams.getStateIcon());
+        brokenView.setColorFilter(brokenParams.getBackgroundColor());
+        TextView brokenCounter = findViewById(R.id.broken_count);
+
+        ImageView limitedView = findViewById(R.id.limited_image);
+        DeviceStateVisuals limitedParams = new DeviceStateVisuals(DeviceState.LIMITATIONS, this);
+        limitedView.setImageDrawable(limitedParams.getStateIcon());
+        limitedView.setColorFilter(limitedParams.getBackgroundColor());
+        TextView limitedCounter = findViewById(R.id.limited_count);
+
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
                 .roomModule(new RoomModule(getApplication()))
@@ -135,13 +175,30 @@ public class HospitalActivity extends BaseActivity {
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
+                int[] stateCounters = {0, 0, 0, 0, 0, 0};
+
+                for(DeviceInfo deviceInfo : deviceInfos) {
+                    ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
+
+                    int state = latestReportInfo.getReport().getCurrentState();
+
+                    stateCounters[state]++;
+                }
+
+                workingCounter.setText(Integer.toString(stateCounters[DeviceState.WORKING]));
+                maintenanceCounter.setText(Integer.toString(stateCounters[DeviceState.MAINTENANCE]));
+                repairCounter.setText(Integer.toString(stateCounters[DeviceState.BROKEN]));
+                progressCounter.setText(Integer.toString(stateCounters[DeviceState.IN_PROGRESS]));
+                brokenCounter.setText(Integer.toString(stateCounters[DeviceState.SALVAGE]));
+                limitedCounter.setText(Integer.toString(stateCounters[DeviceState.LIMITATIONS]));
+
                 Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().compareTo(second.getDevice().getType()));
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_my_hospital, menu);
@@ -159,7 +216,7 @@ public class HospitalActivity extends BaseActivity {
         } else {
             return super.onOptionsItemSelected(item, R.string.hospital_activity);
         }
-    }
+    }*/
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
         private List<User> users = new ArrayList<>();
@@ -331,7 +388,7 @@ public class HospitalActivity extends BaseActivity {
 
                         nameView.setText(device.getType());
 
-                        if (deviceInfo.getReports().size() > 0) {
+                        if(deviceInfo.getReports().size() > 0) {
                             Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size() - 1).getReport();
 
                             DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), HospitalActivity.this);
