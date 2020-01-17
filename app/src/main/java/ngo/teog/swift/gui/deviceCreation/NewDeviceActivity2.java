@@ -1,24 +1,44 @@
 package ngo.teog.swift.gui.deviceCreation;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import androidx.lifecycle.ViewModelProviders;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.hospital.HospitalViewModel;
+import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.ReportInfo;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class NewDeviceActivity2 extends BaseActivity {
 
@@ -32,7 +52,9 @@ public class NewDeviceActivity2 extends BaseActivity {
     private EditText serialNumberField;
     private EditText manufacturerField;
     private EditText modelField;
-    private EditText wardField;
+    private AutoCompleteTextView wardField;
+
+    private ArrayAdapter<String> wardAdapter;
 
     private NumberPicker intervalPicker;
     private Spinner weekMonthSpinner;
@@ -40,6 +62,9 @@ public class NewDeviceActivity2 extends BaseActivity {
     public static final int MIN_MAINT_INTERVAL = 1;
     public static final int DEF_MAINT_INTERVAL = 4;
     public static final int MAX_MAINT_INTERVAL = 24;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +81,11 @@ public class NewDeviceActivity2 extends BaseActivity {
         manufacturerField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         modelField = findViewById(R.id.modelText);
         modelField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+
         wardField = findViewById(R.id.wardText);
         wardField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+        wardAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
+        wardField.setAdapter(wardAdapter);
 
         intervalPicker = findViewById(R.id.intervalPicker);
         weekMonthSpinner = findViewById(R.id.spinner2);
@@ -72,6 +100,35 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         Intent intent = this.getIntent();
         deviceNumber = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        HospitalViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);
+        viewModel.init(id);
+
+        viewModel.getDeviceInfos().observe(this, deviceInfos -> {
+            if(deviceInfos != null) {
+                List<String> wardSuggestions = new ArrayList<>();
+
+                for(DeviceInfo deviceInfo : deviceInfos) {
+                    String ward = deviceInfo.getDevice().getWard();
+
+                    if(!wardSuggestions.contains(ward)) {
+                        wardSuggestions.add(ward);
+                    }
+                }
+
+                wardAdapter.clear();
+                wardAdapter.addAll(wardSuggestions);
+            }
+        });
     }
 
     @Override

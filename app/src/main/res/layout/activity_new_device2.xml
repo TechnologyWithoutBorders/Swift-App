@@ -58,13 +58,14 @@
                 android:inputType="text"
                 android:maxLength="20"/>
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/wardText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/device_ward"
                 android:inputType="text"
-                android:maxLength="20"/>
+                android:maxLength="20"
+                android:completionThreshold="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
