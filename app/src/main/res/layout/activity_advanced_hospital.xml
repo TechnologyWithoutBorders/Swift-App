@@ -7,23 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Export hospital data" />
-
-    <Button
-        android:id="@+id/exportButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CSV" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="User management" />
+        android:text="Create new user:" />
 
     <EditText
         android:id="@+id/nameText"
@@ -39,7 +23,7 @@
         android:inputType="textEmailAddress"
         android:hint="@string/user_mail" />
 
-    <Button
+    <Button style="@style/AppTheme.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="create"

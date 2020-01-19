@@ -7,7 +7,7 @@
         android:title="information"
         app:showAsAction="always" />
     <item
-        android:id="@+id/advanded"
-        android:title="advanced"
+        android:id="@+id/user_management"
+        android:title="user management"
         app:showAsAction="never" />
 </menu>

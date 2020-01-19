@@ -18,7 +18,7 @@
         <activity
             android:name=".gui.hospital.AdvancedHospitalActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="Advanced options"
+            android:label="User management"
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity

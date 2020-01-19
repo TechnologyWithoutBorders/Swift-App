@@ -198,7 +198,7 @@ public class HospitalActivity extends BaseActivity {
         });
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_my_hospital, menu);
@@ -207,7 +207,7 @@ public class HospitalActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.advanded) {
+        if(item.getItemId() == R.id.user_management) {
             Intent intent = new Intent(this, AdvancedHospitalActivity.class);
 
             startActivity(intent);
@@ -216,7 +216,7 @@ public class HospitalActivity extends BaseActivity {
         } else {
             return super.onOptionsItemSelected(item, R.string.hospital_activity);
         }
-    }*/
+    }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
         private List<User> users = new ArrayList<>();

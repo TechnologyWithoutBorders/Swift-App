@@ -173,6 +173,21 @@ public class RequestFactory {
         }
     }
 
+    public DefaultRequest createUserCreationRequest(final Context context, View disable, final View enable, final int id) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
+
+        Map<String, String> params = generateParameterMap(context, UserAction.CREATE_USER, true);
+
+        JSONObject request = new JSONObject(params);
+
+        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
+                //TODO synchronisieren
+            }
+        });
+    }
+
     public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
