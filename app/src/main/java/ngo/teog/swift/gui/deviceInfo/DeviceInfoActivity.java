@@ -333,38 +333,38 @@ public class DeviceInfoActivity extends BaseActivity {
 
             switch (parameter) {
                 case ASSET_NUMBER:
-                    String assetNumber = ((EditText) editView).getText().toString();
+                    String assetNumber = ((EditText) editView).getText().toString().trim();
 
                     //if we use database queries this value is updated automatically
                     assetNumberView.setText(assetNumber);
                     device.setAssetNumber(assetNumber);
                     break;
                 case TYPE:
-                    String type = ((EditText) editView).getText().toString();
+                    String type = ((EditText) editView).getText().toString().trim();
 
                     typeView.setText(type);
                     device.setType(type);
                     break;
                 case MODEL:
-                    String model = ((EditText) editView).getText().toString();
+                    String model = ((EditText) editView).getText().toString().trim();
 
                     modelView.setText(model);
                     device.setModel(model);
                     break;
                 case MANUFACTURER:
-                    String manufacturer = ((EditText) editView).getText().toString();
+                    String manufacturer = ((EditText) editView).getText().toString().trim();
 
                     manufacturerView.setText(manufacturer);
                     device.setManufacturer(manufacturer);
                     break;
                 case SERIAL_NUMBER:
-                    String serialNumber = ((EditText) editView).getText().toString();
+                    String serialNumber = ((EditText) editView).getText().toString().trim();
 
                     serialNumberView.setText(serialNumber);
                     device.setSerialNumber(serialNumber);
                     break;
                 case WARD:
-                    String ward = ((EditText) editView).getText().toString();
+                    String ward = ((EditText) editView).getText().toString().trim();
 
                     wardView.setText(ward);
                     device.setWard(ward);

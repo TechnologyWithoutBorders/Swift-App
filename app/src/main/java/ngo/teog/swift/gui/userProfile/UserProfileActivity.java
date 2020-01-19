@@ -152,7 +152,7 @@ public class UserProfileActivity extends BaseActivity {
     public void save() {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString(), mailView.getText().toString(), nameView.getText().toString(), viewModel.getUserProfile().getValue().getUser().getHospital(), positionView.getText().toString(), new Date());//TODO getUser.getValue schlecht
+        User user = new User(preferences.getInt(Defaults.ID_PREFERENCE, -1), telephoneView.getText().toString().trim(), mailView.getText().toString().trim(), nameView.getText().toString().trim(), viewModel.getUserProfile().getValue().getUser().getHospital(), positionView.getText().toString().trim(), new Date());//TODO getUser.getValue schlecht
 
         viewModel.updateUser(user);
     }

@@ -66,7 +66,7 @@ public class NewDeviceActivity2 extends BaseActivity {
     private Spinner weekMonthSpinner;
 
     public static final int MIN_MAINT_INTERVAL = 1;
-    public static final int DEF_MAINT_INTERVAL = 4;
+    public static final int DEF_MAINT_INTERVAL = 3;
     public static final int MAX_MAINT_INTERVAL = 24;
 
     @Inject
@@ -105,6 +105,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         intervalPicker = findViewById(R.id.intervalPicker);
         weekMonthSpinner = findViewById(R.id.spinner2);
+        weekMonthSpinner.setSelection(1);
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
@@ -212,7 +213,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     nextButton.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
 
-                    String assetNumber = assetNumberField.getText().toString();
+                    String assetNumber = assetNumberField.getText().toString().trim();
 
                     if(assetNumber.length() == 0) {
                         assetNumber = Integer.toString(deviceNumber);
@@ -227,7 +228,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     }
 
                     HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                            typeField.getText().toString(), serialNumberField.getText().toString(), manufacturerField.getText().toString(), modelField.getText().toString(), wardField.getText().toString(), -1, interval, new Date());
+                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), wardField.getText().toString().trim(), -1, interval, new Date());
 
                     Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                     intent.putExtra(ResourceKeys.DEVICE, device);

@@ -82,7 +82,7 @@ public class ReportCreationActivity extends BaseActivity {
     public void createReport(View view) {
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        String description = descriptionText.getText().toString();
+        String description = descriptionText.getText().toString().trim();
 
         Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date());
 
