@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="2dp"
         android:paddingLeft="2dp"
-        android:text="[version_name]"/>
+        android:text="@string/app_name" />
 
     <Space
         android:layout_width="match_parent"

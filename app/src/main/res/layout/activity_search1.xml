@@ -17,20 +17,20 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:text="Hospital" />
+        android:text="@string/hospital" />
 
     <Button style="@style/AppTheme.Button"
         android:id="@+id/deviceButton"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:text="Device" />
+        android:text="@string/device" />
 
     <Button style="@style/AppTheme.Button"
         android:id="@+id/userButton"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:text="User" />
+        android:text="@string/user" />
 
 </LinearLayout>

@@ -170,6 +170,7 @@
     <string name="device_recent_reports">Recent Reports</string>
 
     <!-- Report Information -->
+    <string name="report">Report</string>
     <string name="report_description">Description</string>
     <string name="report_date">Date</string>
     <string name="report_state_change">State Change</string>
@@ -185,6 +186,8 @@
 
     <!-- Hospital Information -->
     <string name="hospital">Hospital</string>
+    <string name="map">Map</string>
+    <string name="filter">filter...</string>
 
     <!-- Error Messages -->
     <string name="error_internet_connection">no internet connection</string>
@@ -199,5 +202,7 @@
     <string name="dialog_ok_text">OK</string>
 
     <string name="initial_report_text">device creation</string>
+
+    <string name="image_download_hint">tap icon to download image</string>
 
 </resources>
