@@ -168,7 +168,7 @@ public class HospitalActivity extends BaseActivity {
 
         viewModel.getUsers().observe(this, users -> {
            if(users != null) {
-               Collections.sort(users, (first, second) -> first.getName().compareTo(second.getName()));
+               Collections.sort(users, (first, second) -> first.getName().toLowerCase().compareTo(second.getName().toLowerCase()));
                adapter.setUsers(users);
            }
         });
@@ -192,7 +192,7 @@ public class HospitalActivity extends BaseActivity {
                 brokenCounter.setText(Integer.toString(stateCounters[DeviceState.SALVAGE]));
                 limitedCounter.setText(Integer.toString(stateCounters[DeviceState.LIMITATIONS]));
 
-                Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().compareTo(second.getDevice().getType()));
+                Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().toLowerCase().compareTo(second.getDevice().getType().toLowerCase()));
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
