@@ -198,7 +198,7 @@ public class HospitalActivity extends BaseActivity {
         });
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_my_hospital, menu);
@@ -216,7 +216,7 @@ public class HospitalActivity extends BaseActivity {
         } else {
             return super.onOptionsItemSelected(item, R.string.hospital_activity);
         }
-    }*/
+    }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
         private List<User> users = new ArrayList<>();
