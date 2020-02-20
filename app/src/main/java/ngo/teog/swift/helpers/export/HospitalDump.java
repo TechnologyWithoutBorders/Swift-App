@@ -30,4 +30,8 @@ public class HospitalDump {
     public void setDevices(List<DeviceDump> devices) {
         this.devices = devices;
     }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
 }
