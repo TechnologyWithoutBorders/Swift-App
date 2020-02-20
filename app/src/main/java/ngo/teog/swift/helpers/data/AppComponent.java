@@ -10,6 +10,7 @@ import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.hospital.AdvancedHospitalActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
+import ngo.teog.swift.gui.hospital.PortationActivity;
 import ngo.teog.swift.gui.main.BarcodeFragment;
 import ngo.teog.swift.gui.main.CalendarFragment;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -38,6 +39,7 @@ public interface AppComponent {
     void inject(MainActivity target);
     void inject(ReportInfoActivity target);
     void inject(CalendarFragment target);
+    void inject(PortationActivity target);
 
     HospitalDatabase userDatabase();
 
