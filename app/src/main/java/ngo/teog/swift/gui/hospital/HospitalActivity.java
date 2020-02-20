@@ -213,6 +213,12 @@ public class HospitalActivity extends BaseActivity {
             startActivity(intent);
 
             return true;
+        } else if(item.getItemId() == R.id.portation) {
+            Intent intent = new Intent(this, PortationActivity.class);
+
+            startActivity(intent);
+
+            return true;
         } else {
             return super.onOptionsItemSelected(item, R.string.hospital_activity);
         }
