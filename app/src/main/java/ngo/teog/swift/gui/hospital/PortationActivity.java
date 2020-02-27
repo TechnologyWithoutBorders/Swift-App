@@ -3,19 +3,33 @@ package ngo.teog.swift.gui.hospital;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.inject.Inject;
 
@@ -43,33 +57,55 @@ public class PortationActivity extends AppCompatActivity {
                 .build()
                 .inject(this);
 
-        //TODO Rechte überprüfen?
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("application/zip")
+                .putExtra(Intent.EXTRA_TITLE, "swift_export.zip");
 
-        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+        startActivityForResult(intent, 0);
+    }
 
-        PortationViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(PortationViewModel.class);
-        viewModel.init(id);
-        viewModel.getHospitalDump().observe(this, hospitalDump -> {
-            if(hospitalDump != null) {
-                //can't use Intent.ACTION_CREATE_DOCUMENT as it requires new Android API level
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-                File file = new File(this.getCacheDir(), "swift_export.csv");
+        if(requestCode == 0) {
+            if(resultCode == Activity.RESULT_OK) {
+                if(data != null && data.getData() != null) {
+                    Uri fileUri = data.getData();
 
-                try {
-                    FileWriter fileWriter = new FileWriter(file);
-                    CSVWriter writer = new CSVWriter(fileWriter);
+                    SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-                    Hospital hospital = hospitalDump.getHospital();
+                    PortationViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(PortationViewModel.class);
+                    viewModel.init(id);
+                    viewModel.getHospitalDump().observe(this, hospitalDump -> {
+                        if(hospitalDump != null) {
+                            try {
+                                ZipOutputStream zipOut = new ZipOutputStream(getContentResolver().openOutputStream(fileUri));
 
-                    writer.writeNext(new String[]{"ID", "Name", "Location", "Longitude", "Latitude"});
-                    writer.writeNext(new String[]{Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
+                                CSVWriter writer = new CSVWriter(new OutputStreamWriter(zipOut));
 
-                    writer.close();
-                } catch (IOException e) {
-                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                                ZipEntry entry = new ZipEntry("hospitals.csv");
+
+                                zipOut.putNextEntry(entry);
+
+                                Hospital hospital = hospitalDump.getHospital();
+
+                                writer.writeNext(new String[]{"ID", "Name", "Location", "Longitude", "Latitude"});
+                                writer.writeNext(new String[]{Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
+
+                                writer.close();
+
+                                zipOut.close();
+                            } catch (IOException e) {
+                                //Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                                Toast.makeText(this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }
             }
-        });
+        }
     }
 }
