@@ -34,4 +34,12 @@ public class HospitalDump {
     public Hospital getHospital() {
         return hospital;
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public List<DeviceDump> getDeviceDumps() {
+        return devices;
+    }
 }

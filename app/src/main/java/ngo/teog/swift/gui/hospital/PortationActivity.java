@@ -4,30 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -35,11 +22,16 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Hospital;
+import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
+import ngo.teog.swift.helpers.export.DeviceDump;
 
 public class PortationActivity extends AppCompatActivity {
 
@@ -83,20 +75,51 @@ public class PortationActivity extends AppCompatActivity {
                         if(hospitalDump != null) {
                             try {
                                 ZipOutputStream zipOut = new ZipOutputStream(getContentResolver().openOutputStream(fileUri));
-
                                 CSVWriter writer = new CSVWriter(new OutputStreamWriter(zipOut));
-
-                                ZipEntry entry = new ZipEntry("hospitals.csv");
-
-                                zipOut.putNextEntry(entry);
 
                                 Hospital hospital = hospitalDump.getHospital();
 
-                                writer.writeNext(new String[]{"ID", "Name", "Location", "Longitude", "Latitude"});
-                                writer.writeNext(new String[]{Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
+                                ZipEntry hospitalEntry = new ZipEntry("hospitals.csv");
+                                zipOut.putNextEntry(hospitalEntry);
+
+                                writer.writeNext(new String[] {"ID", "Name", "Location", "Longitude", "Latitude"});
+                                writer.writeNext(new String[] {Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
+
+                                ZipEntry userEntry = new ZipEntry("users.csv");
+                                zipOut.putNextEntry(userEntry);
+
+                                writer.writeNext(new String[] {"Hospital", "ID", "Name", "Position", "Mail", "Phone"});
+
+                                for(User user : hospitalDump.getUsers()) {
+                                    writer.writeNext(new String[] {Integer.toString(user.getHospital()), Integer.toString(user.getId()), user.getName(), user.getPosition(), user.getMail(), user.getPhone()});
+                                }
+
+                                ZipEntry deviceEntry = new ZipEntry("devices.csv");
+                                zipOut.putNextEntry(deviceEntry);
+
+                                writer.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Ward", "Type", "Manufacturer", "Model", "Serial Number"});
+
+                                for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
+                                    HospitalDevice device = deviceDump.getDevice();
+
+                                    writer.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getWard(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
+                                }
+
+                                ZipEntry reportEntry = new ZipEntry("reports.csv");
+                                zipOut.putNextEntry(reportEntry);
+
+                                writer.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Previous State", "Current State", "Description"});
+
+                                for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
+                                    for(Report report : deviceDump.getReports()) {
+                                        DeviceStateVisuals oldVisuals = new DeviceStateVisuals(report.getPreviousState(), this);
+                                        DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
+
+                                        writer.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
+                                    }
+                                }
 
                                 writer.close();
-
                                 zipOut.close();
                             } catch (IOException e) {
                                 //Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();

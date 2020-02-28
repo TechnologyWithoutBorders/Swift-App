@@ -13,6 +13,9 @@ public class ReportInfo implements Serializable {
     @Relation(parentColumn = "author", entityColumn = "id")
     private List<User> authors;
 
+    @Relation(parentColumn = "hospital", entityColumn = "id")
+    private List<Hospital> hospitals;
+
     public ReportInfo(Report report) {
         this.report = report;
     }
@@ -31,5 +34,9 @@ public class ReportInfo implements Serializable {
 
     public void setAuthors(List<User> authors) {
         this.authors = authors;
+    }
+
+    public void setHospitals(List<Hospital> hospitals) {
+        this.hospitals = hospitals;
     }
 }

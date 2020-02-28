@@ -140,7 +140,7 @@ public class HospitalRepository {
         executor.execute(() -> {
             Date lastUpdate = new Date();
 
-            Report creationReport = new Report(1, userId, device.getId(), 0, 0, context.getString(R.string.initial_report_text), lastUpdate);
+            Report creationReport = new Report(1, userId, device.getId(), device.getHospital(), 0, 0, context.getString(R.string.initial_report_text), lastUpdate);
             device.setLastUpdate(lastUpdate);
 
             hospitalDao.save(device);

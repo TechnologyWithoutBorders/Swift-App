@@ -40,6 +40,8 @@ public final class ResourceKeys {
     /** Identifier for all kinds of paths */
     public static final String PATH = "path";
 
+    public static final String HOSPITAL_ID = "hospital_id";
+
     /** Identifier for hospital objects */
     public static final String HOSPITAL = "hospital";
 

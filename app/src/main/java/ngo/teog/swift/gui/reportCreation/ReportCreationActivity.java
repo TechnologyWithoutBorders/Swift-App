@@ -37,6 +37,7 @@ public class ReportCreationActivity extends BaseActivity {
     private int oldState;
     private int state;
     private int device;
+    private int hospital;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -52,6 +53,7 @@ public class ReportCreationActivity extends BaseActivity {
         oldState = intent.getIntExtra(ResourceKeys.REPORT_OLD_STATE, -1);
         state = intent.getIntExtra(ResourceKeys.REPORT_NEW_STATE, -1);
         device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        hospital = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
 
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);
@@ -84,7 +86,7 @@ public class ReportCreationActivity extends BaseActivity {
 
         String description = descriptionText.getText().toString().trim();
 
-        Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, oldState, state, description, new Date());
+        Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, hospital, oldState, state, description, new Date());
 
         viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
