@@ -11,10 +11,10 @@ import ngo.teog.swift.R;
  */
 public class DeviceStateVisuals {
 
-    private static final int[] ICONS= {R.drawable.ic_check,
+    private static final int[] ICONS = {R.drawable.ic_check,
                                         R.drawable.ic_maintenance,
                                         R.drawable.ic_repair,
-                                        R.drawable.ic_in_progress,
+                                        R.drawable.ic_hourglass_empty_white_24dp,
                                         R.drawable.ic_broken_salvage,
                                         R.drawable.ic_working_with_limitations};
 

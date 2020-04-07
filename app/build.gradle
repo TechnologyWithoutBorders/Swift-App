@@ -40,8 +40,9 @@ dependencies {
     def zxing_version = "3.5.0"
     def dagger_version = "2.24"
     def work_version = "2.3.4"
+    def opencsv_version = "4.2"
 
-    implementation "com.opencsv:opencsv:4.2"
+    implementation "com.opencsv:opencsv:$opencsv_version"
 
     implementation "com.google.code.gson:gson:$gson_version"
 
@@ -54,16 +55,24 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
+
     implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+
     implementation "com.journeyapps:zxing-android-embedded:$zxing_version"
+
     implementation "com.android.volley:volley:$volley_version"
+
     implementation "androidx.work:work-runtime:$work_version"
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
+
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
