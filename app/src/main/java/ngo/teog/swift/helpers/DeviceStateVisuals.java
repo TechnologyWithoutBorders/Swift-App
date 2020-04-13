@@ -11,12 +11,12 @@ import ngo.teog.swift.R;
  */
 public class DeviceStateVisuals {
 
-    private static final int[] ICONS = {R.drawable.ic_check,
-                                        R.drawable.ic_maintenance,
-                                        R.drawable.ic_repair,
+    private static final int[] ICONS = {R.drawable.ic_check_white_24dp,
+                                        R.drawable.ic_timer_white_24dp,
+                                        R.drawable.ic_build_white_24dp,
                                         R.drawable.ic_hourglass_empty_white_24dp,
-                                        R.drawable.ic_broken_salvage,
-                                        R.drawable.ic_working_with_limitations};
+                                        R.drawable.ic_block_white_24dp,
+                                        R.drawable.ic_warning_white_24dp};
 
     private static final int[] COLORS = {android.R.color.holo_green_dark,
                                         android.R.color.holo_blue_light,
