@@ -41,7 +41,7 @@ public class RoomModule {
         return new HospitalRepository(hospitalDao, context);
     }
 
-    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             //ignore as no noteworthy changes took place
@@ -51,7 +51,7 @@ public class RoomModule {
     /*
      * Hospital column was added to table Reports
      */
-    private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+    public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE reports ADD COLUMN hospital INTEGER");

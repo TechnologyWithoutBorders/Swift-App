@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import ngo.teog.swift.helpers.data.HospitalDatabase;
 
-import static androidx.work.impl.WorkDatabaseMigrations.MIGRATION_1_2;
+import static ngo.teog.swift.helpers.data.RoomModule.MIGRATION_2_3;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class DatabaseMigrationTest {
@@ -28,10 +28,10 @@ public class DatabaseMigrationTest {
     }
 
     @Test
-    public void migrate1To2() throws IOException {
-        SupportSQLiteDatabase db = helper.createDatabase(TEST_DB, 1);
+    public void migrate2To3() throws IOException {
+        SupportSQLiteDatabase db = helper.createDatabase(TEST_DB, 2);
 
-        // db has schema version 1. insert some data using SQL queries.
+        // db has schema version 2. insert some data using SQL queries.
         // You cannot use DAO classes because they expect the latest schema.
         //db.execSQL(...);
 
@@ -40,7 +40,7 @@ public class DatabaseMigrationTest {
 
         // Re-open the database with version 2 and provide
         // MIGRATION_1_2 as the migration process.
-        db = helper.runMigrationsAndValidate(TEST_DB, 2, true, MIGRATION_1_2);
+        db = helper.runMigrationsAndValidate(TEST_DB, 3, true, MIGRATION_2_3);
 
         // MigrationTestHelper automatically verifies the schema changes,
         // but you need to validate that the data was migrated properly.
