@@ -48,10 +48,12 @@ public class RoomModule {
         }
     };
 
+    /*
+     * Hospital column was added to table Reports
+     */
     private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            //TODO copy and insert
             database.execSQL("ALTER TABLE reports ADD COLUMN hospital INTEGER");
             database.execSQL("UPDATE reports SET hospital = 1");
         }

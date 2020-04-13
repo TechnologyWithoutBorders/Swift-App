@@ -11,7 +11,7 @@ import java.util.Date;
  * @author Julian Deyerler
  */
 
-@Entity(tableName = "reports", primaryKeys = {"id", "device", "hospital"})
+@Entity(tableName = "reports", primaryKeys = {"id", "device"})//TODO hospital muss auch in primary keys
 public class Report implements  Serializable {
 
     private int id;
