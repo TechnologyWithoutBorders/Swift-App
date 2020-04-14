@@ -13,8 +13,10 @@ import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.Buffer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -74,7 +76,7 @@ public class PortationActivity extends AppCompatActivity {
                     viewModel.getHospitalDump().observe(this, hospitalDump -> {
                         if(hospitalDump != null) {
                             try {
-                                ZipOutputStream zipOut = new ZipOutputStream(getContentResolver().openOutputStream(fileUri));
+                                ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(getContentResolver().openOutputStream(fileUri)));
                                 CSVWriter writer = new CSVWriter(new OutputStreamWriter(zipOut));
 
                                 Hospital hospital = hospitalDump.getHospital();
@@ -85,6 +87,8 @@ public class PortationActivity extends AppCompatActivity {
                                 writer.writeNext(new String[] {"ID", "Name", "Location", "Longitude", "Latitude"});
                                 writer.writeNext(new String[] {Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
 
+                                writer.flush();
+                                zipOut.closeEntry();
                                 ZipEntry userEntry = new ZipEntry("users.csv");
                                 zipOut.putNextEntry(userEntry);
 
@@ -94,6 +98,8 @@ public class PortationActivity extends AppCompatActivity {
                                     writer.writeNext(new String[] {Integer.toString(user.getHospital()), Integer.toString(user.getId()), user.getName(), user.getPosition(), user.getMail(), user.getPhone()});
                                 }
 
+                                writer.flush();
+                                zipOut.closeEntry();
                                 ZipEntry deviceEntry = new ZipEntry("devices.csv");
                                 zipOut.putNextEntry(deviceEntry);
 
@@ -105,6 +111,8 @@ public class PortationActivity extends AppCompatActivity {
                                     writer.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getWard(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
                                 }
 
+                                writer.flush();
+                                zipOut.closeEntry();
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
@@ -122,8 +130,7 @@ public class PortationActivity extends AppCompatActivity {
                                 writer.close();
                                 zipOut.close();
                             } catch (IOException e) {
-                                //Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
-                                Toast.makeText(this.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
