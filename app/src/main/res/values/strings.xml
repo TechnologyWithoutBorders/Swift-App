@@ -3,6 +3,7 @@
     <string name="app_name">Swift</string>
 
     <!-- Information Texts -->
+    <string name="menu_information">information</string>
     <string name="deviceinfo_activity">This view contains basic information about a device. You can also change the device´s state and append reports.</string>
     <string name="hospital_activity">Use this view to find members of staff or devices associated with your hospital.</string>
     <string name="newdevice_activity_1">Please put a fresh barcode sticker on the device you want to register and scan it with your camera.</string>

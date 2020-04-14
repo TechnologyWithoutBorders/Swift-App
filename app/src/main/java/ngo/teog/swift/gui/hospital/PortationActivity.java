@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
@@ -16,7 +17,6 @@ import com.opencsv.CSVWriter;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.Buffer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -50,7 +50,9 @@ public class PortationActivity extends AppCompatActivity {
                 .roomModule(new RoomModule(getApplication()))
                 .build()
                 .inject(this);
+    }
 
+    public void exportCSV(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("application/zip")

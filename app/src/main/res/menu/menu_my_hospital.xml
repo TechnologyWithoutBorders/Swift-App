@@ -4,7 +4,7 @@
     <item
         android:id="@+id/info"
         android:icon="@drawable/ic_info_outline_white_24dp"
-        android:title="information"
+        android:title="@string/menu_information"
         app:showAsAction="always" />
     <item
         android:id="@+id/user_management"
@@ -12,6 +12,6 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/portation"
-        android:title="Export"
+        android:title="Import/Export"
         app:showAsAction="never" />
 </menu>
