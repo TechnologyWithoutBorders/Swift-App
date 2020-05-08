@@ -456,18 +456,12 @@ public class RequestFactory {
                             byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
                             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                            FileOutputStream outputStream;
+                            File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                            dir.mkdirs();
 
-                            try {
-                                File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                                dir.mkdirs();
-
-                                outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
-                                outputStream.write(decodedString);
-                                outputStream.close();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            FileOutputStream outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
+                            outputStream.write(decodedString);
+                            outputStream.close();
 
                             if(imageView != null) {
                                 imageView.setImageBitmap(bitmap);
