@@ -130,6 +130,22 @@ public class DeviceInfoActivity extends BaseActivity {
 
         dummyImageView = findViewById(R.id.downloadImageView);
         globalImageView = findViewById(R.id.imageView);
+        globalImageView.setBackgroundColor(Color.BLACK);
+
+        globalImageView.setOnClickListener(view -> {
+            File dir = new File(this.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+            dir.mkdirs();
+
+            File image1 = new File(dir, deviceId + ".jpg");
+
+            if(image1.exists()) {
+                Intent intent12 = new Intent(DeviceInfoActivity.this, ImageActivity.class);
+                intent12.putExtra(ResourceKeys.IMAGE, image1);
+                intent12.putExtra(ResourceKeys.DEVICE_ID, deviceId);
+
+                startActivity(intent12);
+            }
+        });
 
         //TODO bei Bild per Hash überprüfen, ob es ein neueres gibt
 
@@ -222,22 +238,6 @@ public class DeviceInfoActivity extends BaseActivity {
 
                     Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
                     globalImageView.setImageBitmap(bitmap);
-                    globalImageView.setBackgroundColor(Color.BLACK);
-
-                    globalImageView.setOnClickListener(view -> {
-                        File dir1 = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                        dir1.mkdirs();
-
-                        File image1 = new File(dir1, device.getId() + ".jpg");
-
-                        if(image1.exists()) {
-                            Intent intent12 = new Intent(DeviceInfoActivity.this, ImageActivity.class);
-                            intent12.putExtra(ResourceKeys.IMAGE, image1);
-                            intent12.putExtra(ResourceKeys.DEVICE_ID, device.getId());
-
-                            startActivity(intent12);
-                        }
-                    });
                 }
 
                 adapter = new ReportArrayAdapter(this, reports);

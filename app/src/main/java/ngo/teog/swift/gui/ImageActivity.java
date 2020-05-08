@@ -32,6 +32,7 @@ import ngo.teog.swift.helpers.ResourceKeys;
  */
 public class ImageActivity extends BaseActivity {
     private int device;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class ImageActivity extends BaseActivity {
         try {
             Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(image));
 
-            ImageView imageView = findViewById(R.id.imageView);
+            imageView = findViewById(R.id.imageView);
             imageView.setImageBitmap(bitmap);
         } catch(FileNotFoundException e) {
             Toast.makeText(this.getApplicationContext(), this.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
@@ -99,11 +100,11 @@ public class ImageActivity extends BaseActivity {
 
                         StringBuilder sb = new StringBuilder();
 
-                        for (byte b : result) {
+                        for(byte b : result) {
                             sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
                         }
 
-                        RequestFactory.ImageHashRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString());
+                        RequestFactory.ImageHashRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString(), imageView);
 
                         VolleyManager.getInstance(this).getRequestQueue().add(request);
                     } catch(FileNotFoundException e1) {

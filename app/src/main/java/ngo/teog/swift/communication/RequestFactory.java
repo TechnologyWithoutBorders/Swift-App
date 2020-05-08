@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.Base64;
 import android.util.Log;
@@ -35,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
@@ -218,19 +216,6 @@ public class RequestFactory {
                 }
 
                 ((ImageView) enable).setImageBitmap(bitmap);
-                enable.setBackgroundColor(Color.BLACK);
-
-                enable.setOnClickListener(view -> {
-                    File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    File image = new File(dir, id + ".jpg");
-
-                    if(image.exists()) {
-                        Intent intent = new Intent(context, ImageActivity.class);
-                        intent.putExtra(ResourceKeys.IMAGE, image);
-
-                        context.startActivity(intent);
-                    }
-                });
             }
         });
     }
@@ -319,7 +304,7 @@ public class RequestFactory {
         return new PasswordResetRequest(context, url, request);
     }
 
-    public ImageHashRequest createImageHashRequest(Context context, int device, String hash) {
+    public ImageHashRequest createImageHashRequest(Context context, int device, String hash, ImageView imageView) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
@@ -329,7 +314,7 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new ImageHashRequest(context, url, request);
+        return new ImageHashRequest(context, url, request, device, imageView);
     }
 
     public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<User> adapter) {
@@ -455,16 +440,38 @@ public class RequestFactory {
         }
     }
 
+    /**
+     * Server request that uploads a device image hash in order to check if a newer image is available.
+     */
     public class ImageHashRequest extends JsonObjectRequest {
-        public ImageHashRequest(final Context context, final String url, JSONObject request) {
+        public ImageHashRequest(final Context context, final String url, JSONObject request, final int device, ImageView imageView) {
             super(Request.Method.POST, url, request, response -> {
                 try {
                     int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
 
                     switch(responseCode) {
                         case SwiftResponse.CODE_OK:
-                            //TODO
-                            Toast.makeText(context.getApplicationContext(), response.getString(SwiftResponse.DATA_FIELD), Toast.LENGTH_SHORT).show();
+                            String imageData = response.getString(SwiftResponse.DATA_FIELD);
+
+                            byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                            FileOutputStream outputStream;
+
+                            try {
+                                File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                                dir.mkdirs();
+
+                                outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
+                                outputStream.write(decodedString);
+                                outputStream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            if(imageView != null) {
+                                imageView.setImageBitmap(bitmap);
+                            }
 
                             break;
                         case SwiftResponse.CODE_FAILED_VISIBLE:
