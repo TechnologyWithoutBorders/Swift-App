@@ -56,7 +56,7 @@ public class ImageActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.menu_device_image, menu);
+        inflater.inflate(R.menu.menu_device_image, menu);
         return true;
     }
 
@@ -65,7 +65,7 @@ public class ImageActivity extends BaseActivity {
         switch(item.getItemId()) {
             case R.id.edit:
                 Intent intent = new Intent(this, ImageCaptureActivity.class);
-                intent.putExtra(ResourceKeys.DEVICE, device);
+                intent.putExtra(ResourceKeys.DEVICE_ID, device);
 
                 startActivity(intent);
 
