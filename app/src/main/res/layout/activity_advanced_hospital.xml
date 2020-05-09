@@ -7,7 +7,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create new user:" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Create new user" />
 
     <EditText
         android:id="@+id/nameText"
@@ -22,6 +24,11 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:hint="@string/user_mail" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The user will receive his/her password via mail." />
 
     <Button style="@style/AppTheme.Button"
         android:layout_width="match_parent"
