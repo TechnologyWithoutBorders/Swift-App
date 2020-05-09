@@ -70,8 +70,10 @@ public class ImageActivity extends BaseActivity {
 
                 startActivity(intent);
 
+                this.finish();
+
                 return true;
-            case R.id.refresh:
+            case R.id.refresh://TODO beim ersten Refresh stimmt der Hash iwie nicht überein
                 if(this.checkForInternetConnection()) {
                     //in order to minimize traffic, we request a hash of the image and then decide whether to download the image
 

@@ -253,7 +253,7 @@ public class DeviceInfoActivity extends BaseActivity {
         refresh();
     }
 
-    private void refresh() {
+    private void refresh() {//TODO Reports werden nicht refresht! Bild irgendwie schon, auch wenn hier nicht angegeben
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
