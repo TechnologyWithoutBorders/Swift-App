@@ -30,10 +30,22 @@
         android:layout_height="wrap_content"
         android:text="The user will receive his/her password via mail." />
 
-    <Button style="@style/AppTheme.Button"
-        android:id="@+id/create_button"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="create"
-        android:onClick="createUser" />
+        android:layout_height="wrap_content">
+
+        <Button style="@style/AppTheme.Button"
+            android:id="@+id/create_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="create"
+            android:onClick="createUser" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </RelativeLayout>
+
 </LinearLayout>

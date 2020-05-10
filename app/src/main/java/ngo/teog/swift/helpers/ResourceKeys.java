@@ -17,6 +17,9 @@ public final class ResourceKeys {
     /** Identifier for user IDs */
     public static final String USER_ID = "user_id";
 
+    public static final String USER_MAIL = "user_mail";
+    public static final String USER_NAME = "user_name";
+
     /** Identifier for user objects */
     public static final String USER = "user";
 

@@ -207,13 +207,13 @@ public class HospitalActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*if(item.getItemId() == R.id.user_management) {
+        if(item.getItemId() == R.id.user_management) {
             Intent intent = new Intent(this, AdvancedHospitalActivity.class);
 
             startActivity(intent);
 
             return true;
-        } else*/ if(item.getItemId() == R.id.portation) {
+        } else if(item.getItemId() == R.id.portation) {
             Intent intent = new Intent(this, PortationActivity.class);
 
             startActivity(intent);

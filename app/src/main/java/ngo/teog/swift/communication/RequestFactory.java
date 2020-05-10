@@ -65,7 +65,7 @@ public class RequestFactory {
         }
     }
 
-    private abstract class BaseResponseListener implements Response.Listener<JSONObject> {
+    public abstract class BaseResponseListener implements Response.Listener<JSONObject> {
         private Context context;
         private View disable;
         private View enable;
@@ -169,21 +169,6 @@ public class RequestFactory {
                 }
             }, error -> Log.e("IMAGE_UPLOAD", error.toString(), error));
         }
-    }
-
-    public DefaultRequest createUserCreationRequest(final Context context, View disable, final View enable, final int id) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, UserAction.CREATE_USER, true);
-
-        JSONObject request = new JSONObject(params);
-
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                //TODO synchronisieren
-            }
-        });
     }
 
     public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
