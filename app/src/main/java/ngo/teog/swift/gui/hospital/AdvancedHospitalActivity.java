@@ -91,20 +91,28 @@ public class AdvancedHospitalActivity extends BaseActivity {
     }
 
     public void createUser(View view) {
-        String name = nameText.getText().toString();
-        String mail = mailText.getText().toString();
+        String name = nameText.getText().toString().trim();
+        String mail = mailText.getText().toString().trim();
 
-        if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
+        if(name.length() > 0) {
+            if(mail.length() > 0) {
+                if (this.checkForInternetConnection()) {
+                    RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            DefaultRequest request = this.createUserCreationRequest(this, progressBar, createButton, name, mail);
+                    DefaultRequest request = this.createUserCreationRequest(this, progressBar, createButton, name, mail);
 
-            progressBar.setVisibility(View.VISIBLE);
-            createButton.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+                    createButton.setVisibility(View.GONE);
 
-            queue.add(request);
+                    queue.add(request);
+                } else {
+                    Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                mailText.setError("mail is empty");
+            }
         } else {
-            Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+            nameText.setError("name is empty");
         }
     }
 }
