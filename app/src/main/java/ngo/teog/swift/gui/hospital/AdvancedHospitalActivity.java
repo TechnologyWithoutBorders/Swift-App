@@ -85,6 +85,9 @@ public class AdvancedHospitalActivity extends BaseActivity {
             public void onSuccess(JSONObject response) throws Exception {
                 Toast.makeText(context.getApplicationContext(), "user created", Toast.LENGTH_LONG).show();
 
+                nameText.setText(null);
+                mailText.setText(null);
+
                 //TODO sync anstoßen?
             }
         });
