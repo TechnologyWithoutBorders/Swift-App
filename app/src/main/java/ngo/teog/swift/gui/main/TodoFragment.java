@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
@@ -75,6 +76,12 @@ public class TodoFragment extends Fragment {
                     refresh();
                 }
         );
+
+        new FancyShowCaseView.Builder(this.getActivity())
+                .focusOn(view.findViewById(R.id.new_device_button))
+                .title("Create a new device using the button below")
+                .build()
+                .show();
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getActivity().getApplication()))

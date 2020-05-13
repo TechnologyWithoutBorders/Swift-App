@@ -33,6 +33,7 @@
     </RelativeLayout>
 
     <Button style="@style/AppTheme.Button"
+        android:id="@+id/new_device_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/new_device_button"
