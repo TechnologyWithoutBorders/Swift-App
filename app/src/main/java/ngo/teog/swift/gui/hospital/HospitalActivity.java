@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -196,6 +197,13 @@ public class HospitalActivity extends BaseActivity {
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
+
+        //Show tutorial
+        new FancyShowCaseView.Builder(this)
+                .focusOn(findViewById(R.id.device_state_overview))
+                .title("Quick overview over your hospital")
+                .build()
+                .show();
     }
 
     @Override

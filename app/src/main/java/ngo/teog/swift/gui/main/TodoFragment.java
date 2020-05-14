@@ -77,12 +77,6 @@ public class TodoFragment extends Fragment {
                 }
         );
 
-        new FancyShowCaseView.Builder(this.getActivity())
-                .focusOn(view.findViewById(R.id.new_device_button))
-                .title("Create a new device using the button below")
-                .build()
-                .show();
-
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getActivity().getApplication()))
                 .roomModule(new RoomModule(getActivity().getApplication()))
