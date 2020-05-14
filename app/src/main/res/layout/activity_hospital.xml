@@ -52,7 +52,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/device_state_overview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -111,6 +110,7 @@
             android:layout_weight="1" />
 
         <LinearLayout
+            android:id="@+id/device_state_overview"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

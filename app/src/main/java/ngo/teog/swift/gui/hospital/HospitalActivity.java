@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
@@ -199,11 +200,30 @@ public class HospitalActivity extends BaseActivity {
         });
 
         //Show tutorial
-        new FancyShowCaseView.Builder(this)
-                .focusOn(findViewById(R.id.device_state_overview))
+        FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
                 .title("Quick overview over your hospital")
-                .build()
-                .show();
+                .focusRectAtPosition(360, 295,  640, 115)
+                .roundRectRadius(60)
+                .build();
+
+        FancyShowCaseView tut2 = new FancyShowCaseView.Builder(this)
+                .title("Browse through your colleagues and devices")
+                .focusRectAtPosition(360, 500,  750, 150)
+                .roundRectRadius(60)
+                .build();
+
+        FancyShowCaseView tut3 = new FancyShowCaseView.Builder(this)
+                .title("Use this field for filtering")
+                .focusRectAtPosition(360, 380,  750, 100)
+                .roundRectRadius(60)
+                .build();
+
+        FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                .add(tut1)
+                .add(tut2)
+                .add(tut3);
+
+        tutorialQueue.show();
     }
 
     @Override
