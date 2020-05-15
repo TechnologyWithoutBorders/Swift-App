@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -201,20 +202,23 @@ public class HospitalActivity extends BaseActivity {
 
         //Show tutorial
         FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
+                .focusOn(findViewById(R.id.device_state_overview))
                 .title("Quick overview over your hospital")
-                .focusRectAtPosition(360, 295,  640, 115)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .roundRectRadius(60)
                 .build();
 
         FancyShowCaseView tut2 = new FancyShowCaseView.Builder(this)
                 .title("Browse through your colleagues and devices")
-                .focusRectAtPosition(360, 500,  750, 150)
+                .focusOn(hospitalListView)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .roundRectRadius(60)
                 .build();
 
         FancyShowCaseView tut3 = new FancyShowCaseView.Builder(this)
+                .focusOn(searchView)
                 .title("Use this field for filtering")
-                .focusRectAtPosition(360, 380,  750, 100)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .roundRectRadius(60)
                 .build();
 
