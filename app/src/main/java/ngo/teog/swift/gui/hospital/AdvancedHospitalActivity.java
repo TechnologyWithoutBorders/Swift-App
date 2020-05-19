@@ -88,7 +88,10 @@ public class AdvancedHospitalActivity extends BaseActivity {
                 nameText.setText(null);
                 mailText.setText(null);
 
-                //TODO sync anstoßen?
+                SharedPreferences preferences = AdvancedHospitalActivity.this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+                viewModel.refreshHospital(userId);
             }
         });
     }
