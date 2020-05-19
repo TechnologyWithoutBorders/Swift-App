@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,12 +54,15 @@ public class HospitalActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private ExpandableListView hospitalListView;
+    private EditText searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital);
 
-        final ExpandableListView hospitalListView = findViewById(R.id.hospitalList);
+        hospitalListView = findViewById(R.id.hospitalList);
 
         ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
         hospitalListView.setAdapter(adapter);
@@ -80,7 +84,7 @@ public class HospitalActivity extends BaseActivity {
             return false;
         });
 
-        EditText searchView = findViewById(R.id.search_view);
+        searchView = findViewById(R.id.search_view);
 
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -199,35 +203,6 @@ public class HospitalActivity extends BaseActivity {
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
-
-        //Show tutorial
-        FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
-                .focusOn(findViewById(R.id.device_state_overview))
-                .title("Quick overview over your hospital")
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(60)
-                .build();
-
-        FancyShowCaseView tut2 = new FancyShowCaseView.Builder(this)
-                .title("Browse through your colleagues and devices")
-                .focusOn(hospitalListView)
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(60)
-                .build();
-
-        FancyShowCaseView tut3 = new FancyShowCaseView.Builder(this)
-                .focusOn(searchView)
-                .title("Use this field for filtering")
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(60)
-                .build();
-
-        FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                .add(tut1)
-                .add(tut2)
-                .add(tut3);
-
-        tutorialQueue.show();
     }
 
     @Override
@@ -251,8 +226,42 @@ public class HospitalActivity extends BaseActivity {
             startActivity(intent);
 
             return true;
+        } else if(item.getItemId() == R.id.info) {
+            //Show tutorial
+            FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
+                    .focusOn(findViewById(R.id.device_state_overview))
+                    .title("These symbols give you a quick overview over the state of your devices")
+                    .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
+                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                    .roundRectRadius(60)
+                    .build();
+
+            FancyShowCaseView tut2 = new FancyShowCaseView.Builder(this)
+                    .focusOn(hospitalListView)
+                    .title("You can browse through a list of your colleagues or devices by expanding the respective section")
+                    .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
+                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                    .roundRectRadius(60)
+                    .build();
+
+            FancyShowCaseView tut3 = new FancyShowCaseView.Builder(this)
+                    .focusOn(searchView)
+                    .title("Use this field for filtering")
+                    .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
+                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                    .roundRectRadius(60)
+                    .build();
+
+            FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                    .add(tut1)
+                    .add(tut2)
+                    .add(tut3);
+
+            tutorialQueue.show();
+
+            return true;
         } else {
-            return super.onOptionsItemSelected(item, R.string.hospital_activity);
+            return super.onOptionsItemSelected(item);
         }
     }
 
