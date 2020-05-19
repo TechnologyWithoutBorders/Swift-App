@@ -77,8 +77,6 @@
     ]]></string>
 
     <string name="about_text"><![CDATA[
-        <p>In order to register a new user for your hospital, please contact swift-app@teog.de</p>
-
         <h3>About TeoG Swift</h3>
         <p>TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders). Its intended use is to establish a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.</p>
         ]]></string>
