@@ -230,7 +230,7 @@ public class HospitalActivity extends BaseActivity {
             //Show tutorial
             FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
                     .focusOn(findViewById(R.id.device_state_overview))
-                    .title("These symbols give you a quick overview over the state of your devices")
+                    .title("These symbols give you a quick overview over the states of your devices")
                     .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
                     .focusShape(FocusShape.ROUNDED_RECTANGLE)
                     .roundRectRadius(60)
