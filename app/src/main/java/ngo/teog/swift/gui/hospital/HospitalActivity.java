@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -61,6 +62,26 @@ public class HospitalActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital);
+
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        String token = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
+
+        if(token != null && token.toLowerCase().startsWith("ger")) {
+            ImageView storageAccess = findViewById(R.id.storage_access);
+
+            storageAccess.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    if(HospitalActivity.this.checkForInternetConnection()) {
+                        Intent intent = new Intent(HospitalActivity.this, StorageAccessActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(HospitalActivity.this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
 
         hospitalListView = findViewById(R.id.hospitalList);
 
@@ -152,7 +173,6 @@ public class HospitalActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
-        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         HospitalViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);

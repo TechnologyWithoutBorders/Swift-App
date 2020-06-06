@@ -12,6 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/storage_access"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:padding="8dp"
