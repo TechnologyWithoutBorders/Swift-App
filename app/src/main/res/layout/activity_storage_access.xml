@@ -20,7 +20,7 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:textStyle="bold"
-        android:text="Der Code ist einen Tag lang gültig, d.h. du kannst auch einen Screenshot verschicken." />
+        android:text="Der Code ist nur einen Tag lang gültig, d.h. du kannst auch einen Screenshot verschicken." />
 
     <RelativeLayout
         android:layout_width="match_parent"
