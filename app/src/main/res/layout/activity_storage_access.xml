@@ -9,9 +9,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Halte diesen Code an den Scanner der Lagertür." />
+        android:text="Halte diesen Code mit etwa 3cm Abstand vor den Scanner an der Lagertür." />
 
     <RelativeLayout
         android:layout_width="match_parent"
