@@ -67,7 +67,7 @@ public class HospitalActivity extends BaseActivity {
         String token = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
 
         if(token != null && token.toLowerCase().startsWith("ger")) {
-            ImageView storageAccess = findViewById(R.id.storage_access);
+            TextView storageAccess = findViewById(R.id.storage_access_button);
 
             storageAccess.setOnClickListener(new View.OnClickListener() {
 
@@ -81,6 +81,8 @@ public class HospitalActivity extends BaseActivity {
                     }
                 }
             });
+
+            storageAccess.setVisibility(View.VISIBLE);
         }
 
         hospitalListView = findViewById(R.id.hospitalList);
