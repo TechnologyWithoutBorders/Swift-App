@@ -3,9 +3,9 @@ package ngo.teog.swift.helpers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -36,29 +36,41 @@ public class ImageUploader extends Worker {
     @NonNull
     public Worker.Result doWork() {
         String targetName = getInputData().getString(ResourceKeys.PATH);
-        int deviceId = getInputData().getInt(ResourceKeys.DEVICE_ID, -1);
 
-        try {
+        if(targetName != null) {
+            int deviceId = getInputData().getInt(ResourceKeys.DEVICE_ID, -1);
+
             File dir = new File(getApplicationContext().getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
             File image = new File(dir, targetName);
 
-            FileInputStream inputStream = new FileInputStream(image.getPath());
+            try {
+                FileInputStream inputStream = new FileInputStream(image.getPath());
 
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-            VolleyManager volleyManager = VolleyManager.getInstance(this.getApplicationContext());
+                VolleyManager volleyManager = VolleyManager.getInstance(this.getApplicationContext());
 
-            RequestQueue queue = volleyManager.getRequestQueue();
+                RequestQueue queue = volleyManager.getRequestQueue();
 
-            RequestFactory factory =  RequestFactory.getInstance();
-            RequestFactory.DeviceImageUploadRequest request = factory.createDeviceImageUploadRequest(this.getApplicationContext(), deviceId, bitmap);
+                RequestFactory factory = RequestFactory.getInstance();
+                RequestFactory.DeviceImageUploadRequest request = factory.createDeviceImageUploadRequest(this.getApplicationContext(), deviceId, bitmap);
 
-            queue.add(request);
+                queue.add(request);
 
-            return Result.success();
-        } catch (Exception e) {
-            Log.e("IMAGE_UPLOAD", "not created", e);
-            return Result.failure();
+                return Result.success();
+            } catch (Exception e) {
+                Data output = new Data.Builder()
+                        .putString("ERROR", e.toString())
+                        .build();
+
+                return Result.failure(output);
+            }
         }
+
+        Data output = new Data.Builder()
+                .putString("ERROR", "no input path found")
+                .build();
+
+        return Result.failure(output);
     }
 }
