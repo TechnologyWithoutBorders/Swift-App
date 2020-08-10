@@ -21,9 +21,9 @@ public class AboutActivity extends BaseActivity {
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String version = pInfo.versionName;
+            String versionString = "TeoG Swift v" + pInfo.versionName;
             TextView versionView = findViewById(R.id.version_view);
-            versionView.setText("TeoG Swift v" + version);
+            versionView.setText(versionString);
         } catch(PackageManager.NameNotFoundException e) {
             //ignore
         }
