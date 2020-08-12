@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -124,6 +125,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
                 WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
+                Log.e(this.getClass().getName(), "creating image upload worker failed", e);
                 Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
 
@@ -189,6 +191,7 @@ public class ImageCaptureActivity extends BaseActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         } catch(Exception e) {
+            Log.e(this.getClass().getName(), "dispatching picture event failed", e);
             Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
         }
     }
