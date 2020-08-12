@@ -1,6 +1,7 @@
 package ngo.teog.swift.communication;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -27,6 +28,7 @@ public class VolleyManager {
     }
 
     private VolleyManager(Context context) {
+        Log.v(this.getClass().getName(), "setting up Volley request queue");
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
     }
 
