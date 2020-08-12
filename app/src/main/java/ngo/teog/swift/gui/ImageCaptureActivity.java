@@ -1,8 +1,6 @@
 package ngo.teog.swift.gui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -10,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
@@ -29,24 +25,13 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-
-import javax.inject.Inject;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ImageUploader;
 import ngo.teog.swift.helpers.ResourceKeys;
-import ngo.teog.swift.helpers.data.AppModule;
-import ngo.teog.swift.helpers.data.DaggerAppComponent;
-import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.data.RoomModule;
-import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class ImageCaptureActivity extends BaseActivity {
 
@@ -139,7 +124,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
                 WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
-                Log.e("IMAGE_UPLOAD", "not created", e);
+                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
 
             this.finish();
@@ -191,6 +176,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
             Uri photoURI;
 
+            //Use different mechanisms depending on the SDK version
             if(Build.VERSION.SDK_INT >= 24) {
                 photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);
             } else {
@@ -203,7 +189,7 @@ public class ImageCaptureActivity extends BaseActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         } catch(Exception e) {
-            Log.e("ERROR", e.getMessage(), e);
+            Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
         }
     }
 }
