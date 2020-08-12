@@ -21,8 +21,6 @@ import java.security.NoSuchAlgorithmException;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
-import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
-import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 
@@ -39,17 +37,26 @@ public class ImageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_image_dialog);
 
+        //Read image from intent
         Intent intent = this.getIntent();
         File image = (File)intent.getSerializableExtra(ResourceKeys.IMAGE);
 
-        device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        if(image != null) {
+            /*
+             * Read device ID from intent.
+             * This allows for refreshing/updating the image.
+             */
+            device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
-        try {
-            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(image));
+            try {
+                Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(image));
 
-            imageView = findViewById(R.id.imageView);
-            imageView.setImageBitmap(bitmap);
-        } catch(FileNotFoundException e) {
+                imageView = findViewById(R.id.imageView);
+                imageView.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                Toast.makeText(this.getApplicationContext(), getText(R.string.file_not_found), Toast.LENGTH_SHORT).show();
+            }
+        } else {
             Toast.makeText(this.getApplicationContext(), this.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
         }
     }
@@ -75,7 +82,7 @@ public class ImageActivity extends BaseActivity {
                 return true;
             case R.id.refresh://TODO beim ersten Refresh stimmt der Hash iwie nicht überein
                 if(this.checkForInternetConnection()) {
-                    //in order to minimize traffic, we request a hash of the image and then decide whether to download the image
+                    //in order to minimize traffic, we request an MD5 hash of the image and then decide whether to download the image
 
                     File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
                     dir.mkdirs();
@@ -110,7 +117,7 @@ public class ImageActivity extends BaseActivity {
 
                         VolleyManager.getInstance(this).getRequestQueue().add(request);
                     } catch(FileNotFoundException e1) {
-                        Toast.makeText(this.getApplicationContext(), "file not found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this.getApplicationContext(), getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
                     } catch(NoSuchAlgorithmException | IOException e1) {
                         Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                     }

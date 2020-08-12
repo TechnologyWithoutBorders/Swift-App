@@ -195,6 +195,7 @@
     <string name="generic_error_message">something went wrong</string>
     <string name="server_comm_error_message">server communication problems</string>
     <string name="directory_not_accessible">directory could not be accessed</string>
+    <string name="file_not_found">file not found</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>
