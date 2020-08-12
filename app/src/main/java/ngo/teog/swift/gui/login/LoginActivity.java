@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -124,18 +125,23 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void login(View view) {
-        if(mailField.getText().length() > 0) {
-            if(passwordField.getText().length() > 0) {
+        String mailAddress = mailField.getText().toString();
+        String password = passwordField.getText().toString();
+        String country = (String)countrySpinner.getSelectedItem();
+
+        if(mailAddress.length() > 0) {
+            if(password.length() > 0) {
                 if(checkForInternetConnection()) {
                     AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
 
-                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailField.getText().toString(), getSHA256Hash(passwordField.getText().toString()), (String)countrySpinner.getSelectedItem());
+                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country);
 
                     form.setVisibility(View.GONE);
 
                     imageView.setImageDrawable(null);
                     anim.start();
 
+                    Log.v(this.getClass().getName(), "trying to log in user with mail address " + mailAddress);
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } else {
                     Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
@@ -149,19 +155,19 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void resetPassword(View view) {
-        String country = (String)countrySpinner.getSelectedItem();
+        String mailAddress = mailField.getText().toString();
 
-        if(mailField.getText().length() > 0) {
-            String mail = mailField.getText().toString();
+        if(mailAddress.length() > 0) {
+            String country = (String)countrySpinner.getSelectedItem();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle("Reset password");
-            builder.setMessage("Do you want to reset your password?\nA new one will be sent to:\n" + mail);
+            builder.setMessage("Do you want to reset your password?\nA new one will be sent to:\n" + mailAddress);
 
             DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> {
                 if(checkForInternetConnection()) {
-                    RequestFactory.PasswordResetRequest request = RequestFactory.getInstance().createPasswordResetRequest(this, mail, country);
+                    RequestFactory.PasswordResetRequest request = RequestFactory.getInstance().createPasswordResetRequest(this, mailAddress, country);
 
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } else {
