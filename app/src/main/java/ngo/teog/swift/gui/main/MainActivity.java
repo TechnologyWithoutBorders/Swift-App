@@ -168,7 +168,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(mViewPager.getCurrentItem() == 0) {
-            return ((BarcodeFragment)mDemoCollectionPagerAdapter.getItem(0)).onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+            BarcodeFragment barcodeFragment = (BarcodeFragment)mDemoCollectionPagerAdapter.getItem(0);
+
+            return barcodeFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
         } else {
             return super.onKeyDown(keyCode, event);
         }

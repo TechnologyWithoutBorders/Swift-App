@@ -149,7 +149,12 @@ public class BarcodeFragment extends Fragment {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return barcodeScannerView.onKeyDown(keyCode, event);
+        //This seems to be null sometimes??
+        if(barcodeScannerView != null) {
+            return barcodeScannerView.onKeyDown(keyCode, event);
+        } else {
+            return false;
+        }
     }
 
     private void search() {
