@@ -8,6 +8,7 @@ android {
         targetSdkVersion 29
         versionCode 76
         versionName "1.4"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 

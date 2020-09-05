@@ -32,24 +32,6 @@
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gui.maintenance.SearchActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="Search"
-            android:parentActivityName=".gui.main.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".gui.maintenance.SearchActivity2"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="Search"
-            android:parentActivityName=".gui.main.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".gui.maintenance.SearchActivity3"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="Search"
-            android:parentActivityName=".gui.main.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".gui.login.StatsActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="Statistics"
