@@ -11,11 +11,21 @@ import com.android.volley.VolleyError;
 
 import ngo.teog.swift.R;
 
+/**
+ * Error listener that is called when a Volley request fails.
+ * @author nitelow
+ */
 public class BaseErrorListener implements Response.ErrorListener {
     private Context context;
     private View disable;
     private View enable;
 
+    /**
+     * Returns a new BaseErrorListener.
+     * @param context Context
+     * @param disable View that should be hidden after the request has failed.
+     * @param enable View that should be visible after the request has failed.
+     */
     public BaseErrorListener(Context context, @Nullable View disable, @Nullable View enable) {
         this.context = context;
         this.disable = disable;
