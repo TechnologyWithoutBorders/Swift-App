@@ -34,7 +34,6 @@ import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.login.LoginActivity;
-import ngo.teog.swift.gui.maintenance.SearchActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
@@ -191,9 +190,6 @@ public class MainActivity extends BaseActivity {
             case R.id.aboutItem:
                 startAboutActivity();
                 return true;
-            case R.id.maintenance:
-                startMaintenanceActivity();
-                return true;
             case R.id.info:
                 showInfo(R.string.mainactivity);
                 return true;
@@ -248,11 +244,6 @@ public class MainActivity extends BaseActivity {
 
     public void startNewDeviceActivity(View view) {
         Intent intent = new Intent(MainActivity.this, NewDeviceActivity.class);
-        startActivity(intent);
-    }
-
-    public void startMaintenanceActivity() {
-        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 }
