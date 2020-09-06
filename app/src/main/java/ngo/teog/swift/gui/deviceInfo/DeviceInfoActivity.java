@@ -452,7 +452,7 @@ public class DeviceInfoActivity extends BaseActivity {
             builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int i) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(arrayAdapter.getItem(i))));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + arrayAdapter.getItem(i))));
                 }
             });
 
