@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceFilter;
@@ -249,17 +252,6 @@ public class RequestFactory {
         }
     }
 
-    public DeviceListRequest createDeviceSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<HospitalDevice> adapter) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, DeviceAction.SEARCH_DEVICE, true);
-        params.put(DeviceFilter.TYPE, searchValue);
-
-        JSONObject request = new JSONObject(params);
-
-        return new DeviceListRequest(context, disable, enable, url, request, adapter);
-    }
-
     public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
@@ -300,61 +292,6 @@ public class RequestFactory {
         JSONObject request = new JSONObject(params);
 
         return new ImageHashRequest(context, url, request, device, imageView);
-    }
-
-    public UserListRequest createUserSearchRequest(Context context, View disable, View enable, String searchValue, ArrayAdapter<User> adapter) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, UserAction.SEARCH_USER, true);
-        params.put(UserFilter.FULL_NAME, searchValue);
-
-        JSONObject request = new JSONObject(params);
-
-        return new UserListRequest(context, disable, enable, url, request, adapter);
-    }
-
-    public class UserListRequest extends JsonObjectRequest {
-
-        public UserListRequest(final Context context, @Nullable final View disable, @Nullable final View enable, final String url, JSONObject request, final ArrayAdapter<User> adapter) {
-            super(Request.Method.POST, url, request, response -> {
-                try {
-                    List<User> userList = ResponseParser.parseUserList(response);
-
-                    if(adapter != null) {
-                        adapter.clear();
-                        adapter.addAll(userList);
-                    }
-                } catch(TransparentServerException e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch(ServerException e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.server_comm_error_message), Toast.LENGTH_SHORT).show();
-                } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                } finally {
-                    if(disable != null) {
-                        disable.setVisibility(View.INVISIBLE);
-                    }
-
-                    if(enable != null) {
-                        enable.setVisibility(View.VISIBLE);
-                    }
-                }
-            }, error -> {
-                if(adapter != null) {
-                    adapter.clear();
-                }
-
-                if(disable != null) {
-                    disable.setVisibility(View.INVISIBLE);
-                }
-
-                if(enable != null) {
-                    enable.setVisibility(View.VISIBLE);
-                }
-
-                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-            });
-        }
     }
 
     public class LoginRequest extends JsonObjectRequest {
@@ -468,6 +405,55 @@ public class RequestFactory {
         }
     }
 
+    public DeviceDocumentRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ArrayAdapter<String> adapter) {
+        final String url = Defaults.BASE_URL + Defaults.DOCUMENTS_URL;
+
+        Map<String, String> params = new HashMap<>();
+        params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
+        params.put(DeviceFilter.MODEL, device.getModel());
+
+        JSONObject request = new JSONObject(params);
+
+        return new DeviceDocumentRequest(context, url, request, adapter);
+    }
+
+    public class DeviceDocumentRequest extends JsonObjectRequest {
+        public DeviceDocumentRequest(final Context context, final String url, JSONObject request, ArrayAdapter<String> adapter) {
+            super(Request.Method.POST, url, request, response -> {
+                try {
+                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+
+                    switch(responseCode) {
+                        case SwiftResponse.CODE_OK:
+                            //The response provides a list of links to matching documents.
+                            JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
+
+                            adapter.clear();
+
+                            for(int i = 0; i < documentList.length(); i++) {
+                                String docLink = documentList.getString(i);
+
+                                adapter.add(docLink);
+                            }
+
+                            adapter.notifyDataSetChanged();
+
+                            break;
+                        case SwiftResponse.CODE_FAILED_VISIBLE:
+                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
+                        case SwiftResponse.CODE_FAILED_HIDDEN:
+                        default:
+                            throw new ServerException(response.getString(SwiftResponse.DATA_FIELD));
+                    }
+                } catch(TransparentServerException e) {
+                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch(Exception e) {
+                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                }
+            }, error -> Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show());
+        }
+    }
+
     /**
      * Generates a map for the request parameters. It will already contain the parameters
      * for the designated action, the country key and - if activated - the user authentication parameters.
@@ -476,11 +462,13 @@ public class RequestFactory {
      * @param userAuthentication adds user authentication parameters to map if true
      * @return Map with some standard parameters
      */
-    public static HashMap<String, String> generateParameterMap(Context context, String action, boolean userAuthentication) {
+    public static HashMap<String, String> generateParameterMap(Context context, @Nullable String action, boolean userAuthentication) {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         HashMap<String, String> parameterMap = new HashMap<>();
-        parameterMap.put(Defaults.ACTION_KEY, action);
+        if (action != null) {
+            parameterMap.put(Defaults.ACTION_KEY, action);
+        }
         parameterMap.put(Defaults.COUNTRY_KEY, preferences.getString(Defaults.COUNTRY_PREFERENCE, null));
 
         if(userAuthentication) {

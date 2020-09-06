@@ -41,6 +41,8 @@ public final class Defaults {
     /** Additional URL segment for server communication regarding hospitals (general synchronization) */
     public static final String HOSPITALS_URL = "hospitals.php";
 
+    public static final String DOCUMENTS_URL = "documents.php";
+
     //Local paths
 
     /** Folder for device images in local file system */

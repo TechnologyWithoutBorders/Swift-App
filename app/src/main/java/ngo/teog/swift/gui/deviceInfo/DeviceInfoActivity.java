@@ -7,9 +7,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -430,6 +432,38 @@ public class DeviceInfoActivity extends BaseActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item, R.string.deviceinfo_activity);
+        }
+    }
+
+    public void searchDocuments(View view) {
+        if(this.checkForInternetConnection()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Available Documents");
+
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_singlechoice);
+
+            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int i) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(arrayAdapter.getItem(i))));
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            RequestFactory.DeviceDocumentRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), arrayAdapter);
+
+            VolleyManager.getInstance(this).getRequestQueue().add(request);
+        } else {
+            Toast.makeText(this.getApplicationContext(), R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
         }
     }
 
