@@ -2,11 +2,13 @@ package ngo.teog.swift.communication;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -405,7 +408,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceDocumentRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ArrayAdapter<String> adapter) {
+    public DeviceDocumentRequest createDeviceDocumentRequest(Context context, HospitalDevice device) {
         final String url = Defaults.BASE_URL + Defaults.DOCUMENTS_URL;
 
         Map<String, String> params = new HashMap<>();
@@ -414,11 +417,11 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceDocumentRequest(context, url, request, adapter);
+        return new DeviceDocumentRequest(context, url, request, device);
     }
 
     public class DeviceDocumentRequest extends JsonObjectRequest {
-        public DeviceDocumentRequest(final Context context, final String url, JSONObject request, ArrayAdapter<String> adapter) {
+        public DeviceDocumentRequest(final Context context, final String url, JSONObject request, HospitalDevice device) {
             super(Request.Method.POST, url, request, response -> {
                 try {
                     int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
@@ -428,7 +431,26 @@ public class RequestFactory {
                             //The response provides a list of links to matching documents.
                             JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
 
-                            adapter.clear();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            builder.setTitle("Available Documents");
+
+                            final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
+
+                            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int i) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int i) {
+                                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))));
+                                }
+                            });
+
+                            AlertDialog dialog = builder.create();
 
                             for(int i = 0; i < documentList.length(); i++) {
                                 String docLink = documentList.getString(i);
@@ -437,6 +459,7 @@ public class RequestFactory {
                             }
 
                             adapter.notifyDataSetChanged();
+                            dialog.show();
 
                             break;
                         case SwiftResponse.CODE_FAILED_VISIBLE:

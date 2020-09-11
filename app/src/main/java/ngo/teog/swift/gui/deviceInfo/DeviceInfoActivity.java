@@ -437,29 +437,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
     public void searchDocuments(View view) {
         if(this.checkForInternetConnection()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Available Documents");
-
-            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_singlechoice);
-
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    dialog.dismiss();
-                }
-            });
-
-            builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int i) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + arrayAdapter.getItem(i))));
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            RequestFactory.DeviceDocumentRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), arrayAdapter);
+            RequestFactory.DeviceDocumentRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice());
 
             VolleyManager.getInstance(this).getRequestQueue().add(request);
         } else {
