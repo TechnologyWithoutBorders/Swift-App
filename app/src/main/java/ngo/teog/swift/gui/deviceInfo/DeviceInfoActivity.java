@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +47,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
@@ -83,6 +87,8 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private ReportArrayAdapter adapter;
 
+    private FloatingActionButton reportCreationButton;
+
     private ListView reportListView;
 
     private ProgressBar progressBar;
@@ -114,7 +120,7 @@ public class DeviceInfoActivity extends BaseActivity {
         //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
         int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
-        FloatingActionButton reportCreationButton = findViewById(R.id.reportCreationButton);
+        reportCreationButton = findViewById(R.id.reportCreationButton);
 
         ImageView stateImageView = findViewById(R.id.stateView);
         TextView stateTextView = findViewById(R.id.stateTextView);
@@ -427,6 +433,22 @@ public class DeviceInfoActivity extends BaseActivity {
                 intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + deviceInfo.getHospitals().get(0).getId() + "/" + deviceInfo.getDevice().getId());
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, "Share device link"));
+                return true;
+            case R.id.info:
+                //Show tutorial
+                FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
+                        .focusOn(reportCreationButton)
+                        .title("Use this button to create a new report")
+                        .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
+                        .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                        .roundRectRadius(60)
+                        .build();
+
+                FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                        .add(tut1);
+
+                tutorialQueue.show();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item, R.string.deviceinfo_activity);
