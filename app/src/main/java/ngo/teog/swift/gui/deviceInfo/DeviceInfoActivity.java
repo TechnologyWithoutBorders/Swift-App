@@ -34,6 +34,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.RequestQueue;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -113,6 +114,8 @@ public class DeviceInfoActivity extends BaseActivity {
         //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
         int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
+        FloatingActionButton reportCreationButton = findViewById(R.id.reportCreationButton);
+
         ImageView stateImageView = findViewById(R.id.stateView);
         TextView stateTextView = findViewById(R.id.stateTextView);
 
@@ -185,25 +188,18 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
 
-                /*statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                reportCreationButton.setOnClickListener(new View.OnClickListener() {
+
                     @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    public void onClick(View view) {
                         int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
 
-                        if(currentState != i) {
-                            Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                            intent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
-                            intent.putExtra(ResourceKeys.REPORT_NEW_STATE, i);
-                            intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
-                            startActivity(intent);
-                        }
+                        Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                        intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
+                        intent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
+                        startActivity(intent);
                     }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });*/
+                });
 
                 DeviceStateVisuals visuals = new DeviceStateVisuals(deviceInfo.getReports().get(0).getReport().getCurrentState(), this);
 
@@ -496,50 +492,6 @@ public class DeviceInfoActivity extends BaseActivity {
             }
 
             return convertView;
-        }
-    }
-
-    /**
-     * Adapter for displaying the device state spinner.
-     */
-    private class StatusArrayAdapter extends ArrayAdapter<String> {
-
-        private final Context context;
-
-        private StatusArrayAdapter(Context context, String[] values) {
-            super(context, -1, values);
-            this.context = context;
-        }
-
-        private View getCustomView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.spinner_status, parent, false);
-            }
-
-            TextView statusTextView = convertView.findViewById(R.id.statusTextView);
-            statusTextView.setText(getItem(position));
-
-            ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
-
-            DeviceStateVisuals triple = new DeviceStateVisuals(position,this.getContext());
-
-            statusImageView.setImageDrawable(triple.getStateIcon());
-            statusImageView.setBackgroundColor(triple.getBackgroundColor());
-
-            return convertView;
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
-        }
-
-        @Override
-        @NonNull
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
         }
     }
 }
