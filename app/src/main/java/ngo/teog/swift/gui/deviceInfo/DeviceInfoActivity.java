@@ -84,8 +84,6 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private ListView reportListView;
 
-    private Spinner statusSpinner;
-
     private ProgressBar progressBar;
     private TextView dummyImageView;
     private ImageView globalImageView;
@@ -115,8 +113,8 @@ public class DeviceInfoActivity extends BaseActivity {
         //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
         int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
-        statusSpinner = findViewById(R.id.statusSpinner);
-        statusSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
+        ImageView stateImageView = findViewById(R.id.stateView);
+        TextView stateTextView = findViewById(R.id.stateTextView);
 
         reportListView = findViewById(R.id.reportList);
 
@@ -187,7 +185,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
 
-                statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                /*statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
@@ -205,9 +203,13 @@ public class DeviceInfoActivity extends BaseActivity {
                     public void onNothingSelected(AdapterView<?> adapterView) {
 
                     }
-                });
+                });*/
 
-                statusSpinner.setSelection(deviceInfo.getReports().get(0).getReport().getCurrentState());
+                DeviceStateVisuals visuals = new DeviceStateVisuals(deviceInfo.getReports().get(0).getReport().getCurrentState(), this);
+
+                stateTextView.setText(visuals.getStateString());
+                stateImageView.setImageDrawable(visuals.getStateIcon());
+                stateImageView.setBackgroundColor(visuals.getBackgroundColor());
 
                 assetNumberView.setText(device.getAssetNumber());
                 typeView.setText(device.getType());
