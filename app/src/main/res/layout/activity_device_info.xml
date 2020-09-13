@@ -61,10 +61,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Documents"
+            <ImageView
+                android:id="@+id/storage_access"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:contentDescription="@string/hospital_location_symbol"
+                app:srcCompat="@drawable/ic_baseline_menu_book_24"
                 android:onClick="searchDocuments" />
 
             <ProgressBar

@@ -47,7 +47,6 @@
             android:layout_height="64dp"
             android:visibility="gone"
             android:padding="8dp"
-            android:text="Lager"
             android:textAlignment="center"
             android:drawableTop="@drawable/ic_baseline_lock_black_24" />
 
