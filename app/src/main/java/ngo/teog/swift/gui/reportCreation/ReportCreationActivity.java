@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
@@ -65,6 +66,7 @@ public class ReportCreationActivity extends BaseActivity {
 
         stateSpinner = findViewById(R.id.stateSpinner);
         stateSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
+        stateSpinner.setSelection(oldState);
 
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);
@@ -93,18 +95,24 @@ public class ReportCreationActivity extends BaseActivity {
     }
 
     public void createReport(View view) {
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int newState = stateSpinner.getSelectedItemPosition();
 
-        String description = descriptionText.getText().toString().trim();
+        if(newState != oldState) {
+            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, hospital, oldState, stateSpinner.getSelectedItemPosition(), description, new Date());
+            String description = descriptionText.getText().toString().trim();
 
-        viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
+            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, hospital, oldState, newState, description, new Date());
 
-        saveButton.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+            viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
-        ReportCreationActivity.this.finish();
+            saveButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+
+            ReportCreationActivity.this.finish();
+        } else {
+            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
