@@ -211,50 +211,6 @@ public class RequestFactory {
         });
     }
 
-    public class DeviceListRequest extends JsonObjectRequest {
-
-        public DeviceListRequest(final Context context, @Nullable final View disable, @Nullable final View enable, final String url, JSONObject request, final ArrayAdapter<HospitalDevice> adapter) {
-            super(Request.Method.POST, url, request, response -> {
-                try {
-                    List<HospitalDevice> deviceList = ResponseParser.parseDeviceList(response);
-
-                    if(adapter != null) {
-                        adapter.clear();
-                        adapter.addAll(deviceList);
-                    }
-                } catch(TransparentServerException e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch(ServerException e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.server_comm_error_message), Toast.LENGTH_SHORT).show();
-                } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                }
-
-                if(disable != null) {
-                    disable.setVisibility(View.INVISIBLE);
-                }
-
-                if(enable != null) {
-                    enable.setVisibility(View.VISIBLE);
-                }
-            }, error -> {
-                if(adapter != null) {
-                    adapter.clear();
-                }
-
-                if(disable != null) {
-                    disable.setVisibility(View.INVISIBLE);
-                }
-
-                if(enable != null) {
-                    enable.setVisibility(View.VISIBLE);
-                }
-
-                Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-            });
-        }
-    }
-
     public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
