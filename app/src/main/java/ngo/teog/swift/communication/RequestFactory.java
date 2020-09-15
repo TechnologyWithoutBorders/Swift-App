@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -364,7 +365,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceDocumentRequest createDeviceDocumentRequest(Context context, HospitalDevice device) {
+    public DeviceDocumentRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
         final String url = Defaults.BASE_URL + Defaults.DOCUMENTS_URL;
 
         Map<String, String> params = new HashMap<>();
@@ -373,11 +374,11 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceDocumentRequest(context, url, request, device);
+        return new DeviceDocumentRequest(context, url, request, device, button, progressBar);
     }
 
     public class DeviceDocumentRequest extends JsonObjectRequest {
-        public DeviceDocumentRequest(final Context context, final String url, JSONObject request, HospitalDevice device) {
+        public DeviceDocumentRequest(final Context context, final String url, JSONObject request, HospitalDevice device, ImageView button, ProgressBar progressBar) {
             super(Request.Method.POST, url, request, response -> {
                 try {
                     int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
@@ -429,7 +430,10 @@ public class RequestFactory {
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
-            }, error -> Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show());
+
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.VISIBLE);
+            }, new BaseErrorListener(context, progressBar, button));
         }
     }
 

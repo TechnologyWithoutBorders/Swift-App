@@ -97,6 +97,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private TextView dummyImageView;
     private ImageView globalImageView;
 
+    private ProgressBar documentProgressBar;
     private ImageView documentButton;
     private LinearLayout stateSection;
     private TableLayout attributeTable;
@@ -131,6 +132,7 @@ public class DeviceInfoActivity extends BaseActivity {
         ImageView stateImageView = findViewById(R.id.stateView);
         TextView stateTextView = findViewById(R.id.stateTextView);
 
+        documentProgressBar = findViewById(R.id.documentProgressBar);
         documentButton = findViewById(R.id.documentButton);
         stateSection = findViewById(R.id.stateSection);
         attributeTable = findViewById(R.id.attributeTable);
@@ -469,7 +471,10 @@ public class DeviceInfoActivity extends BaseActivity {
 
     public void searchDocuments(View view) {
         if(this.checkForInternetConnection()) {
-            RequestFactory.DeviceDocumentRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice());
+            documentButton.setVisibility(View.INVISIBLE);
+            documentProgressBar.setVisibility(View.VISIBLE);
+
+            RequestFactory.DeviceDocumentRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), documentButton, documentProgressBar);
 
             VolleyManager.getInstance(this).getRequestQueue().add(request);
         } else {
