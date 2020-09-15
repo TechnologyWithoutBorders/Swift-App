@@ -37,6 +37,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/stateSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -62,7 +63,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/storage_access"
+                android:id="@+id/documentButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:padding="8dp"
@@ -80,6 +81,7 @@
     </LinearLayout>
 
     <TableLayout
+        android:id="@+id/attributeTable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stretchColumns="1">

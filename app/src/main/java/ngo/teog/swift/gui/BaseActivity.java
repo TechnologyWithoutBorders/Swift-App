@@ -4,11 +4,15 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
 import ngo.teog.swift.R;
 
 /**
@@ -60,5 +64,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    public FancyShowCaseView buildTutorialStep(View viewToFocus, String message) {
+        return new FancyShowCaseView.Builder(this)
+                .focusOn(viewToFocus)
+                .title(message)
+                .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(60)
+                .build();
     }
 }

@@ -23,10 +23,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +97,10 @@ public class DeviceInfoActivity extends BaseActivity {
     private TextView dummyImageView;
     private ImageView globalImageView;
 
+    private ImageView documentButton;
+    private LinearLayout stateSection;
+    private TableLayout attributeTable;
+
     private TextView assetNumberView;
     private TextView typeView;
     private TextView modelView;
@@ -124,6 +130,10 @@ public class DeviceInfoActivity extends BaseActivity {
 
         ImageView stateImageView = findViewById(R.id.stateView);
         TextView stateTextView = findViewById(R.id.stateTextView);
+
+        documentButton = findViewById(R.id.documentButton);
+        stateSection = findViewById(R.id.stateSection);
+        attributeTable = findViewById(R.id.attributeTable);
 
         reportListView = findViewById(R.id.reportList);
 
@@ -436,16 +446,18 @@ public class DeviceInfoActivity extends BaseActivity {
                 return true;
             case R.id.info:
                 //Show tutorial
-                FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
-                        .focusOn(reportCreationButton)
-                        .title("Use this button to create a new report")
-                        .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
-                        .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                        .roundRectRadius(60)
-                        .build();
+                FancyShowCaseView tut1 = buildTutorialStep(attributeTable, "This table lists all relevant data of a device.");
+                FancyShowCaseView tut2 = buildTutorialStep(stateSection, "The current state of the device is shown up here.");
+                FancyShowCaseView tut3 = buildTutorialStep(reportListView, "You can see the recent maintenance/repair history in the bottom section.");
+                FancyShowCaseView tut4 = buildTutorialStep(reportCreationButton, "Use this button to create a new report.");
+                FancyShowCaseView tut5 = buildTutorialStep(documentButton, "If available, related documents can be retrieved by tapping this button.");
 
                 FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                        .add(tut1);
+                        .add(tut1)
+                        .add(tut2)
+                        .add(tut3)
+                        .add(tut4)
+                        .add(tut5);
 
                 tutorialQueue.show();
 
