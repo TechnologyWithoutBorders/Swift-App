@@ -6,8 +6,8 @@ android {
         applicationId "ngo.teog.swift"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 76
-        versionName "1.4"
+        versionCode 77
+        versionName "1.5"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -82,7 +82,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
