@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -55,7 +57,9 @@ public class StorageAccessActivity extends BaseActivity {
 
         return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
-            public void onSuccess(JSONObject response) throws Exception {
+            public void onSuccess(JSONObject response) throws JSONException {
+                super.onSuccess(response);
+
                 String key = response.getString(SwiftResponse.DATA_FIELD);
 
                 QRCodeWriter writer = new QRCodeWriter();
@@ -73,6 +77,7 @@ public class StorageAccessActivity extends BaseActivity {
                     ((ImageView) findViewById(R.id.qr_code)).setImageBitmap(bmp);
 
                 } catch (WriterException e) {
+                    Log.w(this.getClass().getName(), e.toString());
                     Toast.makeText(StorageAccessActivity.this, getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
             }

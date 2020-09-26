@@ -32,6 +32,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -410,7 +411,7 @@ public class DeviceInfoActivity extends BaseActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            BaseRequest request = RequestFactory.getInstance().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
+            JsonObjectRequest request = RequestFactory.getInstance().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
 
             progressBar.setVisibility(View.VISIBLE);
             dummyImageView.setVisibility(View.GONE);
@@ -469,7 +470,7 @@ public class DeviceInfoActivity extends BaseActivity {
             documentButton.setVisibility(View.INVISIBLE);
             documentProgressBar.setVisibility(View.VISIBLE);
 
-            RequestFactory.DeviceDocumentRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), documentButton, documentProgressBar);
+            JsonObjectRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), documentButton, documentProgressBar);
 
             VolleyManager.getInstance(this).getRequestQueue().add(request);
         } else {

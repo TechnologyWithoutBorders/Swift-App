@@ -95,6 +95,8 @@ public class RequestFactory {
         return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
+                super.onSuccess(response);
+
                 String imageData = response.getString(SwiftResponse.DATA_FIELD);
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
@@ -111,6 +113,7 @@ public class RequestFactory {
                         outputStream.write(decodedString);
                         outputStream.close();
                     } else {
+                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                         throw new IOException("directory could not be created");
                     }
                 } catch(IOException e) {
@@ -275,7 +278,7 @@ public class RequestFactory {
         }
     }
 
-    public DeviceDocumentRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
+    public JsonObjectRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
         final String url = Defaults.BASE_URL + Defaults.DOCUMENTS_URL;
 
         Map<String, String> params = new HashMap<>();
@@ -284,67 +287,47 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceDocumentRequest(context, url, request, device, button, progressBar);
-    }
+        //return new DeviceDocumentRequest(context, url, request, device, button, progressBar);
 
-    public class DeviceDocumentRequest extends JsonObjectRequest {
-        public DeviceDocumentRequest(final Context context, final String url, JSONObject request, HospitalDevice device, ImageView button, ProgressBar progressBar) {
-            super(Request.Method.POST, url, request, response -> {
-                try {
-                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+        return new BaseRequest(context, url, request, button, progressBar, new BaseResponseListener(context) {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                super.onSuccess(response);
 
-                    switch(responseCode) {
-                        case SwiftResponse.CODE_OK:
-                            //The response provides a list of links to matching documents.
-                            JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                //The response provides a list of links to matching documents.
+                JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle("Available Documents");
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Available Documents");
 
-                            final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
+                final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
 
-                            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))));
-                                }
-                            });
-
-                            AlertDialog dialog = builder.create();
-
-                            for(int i = 0; i < documentList.length(); i++) {
-                                String docLink = documentList.getString(i);
-
-                                adapter.add(docLink);
-                            }
-
-                            adapter.notifyDataSetChanged();
-                            dialog.show();
-
-                            break;
-                        case SwiftResponse.CODE_FAILED_VISIBLE:
-                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
-                        case SwiftResponse.CODE_FAILED_HIDDEN:
-                        default:
-                            throw new ServerException(response.getString(SwiftResponse.DATA_FIELD));
+                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.dismiss();
                     }
-                } catch(TransparentServerException e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                });
+
+                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int i) {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))));
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+
+                for(int i = 0; i < documentList.length(); i++) {
+                    String docLink = documentList.getString(i);
+
+                    adapter.add(docLink);
                 }
 
-                progressBar.setVisibility(View.INVISIBLE);
-                button.setVisibility(View.VISIBLE);
-            }, new BaseErrorListener(context, progressBar, button));
-        }
+                adapter.notifyDataSetChanged();
+                dialog.show();
+            }
+        });
     }
 
     /**

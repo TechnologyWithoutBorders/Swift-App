@@ -18,7 +18,7 @@ public class BaseRequest extends JsonObjectRequest {
         super(Request.Method.POST, url, request, listener, new BaseErrorListener(context));
     }
 
-    public BaseRequest(Context context, String url, JSONObject request, @Nullable View disable, @Nullable View enable, BaseResponseListener listener) {
-        super(Request.Method.POST, url, request, listener, new BaseErrorListener(context, disable, enable));
+    public BaseRequest(Context context, String url, JSONObject request, @Nullable View disableOnFinish, @Nullable View enableOnFinish, BaseResponseListener listener) {
+        super(Request.Method.POST, url, request, listener, new BaseErrorListener(context, disableOnFinish, enableOnFinish));
     }
 }

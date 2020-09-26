@@ -28,13 +28,13 @@ public class BaseErrorListener implements Response.ErrorListener {
     /**
      * Returns a new BaseErrorListener.
      * @param context Context
-     * @param disable View that should be hidden after the request has failed.
-     * @param enable View that should be visible after the request has failed.
+     * @param disableOnFinish View that should be hidden after the request has failed.
+     * @param enableOnFinish View that should be visible after the request has failed.
      */
-    public BaseErrorListener(Context context, @Nullable View disable, @Nullable View enable) {
+    public BaseErrorListener(Context context, @Nullable View disableOnFinish, @Nullable View enableOnFinish) {
         this.context = context;
-        this.disable = disable;
-        this.enable = enable;
+        this.disable = disableOnFinish;
+        this.enable = enableOnFinish;
     }
 
     @Override

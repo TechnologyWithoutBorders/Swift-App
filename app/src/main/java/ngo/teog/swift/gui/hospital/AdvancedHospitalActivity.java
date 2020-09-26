@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -75,7 +76,9 @@ public class AdvancedHospitalActivity extends BaseActivity {
 
         return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
-            public void onSuccess(JSONObject response) throws Exception {
+            public void onSuccess(JSONObject response) throws JSONException {
+                super.onSuccess(response);
+
                 Toast.makeText(context.getApplicationContext(), "user created", Toast.LENGTH_LONG).show();
 
                 nameText.setText(null);

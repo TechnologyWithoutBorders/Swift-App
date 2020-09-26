@@ -10,6 +10,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +54,7 @@ public class ImageUploader extends Worker {
                 RequestQueue queue = volleyManager.getRequestQueue();
 
                 RequestFactory factory = RequestFactory.getInstance();
-                RequestFactory.DeviceImageUploadRequest request = factory.createDeviceImageUploadRequest(this.getApplicationContext(), deviceId, bitmap);
+                JsonObjectRequest request = factory.createDeviceImageUploadRequest(this.getApplicationContext(), deviceId, bitmap);
 
                 queue.add(request);
 
