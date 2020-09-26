@@ -66,12 +66,6 @@ public class RequestFactory {
 
     private RequestFactory() {}
 
-    public class DefaultRequest extends JsonObjectRequest {
-        public DefaultRequest(Context context, String url, JSONObject request, @Nullable View disable, @Nullable View enable, BaseResponseListener listener) {
-            super(Request.Method.POST, url, request, listener, new BaseErrorListener(context, disable, enable));
-        }
-    }
-
     public DeviceImageUploadRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
