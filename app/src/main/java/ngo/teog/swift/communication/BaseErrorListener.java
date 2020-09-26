@@ -1,6 +1,7 @@
 package ngo.teog.swift.communication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,8 +18,12 @@ import ngo.teog.swift.R;
  */
 public class BaseErrorListener implements Response.ErrorListener {
     private Context context;
-    private View disable;
-    private View enable;
+    private View disable = null;
+    private View enable = null;
+
+    public BaseErrorListener(Context context) {
+        this.context = context;
+    }
 
     /**
      * Returns a new BaseErrorListener.
@@ -42,6 +47,7 @@ public class BaseErrorListener implements Response.ErrorListener {
             enable.setVisibility(View.VISIBLE);
         }
 
+        Log.e(this.getClass().getName(), error.toString());
         Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
     }
 }

@@ -58,6 +58,7 @@ public class RequestFactory {
         return instance;
     }
 
+    // make default constructor private (singleton class!)
     private RequestFactory() {}
 
     public DeviceImageUploadRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
@@ -80,12 +81,12 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceImageUploadRequest(url, request);
+        return new DeviceImageUploadRequest(context, url, request);
     }
 
     public class DeviceImageUploadRequest extends JsonObjectRequest {
 
-        public DeviceImageUploadRequest(final String url, JSONObject request) {
+        public DeviceImageUploadRequest(Context context, final String url, JSONObject request) {
             super(Request.Method.POST, url, request, response -> {
                 //TODO
                 try {
@@ -93,7 +94,7 @@ public class RequestFactory {
                 } catch (JSONException e) {
                     Log.e("IMAGE_UPLOAD", "response not readable", e);
                 }
-            }, error -> Log.e("IMAGE_UPLOAD", error.toString(), error));
+            }, new BaseErrorListener(context));
         }
     }
 
@@ -237,7 +238,7 @@ public class RequestFactory {
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
-            }, error -> Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show());
+            }, new BaseErrorListener(context));
         }
     }
 
@@ -280,7 +281,7 @@ public class RequestFactory {
                 } catch(Exception e) {
                     Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
-            }, error -> Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show());
+            }, new BaseErrorListener(context));
         }
     }
 
