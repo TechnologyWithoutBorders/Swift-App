@@ -13,8 +13,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import ngo.teog.swift.helpers.data.HospitalDatabase;
-
-import static ngo.teog.swift.helpers.data.RoomModule.MIGRATION_2_3;
+import ngo.teog.swift.helpers.data.RoomModule;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class DatabaseMigrationTest {
@@ -40,7 +39,7 @@ public class DatabaseMigrationTest {
 
         // Re-open the database with version 2 and provide
         // MIGRATION_1_2 as the migration process.
-        db = helper.runMigrationsAndValidate(TEST_DB, 3, true, MIGRATION_2_3);
+        db = helper.runMigrationsAndValidate(TEST_DB, 3, true, RoomModule.MIGRATION_2_3);
 
         // MigrationTestHelper automatically verifies the schema changes,
         // but you need to validate that the data was migrated properly.
