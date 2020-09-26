@@ -28,7 +28,7 @@ public class VolleyManager {
     }
 
     private VolleyManager(Context context) {
-        Log.v(this.getClass().getName(), "setting up Volley request queue");
+        Log.d(this.getClass().getName(), "setting up Volley request queue");
         requestQueue = Volley.newRequestQueue(context.getApplicationContext());
     }
 

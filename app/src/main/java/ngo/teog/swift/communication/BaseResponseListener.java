@@ -1,6 +1,7 @@
 package ngo.teog.swift.communication;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -39,8 +40,10 @@ public abstract class BaseResponseListener implements Response.Listener<JSONObje
                     throw new Exception(response.getString(SwiftResponse.DATA_FIELD));
             }
         } catch(TransparentServerException e) {
+            Log.i(this.getClass().getName(), e.toString());
             Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         } catch(Exception e) {
+            Log.w(this.getClass().getName(), e.toString());
             Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
         }
 

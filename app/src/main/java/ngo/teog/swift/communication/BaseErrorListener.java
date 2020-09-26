@@ -47,7 +47,7 @@ public class BaseErrorListener implements Response.ErrorListener {
             enable.setVisibility(View.VISIBLE);
         }
 
-        Log.e(this.getClass().getName(), error.toString());
+        Log.w(this.getClass().getName(), error.toString());
         Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
     }
 }
