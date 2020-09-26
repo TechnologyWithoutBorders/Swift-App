@@ -26,6 +26,8 @@ public abstract class BaseResponseListener implements Response.Listener<JSONObje
 
     @Override
     public void onResponse(JSONObject response) {
+        Log.i(this.getClass().getName(), "received valid response");
+
         try {
             int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
             switch(responseCode) {
