@@ -47,7 +47,7 @@ import javax.inject.Inject;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.DefaultRequest;
+import ngo.teog.swift.communication.BaseRequest;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
@@ -410,7 +410,7 @@ public class DeviceInfoActivity extends BaseActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            DefaultRequest request = RequestFactory.getInstance().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
+            BaseRequest request = RequestFactory.getInstance().createDeviceImageRequest(this, progressBar, globalImageView, deviceInfo.getDevice().getId());
 
             progressBar.setVisibility(View.VISIBLE);
             dummyImageView.setVisibility(View.GONE);

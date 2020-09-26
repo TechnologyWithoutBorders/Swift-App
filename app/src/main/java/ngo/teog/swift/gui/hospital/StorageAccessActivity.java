@@ -1,9 +1,6 @@
 package ngo.teog.swift.gui.hospital;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,14 +21,12 @@ import java.util.Map;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.DataAction;
-import ngo.teog.swift.communication.DefaultRequest;
+import ngo.teog.swift.communication.BaseRequest;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.SwiftResponse;
-import ngo.teog.swift.communication.UserAction;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.ResourceKeys;
 
 public class StorageAccessActivity extends BaseActivity {
 
@@ -43,7 +38,7 @@ public class StorageAccessActivity extends BaseActivity {
         if(this.checkForInternetConnection()) {
             RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-            DefaultRequest request = this.createAccessRequest(this, findViewById(R.id.qr_code), findViewById(R.id.storage_access));
+            BaseRequest request = this.createAccessRequest(this, findViewById(R.id.qr_code), findViewById(R.id.storage_access));
 
             queue.add(request);
         } else {
@@ -51,14 +46,14 @@ public class StorageAccessActivity extends BaseActivity {
         }
     }
 
-    public DefaultRequest createAccessRequest(final Context context, View enable, View disable) {
+    public BaseRequest createAccessRequest(final Context context, View enable, View disable) {
         final String url = Defaults.BASE_URL + "info.php";
 
         Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.ACCESS_STORAGE, true);
 
         JSONObject request = new JSONObject(params);
 
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+        return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
                 String key = response.getString(SwiftResponse.DATA_FIELD);

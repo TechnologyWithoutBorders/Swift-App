@@ -1,6 +1,5 @@
 package ngo.teog.swift.gui.hospital;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -16,28 +15,22 @@ import com.android.volley.RequestQueue;
 
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.BaseResponseListener;
-import ngo.teog.swift.communication.DefaultRequest;
+import ngo.teog.swift.communication.BaseRequest;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.UserAction;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
-import ngo.teog.swift.gui.reportCreation.ReportCreationViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
-import ngo.teog.swift.helpers.data.Hospital;
-import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
-import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class AdvancedHospitalActivity extends BaseActivity {
@@ -71,7 +64,7 @@ public class AdvancedHospitalActivity extends BaseActivity {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AdvancedHospitalViewModel.class);
     }
 
-    public DefaultRequest createUserCreationRequest(final Context context, View disable, final View enable, String userName, String userMail) {
+    public BaseRequest createUserCreationRequest(final Context context, View disable, final View enable, String userName, String userMail) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = RequestFactory.generateParameterMap(context, UserAction.CREATE_USER, true);
@@ -80,7 +73,7 @@ public class AdvancedHospitalActivity extends BaseActivity {
 
         JSONObject request = new JSONObject(params);
 
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+        return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
             public void onSuccess(JSONObject response) throws Exception {
                 Toast.makeText(context.getApplicationContext(), "user created", Toast.LENGTH_LONG).show();
@@ -105,7 +98,7 @@ public class AdvancedHospitalActivity extends BaseActivity {
                 if (this.checkForInternetConnection()) {
                     RequestQueue queue = VolleyManager.getInstance(this).getRequestQueue();
 
-                    DefaultRequest request = this.createUserCreationRequest(this, progressBar, createButton, name, mail);
+                    BaseRequest request = this.createUserCreationRequest(this, progressBar, createButton, name, mail);
 
                     progressBar.setVisibility(View.VISIBLE);
                     createButton.setVisibility(View.GONE);

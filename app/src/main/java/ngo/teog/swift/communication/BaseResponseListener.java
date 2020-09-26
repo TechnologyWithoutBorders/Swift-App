@@ -9,14 +9,19 @@ import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import ngo.teog.swift.R;
 
-public abstract class BaseResponseListener implements Response.Listener<JSONObject> {
+public class BaseResponseListener implements Response.Listener<JSONObject> {
     private Context context;
     private View disable;
     private View enable;
+
+    public BaseResponseListener(Context context) {
+        this.context = context;
+    }
 
     public BaseResponseListener(Context context, @Nullable View disable, @Nullable View enable) {
         this.context = context;
@@ -58,5 +63,10 @@ public abstract class BaseResponseListener implements Response.Listener<JSONObje
         }
     }
 
-    public abstract void onSuccess(JSONObject response) throws Exception;
+    /**
+     * Called when a HTTPS response with the correct response code has been received.
+     * @param response JSON formatted response
+     * @throws JSONException if parsing the response fails for some reason
+     */
+    public void onSuccess(JSONObject response) throws JSONException {};
 }

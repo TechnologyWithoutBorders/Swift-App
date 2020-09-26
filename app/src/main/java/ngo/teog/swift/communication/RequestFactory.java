@@ -61,7 +61,7 @@ public class RequestFactory {
     // make default constructor private (singleton class!)
     private RequestFactory() {}
 
-    public DeviceImageUploadRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
+    public JsonObjectRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DataAction.UPLOAD_DEVICE_IMAGE, true);
@@ -81,24 +81,10 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DeviceImageUploadRequest(context, url, request);
+        return new BaseRequest(context, url, request, new BaseResponseListener(context));
     }
 
-    public class DeviceImageUploadRequest extends JsonObjectRequest {
-
-        public DeviceImageUploadRequest(Context context, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, response -> {
-                //TODO
-                try {
-                    Log.d("IMAGE_UPLOAD", response.toString(4));
-                } catch (JSONException e) {
-                    Log.e("IMAGE_UPLOAD", "response not readable", e);
-                }
-            }, new BaseErrorListener(context));
-        }
-    }
-
-    public DefaultRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
+    public JsonObjectRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE, true);
@@ -106,9 +92,9 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new DefaultRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+        return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
             @Override
-            public void onSuccess(JSONObject response) throws Exception {
+            public void onSuccess(JSONObject response) throws JSONException {
                 String imageData = response.getString(SwiftResponse.DATA_FIELD);
 
                 byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
@@ -118,13 +104,17 @@ public class RequestFactory {
 
                 try {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    dir.mkdirs();
+                    boolean success = dir.mkdirs();
 
-                    outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
-                    outputStream.write(decodedString);
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if(!success) {
+                        outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
+                        outputStream.write(decodedString);
+                        outputStream.close();
+                    } else {
+                        throw new IOException("directory could not be created");
+                    }
+                } catch(IOException e) {
+                    Log.w(this.getClass().getName(), "writing image data failed: " + e.toString());
                 }
 
                 ((ImageView) enable).setImageBitmap(bitmap);
