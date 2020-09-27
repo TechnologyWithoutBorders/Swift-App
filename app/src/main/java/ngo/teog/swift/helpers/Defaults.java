@@ -52,12 +52,6 @@ public final class Defaults {
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final String DATETIME_PRECISE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    public static final String SCOPE = "scope";
-    public static final String SCOPE_LOCAL = "local";
-    public static final String SCOPE_GLOBAL = "global";
-
-    public static final String SEARCH_OBJECT = "search_object";
-
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
 
