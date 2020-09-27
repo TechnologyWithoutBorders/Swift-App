@@ -68,5 +68,5 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
      * @param response JSON formatted response
      * @throws JSONException if parsing the response fails for some reason
      */
-    public void onSuccess(JSONObject response) throws JSONException {};
+    public void onSuccess(JSONObject response) throws JSONException {}
 }
