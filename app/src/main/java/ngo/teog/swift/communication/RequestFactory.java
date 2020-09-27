@@ -108,7 +108,7 @@ public class RequestFactory {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
                     boolean success = dir.mkdirs();
 
-                    if(!success) {
+                    if(success) {
                         outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
                         outputStream.write(decodedString);
                         outputStream.close();
@@ -125,7 +125,7 @@ public class RequestFactory {
         });
     }
 
-    public LoginRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
+    public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, UserAction.LOGIN_USER, false);
@@ -138,33 +138,6 @@ public class RequestFactory {
         JSONObject request = new JSONObject(params);
 
         return new LoginRequest(context, anim, form, url, request, password, country);
-    }
-
-    public PasswordResetRequest createPasswordResetRequest(Context context, String mail, String country) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, UserAction.RESET_PASSWORD, false);
-
-        params.put(UserFilter.MAIL, mail);
-        //Override country, because the shared preferences contain no country at this point
-        params.put(Defaults.COUNTRY_KEY, country);
-
-        JSONObject request = new JSONObject(params);
-
-        return new PasswordResetRequest(context, url, request);
-    }
-
-    public ImageHashRequest createImageHashRequest(Context context, int device, String hash, ImageView imageView) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
-
-        params.put(DeviceFilter.ID, Integer.toString(device));
-        params.put(ResourceKeys.IMAGE_HASH, hash);
-
-        JSONObject request = new JSONObject(params);
-
-        return new ImageHashRequest(context, url, request, device, imageView);
     }
 
     public class LoginRequest extends JsonObjectRequest {
@@ -209,73 +182,69 @@ public class RequestFactory {
         }
     }
 
-    public class PasswordResetRequest extends JsonObjectRequest {
-        public PasswordResetRequest(final Context context, final String url, JSONObject request) {
-            super(Request.Method.POST, url, request, response -> {
-                try {
-                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+    public JsonObjectRequest createPasswordResetRequest(Context context, String mail, String country) {
+        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-                    switch(responseCode) {
-                        case SwiftResponse.CODE_OK:
-                            Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+        Map<String, String> params = generateParameterMap(context, UserAction.RESET_PASSWORD, false);
 
-                            break;
-                        case SwiftResponse.CODE_FAILED_VISIBLE:
-                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
-                        case SwiftResponse.CODE_FAILED_HIDDEN:
-                        default:
-                            throw new ServerException(response.getString(SwiftResponse.DATA_FIELD));
-                    }
-                } catch(TransparentServerException e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                }
-            }, new BaseErrorListener(context));
-        }
+        params.put(UserFilter.MAIL, mail);
+        //Override country, because the shared preferences contain no country at this point
+        params.put(Defaults.COUNTRY_KEY, country);
+
+        JSONObject request = new JSONObject(params);
+
+        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                super.onSuccess(response);
+
+                Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    /**
-     * Server request that uploads a device image hash in order to check if a newer image is available.
-     */
-    public class ImageHashRequest extends JsonObjectRequest {
-        public ImageHashRequest(final Context context, final String url, JSONObject request, final int device, ImageView imageView) {
-            super(Request.Method.POST, url, request, response -> {
+    //TODO merge with createDeviceImageRequest
+    public JsonObjectRequest createImageHashRequest(Context context, int device, String hash, ImageView imageView) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
+
+        params.put(DeviceFilter.ID, Integer.toString(device));
+        params.put(ResourceKeys.IMAGE_HASH, hash);
+
+        JSONObject request = new JSONObject(params);
+
+        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+            @Override
+            public void onSuccess(JSONObject response) throws JSONException {
+                super.onSuccess(response);
+
+                String imageData = response.getString(SwiftResponse.DATA_FIELD);
+
+                byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                boolean success = dir.mkdirs();
+
                 try {
-                    int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
+                    if (success) {
+                        FileOutputStream outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
+                        outputStream.write(decodedString);
+                        outputStream.close();
 
-                    switch(responseCode) {
-                        case SwiftResponse.CODE_OK:
-                            String imageData = response.getString(SwiftResponse.DATA_FIELD);
-
-                            byte[] decodedString = Base64.decode(imageData, Base64.DEFAULT);
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-                            File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                            dir.mkdirs();
-
-                            FileOutputStream outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
-                            outputStream.write(decodedString);
-                            outputStream.close();
-
-                            if(imageView != null) {
-                                imageView.setImageBitmap(bitmap);
-                            }
-
-                            break;
-                        case SwiftResponse.CODE_FAILED_VISIBLE:
-                            throw new TransparentServerException(response.getString(SwiftResponse.DATA_FIELD));
-                        case SwiftResponse.CODE_FAILED_HIDDEN:
-                        default:
-                            throw new ServerException(response.getString(SwiftResponse.DATA_FIELD));
+                        if(imageView != null) {
+                            imageView.setImageBitmap(bitmap);
+                        }
+                    } else {
+                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                        throw new IOException("directory could not be created");
                     }
-                } catch(TransparentServerException e) {
-                    Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch(Exception e) {
-                    Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                } catch(IOException e) {
+                    Log.w(this.getClass().getName(), "writing image data failed: " + e.toString());
                 }
-            }, new BaseErrorListener(context));
-        }
+            }
+        });
     }
 
     public JsonObjectRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
@@ -286,8 +255,6 @@ public class RequestFactory {
         params.put(DeviceFilter.MODEL, device.getModel());
 
         JSONObject request = new JSONObject(params);
-
-        //return new DeviceDocumentRequest(context, url, request, device, button, progressBar);
 
         return new BaseRequest(context, url, request, button, progressBar, new BaseResponseListener(context) {
             @Override
@@ -302,19 +269,11 @@ public class RequestFactory {
 
                 final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
 
-                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        dialog.dismiss();
-                    }
-                });
+                builder.setNegativeButton("cancel", (dialog, i) -> dialog.dismiss());
 
-                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))));
-                    }
-                });
+                builder.setAdapter(adapter, (dialog, i) ->
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))))
+                );
 
                 AlertDialog dialog = builder.create();
 

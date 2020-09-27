@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -113,7 +115,7 @@ public class ImageActivity extends BaseActivity {
                             sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
                         }
 
-                        RequestFactory.ImageHashRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString(), imageView);
+                        JsonObjectRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString(), imageView);
 
                         VolleyManager.getInstance(this).getRequestQueue().add(request);
                     } catch(FileNotFoundException e1) {

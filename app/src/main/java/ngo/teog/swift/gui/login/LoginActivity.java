@@ -27,6 +27,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -134,7 +136,7 @@ public class LoginActivity extends BaseActivity {
                 if(checkForInternetConnection()) {
                     AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
 
-                    RequestFactory.LoginRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country);
+                    JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country);
 
                     form.setVisibility(View.GONE);
 
@@ -167,7 +169,7 @@ public class LoginActivity extends BaseActivity {
 
             DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> {
                 if(checkForInternetConnection()) {
-                    RequestFactory.PasswordResetRequest request = RequestFactory.getInstance().createPasswordResetRequest(this, mailAddress, country);
+                    JsonObjectRequest request = RequestFactory.getInstance().createPasswordResetRequest(this, mailAddress, country);
 
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } else {
