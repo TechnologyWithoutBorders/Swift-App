@@ -105,16 +105,11 @@ public class RequestFactory {
 
                 try {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    boolean success = dir.mkdirs();
+                    dir.mkdirs();
 
-                    if(success) {
-                        outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
-                        outputStream.write(decodedString);
-                        outputStream.close();
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                        throw new IOException("directory could not be created");
-                    }
+                    outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
+                    outputStream.write(decodedString);
+                    outputStream.close();
                 } catch(IOException e) {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e.toString());
                 }
@@ -224,20 +219,15 @@ public class RequestFactory {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                boolean success = dir.mkdirs();
+                dir.mkdirs();
 
                 try {
-                    if (success) {
-                        FileOutputStream outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
-                        outputStream.write(decodedString);
-                        outputStream.close();
+                    FileOutputStream outputStream = new FileOutputStream(new File(dir, device + ".jpg"));
+                    outputStream.write(decodedString);
+                    outputStream.close();
 
-                        if(imageView != null) {
-                            imageView.setImageBitmap(bitmap);
-                        }
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                        throw new IOException("directory could not be created");
+                    if(imageView != null) {
+                        imageView.setImageBitmap(bitmap);
                     }
                 } catch(IOException e) {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e.toString());
