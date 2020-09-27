@@ -163,14 +163,6 @@ public class HospitalRepository {
         });
     }
 
-    public void createUser(User user, int userId) {
-        executor.execute(() -> {
-            hospitalDao.save(user);
-
-            refreshUserHospitalSync(userId);
-        });
-    }
-
     public void refreshUserHospital(int userId) {
         executor.execute(() -> {
             //TODO check if user data has been fetched recently
