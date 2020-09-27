@@ -75,49 +75,6 @@ public class ResponseParser {
     }
 
     /**
-     * Extracts a device list from a suiting server response.
-     * @param raw JSON-formatted server response
-     * @return Device list
-     * @throws ServerException if some internal server error has occurred
-     * @throws TransparentServerException if some transparent error has happened
-     */
-    public static List<HospitalDevice> parseDeviceList(JSONObject raw) throws ServerException, TransparentServerException {
-        probeResponseCode(raw);
-
-        try {
-            JSONArray deviceList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
-
-            ArrayList<HospitalDevice> result = new ArrayList<>();
-
-            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-            for (int i = 0; i < deviceList.length(); i++) {
-                JSONObject deviceObject = deviceList.getJSONObject(i);
-
-                int id = deviceObject.getInt(DeviceFilter.ID);
-                String assetNumber = deviceObject.getString(DeviceFilter.ASSET_NUMBER);
-                String type = deviceObject.getString(DeviceFilter.TYPE);
-                String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
-                String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
-                String model = deviceObject.getString(DeviceFilter.MODEL);
-                String ward = deviceObject.getString(DeviceFilter.WARD);
-
-                int hospital = deviceObject.getInt(DeviceFilter.HOSPITAL);
-                int maintenanceInterval = deviceObject.getInt(DeviceFilter.MAINTENANCE_INTERVAL);
-                Date lastUpdate = dateFormat.parse(deviceObject.getString(DeviceFilter.LAST_UPDATE));
-
-                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
-                result.add(device);
-            }
-
-            return result;
-        } catch(JSONException | ParseException e) {
-            throw new ServerException(e);
-        }
-    }
-
-    /**
      * Extracts information about a hospital from a suiting server response.<br>
      * The result includes the users, devices and reports assigned to the hospital.
      * @param raw JSON-formatted server response
@@ -131,7 +88,7 @@ public class ResponseParser {
         try {
             JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
 
-            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
+            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             int hospitalId = hospitalObject.getInt(HospitalFilter.ID);
