@@ -245,7 +245,7 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, button, progressBar, new BaseResponseListener(context) {
+        return new BaseRequest(context, url, request, progressBar, button, new BaseResponseListener(context, progressBar, button) {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);

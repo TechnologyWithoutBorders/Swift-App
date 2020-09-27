@@ -211,43 +211,4 @@ public class ResponseParser {
             throw new ServerException(e);
         }
     }
-
-    /**
-     * Extracts a user list from a suiting server response.
-     * @param raw JSON-formatted server response
-     * @return User list
-     * @throws ServerException if some internal server error has occurred
-     * @throws TransparentServerException if some transparent error has happened
-     */
-    public static List<User> parseUserList(JSONObject raw) throws ServerException, TransparentServerException {
-        probeResponseCode(raw);
-
-        try {
-            JSONArray userList = raw.getJSONArray(SwiftResponse.DATA_FIELD);
-
-            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-            ArrayList<User> result = new ArrayList<>();
-
-            for (int i = 0; i < userList.length(); i++) {
-                JSONObject userObject = userList.getJSONObject(i);
-
-                int id = userObject.getInt(UserFilter.ID);
-                String phone = userObject.getString(UserFilter.PHONE);
-                String mail = userObject.getString(UserFilter.MAIL);
-                String fullName = userObject.getString(UserFilter.FULL_NAME);
-                int hospitalId = userObject.getInt(UserFilter.HOSPITAL);
-                String position = userObject.getString(UserFilter.POSITION);
-                Date lastUpdate = dateFormat.parse(userObject.getString(UserFilter.LAST_UPDATE));
-
-                User user = new User(id, phone, mail, fullName, hospitalId, position, lastUpdate);
-                result.add(user);
-            }
-
-            return result;
-        } catch(JSONException | ParseException e) {
-            throw new ServerException(e);
-        }
-    }
 }

@@ -23,10 +23,10 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
         this.context = context;
     }
 
-    public BaseResponseListener(Context context, @Nullable View disable, @Nullable View enable) {
+    public BaseResponseListener(Context context, @Nullable View disableOnFinish, @Nullable View enableOnFinish) {
         this.context = context;
-        this.disable = disable;
-        this.enable = enable;
+        this.disable = disableOnFinish;
+        this.enable = enableOnFinish;
     }
 
     @Override

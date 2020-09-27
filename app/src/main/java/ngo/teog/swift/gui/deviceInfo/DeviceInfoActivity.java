@@ -48,7 +48,6 @@ import javax.inject.Inject;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.BaseRequest;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
