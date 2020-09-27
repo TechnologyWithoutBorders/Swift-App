@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +30,6 @@ import javax.inject.Inject;
 
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import me.toptas.fancyshowcase.FancyShowCaseView;
-import me.toptas.fancyshowcase.FocusShape;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -69,16 +67,12 @@ public class HospitalActivity extends BaseActivity {
         if(token != null && token.toLowerCase().startsWith("ger")) {
             TextView storageAccess = findViewById(R.id.storage_access_button);
 
-            storageAccess.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    if(HospitalActivity.this.checkForInternetConnection()) {
-                        Intent intent = new Intent(HospitalActivity.this, StorageAccessActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(HospitalActivity.this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
-                    }
+            storageAccess.setOnClickListener(view -> {
+                if(HospitalActivity.this.checkForInternetConnection()) {
+                    Intent intent = new Intent(HospitalActivity.this, StorageAccessActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HospitalActivity.this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -250,29 +244,9 @@ public class HospitalActivity extends BaseActivity {
             return true;
         } else if(item.getItemId() == R.id.info) {
             //Show tutorial
-            FancyShowCaseView tut1 = new FancyShowCaseView.Builder(this)
-                    .focusOn(findViewById(R.id.device_state_overview))
-                    .title("These symbols give you a quick overview over the states of your devices")
-                    .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
-                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                    .roundRectRadius(60)
-                    .build();
-
-            FancyShowCaseView tut2 = new FancyShowCaseView.Builder(this)
-                    .focusOn(hospitalListView)
-                    .title("You can browse through a list of your colleagues or devices by expanding the respective section")
-                    .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
-                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                    .roundRectRadius(60)
-                    .build();
-
-            FancyShowCaseView tut3 = new FancyShowCaseView.Builder(this)
-                    .focusOn(searchView)
-                    .title("Use this field for filtering")
-                    .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
-                    .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                    .roundRectRadius(60)
-                    .build();
+            FancyShowCaseView tut1 = buildTutorialStep(findViewById(R.id.device_state_overview), "These symbols give you a quick overview over the states of your devices");
+            FancyShowCaseView tut2 = buildTutorialStep(hospitalListView, "You can browse through a list of your colleagues or devices by expanding the respective section");
+            FancyShowCaseView tut3 = buildTutorialStep(searchView, "Use this field for filtering");
 
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
                     .add(tut1)
