@@ -41,8 +41,7 @@ import ngo.teog.swift.helpers.Defaults;
 
 public class LoginActivity extends BaseActivity {
 
-    private EditText mailField;
-    private EditText passwordField;
+    private EditText mailField, passwordField;
     private LinearLayout form;
     private ImageView imageView;
     private Spinner countrySpinner;

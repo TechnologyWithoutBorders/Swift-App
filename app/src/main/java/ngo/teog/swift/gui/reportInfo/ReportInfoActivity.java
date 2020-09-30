@@ -26,7 +26,6 @@ import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Report;
-import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -36,12 +35,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class ReportInfoActivity extends BaseActivity {
 
-    private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
-
     @Inject
     ViewModelFactory viewModelFactory;
-
-    private ReportInfo reportInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +67,6 @@ public class ReportInfoActivity extends BaseActivity {
 
         viewModel.getReportInfo().observe(this, reportInfo -> {
             if(reportInfo != null) {
-                this.reportInfo = reportInfo;
-
                 Report report = reportInfo.getReport();
                 User author = reportInfo.getAuthors().get(0);
 
@@ -85,6 +78,7 @@ public class ReportInfoActivity extends BaseActivity {
                 toState.setImageDrawable(currentStateInfo.getStateIcon());
                 toState.setBackgroundColor(currentStateInfo.getBackgroundColor());
 
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
                 dateView.setText(dateFormat.format(report.getCreated()));
                 authorView.setText(author.getName());
                 descriptionView.setText(report.getDescription());

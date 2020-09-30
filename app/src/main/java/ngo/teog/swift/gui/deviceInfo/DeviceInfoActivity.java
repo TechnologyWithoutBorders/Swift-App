@@ -97,13 +97,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private LinearLayout stateSection;
     private TableLayout attributeTable;
 
-    private TextView assetNumberView;
-    private TextView typeView;
-    private TextView modelView;
-    private TextView manufacturerView;
-    private TextView serialNumberView;
-    private TextView wardView;
-    private TextView intervalView;
+    private TextView assetNumberView, typeView, modelView, manufacturerView, serialNumberView, wardView, intervalView;
 
     private DeviceInfo deviceInfo;
 

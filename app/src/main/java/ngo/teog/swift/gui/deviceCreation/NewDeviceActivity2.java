@@ -46,21 +46,10 @@ public class NewDeviceActivity2 extends BaseActivity {
 
     private int deviceNumber;
 
-    private EditText assetNumberField;
+    private AutoCompleteTextView typeField, manufacturerField, modelField, wardField;
+    private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter, wardAdapter;
 
-    private AutoCompleteTextView typeField;
-    private ArrayAdapter<String> typeAdapter;
-
-    private EditText serialNumberField;
-
-    private AutoCompleteTextView manufacturerField;
-    private ArrayAdapter<String> manufacturerAdapter;
-
-    private AutoCompleteTextView modelField;
-    private ArrayAdapter<String> modelAdapter;
-
-    private AutoCompleteTextView wardField;
-    private ArrayAdapter<String> wardAdapter;
+    private EditText assetNumberField, serialNumberField;
 
     private NumberPicker intervalPicker;
     private Spinner weekMonthSpinner;
@@ -110,7 +99,6 @@ public class NewDeviceActivity2 extends BaseActivity {
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
 
-        NumberPicker intervalPicker = findViewById(R.id.intervalPicker);
         intervalPicker.setMinValue(MIN_MAINT_INTERVAL);
         intervalPicker.setMaxValue(MAX_MAINT_INTERVAL);
         intervalPicker.setValue(DEF_MAINT_INTERVAL);

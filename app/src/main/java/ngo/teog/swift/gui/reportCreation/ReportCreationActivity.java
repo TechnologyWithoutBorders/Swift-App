@@ -43,9 +43,7 @@ public class ReportCreationActivity extends BaseActivity {
     private ProgressBar progressBar;
     private Button saveButton;
 
-    private int oldState;
-    private int device;
-    private int hospital;
+    private int oldState, device, hospital;
 
     private Spinner stateSpinner;
 

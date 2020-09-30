@@ -36,8 +36,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class AdvancedHospitalActivity extends BaseActivity {
 
-    private EditText nameText;
-    private EditText mailText;
+    private EditText nameText, mailText;
     private Button createButton;
     private ProgressBar progressBar;
 
