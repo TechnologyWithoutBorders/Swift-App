@@ -13,14 +13,14 @@ import ngo.teog.swift.helpers.data.User;
  * @author nitelow
  */
 public class HospitalInfo {
-    private int id;
-    private String name;
-    private String location;
-    private float longitude;
-    private float latitude;
+    private final int id;
+    private final String name;
+    private final String location;
+    private final float longitude;
+    private final float latitude;
     private Date lastUpdate;
-    private List<User> users;
-    private List<DeviceInfo> devices;
+    private final List<User> users;
+    private final List<DeviceInfo> devices;
 
     /**
      * Creates a new hospital info object.

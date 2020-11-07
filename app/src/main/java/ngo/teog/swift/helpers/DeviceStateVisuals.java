@@ -25,9 +25,9 @@ public class DeviceStateVisuals {
                                         android.R.color.holo_red_dark,
                                         android.R.color.holo_red_light};
 
-    private String stateString;
-    private Drawable stateIcon;
-    private int backgroundColor;
+    private final String stateString;
+    private final Drawable stateIcon;
+    private final int backgroundColor;
 
     /**
      * Creates new visualization.
