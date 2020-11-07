@@ -109,20 +109,9 @@ public class LoginActivity extends BaseActivity {
             case R.id.info:
                 showInfo(R.string.about_text, R.string.privacy_policy);
                 return true;
-            case R.id.stats:
-                showStats();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    /**
-     * Opens the statistics activity.
-     */
-    private void showStats() {
-        Intent intent = new Intent(LoginActivity.this, StatsActivity.class);
-        startActivity(intent);
     }
 
     public void login(View view) {
