@@ -46,6 +46,10 @@ import ngo.teog.swift.helpers.data.RoomModule;
 
 public class MainActivity extends BaseActivity {
 
+    private static final int SCANNER_TAB = 0;
+    private static final int TODO_TAB = 1;
+    private static final int CALENDAR_TAB = 2;
+
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
@@ -134,11 +138,11 @@ public class MainActivity extends BaseActivity {
         @NonNull
         public Fragment getItem(int i) {
             switch(i) {
-                case 0:
+                case SCANNER_TAB:
                     return new BarcodeFragment();
-                case 1:
+                case TODO_TAB:
                     return new TodoFragment();
-                case 2:
+                case CALENDAR_TAB:
                     return new CalendarFragment();
             }
 
@@ -166,8 +170,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(mViewPager.getCurrentItem() == 0) {
-            BarcodeFragment barcodeFragment = (BarcodeFragment)mDemoCollectionPagerAdapter.getItem(0);
+        if(mViewPager.getCurrentItem() == SCANNER_TAB) {
+            BarcodeFragment barcodeFragment = (BarcodeFragment)mDemoCollectionPagerAdapter.getItem(SCANNER_TAB);
 
             return barcodeFragment.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
         } else {
