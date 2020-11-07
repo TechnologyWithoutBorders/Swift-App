@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import ngo.teog.swift.R;
 
 public class BaseResponseListener implements Response.Listener<JSONObject> {
-    private Context context;
+    private final Context context;
     private View disable;
     private View enable;
 

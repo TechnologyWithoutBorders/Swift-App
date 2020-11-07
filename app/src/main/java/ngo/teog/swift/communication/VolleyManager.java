@@ -12,7 +12,7 @@ import com.android.volley.toolbox.Volley;
  */
 public class VolleyManager {
     private static VolleyManager instance;
-    private RequestQueue requestQueue;
+    private final RequestQueue requestQueue;
 
     /**
      * Returns an instance of VolleyManager and creates one if necessary.

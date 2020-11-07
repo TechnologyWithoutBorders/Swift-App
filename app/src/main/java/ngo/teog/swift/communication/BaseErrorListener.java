@@ -17,7 +17,7 @@ import ngo.teog.swift.R;
  * @author nitelow
  */
 public class BaseErrorListener implements Response.ErrorListener {
-    private Context context;
+    private final Context context;
     private View disable = null;
     private View enable = null;
 
