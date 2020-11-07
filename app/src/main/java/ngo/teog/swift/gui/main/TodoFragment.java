@@ -24,10 +24,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -118,7 +118,7 @@ public class TodoFragment extends Fragment {
                     if(reportInfos.size() > 0) {
                         int currentState = reportInfos.get(0).getReport().getCurrentState();
 
-                        if(currentState == 1 || currentState == 2 || currentState == 3) {
+                        if(currentState == DeviceState.MAINTENANCE || currentState == DeviceState.BROKEN || currentState == DeviceState.IN_PROGRESS) {
                             adapter.add(deviceInfo);
                         }
                     }

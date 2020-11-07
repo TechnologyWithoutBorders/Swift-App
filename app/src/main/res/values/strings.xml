@@ -13,7 +13,6 @@
     <string name="reportInfoActivity">Always consider browsing through the reports in order to get more information about the device before planning your repair.</string>
     <string name="userinfo_activity">You can use this data to contact your colleagues or staff at other hospitals.</string>
     <string name="userprofile_activity">This is your very own user profile. You can add some general information like your telephone number and position here.</string>
-    <string name="maintenance_info">Coming soon</string>
     <string name="mainactivity"><![CDATA[
         <p><b>Barcode Scanner</b><br>
         The Scanner tab lets you scan registered barcodes and leads you directly to the respective device page. Alternatively you can enter the number of the ID sticker, if scanning is not possible.</p>
@@ -110,11 +109,6 @@
         <item>limited use</item>
     </string-array>
 
-    <string-array name="search_options">
-        <item>Device</item>
-        <item>User</item>
-    </string-array>
-
     <string-array name="countries_options">
         <item>Germany</item>
         <item>Ghana</item>
@@ -131,9 +125,6 @@
     <string name="hospital_location_symbol">hospital location symbol</string>
     <string name="hospital_members_heading">Members</string>
     <string name="hospital_devices_heading">Devices</string>
-
-    <!-- Maintenance Calendar -->
-    <string name="calendar_today_tag">Today</string>
 
     <!-- Info Dialog Texts -->
     <string name="info_dialog_heading">Information</string>
@@ -185,7 +176,7 @@
     <!-- Hospital Information -->
     <string name="hospital">Hospital</string>
     <string name="map">Map</string>
-    <string name="filter">filter...</string>
+    <string name="filter">filter…</string>
 
     <!-- Error Messages -->
     <string name="error_internet_connection">no internet connection</string>
@@ -193,7 +184,6 @@
     <string name="error_empty_password">empty password</string>
     <string name="generic_error_message">something went wrong</string>
     <string name="server_comm_error_message">server communication problems</string>
-    <string name="directory_not_accessible">directory could not be accessed</string>
     <string name="file_not_found">file not found</string>
 
     <!-- Dialog Texts -->
