@@ -8,11 +8,6 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
