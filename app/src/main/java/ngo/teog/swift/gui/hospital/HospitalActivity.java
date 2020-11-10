@@ -29,7 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
-import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -244,14 +243,10 @@ public class HospitalActivity extends BaseActivity {
             return true;
         } else if(item.getItemId() == R.id.info) {
             //Show tutorial
-            FancyShowCaseView tut1 = buildTutorialStep(findViewById(R.id.device_state_overview), "These symbols give you a quick overview over the states of your devices");
-            FancyShowCaseView tut2 = buildTutorialStep(hospitalListView, "You can browse through a list of your colleagues or devices by expanding the respective section");
-            FancyShowCaseView tut3 = buildTutorialStep(searchView, "Use this field for filtering");
-
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                    .add(tut1)
-                    .add(tut2)
-                    .add(tut3);
+                    .add(buildTutorialStep(findViewById(R.id.device_state_overview), "These symbols give you a quick overview over the states of your devices"))
+                    .add(buildTutorialStep(hospitalListView, "You can browse through a list of your colleagues or devices by expanding the respective section"))
+                    .add(buildTutorialStep(searchView, "Use this field for filtering"));
 
             tutorialQueue.show();
 

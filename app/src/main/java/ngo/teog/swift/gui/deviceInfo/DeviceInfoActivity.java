@@ -46,7 +46,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
-import me.toptas.fancyshowcase.FancyShowCaseView;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
@@ -437,18 +436,12 @@ public class DeviceInfoActivity extends BaseActivity {
                 return true;
             case R.id.info:
                 //Show tutorial
-                FancyShowCaseView tut1 = buildTutorialStep(attributeTable, "This table lists all relevant data of a device.");
-                FancyShowCaseView tut2 = buildTutorialStep(stateSection, "The current state of the device is shown up here.");
-                FancyShowCaseView tut3 = buildTutorialStep(reportListView, "You can see the recent maintenance/repair history in the bottom section.");
-                FancyShowCaseView tut4 = buildTutorialStep(reportCreationButton, "Use this button to create a new report.");
-                FancyShowCaseView tut5 = buildTutorialStep(documentButton, "If available, related documents can be retrieved by tapping this button.");
-
                 FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                        .add(tut1)
-                        .add(tut2)
-                        .add(tut3)
-                        .add(tut4)
-                        .add(tut5);
+                        .add(buildTutorialStep(attributeTable, "This table lists all relevant data of a device."))
+                        .add(buildTutorialStep(stateSection, "The current state of the device is shown up here."))
+                        .add(buildTutorialStep(reportListView, "You can see the recent maintenance/repair history in the bottom section."))
+                        .add(buildTutorialStep(reportCreationButton, "Use this button to create a new report."))
+                        .add(buildTutorialStep(documentButton, "If available, related documents can be retrieved by tapping this button."));
 
                 tutorialQueue.show();
 
