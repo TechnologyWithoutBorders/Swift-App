@@ -112,7 +112,7 @@ public class DeviceInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_device_info);
 
         Intent intent = this.getIntent();
-        //TODO für externe devices muss auch serializable möglich sein und dann ohne Bearbeitung usw.
+
         int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
         reportCreationButton = findViewById(R.id.reportCreationButton);
