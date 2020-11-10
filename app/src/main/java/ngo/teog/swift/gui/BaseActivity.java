@@ -66,6 +66,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates a displayable tutorial step that can be used in a tutorial queue.
+     * @param viewToFocus view that should be focused during step
+     * @param message message to display during step
+     * @return displayable tutorial step
+     */
     public FancyShowCaseView buildTutorialStep(View viewToFocus, String message) {
         return new FancyShowCaseView.Builder(this)
                 .focusOn(viewToFocus)
