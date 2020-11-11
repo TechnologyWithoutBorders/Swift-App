@@ -19,20 +19,20 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        String versionString = "";
+
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String versionString = "TeoG Swift v" + pInfo.versionName;
-            TextView versionView = findViewById(R.id.version_view);
-            versionView.setText(versionString);
+            versionString = "TeoG Swift v" + pInfo.versionName;
         } catch(PackageManager.NameNotFoundException e) {
             //ignore
         }
 
+        TextView teogInfo = findViewById(R.id.teog_info);
+        teogInfo.setText(Html.fromHtml(versionString + getString(R.string.teog_info)));
+
         TextView aboutText = findViewById(R.id.aboutText);
         aboutText.setText(Html.fromHtml(getString(R.string.about_text)));
-
-        TextView teogInfo = findViewById(R.id.teog_info);
-        teogInfo.setText(Html.fromHtml(getString(R.string.teog_info)));
 
         TextView privacyPolicyView = findViewById(R.id.privacy_policy_view);
         privacyPolicyView.setText(Html.fromHtml(getString(R.string.privacy_policy)));
