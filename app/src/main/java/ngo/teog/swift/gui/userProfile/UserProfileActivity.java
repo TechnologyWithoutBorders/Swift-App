@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +21,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
@@ -31,6 +34,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class UserProfileActivity extends BaseActivity {
 
+    private TableLayout tableLayout;
+    private ImageView editView;
     private TextView telephoneView, mailView, hospitalView, positionView, nameView;
 
     @Inject
@@ -42,6 +47,9 @@ public class UserProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
+        tableLayout = findViewById(R.id.tableLayout);
+        editView = findViewById(R.id.edit_view);
 
         nameView = findViewById(R.id.nameView);
 
@@ -84,7 +92,20 @@ public class UserProfileActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item, R.string.userprofile_activity);
+        int id = item.getItemId();
+
+        if(id == R.id.info) {
+            //Show tutorial
+            FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                .add(buildTutorialStep(tableLayout, "This table shows all of your user data."))
+                .add(buildTutorialStep(editView, "Tap the pencil symbols in order to change your information."));
+
+            tutorialQueue.show();
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item, R.string.userprofile_activity);
+        }
     }
 
     public void editPhone(View view) {
