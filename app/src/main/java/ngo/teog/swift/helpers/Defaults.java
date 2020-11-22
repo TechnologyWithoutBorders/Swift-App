@@ -41,6 +41,7 @@ public final class Defaults {
     /** Additional URL segment for server communication regarding hospitals (general synchronization) */
     public static final String HOSPITALS_URL = "hospitals.php";
 
+    /** Additional URL segment for server communication regarding documents (e.g. user manuals */
     public static final String DOCUMENTS_URL = "documents.php";
 
     //Local paths
