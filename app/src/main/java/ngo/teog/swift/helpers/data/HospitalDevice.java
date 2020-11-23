@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * @author Julian Deyerler
+ * @author nitelow
  */
 
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
