@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -260,6 +261,9 @@ public class HospitalRepository {
         private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
+                    Log.v(HospitalRepository.class.getName(), "received response with hospital data");
+                    Log.v(HospitalRepository.class.getName(), response.toString(4));
+
                     SynchronisationData data = ResponseParser.parseHospital(response);
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -269,7 +273,7 @@ public class HospitalRepository {
                     int newUserGroup = data.getUserGroup();
 
                     if(currentUserGroup != newUserGroup) {
-                        hospitalDao.deleteGroupSpecificData();
+                        hospitalDao.deleteGroupSpecificData();//TODO auch Gerätebilder löschen
                         editor.putInt("USER_GROUP_PREFERENCE", newUserGroup);
                         editor.apply();
                     }
@@ -314,9 +318,11 @@ public class HospitalRepository {
                     editor.apply();
                 } catch(Exception e) {
                     //we cannot show any information to the user from here as it runs in an extra thread
+                    Log.e(HospitalRepository.class.getName(), e.toString(), e);
                 }
             }), error -> {
                 //we cannot show any information to the user from here as it runs in an extra thread
+                Log.e(HospitalRepository.class.getName(), error.toString(), error);
             });
         }
     }
