@@ -16,72 +16,84 @@ import static androidx.room.OnConflictStrategy.REPLACE;
  * @author nitelow
  */
 @Dao
-public interface HospitalDao {//TODO aufsplitten nach Kategorie
+public abstract class HospitalDao {//TODO aufsplitten nach Kategorie
     //Insert operations
     @Insert(onConflict = REPLACE)
-    void save(Hospital hospital);
+    abstract void save(Hospital hospital);
 
     @Insert(onConflict = REPLACE)
-    void save(User user);
+    abstract void save(User user);
 
     @Insert(onConflict = REPLACE)
-    void save(HospitalDevice device);
+    abstract void save(HospitalDevice device);
 
     @Insert(onConflict = REPLACE)
-    void save(Report report);
+    abstract void save(Report report);
 
     @Insert(onConflict = REPLACE)
-    void save(Group group);
+    abstract void save(Group group);
 
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
-    LiveData<Hospital> loadUserHospital(int userId);
+    abstract LiveData<Hospital> loadUserHospital(int userId);
 
     @Transaction
     @Query("SELECT * FROM users WHERE users.id = :userId")
-    LiveData<UserProfileInfo> loadUserProfile(int userId);
+    abstract LiveData<UserProfileInfo> loadUserProfile(int userId);
 
     @Transaction
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
-    LiveData<HospitalDump> loadHospitalDump(int userId);
+    abstract LiveData<HospitalDump> loadHospitalDump(int userId);
 
     @Transaction
     @Query("SELECT * FROM reports WHERE device = :deviceId AND id = :reportId")
-    LiveData<ReportInfo> loadReportInfo(int deviceId, int reportId);
+    abstract LiveData<ReportInfo> loadReportInfo(int deviceId, int reportId);
 
     @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")
-    LiveData<UserInfo> loadUserInfo(int userId);
+    abstract LiveData<UserInfo> loadUserInfo(int userId);
 
     @Query("SELECT MAX(id) FROM reports WHERE device = :deviceId")
-    int getMaxReportId(int deviceId);
+    abstract int getMaxReportId(int deviceId);
 
     @Query("SELECT * FROM users")
-    List<User> getUsers();
+    abstract List<User> getUsers();
 
     @Query("SELECT * FROM users WHERE id = :id")
-    LiveData<User> loadUser(int id);
+    abstract LiveData<User> loadUser(int id);
 
     @Transaction
     @Query("SELECT * FROM devices WHERE id = :deviceId")
-    LiveData<DeviceInfo> loadDevice(int deviceId);
+    abstract LiveData<DeviceInfo> loadDevice(int deviceId);
 
     @Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastSync >= :currentMillis-(:timeout*1000)")
-    int hasUser(int id, long currentMillis, int timeout);
+    abstract int hasUser(int id, long currentMillis, int timeout);
 
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
-    Hospital getUserHospital(int userId);
+    abstract Hospital getUserHospital(int userId);
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
-    LiveData<List<User>> loadUserColleagues(int userId);
+    abstract LiveData<List<User>> loadUserColleagues(int userId);
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
-    List<User> getUserColleagues(int userId);
+    abstract List<User> getUserColleagues(int userId);
 
     @Transaction
     @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
-    LiveData<List<DeviceInfo>> loadHospitalDevices(int userId);
+    abstract LiveData<List<DeviceInfo>> loadHospitalDevices(int userId);
 
     @Transaction
     @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
-    List<DeviceInfo> getHospitalDevices(int userId);
+    abstract List<DeviceInfo> getHospitalDevices(int userId);
+
+    @Query("DELETE FROM devices")
+    abstract void deleteDevices();
+
+    @Query("DELETE FROM reports")
+    abstract void deleteReports();
+
+    @Transaction
+    void deleteGroupSpecificData() {
+        deleteDevices();
+        deleteReports();
+    }
 }

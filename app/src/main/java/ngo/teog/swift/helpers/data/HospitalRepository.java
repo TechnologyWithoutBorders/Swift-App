@@ -38,6 +38,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.communication.ResponseParser;
+import ngo.teog.swift.helpers.SynchronisationData;
 import ngo.teog.swift.helpers.export.HospitalDump;
 
 @Singleton
@@ -197,7 +198,7 @@ public class HospitalRepository {
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
-            params.put("lastSync", dateFormat.format(new Date(lastUpdate)));
+            params.put("lastSync", dateFormat.format(new Date(lastUpdate)));//TODO Konstante
 
             JSONArray jsonDevices = new JSONArray();
             JSONArray jsonUsers = new JSONArray();
@@ -259,7 +260,18 @@ public class HospitalRepository {
         private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
-                    HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
+                    SynchronisationData data = ResponseParser.parseHospital(response);
+
+                    SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+                    int currentUserGroup = preferences.getInt("USER_GROUP_PREFERENCE", -1);//TODO Konstante
+                    int newUserGroup = data.getUserGroup();
+
+                    if(currentUserGroup != newUserGroup) {
+                        hospitalDao.deleteGroupSpecificData();
+                    }
+
+                    HospitalInfo hospitalInfo = data.getHospitalInfo();
 
                     long now = new Date().getTime();
 
@@ -295,7 +307,6 @@ public class HospitalRepository {
                         }
                     }
 
-                    SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                     editor.apply();

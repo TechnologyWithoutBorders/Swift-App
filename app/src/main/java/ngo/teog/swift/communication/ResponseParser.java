@@ -16,6 +16,7 @@ import java.util.TimeZone;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.SynchronisationData;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
@@ -78,15 +79,19 @@ public class ResponseParser {
      * Extracts information about a hospital from a suiting server response.<br>
      * The result includes the users, devices and reports assigned to the hospital.
      * @param raw JSON-formatted server response
-     * @return Hospital information
+     * @return Hospital information and current user group
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if some transparent error has happened
      */
-    public static HospitalInfo parseHospital(JSONObject raw) throws ServerException, TransparentServerException {
+    public static SynchronisationData parseHospital(JSONObject raw) throws ServerException, TransparentServerException {
         probeResponseCode(raw);
 
         try {
-            JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
+            JSONObject data = raw.getJSONObject(SwiftResponse.DATA_FIELD);
+
+            int userGroup = data.getInt("userGroup");//TODO Konstante
+
+            JSONObject hospitalObject = data.getJSONObject(ResourceKeys.HOSPITAL);
 
             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -163,7 +168,7 @@ public class ResponseParser {
                 deviceList.add(deviceInfo);
             }
 
-            return new HospitalInfo(hospitalId, name, location, longitude, latitude, hospitalLastUpdate, userList, deviceList);
+            return new SynchronisationData(new HospitalInfo(hospitalId, name, location, longitude, latitude, hospitalLastUpdate, userList, deviceList), userGroup);
         } catch(JSONException | ParseException e) {
             throw new ServerException(e);
         }
