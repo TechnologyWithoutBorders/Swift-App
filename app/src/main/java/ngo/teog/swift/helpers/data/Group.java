@@ -6,16 +6,16 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(tableName = "groups")
+@Entity(tableName = "groups", primaryKeys = {"id", "hospital"})
 public class Group implements Serializable {
-    @PrimaryKey
     private int id;
+    private int hospital;
     private String name;
     private int parentGroup;
     private Date lastUpdate;
     private Date lastSync;
 
-    public Group(int id, String name, int parentGroup, Date lastUpdate) {
+    public Group(int id, int hospital, String name, int parentGroup, Date lastUpdate) {
         this.id = id;
         this.name = name;
         this.parentGroup = parentGroup;
@@ -25,6 +25,10 @@ public class Group implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public int getHospital() {
+        return hospital;
     }
 
     public String getName() {

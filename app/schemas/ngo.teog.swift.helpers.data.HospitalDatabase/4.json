@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "f8a6245693a245844c9cb7048dce4939",
+    "identityHash": "db5fbbc0174eab78ffd15a9d93dd2daa",
     "entities": [
       {
         "tableName": "users",
@@ -274,11 +274,17 @@
       },
       {
         "tableName": "groups",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, `parentGroup` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `hospital` INTEGER NOT NULL, `name` TEXT, `parentGroup` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hospital",
+            "columnName": "hospital",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -309,7 +315,8 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "id",
+            "hospital"
           ],
           "autoGenerate": false
         },
@@ -320,7 +327,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f8a6245693a245844c9cb7048dce4939')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'db5fbbc0174eab78ffd15a9d93dd2daa')"
     ]
   }
 }
