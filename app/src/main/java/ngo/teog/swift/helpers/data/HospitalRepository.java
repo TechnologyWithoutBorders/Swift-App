@@ -263,12 +263,15 @@ public class HospitalRepository {
                     SynchronisationData data = ResponseParser.parseHospital(response);
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
 
                     int currentUserGroup = preferences.getInt("USER_GROUP_PREFERENCE", -1);//TODO Konstante
                     int newUserGroup = data.getUserGroup();
 
                     if(currentUserGroup != newUserGroup) {
                         hospitalDao.deleteGroupSpecificData();
+                        editor.putInt("USER_GROUP_PREFERENCE", newUserGroup);
+                        editor.apply();
                     }
 
                     HospitalInfo hospitalInfo = data.getHospitalInfo();
@@ -307,7 +310,6 @@ public class HospitalRepository {
                         }
                     }
 
-                    SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                     editor.apply();
                 } catch(Exception e) {
