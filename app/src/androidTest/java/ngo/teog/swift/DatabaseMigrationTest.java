@@ -44,4 +44,12 @@ public class DatabaseMigrationTest {
         // MigrationTestHelper automatically verifies the schema changes,
         // but you need to validate that the data was migrated properly.
     }
+
+    @Test
+    public void migrate3To4() throws IOException {
+        SupportSQLiteDatabase db = helper.createDatabase(TEST_DB, 3);
+        db.close();
+
+        db = helper.runMigrationsAndValidate(TEST_DB, 4, true, RoomModule.MIGRATION_3_4);
+    }
 }

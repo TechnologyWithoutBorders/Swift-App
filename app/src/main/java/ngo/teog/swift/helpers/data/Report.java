@@ -8,10 +8,10 @@ import java.util.Date;
 /**
  * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
  * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * @author Julian Deyerler
+ * @author nitelow
  */
 
-@Entity(tableName = "reports", primaryKeys = {"id", "device"})//TODO hospital muss auch in primary keys
+@Entity(tableName = "reports", primaryKeys = {"id", "device"})//TODO hospital muss auch in primary keys -> zumindest global betrachtet. Nicht, wenn man nur ein Krankenhaus betrachtet
 public class Report implements  Serializable {
 
     private int id;

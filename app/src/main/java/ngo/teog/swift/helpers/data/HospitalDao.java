@@ -12,10 +12,26 @@ import ngo.teog.swift.helpers.export.HospitalDump;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
+/**
+ * @author nitelow
+ */
 @Dao
-public interface HospitalDao {
+public interface HospitalDao {//TODO aufsplitten nach Kategorie
+    //Insert operations
     @Insert(onConflict = REPLACE)
     void save(Hospital hospital);
+
+    @Insert(onConflict = REPLACE)
+    void save(User user);
+
+    @Insert(onConflict = REPLACE)
+    void save(HospitalDevice device);
+
+    @Insert(onConflict = REPLACE)
+    void save(Report report);
+
+    @Insert(onConflict = REPLACE)
+    void save(Group group);
 
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
     LiveData<Hospital> loadUserHospital(int userId);
@@ -27,15 +43,6 @@ public interface HospitalDao {
     @Transaction
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
     LiveData<HospitalDump> loadHospitalDump(int userId);
-
-    @Insert(onConflict = REPLACE)
-    void save(User user);
-
-    @Insert(onConflict = REPLACE)
-    void save(HospitalDevice device);
-
-    @Insert(onConflict = REPLACE)
-    void save(Report report);
 
     @Transaction
     @Query("SELECT * FROM reports WHERE device = :deviceId AND id = :reportId")
