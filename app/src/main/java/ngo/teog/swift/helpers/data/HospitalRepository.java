@@ -48,7 +48,7 @@ public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
     private final Context context;
-    private ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
