@@ -51,9 +51,6 @@ public final class ResourceKeys {
     /** Identifier for previous states used in reports */
     public static final String REPORT_OLD_STATE = "old_state";
 
-    /** Identifier for current states used in reports */
-    public static final String REPORT_NEW_STATE = "new_state";
-
     /** Identifier for all kinds of data */
     public static final String DATA = "data";
 }
