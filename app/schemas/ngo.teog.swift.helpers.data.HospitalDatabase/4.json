@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "db5fbbc0174eab78ffd15a9d93dd2daa",
+    "identityHash": "f2ba4e146d6e1958a0c1b023a4b8d7d9",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `phone` TEXT, `mail` TEXT, `name` TEXT, `hospital` INTEGER NOT NULL, `position` TEXT, `lastUpdate` INTEGER, `lastSync` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `phone` TEXT, `mail` TEXT, `name` TEXT, `hospital` INTEGER NOT NULL, `group` INTEGER NOT NULL, `position` TEXT, `lastUpdate` INTEGER, `lastSync` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -35,6 +35,12 @@
           {
             "fieldPath": "hospital",
             "columnName": "hospital",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "group",
+            "columnName": "group",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -124,7 +130,7 @@
       },
       {
         "tableName": "devices",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assetNumber` TEXT, `type` TEXT, `serialNumber` TEXT, `manufacturer` TEXT, `model` TEXT, `ward` TEXT, `hospital` INTEGER NOT NULL, `maintenanceInterval` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assetNumber` TEXT, `type` TEXT, `serialNumber` TEXT, `manufacturer` TEXT, `model` TEXT, `ward` TEXT, `hospital` INTEGER NOT NULL, `group` INTEGER NOT NULL, `maintenanceInterval` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -171,6 +177,12 @@
           {
             "fieldPath": "hospital",
             "columnName": "hospital",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "group",
+            "columnName": "group",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -327,7 +339,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'db5fbbc0174eab78ffd15a9d93dd2daa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2ba4e146d6e1958a0c1b023a4b8d7d9')"
     ]
   }
 }

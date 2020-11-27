@@ -115,10 +115,11 @@ public class ResponseParser {
                 String mail = userObject.getString(UserFilter.MAIL);
                 String fullName = userObject.getString(UserFilter.FULL_NAME);
                 int hospital = userObject.getInt(UserFilter.HOSPITAL);
+                int group = userObject.getInt(UserFilter.GROUP);
                 String position = userObject.getString(UserFilter.POSITION);
                 Date lastUpdate = dateFormat.parse(userObject.getString(UserFilter.LAST_UPDATE));
 
-                User user = new User(id, phone, mail, fullName, hospital, position, lastUpdate);
+                User user = new User(id, phone, mail, fullName, hospital, group, position, lastUpdate);
                 userList.add(user);
             }
 
@@ -135,6 +136,7 @@ public class ResponseParser {
                 String model = deviceObject.getString(DeviceFilter.MODEL);
                 String ward = deviceObject.getString(DeviceFilter.WARD);
                 int hospital = deviceObject.getInt(DeviceFilter.HOSPITAL);
+                int group = deviceObject.getInt(DeviceFilter.GROUP);
                 int maintenanceInterval = deviceObject.getInt(DeviceFilter.MAINTENANCE_INTERVAL);
                 Date lastUpdate = dateFormat.parse(deviceObject.getString(DeviceFilter.LAST_UPDATE));
 
@@ -160,7 +162,7 @@ public class ResponseParser {
                     reportList.add(reportInfo);
                 }
 
-                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
+                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, group, maintenanceInterval, lastUpdate);
 
                 DeviceInfo deviceInfo = new DeviceInfo(device);
                 deviceInfo.setReports(reportList);

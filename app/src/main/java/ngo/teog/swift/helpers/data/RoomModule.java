@@ -64,8 +64,9 @@ public class RoomModule {
     public static final Migration MIGRATION_3_4 = new Migration(3, 4) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            //TODO users und devices haben jetzt auch einen group-parameter
             database.execSQL("CREATE TABLE IF NOT EXISTS groups (id INTEGER NOT NULL, hospital INTEGER NOT NULL, name TEXT, parentGroup INTEGER NOT NULL, lastUpdate INTEGER, lastSync INTEGER, PRIMARY KEY(id, hospital))");
+            database.execSQL("ALTER TABLE users ADD COLUMN 'group' INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE devices ADD COLUMN 'group' INTEGER NOT NULL DEFAULT 1");
         }
     };
 }

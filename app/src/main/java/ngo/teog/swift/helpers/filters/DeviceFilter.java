@@ -13,6 +13,7 @@ public final class DeviceFilter {
     public static final String MODEL = "model";
     public static final String WARD = "ward";
     public static final String HOSPITAL = "hospital";
+    public static final String GROUP = "group";
     public static final String MAINTENANCE_INTERVAL = "maintenanceInterval";
     public static final String LAST_UPDATE = "lastUpdate";
 }

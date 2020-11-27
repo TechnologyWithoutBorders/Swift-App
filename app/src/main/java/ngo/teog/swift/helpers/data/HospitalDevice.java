@@ -22,11 +22,12 @@ public class HospitalDevice implements Serializable {
     private String model;
     private String ward;
     private int hospital;
+    private int group;
     private int maintenanceInterval;
     private Date lastUpdate;
     private Date lastSync;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int hospital, int maintenanceInterval, Date lastUpdate) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int hospital, int group, int maintenanceInterval, Date lastUpdate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -35,6 +36,7 @@ public class HospitalDevice implements Serializable {
         this.model = model;
         this.ward = ward;
         this.hospital = hospital;
+        this.group = group;
         this.maintenanceInterval = maintenanceInterval;
         this.lastUpdate = lastUpdate;
         this.lastSync = new Date();
@@ -86,6 +88,14 @@ public class HospitalDevice implements Serializable {
 
     public int getHospital() {
         return hospital;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
     }
 
     public void setHospital(int hospital) {

@@ -23,17 +23,19 @@ public class User implements Serializable {
     private String name;
 
     private int hospital;
+    private int group;
 
     private String position;
     private Date lastUpdate;
     private Date lastSync;
 
-    public User(int id, String phone, String mail, String name, int hospital, String position, Date lastUpdate) {
+    public User(int id, String phone, String mail, String name, int hospital, int group, String position, Date lastUpdate) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
         this.name = name;
         this.hospital = hospital;
+        this.group = group;
         this.position = position;
         this.lastUpdate = lastUpdate;
         this.lastSync = new Date();
@@ -57,6 +59,10 @@ public class User implements Serializable {
 
     public int getHospital() {
         return hospital;
+    }
+
+    public int getGroup() {
+        return group;
     }
 
     public String getPosition() {

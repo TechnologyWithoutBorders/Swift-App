@@ -29,10 +29,8 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.inject.Inject;
 
@@ -99,6 +97,7 @@ public class NewDeviceActivity3 extends BaseActivity {
         viewModel.getUser().observe(this, user -> {
             if(user != null) {
                 device.setHospital(user.getHospital());
+                device.setGroup(user.getHospital());
                 //TODO sicherstellen, dass das passiert ist, bevor es weitergeht
             }
         });
