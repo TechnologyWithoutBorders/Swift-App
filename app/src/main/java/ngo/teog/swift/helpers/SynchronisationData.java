@@ -1,8 +1,8 @@
 package ngo.teog.swift.helpers;
 
 public class SynchronisationData {
-    private HospitalInfo hospitalInfo;
-    private int userGroup;
+    private final HospitalInfo hospitalInfo;
+    private final int userGroup;
 
     public SynchronisationData(HospitalInfo hospitalInfo, int userGroup) {
         this.hospitalInfo = hospitalInfo;

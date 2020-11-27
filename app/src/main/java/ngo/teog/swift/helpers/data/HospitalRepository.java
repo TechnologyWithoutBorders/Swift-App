@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -275,9 +276,18 @@ public class HospitalRepository {
                     int newUserGroup = data.getUserGroup();
 
                     if(currentUserGroup != newUserGroup) {
-                        hospitalDao.deleteGroupSpecificData();//TODO auch Gerätebilder löschen
+                        hospitalDao.deleteGroupSpecificData();
                         editor.putInt("GROUP_PREFERENCE", newUserGroup);
                         editor.apply();
+
+                        //delete files (images)
+                        File imageDir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+
+                        if(imageDir.exists()) {
+                            for(File file : imageDir.listFiles()) {
+                                file.delete();
+                            }
+                        }
                     }
 
                     HospitalInfo hospitalInfo = data.getHospitalInfo();
