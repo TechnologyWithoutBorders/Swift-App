@@ -89,7 +89,7 @@ public class ResponseParser {
         try {
             JSONObject data = raw.getJSONObject(SwiftResponse.DATA_FIELD);
 
-            int userGroup = data.getInt("userGroup");//TODO Konstante
+            int userGroup = data.getInt(ResourceKeys.USER_GROUP);
 
             JSONObject hospitalObject = data.getJSONObject(ResourceKeys.HOSPITAL);
 

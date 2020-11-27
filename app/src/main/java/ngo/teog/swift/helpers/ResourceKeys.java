@@ -53,4 +53,6 @@ public final class ResourceKeys {
 
     /** Identifier for all kinds of data */
     public static final String DATA = "data";
+
+    public static final String USER_GROUP = "userGroup";
 }
