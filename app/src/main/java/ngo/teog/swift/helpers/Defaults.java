@@ -21,6 +21,9 @@ public final class Defaults {
     /** Key that identifies user country in shared preferences */
     public static final String COUNTRY_PREFERENCE = "COUNTRY_PREFERENCE";
 
+    /** Key that identifies user/device group in shared preferences */
+    public static final String GROUP_PREFERENCE = "GROUP_PREFERENCE";
+
     /** Key that identifies timestamp of last synchronization with server in shared preferences */
     public static final String LAST_SYNC_PREFERENCE = "LAST_SYNC_PREFERENCE";
 

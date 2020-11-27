@@ -197,7 +197,7 @@ public class HospitalRepository {
 
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
-            int userGroup = preferences.getInt("GROUP_PREFERENCE", -1);
+            int userGroup = preferences.getInt(Defaults.GROUP_PREFERENCE, -1);
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
@@ -272,12 +272,12 @@ public class HospitalRepository {
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
 
-                    int currentUserGroup = preferences.getInt("GROUP_PREFERENCE", -1);//TODO Konstante
+                    int currentUserGroup = preferences.getInt(Defaults.GROUP_PREFERENCE, -1);//TODO Konstante
                     int newUserGroup = data.getUserGroup();
 
                     if(currentUserGroup != newUserGroup) {
                         hospitalDao.deleteGroupSpecificData();
-                        editor.putInt("GROUP_PREFERENCE", newUserGroup);
+                        editor.putInt(Defaults.GROUP_PREFERENCE, newUserGroup);
                         editor.apply();
 
                         //delete files (images)
