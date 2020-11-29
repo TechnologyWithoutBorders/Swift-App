@@ -52,7 +52,7 @@ public class BarcodeFragment extends Fragment {
     private EditText searchField;
     private ProgressBar progressBar;
 
-    private BarcodeCallback callback = new BarcodeCallback() {
+    private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if(result.getText() == null || result.getText().equals(lastText)) {
@@ -88,12 +88,7 @@ public class BarcodeFragment extends Fragment {
         barcodeScannerView.decodeContinuous(callback);
 
         searchButton = view.findViewById(R.id.search_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search();
-            }
-        });
+
         searchField = view.findViewById(R.id.code_search_text);
 
         progressBar = view.findViewById(R.id.progressBar);
@@ -157,7 +152,15 @@ public class BarcodeFragment extends Fragment {
         }
     }
 
-    private void search() {
+    public void switchFlashlightState(View view) {
+        //berechtigung
+
+        //status lampe
+
+        //status wechsel
+    }
+
+    private void search(View view) {
         String searchString = searchField.getText().toString();
 
         try {
