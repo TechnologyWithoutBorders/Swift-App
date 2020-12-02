@@ -88,6 +88,9 @@ public class BarcodeFragment extends Fragment {
         barcodeScannerView.decodeContinuous(callback);
 
         searchButton = view.findViewById(R.id.search_button);
+        searchButton.setOnClickListener(sourceView -> {
+            search();
+        });
 
         searchField = view.findViewById(R.id.code_search_text);
 
@@ -152,15 +155,8 @@ public class BarcodeFragment extends Fragment {
         }
     }
 
-    public void switchFlashlightState(View view) {
-        //berechtigung
 
-        //status lampe
-
-        //status wechsel
-    }
-
-    private void search(View view) {
+    private void search() {
         String searchString = searchField.getText().toString();
 
         try {
