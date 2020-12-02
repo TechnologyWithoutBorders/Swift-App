@@ -139,6 +139,7 @@
     <string name="save_button">Save</string>
     <string name="search_button">Search</string>
     <string name="new_device_button">New Device</string>
+    <string name="create_report_button">Create Report</string>
     <string name="transition_indicator">---></string>
 
     <!-- Login Screen -->

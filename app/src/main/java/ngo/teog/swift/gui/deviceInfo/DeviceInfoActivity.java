@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +34,6 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -83,7 +83,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private ReportArrayAdapter adapter;
 
-    private FloatingActionButton reportCreationButton;
+    private Button reportCreationButton;
 
     private ListView reportListView;
 
@@ -194,17 +194,13 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
 
-                reportCreationButton.setOnClickListener(new View.OnClickListener() {
+                reportCreationButton.setOnClickListener((view) -> {
+                    int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
 
-                    @Override
-                    public void onClick(View view) {
-                        int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
-
-                        Intent intent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                        intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
-                        intent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
-                        startActivity(intent);
-                    }
+                    Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                    reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
+                    reportIntent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
+                    startActivity(reportIntent);
                 });
 
                 DeviceStateVisuals visuals = new DeviceStateVisuals(deviceInfo.getReports().get(0).getReport().getCurrentState(), this);
