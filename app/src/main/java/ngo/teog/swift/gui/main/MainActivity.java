@@ -1,9 +1,15 @@
 package ngo.teog.swift.gui.main;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -13,6 +19,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -244,6 +252,41 @@ public class MainActivity extends BaseActivity {
     public void startHospitalActivity() {
         Intent intent = new Intent(MainActivity.this, HospitalActivity.class);
         startActivity(intent);
+    }
+
+    public void switchFlashlightState(View view) {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+
+/*
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                CameraManager camManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                String cameraId = null;
+
+                try {
+                    cameraId = camManager.getCameraIdList()[0];
+                    camManager.setTorchMode(cameraId, true);   //Turn ON
+                } catch (CameraAccessException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Camera mCamera;
+                Camera.Parameters parameters;
+                mCamera = Camera.open();
+                parameters = mCamera.getParameters();
+                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                mCamera.setParameters(parameters);
+                mCamera.startPreview();
+            }
+*/
+
+
+        } else {
+            Toast.makeText(getApplicationContext(),"Camera permission not granted", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
     }
 
     public void startNewDeviceActivity(View view) {
