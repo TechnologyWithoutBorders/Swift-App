@@ -254,40 +254,7 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void switchFlashlightState(View view) {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
-/*
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                CameraManager camManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                String cameraId = null;
-
-                try {
-                    cameraId = camManager.getCameraIdList()[0];
-                    camManager.setTorchMode(cameraId, true);   //Turn ON
-                } catch (CameraAccessException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Camera mCamera;
-                Camera.Parameters parameters;
-                mCamera = Camera.open();
-                parameters = mCamera.getParameters();
-                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                mCamera.setParameters(parameters);
-                mCamera.startPreview();
-            }
-*/
-
-
-        } else {
-            Toast.makeText(getApplicationContext(),"Camera permission not granted", Toast.LENGTH_SHORT).show();
-        }
-
-
-
-
-    }
 
     public void startNewDeviceActivity(View view) {
         Intent intent = new Intent(MainActivity.this, NewDeviceActivity.class);
