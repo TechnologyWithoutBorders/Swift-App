@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -49,8 +51,13 @@ public class BarcodeFragment extends Fragment {
     private String lastText;
 
     private Button searchButton;
+    private ImageView torchButton;
     private EditText searchField;
     private ProgressBar progressBar;
+
+    private boolean torchState = false;
+    private int colorTorchOff = R.color.white_transparent;
+    private int colorTorchOn = R.color.white;
 
     private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -90,6 +97,11 @@ public class BarcodeFragment extends Fragment {
         searchButton = view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(sourceView -> {
             search();
+        });
+
+        torchButton = view.findViewById(R.id.torch_button);
+        torchButton.setOnClickListener(sourceView -> {
+            switchTorchState();
         });
 
         searchField = view.findViewById(R.id.code_search_text);
@@ -154,6 +166,20 @@ public class BarcodeFragment extends Fragment {
             return false;
         }
     }
+
+    private void switchTorchState() {
+        if(torchState == false){
+            barcodeScannerView.setTorchOn();
+            torchButton.setColorFilter(colorTorchOn);
+            torchState = true;
+        } else {
+            barcodeScannerView.setTorchOff();
+            torchButton.setColorFilter(colorTorchOff);
+            torchState = false;
+        }
+
+    }
+
 
 
     private void search() {
