@@ -100,8 +100,7 @@ public class ReportCreationActivity extends BaseActivity {
 
             String description = descriptionText.getText().toString().trim();
 
-            //id = 0 means autogenerate id
-            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), "", device, hospital, oldState, newState, description, new Date());//TODO add title
+            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, hospital, oldState, newState, description, new Date());
 
             viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
@@ -110,7 +109,7 @@ public class ReportCreationActivity extends BaseActivity {
 
             ReportCreationActivity.this.finish();
         } else {
-            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();//TODO why not?
+            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();
         }
     }
 
