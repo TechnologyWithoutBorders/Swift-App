@@ -54,10 +54,7 @@ public class BarcodeFragment extends Fragment {
     private ImageView torchButton;
     private EditText searchField;
     private ProgressBar progressBar;
-
     private boolean torchState = false;
-    private int colorTorchOff = R.color.white_transparent;
-    private int colorTorchOn = R.color.white;
 
     private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -168,13 +165,13 @@ public class BarcodeFragment extends Fragment {
     }
 
     private void switchTorchState() {
-        if(torchState == false){
+        if(!torchState){
             barcodeScannerView.setTorchOn();
-            torchButton.setColorFilter(colorTorchOn);
+            torchButton.setColorFilter(this.getResources().getColor(R.color.white));
             torchState = true;
         } else {
             barcodeScannerView.setTorchOff();
-            torchButton.setColorFilter(colorTorchOff);
+            torchButton.setColorFilter(this.getResources().getColor(R.color.grey_table_bar));
             torchState = false;
         }
 
