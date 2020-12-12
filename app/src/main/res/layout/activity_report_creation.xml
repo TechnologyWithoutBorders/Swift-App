@@ -19,6 +19,24 @@
         android:textSize="15sp"
         android:padding="3dp"
         android:textStyle="bold"
+        android:text="@string/report_title" />
+
+    <EditText
+        android:id="@+id/report_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/report_title"
+        android:maxLength="25"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teog_blue"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:padding="3dp"
+        android:textStyle="bold"
         android:text="@string/report_description" />
 
     <EditText
