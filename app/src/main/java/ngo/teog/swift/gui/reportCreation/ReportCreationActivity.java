@@ -39,7 +39,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class ReportCreationActivity extends BaseActivity {
 
-    private EditText descriptionText;
+    private EditText titleText, descriptionText;
     private ProgressBar progressBar;
     private Button saveButton;
 
@@ -66,6 +66,7 @@ public class ReportCreationActivity extends BaseActivity {
         stateSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
         stateSpinner.setSelection(oldState);
 
+        titleText = findViewById(R.id.report_title);
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);
         saveButton = findViewById(R.id.saveButton);
@@ -99,9 +100,10 @@ public class ReportCreationActivity extends BaseActivity {
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
             String description = descriptionText.getText().toString().trim();
+            String title = titleText.getText().toString().trim();
 
             //ID = 0 means auto-generate ID
-            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), "", device, hospital, oldState, newState, description, new Date());//TODO title
+            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, oldState, newState, description, new Date());
 
             viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
