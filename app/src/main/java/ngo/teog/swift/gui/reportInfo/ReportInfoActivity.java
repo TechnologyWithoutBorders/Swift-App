@@ -49,6 +49,7 @@ public class ReportInfoActivity extends BaseActivity {
 
         TextView dateView = findViewById(R.id.dateView);
         TextView authorView = findViewById(R.id.authorView);
+        TextView titleView = findViewById(R.id.title_view);
         ImageView fromState = findViewById(R.id.fromState);
         ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
@@ -81,6 +82,12 @@ public class ReportInfoActivity extends BaseActivity {
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
                 dateView.setText(dateFormat.format(report.getCreated()));
                 authorView.setText(author.getName());
+
+                String title = report.getTitle();
+                if(title.length() > 0) {
+                    titleView.setText(title);
+                }
+
                 descriptionView.setText(report.getDescription());
             }
         });
