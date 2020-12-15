@@ -165,6 +165,7 @@
     <string name="report_date">Date</string>
     <string name="report_state_change">State Change</string>
     <string name="report_author">Author</string>
+    <string name="report_title">Title</string>
     <string name="report_description_description">provide a short description</string>
 
     <!-- User Information -->

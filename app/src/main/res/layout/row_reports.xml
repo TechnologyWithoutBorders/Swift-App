@@ -29,7 +29,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/authorView"
+        android:id="@+id/title_view"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:textAlignment="center"

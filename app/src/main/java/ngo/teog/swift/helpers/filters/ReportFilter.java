@@ -6,6 +6,7 @@ package ngo.teog.swift.helpers.filters;
 public final class ReportFilter {
     public static final String ID = "id";
     public static final String AUTHOR = "author";
+    public static final String TITLE = "title";
     public static final String DEVICE = "device";
     public static final String HOSPITAL = "hospital";
     public static final String DESCRIPTION = "description";

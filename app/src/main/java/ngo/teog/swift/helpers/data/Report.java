@@ -16,6 +16,7 @@ public class Report implements  Serializable {
 
     private int id;
     private int author;
+    private String title;
     private int device;
     private int hospital;
     private int previousState;
@@ -24,9 +25,10 @@ public class Report implements  Serializable {
     private Date created;
     private Date lastSync;
 
-    public Report(int id, int author, int device, int hospital, int previousState, int currentState, String description, Date created) {
+    public Report(int id, int author, String title, int device, int hospital, int previousState, int currentState, String description, Date created) {
         this.id = id;
         this.author = author;
+        this.title = title;
         this.device = device;
         this.hospital = hospital;
         this.previousState = previousState;
@@ -50,6 +52,10 @@ public class Report implements  Serializable {
 
     public int getAuthor() {
         return author;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public int getDevice() {
