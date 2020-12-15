@@ -420,7 +420,7 @@ public class HospitalActivity extends BaseActivity {
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();
 
-                        statusView.setText(device.getWard());
+                        statusView.setText(device.getLocation());
 
                         detailsView.setText(device.getManufacturer() + "\n" + device.getModel());
 

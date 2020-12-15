@@ -110,7 +110,7 @@ public class PortationActivity extends AppCompatActivity {
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     HospitalDevice device = deviceDump.getDevice();
 
-                                    writer.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getWard(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
+                                    writer.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getLocation(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
                                 }
 
                                 writer.flush();

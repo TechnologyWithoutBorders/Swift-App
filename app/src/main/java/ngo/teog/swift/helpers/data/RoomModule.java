@@ -19,7 +19,7 @@ public class RoomModule {
 
     public RoomModule(Application mApplication) {
         hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_4_5)
                 .build();
     }
 
@@ -55,6 +55,16 @@ public class RoomModule {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE reports ADD COLUMN hospital INTEGER NOT NULL DEFAULT 1");
+        }
+    };
+
+    /*
+     * Ward column was renamed to location
+     */
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE devices RENAME COLUMN ward TO location");
         }
     };
 }
