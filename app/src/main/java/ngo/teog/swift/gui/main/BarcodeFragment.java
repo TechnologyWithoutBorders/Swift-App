@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -49,10 +51,12 @@ public class BarcodeFragment extends Fragment {
     private String lastText;
 
     private Button searchButton;
+    private ImageView torchButton;
     private EditText searchField;
     private ProgressBar progressBar;
+    private boolean torchIsOn = false;
 
-    private BarcodeCallback callback = new BarcodeCallback() {
+    private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if(result.getText() == null || result.getText().equals(lastText)) {
@@ -88,12 +92,15 @@ public class BarcodeFragment extends Fragment {
         barcodeScannerView.decodeContinuous(callback);
 
         searchButton = view.findViewById(R.id.search_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search();
-            }
+        searchButton.setOnClickListener(sourceView -> {
+            search();
         });
+
+        torchButton = view.findViewById(R.id.torch_button);
+        torchButton.setOnClickListener(sourceView -> {
+            switchTorchState();
+        });
+
         searchField = view.findViewById(R.id.code_search_text);
 
         progressBar = view.findViewById(R.id.progressBar);
@@ -156,6 +163,21 @@ public class BarcodeFragment extends Fragment {
             return false;
         }
     }
+
+    private void switchTorchState() {
+        if(!torchIsOn){
+            barcodeScannerView.setTorchOn();
+            torchButton.setColorFilter(this.getResources().getColor(R.color.white));
+            torchIsOn = true;
+        } else {
+            barcodeScannerView.setTorchOff();
+            torchButton.setColorFilter(this.getResources().getColor(R.color.grey_table_bar));
+            torchIsOn = false;
+        }
+
+    }
+
+
 
     private void search() {
         String searchString = searchField.getText().toString();

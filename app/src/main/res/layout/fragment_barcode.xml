@@ -6,6 +6,16 @@
     android:background="@color/grey"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:id="@+id/torch_button"
+        android:layout_gravity="right"
+        app:tint="@color/grey_table_bar"
+        app:srcCompat="@drawable/ic_baseline_highlight_24_white"
+        />
+
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeScannerView"
         android:layout_width="match_parent"
