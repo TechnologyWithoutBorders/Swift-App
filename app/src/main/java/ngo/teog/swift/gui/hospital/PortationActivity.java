@@ -118,14 +118,14 @@ public class PortationActivity extends AppCompatActivity {
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
-                                writer.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Previous State", "Current State", "Description"});
+                                writer.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Title", "Previous State", "Current State", "Description"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     for(Report report : deviceDump.getReports()) {
                                         DeviceStateVisuals oldVisuals = new DeviceStateVisuals(report.getPreviousState(), this);
                                         DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
-                                        writer.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
+                                        writer.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), report.getTitle(), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
                                     }
                                 }
 

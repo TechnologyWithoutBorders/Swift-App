@@ -486,7 +486,7 @@ public class DeviceInfoActivity extends BaseActivity {
             if(reportInfo != null) {
                 Report report = reportInfo.getReport();
 
-                TextView authorView = convertView.findViewById(R.id.authorView);
+                TextView titleView = convertView.findViewById(R.id.title_view);
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);
 
@@ -502,7 +502,13 @@ public class DeviceInfoActivity extends BaseActivity {
                 toState.setImageDrawable(triple1.getStateIcon());
                 toState.setColorFilter(triple1.getBackgroundColor());
 
-                authorView.setText(reportInfo.getAuthors().get(0).getName());
+                String title = reportInfo.getReport().getTitle();
+
+                if(title.length() > 0) {
+                    titleView.setText(title);
+                } else {
+                    titleView.setText(reportInfo.getAuthors().get(0).getName());
+                }
 
                 Date date = report.getCreated();
                 dateView.setText(dateFormat.format(date));
