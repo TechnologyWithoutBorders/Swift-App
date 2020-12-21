@@ -187,16 +187,17 @@
     <string name="filter">filter…</string>
 
     <!-- Error Messages -->
-    <string name="error_internet_connection">no internet connection</string>
-    <string name="error_empty_mail">empty mail address</string>
-    <string name="error_empty_password">empty password</string>
     <string name="generic_error_message">something went wrong</string>
+    <string name="error_internet_connection">no internet connection</string>
+    <string name="error_empty_mail">mail address is empty</string>
+    <string name="error_empty_password">password is empty</string>
+    <string name="empty_model">model is empty</string>
+    <string name="empty_manufacturer">manufacturer is empty</string>
+    <string name="empty_type">type is empty</string>
+    <string name="empty_name">name is empty</string>
     <string name="server_comm_error_message">server communication problems</string>
     <string name="file_not_found">file not found</string>
     <string name="device_number_invalid">invalid device number</string>
-    <string name="empty_model">empty model</string>
-    <string name="empty_manufacturer">empty manufacturer</string>
-    <string name="empty_type">empty type</string>
     <string name="no_picture_attached">no picture attached</string>
 
     <!-- Dialog Texts -->
