@@ -15,7 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Date;
 
@@ -67,7 +67,7 @@ public class UserProfileActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserProfileViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(UserProfileViewModel.class);
         viewModel.init(id);
         viewModel.getUserProfile().observe(this, userProfile -> {
             if(userProfile != null) {
