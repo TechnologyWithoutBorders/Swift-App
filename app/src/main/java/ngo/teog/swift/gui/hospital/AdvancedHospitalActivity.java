@@ -110,10 +110,10 @@ public class AdvancedHospitalActivity extends BaseActivity {
                     Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                mailText.setError("mail is empty");
+                mailText.setError(getString(R.string.error_empty_mail));
             }
         } else {
-            nameText.setError("name is empty");
+            nameText.setError(getString(R.string.empty_name));
         }
     }
 }
