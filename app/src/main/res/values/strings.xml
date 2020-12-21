@@ -130,7 +130,7 @@
     <string name="info_dialog_heading">Information</string>
     <string name="info_dialog_confirmation">Got it!</string>
 
-    <!-- Button Placeholders -->
+    <!-- Button/Image Placeholders -->
     <string name="edit_button_desc">edit button</string>
     <string name="teog_logo">TeoG logo</string>
     <string name="app_logo">app logo</string>
@@ -141,6 +141,7 @@
     <string name="new_device_button">New Device</string>
     <string name="create_report_button">Create Report</string>
     <string name="transition_indicator">---></string>
+    <string name="phone_symbol">Call</string>
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>
