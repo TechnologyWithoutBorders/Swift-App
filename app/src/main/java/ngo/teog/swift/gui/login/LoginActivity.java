@@ -152,8 +152,8 @@ public class LoginActivity extends BaseActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setTitle("Reset password");
-            builder.setMessage("Do you want to reset your password?\nA new one will be sent to:\n" + mailAddress);
+            builder.setTitle(getString(R.string.reset_pw));
+            builder.setMessage(getString(R.string.reset_pw_hint) + mailAddress);
 
             DialogInterface.OnClickListener positiveListener = (dialogInterface, i) -> {
                 if(checkForInternetConnection()) {
@@ -172,7 +172,7 @@ public class LoginActivity extends BaseActivity {
 
             builder.show();
         } else {
-            mailField.setError("please enter your e-mail address first");
+            mailField.setError(getString(R.string.reset_pw_mail_missing));
         }
     }
 

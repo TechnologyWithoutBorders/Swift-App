@@ -78,7 +78,7 @@ public class AdvancedHospitalActivity extends BaseActivity {
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);
 
-                Toast.makeText(context.getApplicationContext(), "user created", Toast.LENGTH_LONG).show();
+                Toast.makeText(context.getApplicationContext(), getString(R.string.user_created), Toast.LENGTH_LONG).show();
 
                 nameText.setText(null);
                 mailText.setText(null);

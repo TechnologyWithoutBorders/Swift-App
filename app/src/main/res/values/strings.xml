@@ -146,6 +146,9 @@
     <string name="login_button_text">Login</string>
     <string name="login_country_hint">Country</string>
     <string name="login_password_hint">Password</string>
+    <string name="reset_pw_mail_missing">Please enter your e-mail address first</string>
+    <string name="reset_pw">Reset password</string>
+    <string name="reset_pw_hint">Do you want to reset your password?\nA new one will be sent to:\n</string>
 
     <!-- Device Information -->
     <string name="device">Device</string>
@@ -185,6 +188,9 @@
     <string name="hospital">Hospital</string>
     <string name="map">Map</string>
     <string name="filter">filter…</string>
+    <string name="hospital_info_tutorial_state_overview">These symbols give you a quick overview over the states of your devices.</string>
+    <string name="hospital_info_tutorial_asset_list">You can browse through a list of your colleagues or devices by expanding the respective section.</string>
+    <string name="hospital_info_tutorial_filter">Use this field for filtering.</string>
 
     <!-- Error Messages -->
     <string name="generic_error_message">something went wrong</string>
@@ -209,5 +215,6 @@
     <string name="image_download_hint">tap icon to download image</string>
 
     <string name="e_mail_sent">E-mail has been sent</string>
+    <string name="user_created">User has been created</string>
 
 </resources>
