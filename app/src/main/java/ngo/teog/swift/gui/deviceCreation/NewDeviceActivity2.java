@@ -223,13 +223,13 @@ public class NewDeviceActivity2 extends BaseActivity {
 
                     startActivity(intent);
                 } else {
-                    modelField.setError("empty model");
+                    modelField.setError(getString(R.string.empty_model));
                 }
             } else {
-                manufacturerField.setError("empty manufacturer");
+                manufacturerField.setError(getString(R.string.empty_manufacturer));
             }
         } else {
-            typeField.setError("empty type");
+            typeField.setError(getString(R.string.empty_type));
         }
     }
 }

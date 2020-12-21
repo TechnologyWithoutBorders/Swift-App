@@ -192,7 +192,7 @@ public class RequestFactory {
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);
 
-                Toast.makeText(context.getApplicationContext(), "e-mail has been sent", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.e_mail_sent), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -254,11 +254,11 @@ public class RequestFactory {
                 JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Available Documents");
+                builder.setTitle(context.getString(R.string.documents_overview));
 
                 final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
 
-                builder.setNegativeButton("cancel", (dialog, i) -> dialog.dismiss());
+                builder.setNegativeButton(context.getString(R.string.dialog_cancel_text), (dialog, i) -> dialog.dismiss());
 
                 builder.setAdapter(adapter, (dialog, i) -> {
                     context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))));

@@ -158,6 +158,12 @@
     <string name="device_ward">Ward</string>
     <string name="device_maintenance_interval">Maint. Interval</string>
     <string name="device_recent_reports">Recent Reports</string>
+    <string name="documents_overview">Available Documents</string>
+    <string name="device_info_tutorial_attribute_table">This table lists all relevant data of a device.</string>
+    <string name="device_info_tutorial_state_section">The current state of the device is shown up here.</string>
+    <string name="device_info_tutorial_report_list">You can see the recent maintenance/repair history in the bottom section.</string>
+    <string name="device_info_tutorial_report_creation">Use this button to create a new report.</string>
+    <string name="device_info_tutorial_documents">If available, related documents can be retrieved by tapping this button.</string>
 
     <!-- Report Information -->
     <string name="report">Report</string>
@@ -187,6 +193,11 @@
     <string name="generic_error_message">something went wrong</string>
     <string name="server_comm_error_message">server communication problems</string>
     <string name="file_not_found">file not found</string>
+    <string name="device_number_invalid">invalid device number</string>
+    <string name="empty_model">empty model</string>
+    <string name="empty_manufacturer">empty manufacturer</string>
+    <string name="empty_type">empty type</string>
+    <string name="no_picture_attached">no picture attached</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>
@@ -195,5 +206,7 @@
     <string name="initial_report_text">device creation</string>
 
     <string name="image_download_hint">tap icon to download image</string>
+
+    <string name="e_mail_sent">E-mail has been sent</string>
 
 </resources>

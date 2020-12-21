@@ -433,11 +433,11 @@ public class DeviceInfoActivity extends BaseActivity {
             case R.id.info:
                 //Show tutorial
                 FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                        .add(buildTutorialStep(attributeTable, "This table lists all relevant data of a device."))
-                        .add(buildTutorialStep(stateSection, "The current state of the device is shown up here."))
-                        .add(buildTutorialStep(reportListView, "You can see the recent maintenance/repair history in the bottom section."))
-                        .add(buildTutorialStep(reportCreationButton, "Use this button to create a new report."))
-                        .add(buildTutorialStep(documentButton, "If available, related documents can be retrieved by tapping this button."));
+                        .add(buildTutorialStep(attributeTable, getString(R.string.device_info_tutorial_attribute_table)))
+                        .add(buildTutorialStep(stateSection, getString(R.string.device_info_tutorial_state_section)))
+                        .add(buildTutorialStep(reportListView, getString(R.string.device_info_tutorial_report_list)))
+                        .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation)))
+                        .add(buildTutorialStep(documentButton, getString(R.string.device_info_tutorial_documents)));
 
                 tutorialQueue.show();
 

@@ -66,4 +66,6 @@ public final class Defaults {
 
     /** Key that identifies user password used for server authentication */
     public static final String AUTH_PW_KEY = "authPw";
+
+    public static final String TIMEZONE_UTC = "UTC";
 }

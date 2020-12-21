@@ -48,7 +48,7 @@ public class NewDeviceActivity extends BaseActivity {
 
                     startActivity(intent);
                 } else {
-                    Toast.makeText(NewDeviceActivity.this, "invalid device number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewDeviceActivity.this, getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
                 }
             } catch(NumberFormatException e) {
                 //ignore

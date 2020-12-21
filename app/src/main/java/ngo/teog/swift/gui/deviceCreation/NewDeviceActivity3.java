@@ -181,7 +181,7 @@ public class NewDeviceActivity3 extends BaseActivity {
 
             viewModel.createDevice(device, user);
         } else {
-            Toast.makeText(this, "no picture attached", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.no_picture_attached), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -240,7 +240,7 @@ public class NewDeviceActivity3 extends BaseActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         } catch(Exception e) {
-            Log.e("ERROR", e.getMessage(), e);
+            Log.e(this.getClass().getName(), e.getMessage(), e);
         }
     }
 }
