@@ -89,7 +89,6 @@ public class ResponseParser {
 
         try {
             JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
-            Log.i("julian", hospitalObject.toString(4));
 
             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
