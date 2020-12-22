@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -181,7 +181,7 @@ public class DeviceInfoActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(DeviceInfoViewModel.class);
         viewModel.init(userId, deviceId);
 
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
@@ -486,7 +486,7 @@ public class DeviceInfoActivity extends BaseActivity {
             if(reportInfo != null) {
                 Report report = reportInfo.getReport();
 
-                TextView authorView = convertView.findViewById(R.id.authorView);
+                TextView titleView = convertView.findViewById(R.id.title_view);
                 TextView dateView = convertView.findViewById(R.id.dateView);
                 ImageView fromState = convertView.findViewById(R.id.fromState);
 
@@ -502,7 +502,13 @@ public class DeviceInfoActivity extends BaseActivity {
                 toState.setImageDrawable(triple1.getStateIcon());
                 toState.setColorFilter(triple1.getBackgroundColor());
 
-                authorView.setText(reportInfo.getAuthors().get(0).getName());
+                String title = reportInfo.getReport().getTitle();
+
+                if(title.length() > 0) {
+                    titleView.setText(title);
+                } else {
+                    titleView.setText(reportInfo.getAuthors().get(0).getName());
+                }
 
                 Date date = report.getCreated();
                 dateView.setText(dateFormat.format(date));

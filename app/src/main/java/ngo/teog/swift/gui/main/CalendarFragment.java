@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,9 +77,9 @@ public class CalendarFragment extends Fragment {
         SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        CalendarViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(CalendarViewModel.class);
+        CalendarViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(CalendarViewModel.class);
         viewModel.init(id);
-        viewModel.getDeviceInfos().observe(this, deviceInfos -> {
+        viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {
                 adapter.clear();
                 List<MaintenanceInfo> values = new ArrayList<>();

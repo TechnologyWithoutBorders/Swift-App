@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +47,9 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * @author nitelow
+ */
 public class HospitalActivity extends BaseActivity {
 
     @Inject
@@ -104,9 +107,7 @@ public class HospitalActivity extends BaseActivity {
 
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -114,9 +115,7 @@ public class HospitalActivity extends BaseActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
+            public void afterTextChanged(Editable editable) {}
         });
 
         TextView nameView = findViewById(R.id.nameView);
@@ -170,7 +169,7 @@ public class HospitalActivity extends BaseActivity {
 
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        HospitalViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);
+        HospitalViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(HospitalViewModel.class);
         viewModel.init(id);
         viewModel.getHospital().observe(this, hospital -> {
             if(hospital != null) {
@@ -254,6 +253,16 @@ public class HospitalActivity extends BaseActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Starts a system dialing activity using the given phone number.
+     * @param phoneNumber number to call
+     */
+    private void invokeCall(String phoneNumber) {
+        Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+        dialIntent.setData(Uri.parse(Defaults.URI_TEL_PREFIX + phoneNumber));
+        startActivity(dialIntent);
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
@@ -397,9 +406,17 @@ public class HospitalActivity extends BaseActivity {
                     if(user != null) {
                         TextView nameView = convertView.findViewById(R.id.nameView);
                         TextView positionView = convertView.findViewById(R.id.positionView);
+                        ImageView phoneView = convertView.findViewById(R.id.phone_symbol);
 
                         nameView.setText(user.getName());
                         positionView.setText(user.getPosition());
+
+                        if(user.getPhone() != null && user.getPhone().length() > 0) {
+                            phoneView.setVisibility(View.VISIBLE);
+                            phoneView.setOnClickListener((view) -> {
+                                invokeCall(user.getPhone());
+                            });
+                        }
                     }
                     break;
                 case 1:

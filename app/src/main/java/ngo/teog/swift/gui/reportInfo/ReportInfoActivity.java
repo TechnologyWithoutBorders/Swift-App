@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -49,6 +49,7 @@ public class ReportInfoActivity extends BaseActivity {
 
         TextView dateView = findViewById(R.id.dateView);
         TextView authorView = findViewById(R.id.authorView);
+        TextView titleView = findViewById(R.id.title_view);
         ImageView fromState = findViewById(R.id.fromState);
         ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
@@ -62,7 +63,7 @@ public class ReportInfoActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        ReportInfoViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportInfoViewModel.class);
+        ReportInfoViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(ReportInfoViewModel.class);
         viewModel.init(userId, deviceId, reportId);
 
         viewModel.getReportInfo().observe(this, reportInfo -> {
@@ -81,6 +82,12 @@ public class ReportInfoActivity extends BaseActivity {
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
                 dateView.setText(dateFormat.format(report.getCreated()));
                 authorView.setText(author.getName());
+
+                String title = report.getTitle();
+                if(title.length() > 0) {
+                    titleView.setText(title);
+                }
+
                 descriptionView.setText(report.getDescription());
             }
         });

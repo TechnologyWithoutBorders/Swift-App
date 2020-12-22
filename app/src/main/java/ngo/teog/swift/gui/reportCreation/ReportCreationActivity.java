@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Date;
 
@@ -39,7 +39,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 public class ReportCreationActivity extends BaseActivity {
 
-    private EditText descriptionText;
+    private EditText titleText, descriptionText;
     private ProgressBar progressBar;
     private Button saveButton;
 
@@ -66,6 +66,7 @@ public class ReportCreationActivity extends BaseActivity {
         stateSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
         stateSpinner.setSelection(oldState);
 
+        titleText = findViewById(R.id.report_title);
         descriptionText = findViewById(R.id.descriptionText);
         progressBar = findViewById(R.id.progressBar);
         saveButton = findViewById(R.id.saveButton);
@@ -76,7 +77,7 @@ public class ReportCreationActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportCreationViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(ReportCreationViewModel.class);
     }
 
     @Override
@@ -99,17 +100,23 @@ public class ReportCreationActivity extends BaseActivity {
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
             String description = descriptionText.getText().toString().trim();
+            String title = titleText.getText().toString().trim();
 
-            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), device, hospital, oldState, newState, description, new Date());
+            if(title.length() > 0) {
+                //ID = 0 means auto-generate ID
+                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, oldState, newState, description, new Date());
 
-            viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
+                viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
-            saveButton.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-            ReportCreationActivity.this.finish();
+                ReportCreationActivity.this.finish();
+            } else {
+                titleText.setError("please add a title");
+            }
         } else {
-            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();//TODO why not?
         }
     }
 

@@ -1,7 +1,7 @@
 package ngo.teog.swift.gui.hospital;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -73,7 +73,7 @@ public class PortationActivity extends AppCompatActivity {
                     SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-                    PortationViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(PortationViewModel.class);
+                    PortationViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(PortationViewModel.class);
                     viewModel.init(id);
                     viewModel.getHospitalDump().observe(this, hospitalDump -> {
                         if(hospitalDump != null) {
@@ -118,14 +118,14 @@ public class PortationActivity extends AppCompatActivity {
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
-                                writer.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Previous State", "Current State", "Description"});
+                                writer.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Title", "Previous State", "Current State", "Description"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     for(Report report : deviceDump.getReports()) {
                                         DeviceStateVisuals oldVisuals = new DeviceStateVisuals(report.getPreviousState(), this);
                                         DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
-                                        writer.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
+                                        writer.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), report.getTitle(), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
                                     }
                                 }
 
