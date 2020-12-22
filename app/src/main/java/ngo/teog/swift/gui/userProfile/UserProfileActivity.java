@@ -97,8 +97,8 @@ public class UserProfileActivity extends BaseActivity {
         if(id == R.id.info) {
             //Show tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                .add(buildTutorialStep(tableLayout, "This table shows all of your user data."))
-                .add(buildTutorialStep(editView, "Tap the pencil symbols in order to change your information."));
+                .add(buildTutorialStep(tableLayout, getString(R.string.user_profile_tutorial_attribute_table)))
+                .add(buildTutorialStep(editView, getString(R.string.user_profile_tutorial_edit)));
 
             tutorialQueue.show();
 
@@ -130,7 +130,7 @@ public class UserProfileActivity extends BaseActivity {
     public void editMail(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.user_mail));
-        builder.setMessage("You will need to remember your new mail address in order to log in.");
+        builder.setMessage(getString(R.string.edit_mail_address_warning));
 
         final EditText input = new EditText(this);
         input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(50)});

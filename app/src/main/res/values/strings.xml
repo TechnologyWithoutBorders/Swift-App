@@ -1,5 +1,6 @@
 <resources>
     <!-- General information -->
+    <string name="organization_name">TeoG</string>
     <string name="app_name">Swift</string>
 
     <!-- Information Texts -->
@@ -204,6 +205,11 @@
     <string name="days_left"> days left</string>
     <string name="days_over"> days over</string>
 
+    <!-- User profile -->
+    <string name="user_profile_tutorial_attribute_table">This table shows all of your user data.</string>
+    <string name="user_profile_tutorial_edit">Tap the pencil symbols in order to change your information.</string>
+    <string name="edit_mail_address_warning">You will need to remember your new mail address in order to log in.</string>
+
     <!-- Error Messages -->
     <string name="generic_error_message">something went wrong</string>
     <string name="error_internet_connection">no internet connection</string>
@@ -213,6 +219,7 @@
     <string name="empty_manufacturer">manufacturer is empty</string>
     <string name="empty_type">type is empty</string>
     <string name="empty_name">name is empty</string>
+    <string name="empty_title">please add a title</string>
     <string name="server_comm_error_message">server communication problems</string>
     <string name="file_not_found">file not found</string>
     <string name="device_number_invalid">invalid device number</string>

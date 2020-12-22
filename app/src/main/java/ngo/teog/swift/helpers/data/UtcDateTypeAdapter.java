@@ -25,7 +25,7 @@ public final class UtcDateTypeAdapter extends TypeAdapter<Date> {
             out.nullValue();
         } else {
             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
             String value = dateFormat.format(date);
             out.value(value);
@@ -35,7 +35,7 @@ public final class UtcDateTypeAdapter extends TypeAdapter<Date> {
     @Override
     public Date read(JsonReader in) throws IOException {
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
         try {
             if(in.peek() == NULL) {
