@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "7ad1fea0b1721ebd2aecaee799421cc7",
+    "identityHash": "d34d427532745bf70cdd805fbbb6e5c0",
     "entities": [
       {
         "tableName": "users",
@@ -205,7 +205,7 @@
       },
       {
         "tableName": "reports",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `author` INTEGER NOT NULL, `device` INTEGER NOT NULL, `hospital` INTEGER NOT NULL, `previousState` INTEGER NOT NULL, `currentState` INTEGER NOT NULL, `description` TEXT, `created` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `device`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `author` INTEGER NOT NULL, `title` TEXT, `device` INTEGER NOT NULL, `hospital` INTEGER NOT NULL, `previousState` INTEGER NOT NULL, `currentState` INTEGER NOT NULL, `description` TEXT, `created` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `device`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -218,6 +218,12 @@
             "columnName": "author",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "device",
@@ -276,7 +282,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7ad1fea0b1721ebd2aecaee799421cc7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd34d427532745bf70cdd805fbbb6e5c0')"
     ]
   }
 }

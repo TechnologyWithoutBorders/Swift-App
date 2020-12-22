@@ -93,7 +93,7 @@ public class ResponseParser {
 
             int hospitalId = hospitalObject.getInt(HospitalFilter.ID);
             String name = hospitalObject.getString(HospitalFilter.NAME);
-            String location = hospitalObject.getString(HospitalFilter.LOCATION);
+            String hospitalLocation = hospitalObject.getString(HospitalFilter.LOCATION);
             float longitude = Float.parseFloat(hospitalObject.getString(HospitalFilter.LONGITUDE));
             float latitude = Float.parseFloat(hospitalObject.getString(HospitalFilter.LATITUDE));
             Date hospitalLastUpdate = dateFormat.parse(hospitalObject.getString(HospitalFilter.LAST_UPDATE));
@@ -128,7 +128,7 @@ public class ResponseParser {
                 String serialNumber = deviceObject.getString(DeviceFilter.SERIAL_NUMBER);
                 String manufacturer = deviceObject.getString(DeviceFilter.MANUFACTURER);
                 String model = deviceObject.getString(DeviceFilter.MODEL);
-                String ward = deviceObject.getString(DeviceFilter.WARD);
+                String location = deviceObject.getString(DeviceFilter.LOCATION);
                 int hospital = deviceObject.getInt(DeviceFilter.HOSPITAL);
                 int maintenanceInterval = deviceObject.getInt(DeviceFilter.MAINTENANCE_INTERVAL);
                 Date lastUpdate = dateFormat.parse(deviceObject.getString(DeviceFilter.LAST_UPDATE));
@@ -156,7 +156,7 @@ public class ResponseParser {
                     reportList.add(reportInfo);
                 }
 
-                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate);
+                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, location, hospital, maintenanceInterval, lastUpdate);
 
                 DeviceInfo deviceInfo = new DeviceInfo(device);
                 deviceInfo.setReports(reportList);
@@ -164,7 +164,7 @@ public class ResponseParser {
                 deviceList.add(deviceInfo);
             }
 
-            return new HospitalInfo(hospitalId, name, location, longitude, latitude, hospitalLastUpdate, userList, deviceList);
+            return new HospitalInfo(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate, userList, deviceList);
         } catch(JSONException | ParseException e) {
             throw new ServerException(e);
         }
