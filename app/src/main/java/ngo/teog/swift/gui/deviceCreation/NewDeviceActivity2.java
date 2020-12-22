@@ -46,8 +46,8 @@ public class NewDeviceActivity2 extends BaseActivity {
 
     private int deviceNumber;
 
-    private AutoCompleteTextView typeField, manufacturerField, modelField, wardField;
-    private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter, wardAdapter;
+    private AutoCompleteTextView typeField, manufacturerField, modelField, locationField;
+    private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter, locationAdapter;
 
     private EditText assetNumberField, serialNumberField;
 
@@ -87,10 +87,10 @@ public class NewDeviceActivity2 extends BaseActivity {
         modelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         modelField.setAdapter(modelAdapter);
 
-        wardField = findViewById(R.id.wardText);
-        wardField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
-        wardAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
-        wardField.setAdapter(wardAdapter);
+        locationField = findViewById(R.id.locationText);
+        locationField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
+        locationField.setAdapter(locationAdapter);
 
         intervalPicker = findViewById(R.id.intervalPicker);
         weekMonthSpinner = findViewById(R.id.spinner2);
@@ -123,7 +123,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                 Map<String, Integer> typeCountMap = new HashMap<>();
                 Map<String, Integer> manufacturerCountMap = new HashMap<>();
                 Map<String, Integer> modelCountMap = new HashMap<>();
-                Map<String, Integer> wardCountMap = new HashMap<>();
+                Map<String, Integer> locationCountMap = new HashMap<>();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     HospitalDevice device = deviceInfo.getDevice();
@@ -131,12 +131,12 @@ public class NewDeviceActivity2 extends BaseActivity {
                     String type = WordUtils.capitalize(device.getType().trim());
                     String manufacturer = WordUtils.capitalize(device.getManufacturer().trim());
                     String model = device.getModel().trim();
-                    String ward = WordUtils.capitalize(device.getWard().trim());
+                    String location = WordUtils.capitalize(device.getLocation().trim());
 
                     updateSuggestionMap(typeCountMap, type);
                     updateSuggestionMap(manufacturerCountMap, manufacturer);
                     updateSuggestionMap(modelCountMap, model);
-                    updateSuggestionMap(wardCountMap, ward);
+                    updateSuggestionMap(locationCountMap, location);
                 }
 
                 //Make sure each value is present at least three times, so spelling mistakes do not spread
@@ -144,7 +144,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                 typeAdapter.clear();
                 manufacturerAdapter.clear();
                 modelAdapter.clear();
-                wardAdapter.clear();
+                locationAdapter.clear();
 
                 for(Map.Entry<String, Integer> entry : typeCountMap.entrySet()) {
                     if(entry.getValue() >= 3) {
@@ -164,9 +164,9 @@ public class NewDeviceActivity2 extends BaseActivity {
                     }
                 }
 
-                for(Map.Entry<String, Integer> entry : wardCountMap.entrySet()) {
+                for(Map.Entry<String, Integer> entry : locationCountMap.entrySet()) {
                     if(entry.getValue() >= 3) {
-                        wardAdapter.add(entry.getKey());
+                        locationAdapter.add(entry.getKey());
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     }
 
                     HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), wardField.getText().toString().trim(), -1, interval, new Date());
+                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), locationField.getText().toString().trim(), -1, interval, new Date());
 
                     Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                     intent.putExtra(ResourceKeys.DEVICE, device);

@@ -76,10 +76,10 @@ public class DeviceInfoActivity extends BaseActivity {
     private static final int MODEL = 2;
     private static final int MANUFACTURER = 3;
     private static final int SERIAL_NUMBER = 4;
-    private static final int WARD = 5;
+    private static final int LOCATION = 5;
     private static final int MAINTENANCE_INTERVAL = 6;
 
-    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Ward", "Maintenance Interval (Weeks)"};
+    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Location", "Maintenance Interval (Weeks)"};//TODO: Constants
 
     private ReportArrayAdapter adapter;
 
@@ -96,7 +96,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private LinearLayout stateSection;
     private TableLayout attributeTable;
 
-    private TextView assetNumberView, typeView, modelView, manufacturerView, serialNumberView, wardView, intervalView;
+    private TextView assetNumberView, typeView, modelView, manufacturerView, serialNumberView, locationView, intervalView;
 
     private DeviceInfo deviceInfo;
 
@@ -168,7 +168,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
         TextView hospitalView = findViewById(R.id.hospitalView);
 
-        wardView = findViewById(R.id.wardView);
+        locationView = findViewById(R.id.locationView);
 
         intervalView = findViewById(R.id.intervalView);
 
@@ -215,7 +215,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 manufacturerView.setText(device.getManufacturer());
                 serialNumberView.setText(device.getSerialNumber());
                 hospitalView.setText(deviceInfo.getHospitals().get(0).getName());
-                wardView.setText(device.getWard());
+                locationView.setText(device.getLocation());
 
                 int interval = device.getMaintenanceInterval();
 
@@ -282,8 +282,8 @@ public class DeviceInfoActivity extends BaseActivity {
         this.edit(SERIAL_NUMBER, serialNumberView.getText().toString(), 25);
     }
 
-    public void editWard(View view) {
-        this.edit(WARD, wardView.getText().toString(), 25);
+    public void editLocation(View view) {
+        this.edit(LOCATION, locationView.getText().toString(), 25);
     }
 
     public void editMaintenanceInterval(View view) {
@@ -366,11 +366,11 @@ public class DeviceInfoActivity extends BaseActivity {
                     serialNumberView.setText(serialNumber);
                     device.setSerialNumber(serialNumber);
                     break;
-                case WARD:
-                    String ward = ((EditText) editView).getText().toString().trim();
+                case LOCATION:
+                    String location = ((EditText) editView).getText().toString().trim();
 
-                    wardView.setText(ward);
-                    device.setWard(ward);
+                    locationView.setText(location);
+                    device.setLocation(location);
                     break;
                 case MAINTENANCE_INTERVAL:
                     int interval = ((NumberPicker) editView).getValue();

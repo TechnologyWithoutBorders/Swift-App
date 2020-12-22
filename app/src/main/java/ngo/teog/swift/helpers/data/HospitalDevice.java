@@ -14,26 +14,26 @@ import java.util.Date;
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
 @Entity(tableName = "devices", primaryKeys = {"id", "hospital"})
 public class HospitalDevice implements Serializable {
-    private int id;
+    private final int id;
     private String assetNumber;
     private String type;
     private String serialNumber;
     private String manufacturer;
     private String model;
-    private String ward;
+    private String location;
     private int hospital;
     private int maintenanceInterval;
     private Date lastUpdate;
     private Date lastSync;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String ward, int hospital, int maintenanceInterval, Date lastUpdate) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, String location, int hospital, int maintenanceInterval, Date lastUpdate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
         this.serialNumber = serialNumber;
         this.manufacturer = manufacturer;
         this.model = model;
-        this.ward = ward;
+        this.location = location;
         this.hospital = hospital;
         this.maintenanceInterval = maintenanceInterval;
         this.lastUpdate = lastUpdate;
@@ -104,12 +104,12 @@ public class HospitalDevice implements Serializable {
         this.maintenanceInterval = maintenanceInterval;
     }
 
-    public String getWard() {
-        return ward;
+    public String getLocation() {
+        return location;
     }
 
-    public void setWard(String ward) {
-        this.ward = ward;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Date getLastUpdate() {
