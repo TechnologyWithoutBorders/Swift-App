@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
@@ -34,6 +36,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  * Activity that sums up all available information about a report.
  */
 public class ReportInfoActivity extends BaseActivity {
+
+    private FancyShowCaseQueue tutorialQueue;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -54,6 +58,14 @@ public class ReportInfoActivity extends BaseActivity {
         ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
 
+        LinearLayout stateChange = findViewById(R.id.state_change);
+        LinearLayout descriptionLayout = findViewById(R.id.descriptionLayout);
+
+        //Show tutorial
+        tutorialQueue = new FancyShowCaseQueue()
+                .add(buildTutorialStep(stateChange, getString(R.string.report_tutorial_state_change)))
+                .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description)));
+
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
                 .roomModule(new RoomModule(getApplication()))
@@ -67,15 +79,15 @@ public class ReportInfoActivity extends BaseActivity {
         viewModel.init(userId, deviceId, reportId);
 
         viewModel.getReportInfo().observe(this, reportInfo -> {
-            if(reportInfo != null) {
+            if (reportInfo != null) {
                 Report report = reportInfo.getReport();
                 User author = reportInfo.getAuthors().get(0);
 
-                DeviceStateVisuals previousStateInfo = new DeviceStateVisuals(report.getPreviousState(),this);
+                DeviceStateVisuals previousStateInfo = new DeviceStateVisuals(report.getPreviousState(), this);
                 fromState.setImageDrawable(previousStateInfo.getStateIcon());
                 fromState.setBackgroundColor(previousStateInfo.getBackgroundColor());
 
-                DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(),this);
+                DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(), this);
                 toState.setImageDrawable(currentStateInfo.getStateIcon());
                 toState.setBackgroundColor(currentStateInfo.getBackgroundColor());
 
@@ -84,7 +96,7 @@ public class ReportInfoActivity extends BaseActivity {
                 authorView.setText(author.getName());
 
                 String title = report.getTitle();
-                if(title.length() > 0) {
+                if (title.length() > 0) {
                     titleView.setText(title);
                 }
 
@@ -102,10 +114,12 @@ public class ReportInfoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            default:
-                return super.onOptionsItemSelected(item, R.string.reportInfoActivity);
+        if (item.getItemId() == R.id.info) {
+            tutorialQueue.show();
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 
