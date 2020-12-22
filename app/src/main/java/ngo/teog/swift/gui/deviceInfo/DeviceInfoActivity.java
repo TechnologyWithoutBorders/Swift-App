@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -181,7 +181,7 @@ public class DeviceInfoActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceInfoViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(DeviceInfoViewModel.class);
         viewModel.init(userId, deviceId);
 
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
