@@ -96,27 +96,23 @@ public class ReportCreationActivity extends BaseActivity {
     public void createReport(View view) {
         int newState = stateSpinner.getSelectedItemPosition();
 
-        if(newState != oldState) {
-            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-            String description = descriptionText.getText().toString().trim();
-            String title = titleText.getText().toString().trim();
+        String description = descriptionText.getText().toString().trim();
+        String title = titleText.getText().toString().trim();
 
-            if(title.length() > 0) {
-                //ID = 0 means auto-generate ID
-                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, oldState, newState, description, new Date());
+        if(title.length() > 0) {
+            //ID = 0 means auto-generate ID
+            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, oldState, newState, description, new Date());
 
-                viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
+            viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
-                saveButton.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
-                ReportCreationActivity.this.finish();
-            } else {
-                titleText.setError("please add a title");
-            }
+            ReportCreationActivity.this.finish();
         } else {
-            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();//TODO why not?
+            titleText.setError(getString(R.string.empty_title));
         }
     }
 
