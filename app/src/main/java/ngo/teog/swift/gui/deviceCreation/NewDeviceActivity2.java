@@ -209,7 +209,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
                     int interval;
 
-                    if((weekMonthSpinner.getSelectedItem()).equals("Week")) {
+                    if((weekMonthSpinner.getSelectedItem()).equals("Week")) {//TODO does not work for other languages
                         interval = intervalPicker.getValue();
                     } else {
                         interval = intervalPicker.getValue()*4;

@@ -153,10 +153,10 @@ public class CalendarFragment extends Fragment {
 
                 int daysLeft = maintenanceInfo.getDaysLeft();
 
-                String dateString = daysLeft + " days left";
+                String dateString = daysLeft + getString(R.string.days_left);
 
                 if(daysLeft < 0) {
-                    dateString = Math.abs(daysLeft) + " days over";
+                    dateString = Math.abs(daysLeft) + getString(R.string.days_over);
                 }
 
                 statusView.setText(dateString);

@@ -192,6 +192,17 @@
     <string name="hospital_info_tutorial_asset_list">You can browse through a list of your colleagues or devices by expanding the respective section.</string>
     <string name="hospital_info_tutorial_filter">Use this field for filtering.</string>
 
+    <!-- Main -->
+    <string-array name="main_tab_names">
+        <item>Scanner</item>
+        <item>Todo</item>
+        <item>Calendar</item>
+    </string-array>
+
+    <!-- Calendar -->
+    <string name="days_left"> days left</string>
+    <string name="days_over"> days over</string>
+
     <!-- Error Messages -->
     <string name="generic_error_message">something went wrong</string>
     <string name="error_internet_connection">no internet connection</string>
@@ -205,6 +216,7 @@
     <string name="file_not_found">file not found</string>
     <string name="device_number_invalid">invalid device number</string>
     <string name="no_picture_attached">no picture attached</string>
+    <string name="device_not_found">device not found</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>
