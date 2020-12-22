@@ -202,8 +202,8 @@
     </string-array>
 
     <!-- Calendar -->
-    <string name="days_left"> days left</string>
-    <string name="days_over"> days over</string>
+    <string name="days_left">days left</string>
+    <string name="days_over">days over</string>
 
     <!-- User profile -->
     <string name="user_profile_tutorial_attribute_table">This table shows all of your user data.</string>
