@@ -262,6 +262,8 @@ public class HospitalRepository {
         private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
+                    Log.i(HospitalRepository.this.getClass().getName(), "Server Response:\n" + response.toString(4));
+
                     HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
 
                     long now = new Date().getTime();
