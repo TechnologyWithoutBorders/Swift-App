@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Date;
 
@@ -77,7 +77,7 @@ public class ReportCreationActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReportCreationViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(ReportCreationViewModel.class);
     }
 
     @Override

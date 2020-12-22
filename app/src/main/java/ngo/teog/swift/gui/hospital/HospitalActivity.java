@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -169,7 +169,7 @@ public class HospitalActivity extends BaseActivity {
 
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        HospitalViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(HospitalViewModel.class);
+        HospitalViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(HospitalViewModel.class);
         viewModel.init(id);
         viewModel.getHospital().observe(this, hospital -> {
             if(hospital != null) {

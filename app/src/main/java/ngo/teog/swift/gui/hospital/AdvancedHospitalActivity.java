@@ -1,6 +1,6 @@
 package ngo.teog.swift.gui.hospital;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -61,7 +61,7 @@ public class AdvancedHospitalActivity extends BaseActivity {
                 .build()
                 .inject(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AdvancedHospitalViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(AdvancedHospitalViewModel.class);
     }
 
     public BaseRequest createUserCreationRequest(final Context context, View disable, final View enable, String userName, String userMail) {

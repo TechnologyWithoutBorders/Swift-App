@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import javax.inject.Inject;
 
@@ -67,7 +67,7 @@ public class UserInfoActivity extends BaseActivity {
             SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int myId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-            viewModel = ViewModelProviders.of(this, viewModelFactory).get(UserInfoViewModel.class);
+            viewModel = new ViewModelProvider(this, viewModelFactory).get(UserInfoViewModel.class);
             viewModel.init(myId, userId);
             viewModel.getUserInfo().observe(this, userInfo -> {
                 if(userInfo != null) {

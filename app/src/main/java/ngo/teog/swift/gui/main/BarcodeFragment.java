@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -115,7 +115,7 @@ public class BarcodeFragment extends Fragment {
                 .build()
                 .inject(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BarcodeViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(BarcodeViewModel.class);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class BarcodeFragment extends Fragment {
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         viewModel.init(userId, deviceId);
-        viewModel.getDeviceInfo().observe(BarcodeFragment.this, deviceInfo -> {
+        viewModel.getDeviceInfo().observe(BarcodeFragment.this.getViewLifecycleOwner(), deviceInfo -> {
             if(deviceInfo != null) {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
                 intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -86,9 +86,9 @@ public class TodoFragment extends Fragment {
         SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TodoViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(TodoViewModel.class);
         viewModel.init(id);
-        viewModel.getDeviceInfos().observe(this, deviceInfos -> {
+        viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {
                 this.values = deviceInfos;
                 adapter.clear();
