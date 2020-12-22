@@ -178,7 +178,7 @@ public class TodoFragment extends Fragment {
 
                 DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), this.getContext());
 
-                statusView.setText(device.getWard());
+                statusView.setText(device.getLocation());
                 imageView.setImageDrawable(triple.getStateIcon());
                 imageView.setBackgroundColor(triple.getBackgroundColor());
             }
