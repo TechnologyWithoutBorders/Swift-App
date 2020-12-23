@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/edit"
         android:icon="@drawable/ic_edit_white_24dp"
-        android:title="edit"
+        android:title="@string/edit"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/refresh"
         android:icon="@drawable/ic_refresh_white_24dp"
-        android:title="refresh"
+        android:title="@string/refresh"
         app:showAsAction="always" />
 </menu>

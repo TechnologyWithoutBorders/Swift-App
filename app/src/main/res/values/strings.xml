@@ -122,6 +122,17 @@
         <item>Months</item>
     </string-array>
 
+    <!-- Miscellaneous Actions -->
+    <string name="edit">edit</string>
+    <string name="refresh">refresh</string>
+    <string name="share">share</string>
+    <string name="about">about</string>
+    <string name="log_out">log out</string>
+    <string name="my_profile">my profile</string>
+    <string name="my_hospital">my hospital</string>
+    <string name="user_management">User Management</string>
+    <string name="import_export">Import/Export</string>
+
     <!-- Hospital Overview -->
     <string name="hospital_location_symbol">hospital location symbol</string>
     <string name="hospital_members_heading">Members</string>
