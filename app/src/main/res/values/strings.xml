@@ -126,6 +126,7 @@
     <string name="edit">edit</string>
     <string name="refresh">refresh</string>
     <string name="share">share</string>
+    <string name="create">create</string>
     <string name="about">about</string>
     <string name="log_out">log out</string>
     <string name="my_profile">my profile</string>
@@ -161,6 +162,7 @@
     <string name="login_password_hint">Password</string>
     <string name="reset_pw_mail_missing">Please enter your e-mail address first</string>
     <string name="reset_pw">Reset password</string>
+    <string name="forgot_pw_hint">Forgot your password?\nPlease select your country, enter your e-mail address and tap this text.</string>
     <string name="reset_pw_hint">Do you want to reset your password?\nA new one will be sent to:\n</string>
 
     <!-- Device Information -->
@@ -198,6 +200,10 @@
     <string name="user_mail">E-Mail</string>
     <string name="user_position">Position</string>
 
+    <!-- User Management -->
+    <string name="create_user">Create new user</string>
+    <string name="create_user_mail_hint">The user will receive his/her password via mail.</string>
+
     <!-- Hospital Information -->
     <string name="hospital">Hospital</string>
     <string name="map">Map</string>
@@ -216,11 +222,16 @@
     <!-- Calendar -->
     <string name="days_left">days left</string>
     <string name="days_over">days over</string>
+    <string name="devices_up_for_maintenance">Devices up for maintenance</string>
 
     <!-- User profile -->
     <string name="user_profile_tutorial_attribute_table">This table shows all of your user data.</string>
     <string name="user_profile_tutorial_edit">Tap the pencil symbols in order to change your information.</string>
     <string name="edit_mail_address_warning">You will need to remember your new mail address in order to log in.</string>
+
+    <!-- Portation -->
+    <string name="portation_export">Export</string>
+    <string name="database_as_csv">Database as CSV</string>
 
     <!-- Error Messages -->
     <string name="generic_error_message">something went wrong</string>

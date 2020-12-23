@@ -11,7 +11,7 @@
         android:layout_height="50dp"
         android:padding="5dp"
         android:id="@+id/torch_button"
-        android:layout_gravity="right"
+        android:layout_gravity="end"
         app:tint="@color/grey_table_bar"
         app:srcCompat="@drawable/ic_baseline_highlight_24_white"
         />
