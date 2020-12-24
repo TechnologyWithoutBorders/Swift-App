@@ -8,10 +8,10 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/user_management"
-        android:title="User Management"
+        android:title="@string/user_management"
         app:showAsAction="never" />
     <item
         android:id="@+id/portation"
-        android:title="Import/Export"
+        android:title="@string/import_export"
         app:showAsAction="never" />
 </menu>

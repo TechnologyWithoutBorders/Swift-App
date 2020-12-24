@@ -9,13 +9,13 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Export" />
+        android:text="@string/portation_export" />
 
     <Button style="@style/AppTheme.Button"
         android:id="@+id/csvButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Database as CSV"
+        android:text="@string/database_as_csv"
         android:onClick="exportCSV"/>
 
 </LinearLayout>

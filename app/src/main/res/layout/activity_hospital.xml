@@ -48,7 +48,7 @@
             android:visibility="gone"
             android:padding="8dp"
             android:textAlignment="center"
-            android:drawableTop="@drawable/ic_baseline_lock_black_24" />
+            app:drawableTopCompat="@drawable/ic_baseline_lock_black_24" />
 
         <TextView
             android:id="@+id/map_button"
@@ -57,7 +57,7 @@
             android:padding="8dp"
             android:text="@string/map"
             android:textAlignment="center"
-            android:drawableTop="@drawable/ic_my_location_black_24dp" />
+            app:drawableTopCompat="@drawable/ic_my_location_black_24dp" />
 
     </LinearLayout>
 

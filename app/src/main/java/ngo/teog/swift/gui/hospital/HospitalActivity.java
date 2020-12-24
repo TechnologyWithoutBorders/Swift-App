@@ -243,9 +243,9 @@ public class HospitalActivity extends BaseActivity {
         } else if(item.getItemId() == R.id.info) {
             //Show tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                    .add(buildTutorialStep(findViewById(R.id.device_state_overview), "These symbols give you a quick overview over the states of your devices"))
-                    .add(buildTutorialStep(hospitalListView, "You can browse through a list of your colleagues or devices by expanding the respective section"))
-                    .add(buildTutorialStep(searchView, "Use this field for filtering"));
+                    .add(buildTutorialStep(findViewById(R.id.device_state_overview), getString(R.string.hospital_info_tutorial_state_overview)))
+                    .add(buildTutorialStep(hospitalListView, getString(R.string.hospital_info_tutorial_asset_list)))
+                    .add(buildTutorialStep(searchView, getString(R.string.hospital_info_tutorial_filter)));
 
             tutorialQueue.show();
 

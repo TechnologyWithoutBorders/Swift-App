@@ -136,8 +136,6 @@ public class MainActivity extends BaseActivity {
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
-        private final String[] PAGE_NAMES = {"Scanner", "Todo", "Calendar"};
-
         public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
@@ -165,7 +163,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return PAGE_NAMES[position];
+            return getResources().getStringArray(R.array.main_tab_names)[position];
         }
     }
 

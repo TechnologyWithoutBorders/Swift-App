@@ -102,7 +102,7 @@ public class ReportCreationActivity extends BaseActivity {
             String description = descriptionText.getText().toString().trim();
             String title = titleText.getText().toString().trim();
 
-            if(title.length() > 0) {
+            if (title.length() > 0) {
                 //ID = 0 means auto-generate ID
                 Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, oldState, newState, description, new Date());
 
@@ -113,10 +113,11 @@ public class ReportCreationActivity extends BaseActivity {
 
                 ReportCreationActivity.this.finish();
             } else {
-                titleText.setError("please add a title");
+                titleText.setError(getString(R.string.empty_title));
             }
         } else {
-            Toast.makeText(this.getApplicationContext(), "new state can not be the same as old state", Toast.LENGTH_SHORT).show();//TODO why not?
+            //TODO prevent this by not offering the old state in the spinner or better: allow transitions to old state (but change algorithm that determines next maintenance as it treats a transition from working to working as the device creation)
+            Toast.makeText(this.getApplicationContext(), getString(R.string.report_creation_invalid_state), Toast.LENGTH_SHORT).show();
         }
     }
 

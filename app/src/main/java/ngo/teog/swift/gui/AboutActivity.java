@@ -23,7 +23,7 @@ public class AboutActivity extends BaseActivity {
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            versionString = "TeoG Swift v" + pInfo.versionName;
+            versionString = String.format("%s %s v%s", getString(R.string.organization_name), getString(R.string.app_name), pInfo.versionName);
         } catch(PackageManager.NameNotFoundException e) {
             //ignore
         }

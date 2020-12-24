@@ -39,6 +39,7 @@ public final class ResourceKeys {
     public static final String IMAGE = "image";
 
     public static final String IMAGE_HASH = "image_hash";//TODO der müsste eher wo anders hin
+    public static final String LAST_SYNC = "lastSync";//TODO der auch
 
     /** Identifier for all kinds of paths */
     public static final String PATH = "path";

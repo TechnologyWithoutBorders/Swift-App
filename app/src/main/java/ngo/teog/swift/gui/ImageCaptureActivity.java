@@ -137,7 +137,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
             this.finish();
         } else {
-            Toast.makeText(this, "no picture attached", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.no_picture_attached), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -186,7 +186,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
             //Use different mechanisms depending on the SDK version
             if(Build.VERSION.SDK_INT >= 24) {
-                photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);
+                photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);//TODO constant
             } else {
                 photoURI = Uri.fromFile(imageFile);
             }

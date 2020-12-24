@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="Create new user" />
+        android:text="@string/create_user" />
 
     <EditText
         android:id="@+id/nameText"
@@ -28,7 +28,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="The user will receive his/her password via mail." />
+        android:text="@string/create_user_mail_hint" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:id="@+id/create_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="create"
+            android:text="@string/create"
             android:onClick="createUser" />
 
         <ProgressBar

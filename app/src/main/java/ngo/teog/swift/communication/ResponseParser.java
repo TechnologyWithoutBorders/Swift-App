@@ -91,7 +91,7 @@ public class ResponseParser {
             JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
 
             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
             int hospitalId = hospitalObject.getInt(HospitalFilter.ID);
             String name = hospitalObject.getString(HospitalFilter.NAME);

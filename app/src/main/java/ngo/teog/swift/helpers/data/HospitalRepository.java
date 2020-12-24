@@ -187,7 +187,7 @@ public class HospitalRepository {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
         try {
             Gson gson = new GsonBuilder()
@@ -200,7 +200,7 @@ public class HospitalRepository {
 
             //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
-            params.put("lastSync", dateFormat.format(new Date(lastUpdate)));
+            params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(lastUpdate)));
 
             JSONArray jsonDevices = new JSONArray();
             JSONArray jsonUsers = new JSONArray();
