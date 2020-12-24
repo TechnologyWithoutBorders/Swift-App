@@ -116,6 +116,7 @@ public class ReportCreationActivity extends BaseActivity {
                 titleText.setError(getString(R.string.empty_title));
             }
         } else {
+            //TODO prevent this by not offering the old state in the spinner or better: allow transitions to old state (but change algorithm that determines next maintenance as it treats a transition from working to working as the device creation)
             Toast.makeText(this.getApplicationContext(), getString(R.string.report_creation_invalid_state), Toast.LENGTH_SHORT).show();
         }
     }
