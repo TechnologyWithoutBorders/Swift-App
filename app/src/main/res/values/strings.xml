@@ -192,6 +192,8 @@
     <string name="report_title">Title</string>
     <string name="report_description_description">provide a short description</string>
     <string name="report_creation_invalid_state">new state can not match old state</string>
+    <string name="report_tutorial_state_change">This section shows you the change of state the device went through in the selected report.</string>
+    <string name="report_tutorial_description">The description contains all the information the creator of the report deemed to be important.</string>
 
     <!-- User Information -->
     <string name="user">User</string>

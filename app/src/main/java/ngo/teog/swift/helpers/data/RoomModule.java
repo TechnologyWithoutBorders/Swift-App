@@ -74,7 +74,17 @@ public class RoomModule {
     public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE devices RENAME COLUMN ward TO location");
+            //Rename statement ist not supported by older Android versions, so we have to go the old way
+            database.beginTransaction();
+            try {
+                database.execSQL("CREATE TABLE devices_tmp(id INTEGER NOT NULL, assetNumber TEXT, type TEXT, serialNumber TEXT, manufacturer TEXT, model TEXT, location TEXT, hospital INTEGER NOT NULL, maintenanceInterval INTEGER NOT NULL, lastUpdate INTEGER, lastSync INTEGER, PRIMARY KEY(id, hospital))");
+                database.execSQL("INSERT INTO devices_tmp(id, assetNumber, type, serialNumber, manufacturer, model, location, hospital, maintenanceInterval, lastUpdate, lastSync) SELECT id, assetNumber, type, serialNumber, manufacturer, model, ward, hospital, maintenanceInterval, lastUpdate, lastSync FROM devices");
+                database.execSQL("DROP TABLE devices");
+                database.execSQL("ALTER TABLE devices_tmp RENAME TO devices");
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
         }
     };
 }

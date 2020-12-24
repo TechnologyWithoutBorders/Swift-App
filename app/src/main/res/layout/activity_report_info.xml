@@ -15,6 +15,7 @@
         android:textAlignment="center"/>
 
     <LinearLayout
+        android:id="@+id/state_change"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
@@ -74,17 +75,25 @@
         android:background="@android:color/darker_gray"
         android:layout_margin="5dp"/>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/descriptionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:text="@string/report_description" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/descriptionView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:text="@string/report_description" />
+
+        <TextView
+            android:id="@+id/descriptionView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp" />
+    </LinearLayout>
+
 
 </LinearLayout>
