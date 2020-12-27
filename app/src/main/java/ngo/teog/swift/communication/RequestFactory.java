@@ -86,7 +86,7 @@ public class RequestFactory {
     public JsonObjectRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE, true);
+        Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE, true);
         params.put(DeviceFilter.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
@@ -122,7 +122,7 @@ public class RequestFactory {
     public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserAction.LOGIN_USER, false);
+        Map<String, String> params = generateParameterMap(context, DataAction.LOGIN_USER, false);
 
         params.put(UserFilter.MAIL, mail);
         params.put(UserFilter.PASSWORD, password);
@@ -179,7 +179,7 @@ public class RequestFactory {
     public JsonObjectRequest createPasswordResetRequest(Context context, String mail, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserAction.RESET_PASSWORD, false);
+        Map<String, String> params = generateParameterMap(context, DataAction.RESET_PASSWORD, false);
 
         params.put(UserFilter.MAIL, mail);
         //Override country, because the shared preferences contain no country at this point
@@ -201,7 +201,7 @@ public class RequestFactory {
     public JsonObjectRequest createImageHashRequest(Context context, int device, String hash, ImageView imageView) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
+        Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE_HASH, true);
 
         params.put(DeviceFilter.ID, Integer.toString(device));
         params.put(ResourceKeys.IMAGE_HASH, hash);

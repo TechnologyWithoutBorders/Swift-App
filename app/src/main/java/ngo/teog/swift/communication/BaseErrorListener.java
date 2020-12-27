@@ -37,6 +37,10 @@ public class BaseErrorListener implements Response.ErrorListener {
         this.enable = enableOnFinish;
     }
 
+    /**
+     * Called when a Volley request fails, manages view visibilities and displays a generic error message.
+     * @param error Error that has occurred
+     */
     @Override
     public void onErrorResponse(VolleyError error) {
         if(disable != null) {

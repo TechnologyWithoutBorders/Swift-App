@@ -4,7 +4,6 @@ package ngo.teog.swift.communication;
  * Exception that indicates an error during parsing of a server response.
  * @author nitelow
  */
-
 public class ServerException extends Exception {
 
     /**

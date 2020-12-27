@@ -14,6 +14,10 @@ import org.json.JSONObject;
 
 import ngo.teog.swift.R;
 
+/**
+ * Response listener for Volley requests.
+ * @author nitelow
+ */
 public class BaseResponseListener implements Response.Listener<JSONObject> {
     private final Context context;
     private View disable;
@@ -29,9 +33,19 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
         this.enable = enableOnFinish;
     }
 
+    /**
+     * Called when a response has been received. Checks the response code and displays corresponding error messages if necessary.
+     * @param response Response
+     */
     @Override
     public void onResponse(JSONObject response) {
-        Log.i(this.getClass().getName(), "received valid response");
+        Log.i(this.getClass().getName(), "received response");
+
+        try {
+            Log.d(this.getClass().getName(), response.toString(4));
+        } catch(JSONException e) {
+            Log.d(this.getClass().getName(), "response is corrupted");
+        }
 
         try {
             int responseCode = response.getInt(SwiftResponse.CODE_FIELD);
@@ -64,7 +78,7 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
     }
 
     /**
-     * Called when a HTTPS response with the correct response code has been received.
+     * Called when a response containing the correct response code has been received.
      * @param response JSON formatted response
      * @throws JSONException if parsing the response fails for some reason
      */
