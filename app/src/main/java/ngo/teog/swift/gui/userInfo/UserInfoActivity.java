@@ -30,8 +30,6 @@ public class UserInfoActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private UserInfoViewModel viewModel;
-
     private User user;
 
     @Override
@@ -67,7 +65,7 @@ public class UserInfoActivity extends BaseActivity {
             SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             int myId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-            viewModel = new ViewModelProvider(this, viewModelFactory).get(UserInfoViewModel.class);
+            UserInfoViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(UserInfoViewModel.class);
             viewModel.init(myId, userId);
             viewModel.getUserInfo().observe(this, userInfo -> {
                 if(userInfo != null) {
@@ -92,20 +90,18 @@ public class UserInfoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch(item.getItemId()) {
-            case R.id.share:
-                SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        if(item.getItemId() == R.id.share) {
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-                Intent intent = new Intent(Intent.ACTION_SEND);
+            Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + user.getHospital() + "/" + user.getId());
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "Share user link"));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item, R.string.userinfo_activity);
+            intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + user.getHospital() + "/" + user.getId());
+            intent.setType("text/plain");
+            startActivity(Intent.createChooser(intent, "Share user link"));
+            return true;
         }
+
+        return super.onOptionsItemSelected(item, R.string.userinfo_activity);//TODO Tutorial
     }
 
     public void invokeCall(View view) {
