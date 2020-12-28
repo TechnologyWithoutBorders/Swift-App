@@ -45,9 +45,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.info) {
             showInfo(stringId);
             return true;
-        } else {
-            return super.onOptionsItemSelected(item);
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

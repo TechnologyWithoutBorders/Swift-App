@@ -72,64 +72,65 @@ public class ImageActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.edit:
-                Intent intent = new Intent(this, ImageCaptureActivity.class);
-                intent.putExtra(ResourceKeys.DEVICE_ID, device);
+        int id = item.getItemId();
 
-                startActivity(intent);
+        if(id == R.id.edit) {
+            Intent intent = new Intent(this, ImageCaptureActivity.class);
+            intent.putExtra(ResourceKeys.DEVICE_ID, device);
 
-                this.finish();
+            startActivity(intent);
 
-                return true;
-            case R.id.refresh://TODO beim ersten Refresh stimmt der Hash iwie nicht überein
-                if(this.checkForInternetConnection()) {
-                    //in order to minimize traffic, we request an MD5 hash of the image and then decide whether to download the image
+            this.finish();
 
-                    File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    dir.mkdirs();
+            return true;
+        } else if(id == R.id.refresh) {//TODO beim ersten Refresh stimmt der Hash iwie nicht überein
+            if(this.checkForInternetConnection()) {
+                //in order to minimize traffic, we request an MD5 hash of the image and then decide whether to download the image
 
-                    File image = new File(dir, device + ".jpg");
+                File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+                dir.mkdirs();
 
-                    byte[] buffer = new byte[(int)image.length()];
+                File image = new File(dir, device + ".jpg");
 
-                    //compute hash of local image
-                    try {
-                        InputStream is = new FileInputStream(image);
-                        int bytesRead = is.read(buffer);
-                        is.close();
+                byte[] buffer = new byte[(int)image.length()];
 
-                        if(bytesRead < image.length()) {
-                            throw new IOException("too few bytes read");
-                        }
+                //compute hash of local image
+                try {
+                    InputStream is = new FileInputStream(image);
+                    int bytesRead = is.read(buffer);
+                    is.close();
 
-                        MessageDigest digest = MessageDigest.getInstance("MD5");
-
-                        digest.reset();
-
-                        byte[] result = digest.digest(buffer);
-
-                        StringBuilder sb = new StringBuilder();
-
-                        for(byte b : result) {
-                            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
-                        }
-
-                        JsonObjectRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString(), imageView);
-
-                        VolleyManager.getInstance(this).getRequestQueue().add(request);
-                    } catch(FileNotFoundException e1) {
-                        Toast.makeText(this.getApplicationContext(), getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
-                    } catch(NoSuchAlgorithmException | IOException e1) {
-                        Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    if(bytesRead < image.length()) {
+                        throw new IOException("too few bytes read");
                     }
-                } else {
-                    Toast.makeText(this.getApplicationContext(), getString(R.string.error_internet_connection), Toast.LENGTH_LONG).show();
-                }
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item, R.string.deviceinfo_activity);//TODO Info anpassen
+                    MessageDigest digest = MessageDigest.getInstance("MD5");
+
+                    digest.reset();
+
+                    byte[] result = digest.digest(buffer);
+
+                    StringBuilder sb = new StringBuilder();
+
+                    for(byte b : result) {
+                        sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+                    }
+
+                    JsonObjectRequest request = RequestFactory.getInstance().createImageHashRequest(this, device, sb.toString(), imageView);
+
+                    VolleyManager.getInstance(this).getRequestQueue().add(request);
+                } catch(FileNotFoundException e1) {
+                    Toast.makeText(this.getApplicationContext(), getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
+                } catch(NoSuchAlgorithmException | IOException e1) {
+                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(this.getApplicationContext(), getString(R.string.error_internet_connection), Toast.LENGTH_LONG).show();
+            }
+
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);//TODO Tutorial
     }
 }

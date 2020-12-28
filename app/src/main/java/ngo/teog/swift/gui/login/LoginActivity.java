@@ -105,13 +105,12 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.info:
-                showInfo(R.string.about_text, R.string.privacy_policy);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId() == R.id.info) {
+            showInfo(R.string.about_text, R.string.privacy_policy);
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void login(View view) {
