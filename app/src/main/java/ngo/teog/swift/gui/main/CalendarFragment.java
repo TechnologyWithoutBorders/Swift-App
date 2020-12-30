@@ -46,8 +46,6 @@ public class CalendarFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private TodoViewModel viewModel;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_maintenance, container, false);
