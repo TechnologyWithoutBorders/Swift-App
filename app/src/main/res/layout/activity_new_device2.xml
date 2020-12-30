@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:entries="@array/maintenance_intervall_options" />
+                    android:entries="@array/maintenance_interval_options" />
 
             </LinearLayout>
         </LinearLayout>

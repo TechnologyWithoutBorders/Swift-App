@@ -113,7 +113,7 @@
         <item>Test</item>
     </string-array>
 
-    <string-array name="maintenance_intervall_options">
+    <string-array name="maintenance_interval_options">
         <item>Weeks</item>
         <item>Months</item>
     </string-array>
