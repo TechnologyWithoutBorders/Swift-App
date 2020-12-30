@@ -1,5 +1,6 @@
 package ngo.teog.swift.helpers.data;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,7 +19,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     }
 
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    @NonNull
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         Provider<ViewModel> viewModelProvider = viewModels.get(modelClass);
 
         if(viewModelProvider == null) {
