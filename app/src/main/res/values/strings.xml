@@ -81,10 +81,6 @@
         <p>TeoG Swift is an inventory and maintenance application, developed by the NGO Technik ohne Grenzen e.V. (Technology without borders). Its intended use is to establish a central database of hospital devices in a certain area, in order to document their repairs and simplify the search for spare parts.</p>
         ]]></string>
 
-    <string name="third_party_software">
-        bla
-    </string>
-
     <string name="teog_info"><![CDATA[
         <p><b>Technology without Borders</b><br>
         WG Hospital Support</p>
