@@ -24,12 +24,16 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.ResourceKeys;
 
+/**
+ * First step when creating a device: Scan the corresponding barcode.
+ * @author nitelow
+ */
 public class NewDeviceActivity extends BaseActivity {
 
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
 
-    private BarcodeCallback callback = new BarcodeCallback() {
+    private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
             if(result.getText() == null || result.getText().equals(lastText)) {

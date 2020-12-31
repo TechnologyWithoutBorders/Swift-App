@@ -48,6 +48,7 @@ import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 /**
+ * Gives a quick overview about a hospital.
  * @author nitelow
  */
 public class HospitalActivity extends BaseActivity {
@@ -413,9 +414,7 @@ public class HospitalActivity extends BaseActivity {
 
                         if(user.getPhone() != null && user.getPhone().length() > 0) {
                             phoneView.setVisibility(View.VISIBLE);
-                            phoneView.setOnClickListener((view) -> {
-                                invokeCall(user.getPhone());
-                            });
+                            phoneView.setOnClickListener((view) -> invokeCall(user.getPhone()));
                         }
                     }
                     break;

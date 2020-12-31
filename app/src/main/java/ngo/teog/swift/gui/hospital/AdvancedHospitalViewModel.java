@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 
 public class AdvancedHospitalViewModel extends ViewModel {
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public AdvancedHospitalViewModel(HospitalRepository hospitalRepo) {

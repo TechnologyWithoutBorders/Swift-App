@@ -34,6 +34,10 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Provides additional functionalities (like user management) for a hospital.
+ * @author nitelow
+ */
 public class AdvancedHospitalActivity extends BaseActivity {
 
     private EditText nameText, mailText;

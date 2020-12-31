@@ -16,7 +16,7 @@ public class HospitalViewModel extends ViewModel {
     private LiveData<Hospital> hospital;
     private LiveData<List<User>> users;
     private LiveData<List<DeviceInfo>> deviceInfos;
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public HospitalViewModel(HospitalRepository hospitalRepo) {

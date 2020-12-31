@@ -9,7 +9,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.export.HospitalDump;
 
 public class PortationViewModel extends ViewModel {
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
     private LiveData<HospitalDump> hospital;
 
     @Inject

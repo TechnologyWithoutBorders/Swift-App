@@ -39,6 +39,10 @@ import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Second step when creating a device: Enter device attributes.
+ * @author nitelow
+ */
 public class NewDeviceActivity2 extends BaseActivity {
 
     private Button nextButton;
