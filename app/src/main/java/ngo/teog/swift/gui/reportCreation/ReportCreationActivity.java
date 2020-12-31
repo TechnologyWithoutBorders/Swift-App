@@ -37,6 +37,10 @@ import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Provides functionality for writing reports.
+ * @author nitelow
+ */
 public class ReportCreationActivity extends BaseActivity {
 
     private EditText titleText, descriptionText;
