@@ -1,7 +1,7 @@
 package ngo.teog.swift.helpers;
 
 /**
- * This class contains all standardized resource keys used within the application and for server communication.
+ * Contains all standardized resource keys used within the application and for server communication.
  * @author nitelow
  */
 public final class ResourceKeys {
