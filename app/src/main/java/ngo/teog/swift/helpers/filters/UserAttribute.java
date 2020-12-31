@@ -1,9 +1,10 @@
 package ngo.teog.swift.helpers.filters;
 
 /**
+ * Contains constants for addressing user attributes when communicating with the server.
  * @author nitelow
  */
-public final class UserFilter {
+public final class UserAttribute {
     public static final String ID = "id";
     public static final String FULL_NAME = "fullName";
     public static final String MAIL = "mail";

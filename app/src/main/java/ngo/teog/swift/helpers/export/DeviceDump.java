@@ -9,6 +9,10 @@ import java.util.List;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.Report;
 
+/**
+ * Wraps all information which is needed to export a device and its reports e.g. in CSV format.
+ * @author nitelow
+ */
 public class DeviceDump implements Serializable {
     @Embedded
     private HospitalDevice device;
