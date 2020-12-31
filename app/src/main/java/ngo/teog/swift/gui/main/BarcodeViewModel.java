@@ -10,7 +10,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 
 public class BarcodeViewModel extends ViewModel {
     private LiveData<DeviceInfo> deviceInfo;
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public BarcodeViewModel(HospitalRepository hospitalRepo) {

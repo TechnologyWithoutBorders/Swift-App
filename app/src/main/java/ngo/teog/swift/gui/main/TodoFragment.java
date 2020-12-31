@@ -39,6 +39,10 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Part of the main activity, shows the user all current work items.
+ * @author nitelow
+ */
 public class TodoFragment extends Fragment {
 
     @Inject
