@@ -25,6 +25,10 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Shows all available information about a user and provides methods of contacting him/her.
+ * @author nitelow
+ */
 public class UserInfoActivity extends BaseActivity {
 
     @Inject

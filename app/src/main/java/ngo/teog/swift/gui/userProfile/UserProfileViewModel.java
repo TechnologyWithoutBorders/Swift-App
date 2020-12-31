@@ -11,7 +11,7 @@ import ngo.teog.swift.helpers.data.UserInfo;
 
 public class UserProfileViewModel extends ViewModel {
     private LiveData<UserInfo> userProfile;
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public UserProfileViewModel(HospitalRepository hospitalRepo) {
