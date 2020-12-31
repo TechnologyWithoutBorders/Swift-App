@@ -38,7 +38,6 @@ import ngo.teog.swift.helpers.ResourceKeys;
  * Activity that is used to capture, decode and upload a device image.
  * @author nitelow
  */
-
 //Todo should be generically usable for other images
 public class ImageCaptureActivity extends BaseActivity {
 
