@@ -37,7 +37,7 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    HospitalRepository userRepository(HospitalDao hospitalDao, Context context) {
+    HospitalRepository hospitalRepository(HospitalDao hospitalDao, Context context) {
         return new HospitalRepository(hospitalDao, context);
     }
 
