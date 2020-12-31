@@ -12,6 +12,10 @@ import ngo.teog.swift.helpers.export.HospitalDump;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
+/**
+ * Definition of methods providing access to hospital objects in database.
+ * @author nitelow
+ */
 @Dao
 public interface HospitalDao {
     @Insert(onConflict = REPLACE)
@@ -19,10 +23,6 @@ public interface HospitalDao {
 
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
     LiveData<Hospital> loadUserHospital(int userId);
-
-    @Transaction
-    @Query("SELECT * FROM users WHERE users.id = :userId")
-    LiveData<UserProfileInfo> loadUserProfile(int userId);
 
     @Transaction
     @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")

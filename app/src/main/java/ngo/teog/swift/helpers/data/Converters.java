@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * This class is used for converting complex data structures into simple ones
- * in order to store them in the database.
+ * in order to store them in the database. These will be used automatically.
  * @author nitelow
  */
 public class Converters {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -123,6 +124,7 @@ public class ImageActivity extends BaseActivity {
                     Toast.makeText(this.getApplicationContext(), getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
                 } catch(NoSuchAlgorithmException | IOException e1) {
                     Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    Log.e(this.getClass().getName(), e1.toString(), e1);
                 }
             } else {
                 Toast.makeText(this.getApplicationContext(), getString(R.string.error_internet_connection), Toast.LENGTH_LONG).show();

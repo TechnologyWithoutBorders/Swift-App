@@ -7,10 +7,10 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
-import ngo.teog.swift.helpers.data.UserProfileInfo;
+import ngo.teog.swift.helpers.data.UserInfo;
 
 public class UserProfileViewModel extends ViewModel {
-    private LiveData<UserProfileInfo> userProfile;
+    private LiveData<UserInfo> userProfile;
     private HospitalRepository hospitalRepo;
 
     @Inject
@@ -26,7 +26,7 @@ public class UserProfileViewModel extends ViewModel {
         userProfile = hospitalRepo.getUserProfileInfo(userId);
     }
 
-    public LiveData<UserProfileInfo> getUserProfile() {
+    public LiveData<UserInfo> getUserProfile() {
         return userProfile;
     }
 

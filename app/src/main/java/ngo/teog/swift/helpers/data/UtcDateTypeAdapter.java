@@ -17,6 +17,10 @@ import ngo.teog.swift.helpers.Defaults;
 
 import static com.google.gson.stream.JsonToken.NULL;
 
+/**
+ * Provides Date to String (and reverse) methods for GSON serialization used when communicating with the server. The timezone will therefore always be set to UTC as the server expects it.
+ * @author nitelow
+ */
 public final class UtcDateTypeAdapter extends TypeAdapter<Date> {
 
     @Override

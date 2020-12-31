@@ -6,23 +6,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Die Report-Klasse kapselt alle Informationen über einen Report. Sie
- * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * @author Julian Deyerler
+ * Definition of "reports" table in Room database and wrapper class for a report.
+ * @author nitelow
  */
-
 @Entity(tableName = "reports", primaryKeys = {"id", "device"})//TODO hospital muss auch in primary keys
 public class Report implements  Serializable {
 
     private int id;
-    private int author;
-    private String title;
-    private int device;
+    private final int author;
+    private final String title;
+    private final int device;
     private int hospital;
-    private int previousState;
-    private int currentState;
-    private String description;
-    private Date created;
+    private final int previousState;
+    private final int currentState;
+    private final String description;
+    private final Date created;
     private Date lastSync;
 
     public Report(int id, int author, String title, int device, int hospital, int previousState, int currentState, String description, Date created) {
