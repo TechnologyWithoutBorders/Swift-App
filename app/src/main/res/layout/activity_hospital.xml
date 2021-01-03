@@ -218,12 +218,20 @@
 
     </LinearLayout>
 
+
     <TextView
-        android:id="@+id/amountofoverduedevices"
-        android:layout_width="match_parent"
+        android:id="@+id/amountOfOverdueDevices"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:textAlignment="center"
-        android:textSize="15dp"/>
+        android:padding="2dp"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/light_red"
+        android:textSize="15sp"/>
 
     <View
         android:layout_width="match_parent"

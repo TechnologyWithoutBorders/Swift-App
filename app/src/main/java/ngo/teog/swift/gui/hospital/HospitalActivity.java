@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +33,6 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
-import ngo.teog.swift.gui.main.CalendarFragment;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceState;
@@ -164,7 +162,7 @@ public class HospitalActivity extends BaseActivity {
         limitedView.setColorFilter(limitedParams.getBackgroundColor());
         TextView limitedCounter = findViewById(R.id.limited_count);
 
-        TextView overdueDevices = findViewById(R.id.amountofoverduedevices);
+        TextView overdueDevices = findViewById(R.id.amountOfOverdueDevices);
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -240,7 +238,7 @@ public class HospitalActivity extends BaseActivity {
                     }
                 }
 
-                overdueDevices.setText(Integer.toString(overdueDeviceCount) + " " + getString(R.string.hospital_info_overdue_devices));
+                overdueDevices.setText(overdueDeviceCount + " " + getString(R.string.hospital_info_overdue_devices));
 
                 workingCounter.setText(Integer.toString(stateCounters[DeviceState.WORKING]));
                 maintenanceCounter.setText(Integer.toString(stateCounters[DeviceState.MAINTENANCE]));
