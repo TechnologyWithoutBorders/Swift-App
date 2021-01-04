@@ -12,7 +12,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 
 public class CalendarViewModel extends ViewModel {
     private LiveData<List<DeviceInfo>> deviceInfos;
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public CalendarViewModel(HospitalRepository hospitalRepo) {

@@ -8,7 +8,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.Report;
 
 public class ReportCreationViewModel extends ViewModel {
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public ReportCreationViewModel(HospitalRepository hospitalRepo) {

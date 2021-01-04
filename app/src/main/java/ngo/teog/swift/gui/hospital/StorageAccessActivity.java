@@ -30,6 +30,10 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
 
+/**
+ * Provides access to the storage room of TeoG regional group Erlangen.
+ * @author nitelow
+ */
 public class StorageAccessActivity extends BaseActivity {
 
     @Override
@@ -77,7 +81,7 @@ public class StorageAccessActivity extends BaseActivity {
                     ((ImageView) findViewById(R.id.qr_code)).setImageBitmap(bmp);
 
                 } catch (WriterException e) {
-                    Log.w(this.getClass().getName(), e.toString());
+                    Log.e(this.getClass().getName(), e.toString(), e);
                     Toast.makeText(StorageAccessActivity.this, getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
                 }
             }

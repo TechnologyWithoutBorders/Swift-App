@@ -10,7 +10,7 @@ import ngo.teog.swift.helpers.data.UserInfo;
 
 public class UserInfoViewModel extends ViewModel {
     private LiveData<UserInfo> userInfo;
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public UserInfoViewModel(HospitalRepository hospitalRepo) {

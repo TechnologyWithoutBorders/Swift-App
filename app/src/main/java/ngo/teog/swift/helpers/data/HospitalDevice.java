@@ -6,11 +6,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Die HospitalDevice-Klasse kapselt alle Informationen über ein Gerät. Sie
- * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * @author Julian Deyerler
+ * Definition of "devices" table in Room database and wrapper class for a device.
+ * @author nitelow
  */
-
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
 @Entity(tableName = "devices", primaryKeys = {"id", "hospital"})
 public class HospitalDevice implements Serializable {

@@ -32,6 +32,10 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Shows a user's own profile and provides ways of editing personal information.
+ * @author nitelow
+ */
 public class UserProfileActivity extends BaseActivity {
 
     private TableLayout tableLayout;

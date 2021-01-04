@@ -39,6 +39,10 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Part of the main activity, shows how much time is left before devices should be serviced again.
+ * @author nitelow
+ */
 public class CalendarFragment extends Fragment {
 
     private ListView hospitalListView;
@@ -56,7 +60,7 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         CustomSimpleArrayAdapter adapter = new CustomSimpleArrayAdapter(getContext());
         hospitalListView.setAdapter(adapter);
 
@@ -175,8 +179,8 @@ public class CalendarFragment extends Fragment {
     }
 
     private class MaintenanceInfo {
-        private DeviceInfo deviceInfo;
-        private int daysLeft;
+        private final DeviceInfo deviceInfo;
+        private final int daysLeft;
 
         private MaintenanceInfo(DeviceInfo deviceInfo, int daysLeft) {
             this.deviceInfo = deviceInfo;

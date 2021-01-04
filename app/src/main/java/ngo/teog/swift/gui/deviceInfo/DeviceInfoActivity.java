@@ -67,7 +67,8 @@ import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 /**
- * Activity that sums up all available information about a device.
+ * Shows all available information about a device.
+ * @author nitelow
  */
 public class DeviceInfoActivity extends BaseActivity {
 

@@ -9,7 +9,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.ReportInfo;
 
 public class ReportInfoViewModel extends ViewModel {
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
     private LiveData<ReportInfo> reportInfo;
 
     public void init(int userId, int deviceId, int reportId) {

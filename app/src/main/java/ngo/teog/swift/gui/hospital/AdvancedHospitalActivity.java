@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.BaseRequest;
+import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.UserAction;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
@@ -34,6 +34,10 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Provides additional functionalities (like user management) for a hospital.
+ * @author nitelow
+ */
 public class AdvancedHospitalActivity extends BaseActivity {
 
     private EditText nameText, mailText;
@@ -67,7 +71,7 @@ public class AdvancedHospitalActivity extends BaseActivity {
     public BaseRequest createUserCreationRequest(final Context context, View disable, final View enable, String userName, String userMail) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = RequestFactory.generateParameterMap(context, UserAction.CREATE_USER, true);
+        Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.CREATE_USER, true);
         params.put(ResourceKeys.USER_NAME, userName);
         params.put(ResourceKeys.USER_MAIL, userMail);
 

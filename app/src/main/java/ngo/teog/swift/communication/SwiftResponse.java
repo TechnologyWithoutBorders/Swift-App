@@ -4,7 +4,6 @@ package ngo.teog.swift.communication;
  * Contains some identifiers for referencing segments of a server response.
  * @author nitelow
  */
-
 public final class SwiftResponse {
 
     //Response Codes

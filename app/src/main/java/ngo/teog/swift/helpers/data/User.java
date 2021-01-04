@@ -7,24 +7,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Die User-Klasse kapselt alle Informationen über einen Benutzer. Sie
- * ist serializable, damit man sie innerhalb eines Intents übergeben kann.
- * @author Julian Deyerler
+ * Definition of "users" table in Room database and wrapper class for a user.
+ * @author nitelow
  */
-
 //(foreignKeys = @ForeignKey(entity = Hospital.class, parentColumns = "id", childColumns = "hospital", onDelete = CASCADE))
-
 @Entity(tableName = "users")
 public class User implements Serializable {
     @PrimaryKey(autoGenerate = true)
-    private int id;
-    private String phone;
-    private String mail;
-    private String name;
+    private final int id;
+    private final String phone;
+    private final String mail;
+    private final String name;
 
-    private int hospital;
+    private final int hospital;
 
-    private String position;
+    private final String position;
     private Date lastUpdate;
     private Date lastSync;
 

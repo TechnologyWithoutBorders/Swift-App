@@ -6,6 +6,10 @@ import androidx.room.Relation;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Wraps all information regarding a report. Contains the report itself, its author(s) and the corresponding hospital.
+ * @author nitelow
+ */
 public class ReportInfo implements Serializable {
     @Embedded
     private Report report;

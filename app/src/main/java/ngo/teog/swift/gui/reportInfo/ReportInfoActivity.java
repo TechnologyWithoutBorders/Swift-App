@@ -33,7 +33,8 @@ import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 /**
- * Activity that sums up all available information about a report.
+ * Shows all available information about a report.
+ * @author nitelow
  */
 public class ReportInfoActivity extends BaseActivity {
 
@@ -61,7 +62,7 @@ public class ReportInfoActivity extends BaseActivity {
         LinearLayout stateChange = findViewById(R.id.state_change);
         LinearLayout descriptionLayout = findViewById(R.id.descriptionLayout);
 
-        //Show tutorial
+        //Build tutorial
         tutorialQueue = new FancyShowCaseQueue()
                 .add(buildTutorialStep(stateChange, getString(R.string.report_tutorial_state_change)))
                 .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description)));

@@ -1,5 +1,9 @@
 package ngo.teog.swift.helpers;
 
+/**
+ * Contains device state constants.
+ * @author nitelow
+ */
 public final class DeviceState {
     public static final int WORKING = 0;
     public static final int MAINTENANCE = 1;

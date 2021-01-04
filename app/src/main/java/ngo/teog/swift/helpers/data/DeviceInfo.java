@@ -6,6 +6,10 @@ import androidx.room.Relation;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Wraps all information regarding a device. Contains the device itself, all of its reports and the corresponding hospital.
+ * @author nitelow
+ */
 public class DeviceInfo implements Serializable {
     @Embedded
     private HospitalDevice device;

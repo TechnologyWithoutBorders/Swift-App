@@ -44,6 +44,10 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDatabase;
 import ngo.teog.swift.helpers.data.RoomModule;
 
+/**
+ * Creates a tab layout holding the three main tabs. Provides some general functionality and implements the main menu.
+ * @author nitelow
+ */
 public class MainActivity extends BaseActivity {
 
     private static final int SCANNER_TAB = 0;
@@ -138,14 +142,13 @@ public class MainActivity extends BaseActivity {
             switch(i) {
                 case SCANNER_TAB:
                     return new BarcodeFragment();
-                case TODO_TAB:
-                    return new TodoFragment();
                 case CALENDAR_TAB:
                     return new CalendarFragment();
+                case TODO_TAB:
+                default:
+                    //necessary, because method is annotated with @NonNull
+                    return new TodoFragment();
             }
-
-            //necessary, because method is annotated with @NonNull
-            return new TodoFragment();
         }
 
         @Override
@@ -203,6 +206,9 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * Logs out the user. Wipes the database and shared preferences and deletes all downloaded device images.
+     */
     public void logout() {
         ExecutorService executor = Executors.newFixedThreadPool(1);
 
@@ -241,8 +247,6 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(MainActivity.this, HospitalActivity.class);
         startActivity(intent);
     }
-
-
 
     public void startNewDeviceActivity(View view) {
         Intent intent = new Intent(MainActivity.this, NewDeviceActivity.class);

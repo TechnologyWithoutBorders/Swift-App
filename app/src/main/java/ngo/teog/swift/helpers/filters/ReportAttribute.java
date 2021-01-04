@@ -1,9 +1,10 @@
 package ngo.teog.swift.helpers.filters;
 
 /**
+ * Contains constants for addressing report attributes when communicating with the server.
  * @author nitelow
  */
-public final class ReportFilter {
+public final class ReportAttribute {
     public static final String ID = "id";
     public static final String AUTHOR = "author";
     public static final String TITLE = "title";

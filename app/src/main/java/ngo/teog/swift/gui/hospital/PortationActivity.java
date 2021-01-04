@@ -35,6 +35,10 @@ import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 import ngo.teog.swift.helpers.export.DeviceDump;
 
+/**
+ * Provides import and export functionalities.
+ * @author nitelow
+ */
 public class PortationActivity extends AppCompatActivity {
 
     @Inject

@@ -19,7 +19,7 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 
 /**
- * Worker used for uploading device images.
+ * Used for uploading device images.
  * @author nitelow
  */
 public class ImageUploader extends Worker {

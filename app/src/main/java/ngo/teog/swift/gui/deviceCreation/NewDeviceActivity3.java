@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.work.Constraints;
 import androidx.work.Data;
 import androidx.work.NetworkType;
@@ -29,10 +29,8 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.inject.Inject;
 
@@ -48,6 +46,10 @@ import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Third step when creating a device: Take a picture of the device.
+ * @author nitelow
+ */
 public class NewDeviceActivity3 extends BaseActivity {
 
     private Button nextButton;
@@ -93,7 +95,7 @@ public class NewDeviceActivity3 extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(NewDeviceViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(NewDeviceViewModel.class);
         viewModel.init(userId, device.getId());
 
         viewModel.getUser().observe(this, user -> {

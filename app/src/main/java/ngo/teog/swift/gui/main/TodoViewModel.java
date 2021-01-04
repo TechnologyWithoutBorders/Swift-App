@@ -12,7 +12,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 
 public class TodoViewModel extends ViewModel {
     private LiveData<List<DeviceInfo>> deviceInfos;
-    private HospitalRepository hospitalRepo;
+    private final HospitalRepository hospitalRepo;
 
     @Inject
     public TodoViewModel(HospitalRepository hospitalRepo) {

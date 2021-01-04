@@ -39,6 +39,10 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 
+/**
+ * Provides login functionality
+ * @author nitelow
+ */
 public class LoginActivity extends BaseActivity {
 
     private EditText mailField, passwordField;

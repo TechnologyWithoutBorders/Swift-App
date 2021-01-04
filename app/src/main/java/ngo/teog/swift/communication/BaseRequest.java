@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 /**
+ * Base for Volley requests that implements easy-to-use constructors supporting frequently used patterns.
  * @author nitelow
  */
 public class BaseRequest extends JsonObjectRequest {

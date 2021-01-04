@@ -39,6 +39,10 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
+/**
+ * Part of the main activity, enables user to scan the barcodes of devices.
+ * @author nitelow
+ */
 public class BarcodeFragment extends Fragment {
 
     @Inject
@@ -91,14 +95,10 @@ public class BarcodeFragment extends Fragment {
         barcodeScannerView.decodeContinuous(callback);
 
         searchButton = view.findViewById(R.id.search_button);
-        searchButton.setOnClickListener(sourceView -> {
-            search();
-        });
+        searchButton.setOnClickListener(sourceView -> search());
 
         torchButton = view.findViewById(R.id.torch_button);
-        torchButton.setOnClickListener(sourceView -> {
-            switchTorchState();
-        });
+        torchButton.setOnClickListener(sourceView -> switchTorchState());
 
         searchField = view.findViewById(R.id.code_search_text);
 

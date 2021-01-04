@@ -9,6 +9,10 @@ import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.User;
 
+/**
+ * Wraps all information which is needed to export a hospital, its members and devices e.g. in CSV format.
+ * @author nitelow
+ */
 public class HospitalDump {
     @Embedded
     private Hospital hospital;

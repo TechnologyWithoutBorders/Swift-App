@@ -41,12 +41,16 @@ import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.communication.ResponseParser;
 import ngo.teog.swift.helpers.export.HospitalDump;
 
+/**
+ * Provides access to relevant hospital data. Acts as the single source of truth and manages the various data sources and their synchronisation in the background.
+ * @author nitelow
+ */
 @Singleton
 public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
     private final Context context;
-    private ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
@@ -70,10 +74,10 @@ public class HospitalRepository {
         return hospitalDao.loadUserHospital(userId);
     }
 
-    public LiveData<UserProfileInfo> getUserProfileInfo(int userId) {
+    public LiveData<UserInfo> getUserProfileInfo(int userId) {
         refreshUserHospital(userId);
 
-        return hospitalDao.loadUserProfile(userId);
+        return hospitalDao.loadUserInfo(userId);
     }
 
     public LiveData<List<User>> getUserColleagues(int userId) {

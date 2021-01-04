@@ -1,10 +1,9 @@
 package ngo.teog.swift.helpers;
 
 /**
- * Contains some global system constants.
+ * Contains some global system constants/default values.
  * @author nitelow
  */
-
 public final class Defaults {
 
     //Preferences

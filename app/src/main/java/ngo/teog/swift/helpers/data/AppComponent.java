@@ -21,7 +21,7 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 
 @Singleton
-@Component(dependencies = {}, modules = {AppModule.class, RoomModule.class, ViewModelModule.class})
+@Component(modules = {AppModule.class, RoomModule.class, ViewModelModule.class})
 public interface AppComponent {
 
     void inject(UserProfileActivity target);
@@ -39,9 +39,9 @@ public interface AppComponent {
     void inject(CalendarFragment target);
     void inject(PortationActivity target);
 
-    HospitalDatabase userDatabase();
+    HospitalDatabase hospitalDatabase();
 
-    HospitalRepository userRepository();
+    HospitalRepository hospitalRepository();
 
     Application application();
 }

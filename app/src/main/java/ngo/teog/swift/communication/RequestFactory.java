@@ -39,8 +39,8 @@ import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.filters.DeviceFilter;
-import ngo.teog.swift.helpers.filters.UserFilter;
+import ngo.teog.swift.helpers.filters.DeviceAttribute;
+import ngo.teog.swift.helpers.filters.UserAttribute;
 
 /**
  * Singleton class that creates HTTPS requests for communication with the server.
@@ -86,8 +86,8 @@ public class RequestFactory {
     public JsonObjectRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE, true);
-        params.put(DeviceFilter.ID, Integer.toString(id));
+        Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE, true);
+        params.put(DeviceAttribute.ID, Integer.toString(id));
 
         JSONObject request = new JSONObject(params);
 
@@ -122,10 +122,10 @@ public class RequestFactory {
     public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserAction.LOGIN_USER, false);
+        Map<String, String> params = generateParameterMap(context, DataAction.LOGIN_USER, false);
 
-        params.put(UserFilter.MAIL, mail);
-        params.put(UserFilter.PASSWORD, password);
+        params.put(UserAttribute.MAIL, mail);
+        params.put(UserAttribute.PASSWORD, password);
         //Override country, because the shared preferences contain no country at this point
         params.put(Defaults.COUNTRY_KEY, country);
 
@@ -179,9 +179,9 @@ public class RequestFactory {
     public JsonObjectRequest createPasswordResetRequest(Context context, String mail, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
-        Map<String, String> params = generateParameterMap(context, UserAction.RESET_PASSWORD, false);
+        Map<String, String> params = generateParameterMap(context, DataAction.RESET_PASSWORD, false);
 
-        params.put(UserFilter.MAIL, mail);
+        params.put(UserAttribute.MAIL, mail);
         //Override country, because the shared preferences contain no country at this point
         params.put(Defaults.COUNTRY_KEY, country);
 
@@ -201,9 +201,9 @@ public class RequestFactory {
     public JsonObjectRequest createImageHashRequest(Context context, int device, String hash, ImageView imageView) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
-        Map<String, String> params = generateParameterMap(context, DeviceAction.FETCH_DEVICE_IMAGE_HASH, true);
+        Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE_HASH, true);
 
-        params.put(DeviceFilter.ID, Integer.toString(device));
+        params.put(DeviceAttribute.ID, Integer.toString(device));
         params.put(ResourceKeys.IMAGE_HASH, hash);
 
         JSONObject request = new JSONObject(params);
@@ -240,8 +240,8 @@ public class RequestFactory {
         final String url = Defaults.BASE_URL + Defaults.DOCUMENTS_URL;
 
         Map<String, String> params = new HashMap<>();
-        params.put(DeviceFilter.MANUFACTURER, device.getManufacturer());
-        params.put(DeviceFilter.MODEL, device.getModel());
+        params.put(DeviceAttribute.MANUFACTURER, device.getManufacturer());
+        params.put(DeviceAttribute.MODEL, device.getModel());
 
         JSONObject request = new JSONObject(params);
 
