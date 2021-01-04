@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "a21e8bfaf1a3cb719071b64b60b146b9",
+    "identityHash": "d34d427532745bf70cdd805fbbb6e5c0",
     "entities": [
       {
         "tableName": "users",
@@ -124,7 +124,7 @@
       },
       {
         "tableName": "devices",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assetNumber` TEXT, `type` TEXT, `serialNumber` TEXT, `manufacturer` TEXT, `model` TEXT, `ward` TEXT, `hospital` INTEGER NOT NULL, `maintenanceInterval` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assetNumber` TEXT, `type` TEXT, `serialNumber` TEXT, `manufacturer` TEXT, `model` TEXT, `location` TEXT, `hospital` INTEGER NOT NULL, `maintenanceInterval` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -163,8 +163,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "ward",
-            "columnName": "ward",
+            "fieldPath": "location",
+            "columnName": "location",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -282,7 +282,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a21e8bfaf1a3cb719071b64b60b146b9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd34d427532745bf70cdd805fbbb6e5c0')"
     ]
   }
 }
