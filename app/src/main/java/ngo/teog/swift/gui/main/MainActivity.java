@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -44,6 +45,7 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDatabase;
 import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 /**
  * Creates a tab layout holding the three main tabs. Provides some general functionality and implements the main menu.
@@ -69,10 +71,25 @@ public class MainActivity extends BaseActivity {
     @Inject
     HospitalDatabase database;
 
+    @Inject
+    ViewModelFactory viewModelFactory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(this.getApplication()))
+                .roomModule(new RoomModule(this.getApplication()))
+                .build()
+                .inject(this);
+
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        MainViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
+        viewModel.init(id);
 
         Intent intent = this.getIntent();
 
@@ -82,50 +99,59 @@ public class MainActivity extends BaseActivity {
         if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
             //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
 
-            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             String userCountry = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
 
-            try {
-                List<String> pathSegments = appLinkData.getPathSegments();
+            viewModel.getUserHospital().observe(this, userHospital -> {
+                if(userHospital != null) {
+                    try {
+                        int userHospitalId = userHospital.getId();
 
-                //Scheme: /<type>/<country>/<hospital ID>/<device/user ID>/[<report ID>]
+                        List<String> pathSegments = appLinkData.getPathSegments();
 
-                String type = pathSegments.get(APP_LINK_TYPE_SEGMENT);
-                String country = pathSegments.get(APP_LINK_COUNTRY_SEGMENT);
-                int hospital = Integer.parseInt(pathSegments.get(APP_LINK_HOSPITAL_SEGMENT));//TODO check hospital
+                        //Scheme: /<type>/<country>/<hospital ID>/<device/user ID>/[<report ID>]
 
-                if(country.equals(userCountry)) {
-                    Intent openIntent;
+                        String type = pathSegments.get(APP_LINK_TYPE_SEGMENT);
+                        String country = pathSegments.get(APP_LINK_COUNTRY_SEGMENT);
+                        int hospital = Integer.parseInt(pathSegments.get(APP_LINK_HOSPITAL_SEGMENT));//TODO check hospital
 
-                    if (ResourceKeys.DEVICE.equals(type)) {
-                        int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
+                        if(country.equals(userCountry)) {
+                            if (hospital == userHospitalId) {
+                                Intent openIntent;
 
-                        openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
-                        openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
-                    } else if (ResourceKeys.USER.equals(type)) {
-                        int userNumber = Integer.parseInt(pathSegments.get(APP_LINK_USER_SEGMENT));
+                                if (ResourceKeys.DEVICE.equals(type)) {
+                                    int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
 
-                        openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
-                        openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
-                    } else if (ResourceKeys.REPORT.equals(type)) {
-                        int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
-                        int reportNumber = Integer.parseInt(pathSegments.get(APP_LINK_REPORT_SEGMENT));
+                                    openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                                } else if (ResourceKeys.USER.equals(type)) {
+                                    int userNumber = Integer.parseInt(pathSegments.get(APP_LINK_USER_SEGMENT));
 
-                        openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
-                        openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
-                        openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
-                    } else {
-                        throw new Exception("invalid item type");
+                                    openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+                                    openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
+                                } else if (ResourceKeys.REPORT.equals(type)) {
+                                    int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
+                                    int reportNumber = Integer.parseInt(pathSegments.get(APP_LINK_REPORT_SEGMENT));
+
+                                    openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
+                                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                                    openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
+                                } else {
+                                    throw new Exception("invalid item type");
+                                }
+
+                                startActivity(openIntent);
+                            } else {
+                                Toast.makeText(this.getApplicationContext(), "wrong country", Toast.LENGTH_SHORT).show();//TODO extract string
+                            }
+                        } else {
+                            Toast.makeText(this.getApplicationContext(), "wrong hospital", Toast.LENGTH_SHORT).show();//TODO extract string
+                        }
+                    } catch(Exception e) {
+                        Log.e(this.getClass().getName(), e.toString(), e);
+                        Toast.makeText(this.getApplicationContext(), getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
                     }
-
-                    startActivity(openIntent);
-                } else {
-                    Toast.makeText(this.getApplicationContext(), "wrong country", Toast.LENGTH_SHORT).show();//TODO extract string
                 }
-            } catch(Exception e) {
-                Log.e(this.getClass().getName(), e.toString(), e);
-                Toast.makeText(this.getApplicationContext(), getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
-            }
+            });
         }
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
