@@ -125,7 +125,7 @@ public class ReportInfoActivity extends BaseActivity {
 
             Intent intent = new Intent(Intent.ACTION_SEND);
 
-            intent.putExtra(Intent.EXTRA_TEXT, "I want to show you this report: http://teog.virlep.de/report/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + reportInfo.getHospitals().get(0).getId() + "/" + reportInfo.getReport().getDevice() + "/" + reportInfo.getReport().getId());
+            intent.putExtra(Intent.EXTRA_TEXT, "I want to show you this report: https://teog.virlep.de/report/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + reportInfo.getHospitals().get(0).getId() + "/" + reportInfo.getReport().getDevice() + "/" + reportInfo.getReport().getId());
             intent.setType("text/plain");
             startActivity(Intent.createChooser(intent, "Share report link"));
 
