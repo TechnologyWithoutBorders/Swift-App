@@ -28,6 +28,7 @@ import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -42,6 +43,8 @@ public class ReportInfoActivity extends BaseActivity {
 
     @Inject
     ViewModelFactory viewModelFactory;
+
+    private ReportInfo reportInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +83,9 @@ public class ReportInfoActivity extends BaseActivity {
         viewModel.init(userId, deviceId, reportId);
 
         viewModel.getReportInfo().observe(this, reportInfo -> {
-            if (reportInfo != null) {
+            this.reportInfo = reportInfo;
+
+            if(reportInfo != null) {
                 Report report = reportInfo.getReport();
                 User author = reportInfo.getAuthors().get(0);
 
@@ -115,8 +120,19 @@ public class ReportInfoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.info) {
+        if(item.getItemId() == R.id.share) {
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+
+            intent.putExtra(Intent.EXTRA_TEXT, "I want to show you this report: http://teog.virlep.de/report/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + reportInfo.getHospitals().get(0).getId() + "/" + reportInfo.getReport().getDevice() + "/" + reportInfo.getReport().getId());
+            intent.setType("text/plain");
+            startActivity(Intent.createChooser(intent, "Share report link"));
+
+            return true;
+        } else if (item.getItemId() == R.id.info) {
             tutorialQueue.show();
+
             return true;
         }
 

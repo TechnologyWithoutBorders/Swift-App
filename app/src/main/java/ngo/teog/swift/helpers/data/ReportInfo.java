@@ -43,4 +43,8 @@ public class ReportInfo implements Serializable {
     public void setHospitals(List<Hospital> hospitals) {
         this.hospitals = hospitals;
     }
+
+    public List<Hospital> getHospitals() {
+        return hospitals;
+    }
 }
