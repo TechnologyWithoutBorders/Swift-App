@@ -249,6 +249,7 @@
     <string name="device_number_invalid">invalid device number</string>
     <string name="no_picture_attached">no picture attached</string>
     <string name="device_not_found">device not found</string>
+    <string name="invalid_item_link">invalid item link</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>

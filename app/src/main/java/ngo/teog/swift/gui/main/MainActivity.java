@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
             try {
                 List<String> pathSegments = appLinkData.getPathSegments();
 
-                //Scheme: /<type>/<country>/<hospital>/<device/user>/[<report>]
+                //Scheme: /<type>/<server>/<hospital ID>/<device/user ID>/[<report ID>]
 
                 String type = pathSegments.get(0);
                 int hospital = Integer.parseInt(pathSegments.get(2));
@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity {
                 startActivity(openIntent);
 
             } catch(Exception e) {
-                Toast.makeText(this.getApplicationContext(), "invalid item link", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getApplicationContext(), getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -227,8 +227,12 @@ public class MainActivity extends BaseActivity {
         File imageDir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
 
         if(imageDir.exists()) {
-            for(File file : imageDir.listFiles()) {
-                file.delete();
+            File[] files = imageDir.listFiles();
+
+            if(files != null) {
+                for(File file : files) {
+                    file.delete();
+                }
             }
         }
 
