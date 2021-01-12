@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
     //device and user share same segment
     private static final int APP_LINK_DEVICE_SEGMENT = 3;
     private static final int APP_LINK_USER_SEGMENT = 3;
-    private static final int APP_LINK_REPORT_SEGMENT = 3;
+    private static final int APP_LINK_REPORT_SEGMENT = 4;
 
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
