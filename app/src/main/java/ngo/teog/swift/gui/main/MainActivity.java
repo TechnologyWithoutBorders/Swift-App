@@ -74,6 +74,8 @@ public class MainActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    MainViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,17 +90,45 @@ public class MainActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        MainViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
 
-        Intent intent = this.getIntent();
+        handleIntent(this.getIntent());
 
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+
+        mDemoCollectionPagerAdapter =
+                new DemoCollectionPagerAdapter(
+                        getSupportFragmentManager());
+        mViewPager = findViewById(R.id.pager);
+        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        mViewPager.setCurrentItem(1);
+
+        for(int i = 0; i < 3; i++) {
+            tabLayout.addTab(
+                    tabLayout.newTab()
+                            .setText("Tab " + (i + 1)));
+        }
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
 
         if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
-            //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
-
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             String userCountry = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
 
             viewModel.getUserHospital().observe(this, userHospital -> {
@@ -153,27 +183,6 @@ public class MainActivity extends BaseActivity {
                 }
             });
         }
-
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-
-        mDemoCollectionPagerAdapter =
-                new DemoCollectionPagerAdapter(
-                        getSupportFragmentManager());
-        mViewPager = findViewById(R.id.pager);
-        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
-        mViewPager.setCurrentItem(1);
-
-        for(int i = 0; i < 3; i++) {
-            tabLayout.addTab(
-                    tabLayout.newTab()
-                            .setText("Tab " + (i + 1)));
-        }
-
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
-                .build()
-                .inject(this);
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {
