@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +55,14 @@ public class MainActivity extends BaseActivity {
     private static final int TODO_TAB = 1;
     private static final int CALENDAR_TAB = 2;
 
+    private static final int APP_LINK_TYPE_SEGMENT = 0;
+    private static final int APP_LINK_COUNTRY_SEGMENT = 1;
+    private static final int APP_LINK_HOSPITAL_SEGMENT = 2;
+    //device and user share same segment
+    private static final int APP_LINK_DEVICE_SEGMENT = 3;
+    private static final int APP_LINK_USER_SEGMENT = 3;
+    private static final int APP_LINK_REPORT_SEGMENT = 3;
+
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
@@ -73,38 +82,48 @@ public class MainActivity extends BaseActivity {
         if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
             //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
 
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            String userCountry = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
+
             try {
                 List<String> pathSegments = appLinkData.getPathSegments();
 
-                //Scheme: /<type>/<server>/<hospital ID>/<device/user ID>/[<report ID>]
+                //Scheme: /<type>/<country>/<hospital ID>/<device/user ID>/[<report ID>]
 
-                String type = pathSegments.get(0);
-                int hospital = Integer.parseInt(pathSegments.get(2));
+                String type = pathSegments.get(APP_LINK_TYPE_SEGMENT);
+                String country = pathSegments.get(APP_LINK_COUNTRY_SEGMENT);
+                int hospital = Integer.parseInt(pathSegments.get(APP_LINK_HOSPITAL_SEGMENT));//TODO check hospital
 
-                Intent openIntent = null;
+                if(country.equals(userCountry)) {
+                    Intent openIntent;
 
-                if(ResourceKeys.DEVICE.equals(type)) {
-                    int deviceNumber = Integer.parseInt(pathSegments.get(3));
+                    if (ResourceKeys.DEVICE.equals(type)) {
+                        int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
 
-                    openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
-                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
-                } else if(ResourceKeys.USER.equals(type)) {
-                    int userNumber = Integer.parseInt(pathSegments.get(3));
+                        openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                        openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                    } else if (ResourceKeys.USER.equals(type)) {
+                        int userNumber = Integer.parseInt(pathSegments.get(APP_LINK_USER_SEGMENT));
 
-                    openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
-                    openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
-                } else if(ResourceKeys.REPORT.equals(type)) {
-                    int deviceNumber = Integer.parseInt(pathSegments.get(3));
-                    int reportNumber = Integer.parseInt(pathSegments.get(4));
+                        openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+                        openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
+                    } else if (ResourceKeys.REPORT.equals(type)) {
+                        int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
+                        int reportNumber = Integer.parseInt(pathSegments.get(APP_LINK_REPORT_SEGMENT));
 
-                    openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
-                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
-                    openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
+                        openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
+                        openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                        openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
+                    } else {
+                        throw new Exception("invalid item type");
+                    }
+
+                    startActivity(openIntent);
+                } else {
+                    Toast.makeText(this.getApplicationContext(), "wrong country", Toast.LENGTH_SHORT).show();//TODO extract string
                 }
-
-                startActivity(openIntent);
-
             } catch(Exception e) {
+                Log.e(this.getClass().getName(), e.toString(), e);
                 Toast.makeText(this.getApplicationContext(), getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
             }
         }
