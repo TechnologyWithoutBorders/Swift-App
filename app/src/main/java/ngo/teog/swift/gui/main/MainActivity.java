@@ -214,8 +214,9 @@ public class MainActivity extends BaseActivity {
 
         executor.execute(() -> {
             database.clearAllTables();
-            executor.shutdown();
         });
+
+        executor.shutdown();
 
         //delete shared preferences
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
