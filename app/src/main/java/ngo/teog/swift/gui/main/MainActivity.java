@@ -246,12 +246,8 @@ public class MainActivity extends BaseActivity {
         File imageDir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
 
         if(imageDir.exists()) {
-            File[] files = imageDir.listFiles();
-
-            if(files != null) {
-                for(File file : files) {
-                    file.delete();
-                }
+            for(File file : imageDir.listFiles()) {
+                file.delete();
             }
         }
 
