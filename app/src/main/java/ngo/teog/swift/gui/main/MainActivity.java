@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity {
 
                         String type = pathSegments.get(APP_LINK_TYPE_SEGMENT);
                         String country = pathSegments.get(APP_LINK_COUNTRY_SEGMENT);
-                        int hospital = Integer.parseInt(pathSegments.get(APP_LINK_HOSPITAL_SEGMENT));//TODO check hospital
+                        int hospital = Integer.parseInt(pathSegments.get(APP_LINK_HOSPITAL_SEGMENT));
 
                         if(country.equals(userCountry)) {
                             if (hospital == userHospitalId) {
