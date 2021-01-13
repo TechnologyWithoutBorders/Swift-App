@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -144,7 +145,11 @@ public class DeviceInfoActivity extends BaseActivity {
 
         globalImageView.setOnClickListener(view -> {
             File dir = new File(this.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-            dir.mkdirs();
+            boolean created = dir.mkdirs();
+
+            if(created) {
+                Log.v(this.getClass().getName(), "image directory has been created");
+            }
 
             File image1 = new File(dir, deviceId + ".jpg");
 
@@ -228,7 +233,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 }
 
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                dir.mkdirs();
+                boolean created = dir.mkdirs();
+
+                if(created) {
+                    Log.v(this.getClass().getName(), "image directory has been created");
+                }
 
                 File image = new File(dir, device.getId() + ".jpg");
 
@@ -467,7 +476,7 @@ public class DeviceInfoActivity extends BaseActivity {
      */
     private class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
         private final Context context;
-        private DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN, Locale.getDefault());
+        private final DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN, Locale.getDefault());
 
         private ReportArrayAdapter(Context context, List<ReportInfo> values) {
             super(context, -1, values);
