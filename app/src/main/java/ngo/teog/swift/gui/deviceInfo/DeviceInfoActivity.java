@@ -227,9 +227,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 int interval = device.getMaintenanceInterval();
 
                 if(interval % 4 == 0) {
-                    intervalView.setText((interval/4) + " Months");
+                    intervalView.setText(String.format(getString(R.string.months_count), (interval/4)));
                 } else {
-                    intervalView.setText((interval) + " Weeks");
+                    intervalView.setText(String.format(getString(R.string.weeks_count), interval));
                 }
 
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
@@ -307,23 +307,20 @@ public class DeviceInfoActivity extends BaseActivity {
 
             final View editView;
 
-            switch(parameter) {
-                case MAINTENANCE_INTERVAL:
-                    NumberPicker numberPicker = new NumberPicker(this);
-                    numberPicker.setMinValue(NewDeviceActivity2.MIN_MAINT_INTERVAL);
-                    numberPicker.setMaxValue(NewDeviceActivity2.MAX_MAINT_INTERVAL);
-                    numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
+            if(parameter == MAINTENANCE_INTERVAL) {
+                NumberPicker numberPicker = new NumberPicker(this);
+                numberPicker.setMinValue(NewDeviceActivity2.MIN_MAINT_INTERVAL);
+                numberPicker.setMaxValue(NewDeviceActivity2.MAX_MAINT_INTERVAL);
+                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
 
-                    editView = numberPicker;
+                editView = numberPicker;
+            } else {
+                EditText editText = new EditText(this);
+                editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
+                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                editText.setText(presetText);
 
-                    break;
-                default:
-                    EditText editText = new EditText(this);
-                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
-                    editText.setInputType(InputType.TYPE_CLASS_TEXT);
-                    editText.setText(presetText);
-
-                    editView = editText;
+                editView = editText;
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -388,10 +385,10 @@ public class DeviceInfoActivity extends BaseActivity {
 
                     device.setMaintenanceInterval(interval);
 
-                    if (interval % 4 == 0) {
-                        intervalView.setText(interval / 4 + " Months");
+                    if(interval % 4 == 0) {
+                        intervalView.setText(String.format(getString(R.string.months_count), (interval/4)));
                     } else {
-                        intervalView.setText(interval + " Weeks");
+                        intervalView.setText(String.format(getString(R.string.weeks_count), interval));
                     }
 
                     break;

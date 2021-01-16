@@ -118,6 +118,9 @@
         <item>Months</item>
     </string-array>
 
+    <string name="months_count">%d Months</string>
+    <string name="weeks_count">%d Weeks</string>
+
     <!-- Miscellaneous Actions -->
     <string name="edit">edit</string>
     <string name="refresh">refresh</string>
