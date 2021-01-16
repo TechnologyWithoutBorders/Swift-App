@@ -122,6 +122,7 @@
     <string name="edit">edit</string>
     <string name="refresh">refresh</string>
     <string name="share">share</string>
+    <string name="share_link">share link</string>
     <string name="create">create</string>
     <string name="about">about</string>
     <string name="log_out">log out</string>

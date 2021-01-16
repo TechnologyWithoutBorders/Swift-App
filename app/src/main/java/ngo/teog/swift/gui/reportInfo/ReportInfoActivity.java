@@ -127,7 +127,7 @@ public class ReportInfoActivity extends BaseActivity {
 
             intent.putExtra(Intent.EXTRA_TEXT, "I want to show you this report: https://teog.virlep.de/report/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + reportInfo.getHospitals().get(0).getId() + "/" + reportInfo.getReport().getDevice() + "/" + reportInfo.getReport().getId());
             intent.setType("text/plain");
-            startActivity(Intent.createChooser(intent, "Share report link"));
+            startActivity(Intent.createChooser(intent, getString(R.string.share_link)));
 
             return true;
         } else if (item.getItemId() == R.id.info) {

@@ -438,7 +438,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
             intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: https://teog.virlep.de/device/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + deviceInfo.getHospitals().get(0).getId() + "/" + deviceInfo.getDevice().getId());
             intent.setType("text/plain");
-            startActivity(Intent.createChooser(intent, "Share device link"));
+            startActivity(Intent.createChooser(intent, getString(R.string.share_link)));
 
             return true;
         } else if(item.getItemId() == R.id.info) {
