@@ -227,9 +227,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 int interval = device.getMaintenanceInterval();
 
                 if(interval % 4 == 0) {
-                    intervalView.setText((interval/4) + " Months");
+                    intervalView.setText(String.format(getString(R.string.months_count), (interval/4)));
                 } else {
-                    intervalView.setText((interval) + " Weeks");
+                    intervalView.setText(String.format(getString(R.string.weeks_count), interval));
                 }
 
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
@@ -385,10 +385,10 @@ public class DeviceInfoActivity extends BaseActivity {
 
                     device.setMaintenanceInterval(interval);
 
-                    if (interval % 4 == 0) {
-                        intervalView.setText(interval / 4 + " Months");
+                    if(interval % 4 == 0) {
+                        intervalView.setText(String.format(getString(R.string.months_count), (interval/4)));
                     } else {
-                        intervalView.setText(interval + " Weeks");
+                        intervalView.setText(String.format(getString(R.string.weeks_count), interval));
                     }
 
                     break;
