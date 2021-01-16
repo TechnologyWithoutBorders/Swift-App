@@ -436,7 +436,9 @@ public class DeviceInfoActivity extends BaseActivity {
 
             Intent intent = new Intent(Intent.ACTION_SEND);
 
-            intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: https://teog.virlep.de/device/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + deviceInfo.getHospitals().get(0).getId() + "/" + deviceInfo.getDevice().getId());
+            String assetString = getString(R.string.report).toLowerCase();
+            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), deviceInfo.getHospitals().get(0).getId());
+            intent.putExtra(Intent.EXTRA_TEXT,sharingString + deviceInfo.getDevice().getId());
             intent.setType("text/plain");
             startActivity(Intent.createChooser(intent, getString(R.string.share_link)));
 

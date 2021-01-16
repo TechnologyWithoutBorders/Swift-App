@@ -123,6 +123,7 @@
     <string name="refresh">refresh</string>
     <string name="share">share</string>
     <string name="share_link">share link</string>
+    <string name="want_to_show">I want to show you this %s: %s%s/%s/%d/</string>
     <string name="create">create</string>
     <string name="about">about</string>
     <string name="log_out">log out</string>
