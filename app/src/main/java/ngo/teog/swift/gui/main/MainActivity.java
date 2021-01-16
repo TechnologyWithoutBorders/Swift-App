@@ -264,6 +264,7 @@ public class MainActivity extends BaseActivity {
      * Logs out the user. Wipes the database and shared preferences and deletes all downloaded device images.
      */
     public void logout() {
+        //clear database
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.execute(() -> database.clearAllTables());
         executor.shutdown();
@@ -282,7 +283,11 @@ public class MainActivity extends BaseActivity {
 
             if(files != null) {
                 for (File file : files) {
-                    file.delete();
+                    boolean success = file.delete();
+
+                    if(!success) {
+                        Log.w(this.getClass().getName(), "file " + file.getName() + " could not be deleted.");
+                    }
                 }
             }
         }
