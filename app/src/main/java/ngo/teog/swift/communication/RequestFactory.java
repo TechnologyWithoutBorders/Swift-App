@@ -105,7 +105,11 @@ public class RequestFactory {
 
                 try {
                     File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                    dir.mkdirs();
+                    boolean created = dir.mkdirs();
+
+                    if(created) {
+                        Log.v(this.getClass().getName(), "image directory has been created");
+                    }
 
                     outputStream = new FileOutputStream(new File(dir, id + ".jpg"));
                     outputStream.write(decodedString);
@@ -219,7 +223,11 @@ public class RequestFactory {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                dir.mkdirs();
+                boolean created = dir.mkdirs();
+
+                if(created) {
+                    Log.v(this.getClass().getName(), "image directory has been created");
+                }
 
                 try {
                     FileOutputStream outputStream = new FileOutputStream(new File(dir, device + ".jpg"));

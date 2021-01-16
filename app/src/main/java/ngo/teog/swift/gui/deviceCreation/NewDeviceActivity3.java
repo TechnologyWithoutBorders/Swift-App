@@ -156,7 +156,11 @@ public class NewDeviceActivity3 extends BaseActivity {
                 outputStream.close();
 
                 File tempFile = new File(imagePath);
-                tempFile.delete();
+                boolean deleted = tempFile.delete();
+
+                if(!deleted) {
+                    Log.w(this.getClass().getName(), "temporary file has not been deleted");
+                }
 
                 Constraints constraints = new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -175,7 +179,8 @@ public class NewDeviceActivity3 extends BaseActivity {
 
                 WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
-                Log.e("IMAGE_UPLOAD", "not created", e);
+                Log.e(this.getClass().getName(), "creating image upload worker failed", e);
+                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
 
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -231,7 +236,7 @@ public class NewDeviceActivity3 extends BaseActivity {
             Uri photoURI;
 
             if(Build.VERSION.SDK_INT >= 24) {
-                photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);
+                photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);//TODO constant
             } else {
                 photoURI = Uri.fromFile(imageFile);
             }

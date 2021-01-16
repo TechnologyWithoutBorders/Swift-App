@@ -27,6 +27,7 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -131,7 +132,7 @@ public class BarcodeFragment extends Fragment {
     }
 
     private void invokeFetch(int deviceId) {
-        searchField.setText(Integer.toString(deviceId));
+        searchField.setText(String.format(Locale.ROOT, "%d", deviceId));
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 

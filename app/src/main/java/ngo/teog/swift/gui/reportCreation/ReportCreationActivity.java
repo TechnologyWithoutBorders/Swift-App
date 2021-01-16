@@ -62,9 +62,9 @@ public class ReportCreationActivity extends BaseActivity {
         setContentView(R.layout.activity_report_creation);
 
         Intent intent = getIntent();
-        oldState = intent.getIntExtra(ResourceKeys.REPORT_OLD_STATE, -1);
-        device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
         hospital = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
+        device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        oldState = intent.getIntExtra(ResourceKeys.REPORT_OLD_STATE, -1);
 
         stateSpinner = findViewById(R.id.stateSpinner);
         stateSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));

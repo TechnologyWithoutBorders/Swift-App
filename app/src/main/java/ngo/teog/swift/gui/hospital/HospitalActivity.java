@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -239,14 +240,14 @@ public class HospitalActivity extends BaseActivity {
                     }
                 }
 
-                overdueDevices.setText(overdueDeviceCount + " " + getString(R.string.hospital_info_overdue_devices));
+                overdueDevices.setText(getString(R.string.hospital_info_overdue_devices, overdueDeviceCount));
 
-                workingCounter.setText(Integer.toString(stateCounters[DeviceState.WORKING]));
-                maintenanceCounter.setText(Integer.toString(stateCounters[DeviceState.MAINTENANCE]));
-                repairCounter.setText(Integer.toString(stateCounters[DeviceState.BROKEN]));
-                progressCounter.setText(Integer.toString(stateCounters[DeviceState.IN_PROGRESS]));
-                brokenCounter.setText(Integer.toString(stateCounters[DeviceState.SALVAGE]));
-                limitedCounter.setText(Integer.toString(stateCounters[DeviceState.LIMITATIONS]));
+                workingCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.WORKING]));
+                maintenanceCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.MAINTENANCE]));
+                repairCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.BROKEN]));
+                progressCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.IN_PROGRESS]));
+                brokenCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.SALVAGE]));
+                limitedCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.LIMITATIONS]));
 
                 Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().toLowerCase().compareTo(second.getDevice().getType().toLowerCase()));
                 adapter.setDeviceInfos(deviceInfos);
@@ -414,11 +415,11 @@ public class HospitalActivity extends BaseActivity {
             switch(groupPosition) {
                 case 0:
                     nameView.setText(R.string.hospital_members_heading);
-                    countView.setText(Integer.toString(filteredUsers.size()));
+                    countView.setText(String.format(Locale.ROOT, "%d", filteredUsers.size()));
                     break;
                 case 1:
                     nameView.setText(R.string.hospital_devices_heading);
-                    countView.setText(Integer.toString(filteredDeviceInfos.size()));
+                    countView.setText(String.format(Locale.ROOT, "%d", filteredDeviceInfos.size()));
                     break;
             }
 

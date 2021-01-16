@@ -111,7 +111,11 @@ public class ImageCaptureActivity extends BaseActivity {
                 outputStream.close();
 
                 File tempFile = new File(imagePath);
-                tempFile.delete();
+                boolean deleted = tempFile.delete();
+
+                if(!deleted) {
+                    Log.w(this.getClass().getName(), "temporary file has not been deleted");
+                }
 
                 Constraints constraints = new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)

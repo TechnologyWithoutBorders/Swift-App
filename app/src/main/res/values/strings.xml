@@ -210,7 +210,7 @@
     <string name="hospital_info_tutorial_state_overview">These symbols give you a quick overview over the states of your devices.</string>
     <string name="hospital_info_tutorial_asset_list">You can browse through a list of your colleagues or devices by expanding the respective section.</string>
     <string name="hospital_info_tutorial_filter">Use this field for filtering.</string>
-    <string name="hospital_info_overdue_devices">devices are scheduled for maintenance</string>
+    <string name="hospital_info_overdue_devices">%d devices are scheduled for maintenance</string>
 
     <!-- Main -->
     <string-array name="main_tab_names">

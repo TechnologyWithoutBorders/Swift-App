@@ -8,9 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
-import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
-import ngo.teog.swift.helpers.data.User;
 
 public class NewDeviceViewModel2 extends ViewModel {
     private LiveData<List<DeviceInfo>> deviceInfos;

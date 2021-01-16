@@ -3,6 +3,8 @@ package ngo.teog.swift.helpers;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import ngo.teog.swift.R;
 
 /**
@@ -36,7 +38,7 @@ public class DeviceStateVisuals {
      */
     public DeviceStateVisuals(int state, Context context) {
         this.stateString = context.getResources().getStringArray(R.array.device_states)[state];
-        this.stateIcon = context.getResources().getDrawable(ICONS[state]);
+        this.stateIcon = ResourcesCompat.getDrawable(context.getResources(), ICONS[state], null);
         this.backgroundColor = context.getResources().getColor(COLORS[state]);
     }
 

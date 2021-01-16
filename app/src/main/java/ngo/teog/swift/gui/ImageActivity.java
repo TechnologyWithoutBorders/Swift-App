@@ -89,7 +89,11 @@ public class ImageActivity extends BaseActivity {
                 //in order to minimize traffic, we request an MD5 hash of the image and then decide whether to download the image
 
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                dir.mkdirs();
+                boolean created = dir.mkdirs();
+
+                if(created) {
+                    Log.v(this.getClass().getName(), "image directory has been created");
+                }
 
                 File image = new File(dir, device + ".jpg");
 

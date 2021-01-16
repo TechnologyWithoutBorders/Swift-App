@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -144,7 +145,11 @@ public class DeviceInfoActivity extends BaseActivity {
 
         globalImageView.setOnClickListener(view -> {
             File dir = new File(this.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-            dir.mkdirs();
+            boolean created = dir.mkdirs();
+
+            if(created) {
+                Log.v(this.getClass().getName(), "image directory has been created");
+            }
 
             File image1 = new File(dir, deviceId + ".jpg");
 
@@ -199,6 +204,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
 
                     Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
+                    reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospitals().get(0).getId());
                     reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                     reportIntent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
                     startActivity(reportIntent);
@@ -227,7 +233,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 }
 
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                dir.mkdirs();
+                boolean created = dir.mkdirs();
+
+                if(created) {
+                    Log.v(this.getClass().getName(), "image directory has been created");
+                }
 
                 File image = new File(dir, device.getId() + ".jpg");
 

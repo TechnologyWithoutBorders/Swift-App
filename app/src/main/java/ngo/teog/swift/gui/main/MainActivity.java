@@ -265,11 +265,8 @@ public class MainActivity extends BaseActivity {
      */
     public void logout() {
         ExecutorService executor = Executors.newFixedThreadPool(1);
-
-        executor.execute(() -> {
-            database.clearAllTables();
-            executor.shutdown();
-        });
+        executor.execute(() -> database.clearAllTables());
+        executor.shutdown();
 
         //delete shared preferences
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -281,8 +278,12 @@ public class MainActivity extends BaseActivity {
         File imageDir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
 
         if(imageDir.exists()) {
-            for(File file : imageDir.listFiles()) {
-                file.delete();
+            File[] files = imageDir.listFiles();
+
+            if(files != null) {
+                for (File file : files) {
+                    file.delete();
+                }
             }
         }
 
