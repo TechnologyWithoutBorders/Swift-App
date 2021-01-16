@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -210,6 +211,7 @@ public class MainActivity extends BaseActivity {
      * Logs out the user. Wipes the database and shared preferences and deletes all downloaded device images.
      */
     public void logout() {
+        //clear database
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.execute(() -> database.clearAllTables());
         executor.shutdown();
@@ -228,7 +230,11 @@ public class MainActivity extends BaseActivity {
 
             if(files != null) {
                 for (File file : files) {
-                    file.delete();
+                    boolean success = file.delete();
+
+                    if(!success) {
+                        Log.w(this.getClass().getName(), "file " + file.getName() + " could not be deleted.");
+                    }
                 }
             }
         }
