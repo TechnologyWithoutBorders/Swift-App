@@ -249,6 +249,8 @@
     <string name="no_picture_attached">no picture attached</string>
     <string name="device_not_found">device not found</string>
     <string name="invalid_item_link">invalid item link</string>
+    <string name="asset_wrong_hospital">asset is from a different hospital</string>
+    <string name="asset_wrong_country">asset is from a different country</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>

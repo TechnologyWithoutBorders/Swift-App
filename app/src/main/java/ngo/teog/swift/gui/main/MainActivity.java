@@ -166,15 +166,15 @@ public class MainActivity extends BaseActivity {
                                     openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
                                     openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
                                 } else {
-                                    throw new Exception("invalid item type");
+                                    throw new Exception("invalid asset type");
                                 }
 
                                 startActivity(openIntent);
                             } else {
-                                Toast.makeText(this.getApplicationContext(), "wrong country", Toast.LENGTH_SHORT).show();//TODO extract string
+                                Toast.makeText(this.getApplicationContext(), getString(R.string.asset_wrong_country), Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(this.getApplicationContext(), "wrong hospital", Toast.LENGTH_SHORT).show();//TODO extract string
+                            Toast.makeText(this.getApplicationContext(), getString(R.string.asset_wrong_hospital), Toast.LENGTH_SHORT).show();
                         }
                     } catch(Exception e) {
                         Log.e(this.getClass().getName(), e.toString(), e);
