@@ -29,7 +29,6 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
