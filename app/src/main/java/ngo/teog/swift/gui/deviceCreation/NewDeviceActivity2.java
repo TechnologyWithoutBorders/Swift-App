@@ -70,7 +70,7 @@ public class NewDeviceActivity2 extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_device2);
 
-        assetNumberField = findViewById(R.id.assetNumberText);
+        assetNumberField = findViewById(R.id.assetIdText);
         assetNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
 
         typeField = findViewById(R.id.typeText);
@@ -78,7 +78,7 @@ public class NewDeviceActivity2 extends BaseActivity {
         typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         typeField.setAdapter(typeAdapter);
 
-        serialNumberField = findViewById(R.id.serialNumberText);
+        serialNumberField = findViewById(R.id.serialIdText);
         serialNumberField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
 
         manufacturerField = findViewById(R.id.manufacturerText);

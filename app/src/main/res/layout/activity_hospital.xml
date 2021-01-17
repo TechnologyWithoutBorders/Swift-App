@@ -243,6 +243,7 @@
         android:inputType="textFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:importantForAutofill="no"
         android:hint="@string/filter"/>
 
     <ExpandableListView

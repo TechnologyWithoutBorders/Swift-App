@@ -46,7 +46,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="8dp"
-            android:layout_margin="3dp" />
+            android:layout_margin="3dp"
+            android:contentDescription="@string/device_state_icon"/>
 
         <TextView
             android:id="@+id/stateTextView"

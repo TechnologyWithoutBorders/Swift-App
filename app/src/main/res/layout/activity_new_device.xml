@@ -5,18 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/first"
-        android:orientation="vertical"
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcodeScannerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:zxing_use_texture_view="false"
+        app:zxing_preview_scaling_strategy="centerCrop"/>
 
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
-            android:id="@+id/barcodeScannerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:zxing_use_texture_view="false"
-            app:zxing_preview_scaling_strategy="centerCrop"/>
-
-    </LinearLayout>
 </LinearLayout>

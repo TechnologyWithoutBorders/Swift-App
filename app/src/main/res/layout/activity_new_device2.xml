@@ -19,12 +19,13 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/assetNumberText"
+                android:id="@+id/assetIdText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/device_asset_number"
                 android:inputType="text"
-                android:maxLength="20"/>
+                android:maxLength="20"
+                android:importantForAutofill="no"/>
 
             <AutoCompleteTextView
                 android:id="@+id/typeText"
@@ -36,12 +37,13 @@
                 android:completionThreshold="1"/>
 
             <EditText
-                android:id="@+id/serialNumberText"
+                android:id="@+id/serialIdText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/device_serial_number"
                 android:inputType="text"
-                android:maxLength="20"/>
+                android:maxLength="20"
+                android:importantForAutofill="no"/>
 
             <AutoCompleteTextView
                 android:id="@+id/manufacturerText"
