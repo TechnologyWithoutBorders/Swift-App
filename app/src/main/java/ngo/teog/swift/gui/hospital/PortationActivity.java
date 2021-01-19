@@ -60,7 +60,7 @@ public class PortationActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("application/zip")
-                .putExtra(Intent.EXTRA_TITLE, "swift_export.zip");
+                .putExtra(Intent.EXTRA_TITLE, Defaults.EXPORT_FILE_NAME);
 
         startActivityForResult(intent, 0);
     }

@@ -47,6 +47,9 @@ public final class Defaults {
     /** Folder for device images in local file system */
     public static final String DEVICE_IMAGE_PATH = "device_images";
 
+    /** File name for dump of hospital data */
+    public static final String EXPORT_FILE_NAME = "swift_export.zip";
+
     public static final String DATE_PATTERN = "yyyy-MM-dd";
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final String DATETIME_PRECISE_PATTERN = "yyyy-MM-dd HH:mm:ss";
