@@ -109,7 +109,7 @@ public class PortationActivity extends AppCompatActivity {
                                 ZipEntry deviceEntry = new ZipEntry("devices.csv");
                                 zipOut.putNextEntry(deviceEntry);
 
-                                writer.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Ward", "Type", "Manufacturer", "Model", "Serial Number"});
+                                writer.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Location", "Type", "Manufacturer", "Model", "Serial Number"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     HospitalDevice device = deviceDump.getDevice();
