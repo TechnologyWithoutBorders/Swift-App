@@ -433,7 +433,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
             Intent intent = new Intent(Intent.ACTION_SEND);
 
-            String assetString = getString(R.string.report).toLowerCase();
+            String assetString = getString(R.string.device).toLowerCase();
             String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), deviceInfo.getHospitals().get(0).getId());
             intent.putExtra(Intent.EXTRA_TEXT,sharingString + deviceInfo.getDevice().getId());
             intent.setType("text/plain");
