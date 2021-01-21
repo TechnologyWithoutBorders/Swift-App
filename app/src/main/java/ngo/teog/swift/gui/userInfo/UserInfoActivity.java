@@ -99,9 +99,11 @@ public class UserInfoActivity extends BaseActivity {
 
             Intent intent = new Intent(Intent.ACTION_SEND);
 
-            intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this user: http://teog.virlep.de/user/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + user.getHospital() + "/" + user.getId());
+            String assetString = getString(R.string.user).toLowerCase();
+            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), user.getHospital());
+            intent.putExtra(Intent.EXTRA_TEXT,sharingString + user.getId());
             intent.setType("text/plain");
-            startActivity(Intent.createChooser(intent, "Share user link"));
+            startActivity(Intent.createChooser(intent, getString(R.string.share_link)));
             return true;
         }
 

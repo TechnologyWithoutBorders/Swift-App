@@ -29,7 +29,8 @@ public final class Defaults {
      * Base URL for server communication. The number in the last segment determines
      * the version of the interface.
      */
-    public static final String BASE_URL = "https://teog.virlep.de/interface/3/";
+    public static final String BASE_URL = "https://teog.virlep.de/interface/3/";//TODO arrange hierarchical (host, path, interface version)
+    public static final String HOST = "https://teog.virlep.de/";
 
     /** Additional URL segment for server communication regarding devices (e.g. device image upload) */
     public static final String DEVICES_URL = "devices.php";

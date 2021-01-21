@@ -5,7 +5,6 @@
 
     <!-- Information Texts -->
     <string name="menu_information">information</string>
-    <string name="deviceinfo_activity">This view contains basic information about a device. You can also change the device´s state and append reports.</string>
     <string name="hospital_activity">Use this view to find members of staff or devices associated with your hospital.</string>
     <string name="newdevice_activity_1">Please put a fresh barcode sticker on the device you want to register and scan it with your camera.</string>
     <string name="newdevice_activity_2">Please enter all general data known about the device.</string>
@@ -126,6 +125,8 @@
     <string name="edit">edit</string>
     <string name="refresh">refresh</string>
     <string name="share">share</string>
+    <string name="share_link">share link</string>
+    <string name="want_to_show">I want to show you this %s: %s%s/%s/%d/</string>
     <string name="create">create</string>
     <string name="about">about</string>
     <string name="log_out">log out</string>
@@ -258,6 +259,9 @@
     <string name="device_number_invalid">invalid device number</string>
     <string name="no_picture_attached">no picture attached</string>
     <string name="device_not_found">device not found</string>
+    <string name="invalid_item_link">invalid item link</string>
+    <string name="asset_wrong_hospital">asset is from a different hospital</string>
+    <string name="asset_wrong_country">asset is from a different country</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>

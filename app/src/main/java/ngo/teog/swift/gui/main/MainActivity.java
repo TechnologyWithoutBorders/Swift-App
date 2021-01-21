@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -44,6 +45,7 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDatabase;
 import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 /**
  * Creates a tab layout holding the three main tabs. Provides some general functionality and implements the main menu.
@@ -55,60 +57,43 @@ public class MainActivity extends BaseActivity {
     private static final int TODO_TAB = 1;
     private static final int CALENDAR_TAB = 2;
 
+    private static final int APP_LINK_TYPE_SEGMENT = 0;
+    private static final int APP_LINK_COUNTRY_SEGMENT = 1;
+    private static final int APP_LINK_HOSPITAL_SEGMENT = 2;
+    //device and user share same segment
+    private static final int APP_LINK_DEVICE_SEGMENT = 3;
+    private static final int APP_LINK_USER_SEGMENT = 3;
+    private static final int APP_LINK_REPORT_SEGMENT = 4;
+
     private ViewPager mViewPager;
     private DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
 
     @Inject
     HospitalDatabase database;
 
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    MainViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = this.getIntent();
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(this.getApplication()))
+                .roomModule(new RoomModule(this.getApplication()))
+                .build()
+                .inject(this);
 
-        String appLinkAction = intent.getAction();
-        Uri appLinkData = intent.getData();
+        SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
-            //TODO im Beispiel wird protected void onNewIntent(Intent intent) überschrieben
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
+        viewModel.init(id);
 
-            try {
-                List<String> pathSegments = appLinkData.getPathSegments();
-
-                //Scheme: /<type>/<country>/<hospital>/<device/user>/[<report>]
-
-                String type = pathSegments.get(0);
-                int hospital = Integer.parseInt(pathSegments.get(2));
-
-                Intent openIntent = null;
-
-                if(ResourceKeys.DEVICE.equals(type)) {
-                    int deviceNumber = Integer.parseInt(pathSegments.get(3));
-
-                    openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
-                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
-                } else if(ResourceKeys.USER.equals(type)) {
-                    int userNumber = Integer.parseInt(pathSegments.get(3));
-
-                    openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
-                    openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
-                } else if(ResourceKeys.REPORT.equals(type)) {
-                    int deviceNumber = Integer.parseInt(pathSegments.get(3));
-                    int reportNumber = Integer.parseInt(pathSegments.get(4));
-
-                    openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
-                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
-                    openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
-                }
-
-                startActivity(openIntent);
-
-            } catch(Exception e) {
-                Toast.makeText(this.getApplicationContext(), "invalid item link", Toast.LENGTH_SHORT).show();
-            }
-        }
+        handleIntent(this.getIntent());
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
 
@@ -130,6 +115,74 @@ public class MainActivity extends BaseActivity {
                 .roomModule(new RoomModule(getApplication()))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        String appLinkAction = intent.getAction();
+        Uri appLinkData = intent.getData();
+
+        if(Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null) {
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            String userCountry = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
+
+            viewModel.getUserHospital().observe(this, userHospital -> {
+                if(userHospital != null) {
+                    try {
+                        int userHospitalId = userHospital.getId();
+
+                        List<String> pathSegments = appLinkData.getPathSegments();
+
+                        //Scheme: /<type>/<country>/<hospital ID>/<device/user ID>/[<report ID>]
+
+                        String type = pathSegments.get(APP_LINK_TYPE_SEGMENT);
+                        String country = pathSegments.get(APP_LINK_COUNTRY_SEGMENT);
+                        int hospital = Integer.parseInt(pathSegments.get(APP_LINK_HOSPITAL_SEGMENT));
+
+                        if(country.equals(userCountry)) {
+                            if (hospital == userHospitalId) {
+                                Intent openIntent;
+
+                                if (ResourceKeys.DEVICE.equals(type)) {
+                                    int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
+
+                                    openIntent = new Intent(MainActivity.this, DeviceInfoActivity.class);
+                                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                                } else if (ResourceKeys.USER.equals(type)) {
+                                    int userNumber = Integer.parseInt(pathSegments.get(APP_LINK_USER_SEGMENT));
+
+                                    openIntent = new Intent(MainActivity.this, UserInfoActivity.class);
+                                    openIntent.putExtra(ResourceKeys.USER_ID, userNumber);
+                                } else if (ResourceKeys.REPORT.equals(type)) {
+                                    int deviceNumber = Integer.parseInt(pathSegments.get(APP_LINK_DEVICE_SEGMENT));
+                                    int reportNumber = Integer.parseInt(pathSegments.get(APP_LINK_REPORT_SEGMENT));
+
+                                    openIntent = new Intent(MainActivity.this, ReportInfoActivity.class);
+                                    openIntent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
+                                    openIntent.putExtra(ResourceKeys.REPORT_ID, reportNumber);
+                                } else {
+                                    throw new Exception("invalid asset type");
+                                }
+
+                                startActivity(openIntent);
+                            } else {
+                                Toast.makeText(this.getApplicationContext(), getString(R.string.asset_wrong_country), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(this.getApplicationContext(), getString(R.string.asset_wrong_hospital), Toast.LENGTH_SHORT).show();
+                        }
+                    } catch(Exception e) {
+                        Log.e(this.getClass().getName(), e.toString(), e);
+                        Toast.makeText(this.getApplicationContext(), getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     public class DemoCollectionPagerAdapter extends FragmentPagerAdapter {

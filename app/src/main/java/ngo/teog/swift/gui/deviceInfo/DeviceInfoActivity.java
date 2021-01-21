@@ -428,31 +428,33 @@ public class DeviceInfoActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.share:
-                SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        if(item.getItemId() == R.id.share) {
+            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-                Intent intent = new Intent(Intent.ACTION_SEND);
+            Intent intent = new Intent(Intent.ACTION_SEND);
 
-                intent.putExtra(Intent.EXTRA_TEXT,"I want to show you this device: http://teog.virlep.de/device/" + preferences.getString(Defaults.COUNTRY_PREFERENCE, null) + "/" + deviceInfo.getHospitals().get(0).getId() + "/" + deviceInfo.getDevice().getId());
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "Share device link"));
-                return true;
-            case R.id.info:
-                //Show tutorial
-                FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                        .add(buildTutorialStep(attributeTable, getString(R.string.device_info_tutorial_attribute_table)))
-                        .add(buildTutorialStep(stateSection, getString(R.string.device_info_tutorial_state_section)))
-                        .add(buildTutorialStep(reportListView, getString(R.string.device_info_tutorial_report_list)))
-                        .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation)))
-                        .add(buildTutorialStep(documentButton, getString(R.string.device_info_tutorial_documents)));
+            String assetString = getString(R.string.device).toLowerCase();
+            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), deviceInfo.getHospitals().get(0).getId());
+            intent.putExtra(Intent.EXTRA_TEXT,sharingString + deviceInfo.getDevice().getId());
+            intent.setType("text/plain");
+            startActivity(Intent.createChooser(intent, getString(R.string.share_link)));
 
-                tutorialQueue.show();
+            return true;
+        } else if(item.getItemId() == R.id.info) {
+            //Show tutorial
+            FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                    .add(buildTutorialStep(attributeTable, getString(R.string.device_info_tutorial_attribute_table)))
+                    .add(buildTutorialStep(stateSection, getString(R.string.device_info_tutorial_state_section)))
+                    .add(buildTutorialStep(reportListView, getString(R.string.device_info_tutorial_report_list)))
+                    .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation)))
+                    .add(buildTutorialStep(documentButton, getString(R.string.device_info_tutorial_documents)));
 
-                return true;
-            default:
-                return super.onOptionsItemSelected(item, R.string.deviceinfo_activity);
+            tutorialQueue.show();
+
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void searchDocuments(View view) {
