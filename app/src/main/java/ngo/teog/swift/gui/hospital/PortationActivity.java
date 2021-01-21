@@ -17,6 +17,11 @@ import com.opencsv.CSVWriter;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -41,6 +46,8 @@ import ngo.teog.swift.helpers.export.DeviceDump;
  */
 public class PortationActivity extends AppCompatActivity {
 
+    private final String SYNC_DATA_FILE_NAME = "synchronisation.txt";
+
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -60,7 +67,7 @@ public class PortationActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("application/zip")
-                .putExtra(Intent.EXTRA_TITLE, "swift_export.zip");
+                .putExtra(Intent.EXTRA_TITLE, Defaults.EXPORT_FILE_NAME);
 
         startActivityForResult(intent, 0);
     }
@@ -82,58 +89,79 @@ public class PortationActivity extends AppCompatActivity {
                     viewModel.getHospitalDump().observe(this, hospitalDump -> {
                         if(hospitalDump != null) {
                             try {
+                                //TODO streams/writers should be closed in "finally"-block
                                 ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(getContentResolver().openOutputStream(fileUri)));
-                                CSVWriter writer = new CSVWriter(new OutputStreamWriter(zipOut));
+                                CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(zipOut));
+                                PrintWriter printWriter = new PrintWriter(zipOut);
 
                                 Hospital hospital = hospitalDump.getHospital();
 
                                 ZipEntry hospitalEntry = new ZipEntry("hospitals.csv");
                                 zipOut.putNextEntry(hospitalEntry);
 
-                                writer.writeNext(new String[] {"ID", "Name", "Location", "Longitude", "Latitude"});
-                                writer.writeNext(new String[] {Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
+                                csvWriter.writeNext(new String[] {"ID", "Name", "Location", "Longitude", "Latitude"});
+                                csvWriter.writeNext(new String[] {Integer.toString(hospital.getId()), hospital.getName(), hospital.getLocation(), Float.toString(hospital.getLongitude()), Float.toString(hospital.getLatitude())});
 
-                                writer.flush();
+                                csvWriter.flush();
                                 zipOut.closeEntry();
                                 ZipEntry userEntry = new ZipEntry("users.csv");
                                 zipOut.putNextEntry(userEntry);
 
-                                writer.writeNext(new String[] {"Hospital", "ID", "Name", "Position", "Mail", "Phone"});
+                                csvWriter.writeNext(new String[] {"Hospital", "ID", "Name", "Position", "Mail", "Phone"});
 
                                 for(User user : hospitalDump.getUsers()) {
-                                    writer.writeNext(new String[] {Integer.toString(user.getHospital()), Integer.toString(user.getId()), user.getName(), user.getPosition(), user.getMail(), user.getPhone()});
+                                    csvWriter.writeNext(new String[] {Integer.toString(user.getHospital()), Integer.toString(user.getId()), user.getName(), user.getPosition(), user.getMail(), user.getPhone()});
                                 }
 
-                                writer.flush();
+                                csvWriter.flush();
                                 zipOut.closeEntry();
                                 ZipEntry deviceEntry = new ZipEntry("devices.csv");
                                 zipOut.putNextEntry(deviceEntry);
 
-                                writer.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Ward", "Type", "Manufacturer", "Model", "Serial Number"});
+                                csvWriter.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Location", "Type", "Manufacturer", "Model", "Serial Number"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     HospitalDevice device = deviceDump.getDevice();
 
-                                    writer.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getLocation(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
+                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getLocation(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
                                 }
 
-                                writer.flush();
+                                csvWriter.flush();
                                 zipOut.closeEntry();
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
-                                writer.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Title", "Previous State", "Current State", "Description"});
+                                csvWriter.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Title", "Previous State", "Current State", "Description"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     for(Report report : deviceDump.getReports()) {
                                         DeviceStateVisuals oldVisuals = new DeviceStateVisuals(report.getPreviousState(), this);
                                         DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
-                                        writer.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), report.getTitle(), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
+                                        csvWriter.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), report.getTitle(), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
                                     }
                                 }
 
-                                writer.close();
+                                //Add file with infos about last synchronisation
+                                csvWriter.flush();
+                                zipOut.closeEntry();
+                                ZipEntry synchroDataEntry = new ZipEntry(SYNC_DATA_FILE_NAME);
+                                zipOut.putNextEntry(synchroDataEntry);
+
+                                long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
+
+                                if(lastUpdate > 0) {
+                                    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
+                                    dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+
+                                    printWriter.write("last successful synchronisation (UTC): " + dateFormat.format(lastUpdate));
+                                } else {
+                                    printWriter.write("last successful synchronisation (UTC): never");
+                                }
+
+                                printWriter.close();
+                                csvWriter.close();
+                                //zipOut is actually closed automatically, but stated here explicitly for convenience
                                 zipOut.close();
                             } catch (IOException e) {
                                 Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
