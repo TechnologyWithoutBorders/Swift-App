@@ -8,28 +8,19 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
-    <LinearLayout
-        android:id="@+id/third"
-        android:orientation="vertical"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_height="0dp">
+        android:contentDescription="@string/captured_image"/>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/captured_image"/>
-
-        <Button style="@style/AppTheme.Button"
-            android:id="@+id/pictureButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/take_picture_button"
-            android:onClick="dispatchTakePictureIntent"/>
-
-    </LinearLayout>
+    <Button style="@style/AppTheme.Button"
+        android:id="@+id/pictureButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/take_picture_button"
+        android:onClick="dispatchTakePictureIntent"/>
 
     <RelativeLayout
         android:id="@+id/buttonArea"
