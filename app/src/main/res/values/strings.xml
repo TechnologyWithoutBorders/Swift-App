@@ -160,6 +160,7 @@
     <string name="device_state_icon">device state</string>
     <string name="previous_state">previous state</string>
     <string name="current_state">current state</string>
+    <string name="toggle_light">toggle camera light</string>
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>
@@ -172,6 +173,7 @@
 
     <!-- Device Information -->
     <string name="device">Device</string>
+    <string name="device_id">Device ID</string>
     <string name="device_image_placeholder">device image</string>
     <string name="device_asset_number">Asset Number</string>
     <string name="device_type">Type</string>

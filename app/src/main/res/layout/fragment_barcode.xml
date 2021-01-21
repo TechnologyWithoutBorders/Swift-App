@@ -13,7 +13,8 @@
         android:id="@+id/torch_button"
         android:layout_gravity="end"
         app:tint="@color/grey_table_bar"
-        app:srcCompat="@drawable/ic_baseline_highlight_24_white" />
+        app:srcCompat="@drawable/ic_baseline_highlight_24_white"
+        android:contentDescription="@string/toggle_light" />
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeScannerView"
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:inputType="number"
-            android:importantForAutofill="no"/>
+            android:importantForAutofill="no"
+            android:hint="@string/device_id" />
 
         <RelativeLayout
             android:layout_width="wrap_content"

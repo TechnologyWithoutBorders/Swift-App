@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,7 +16,8 @@
             android:id="@+id/imageView"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:contentDescription="@string/device_state_icon" />
 
         <TextView
             android:id="@+id/dateView"

@@ -10,7 +10,8 @@
         android:id="@+id/statusImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:contentDescription="@string/device_state_icon" />
 
     <TextView
         android:id="@+id/statusTextView"
