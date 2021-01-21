@@ -3,6 +3,9 @@ package ngo.teog.swift.gui.hospital;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -128,41 +131,29 @@ public class HospitalActivity extends BaseActivity {
 
         //TODO in Methode ausgliedern
 
-        ImageView workingView = findViewById(R.id.working_image);
         DeviceStateVisuals workingParams = new DeviceStateVisuals(DeviceState.WORKING, this);
-        workingView.setImageDrawable(workingParams.getStateIcon());
-        workingView.setColorFilter(workingParams.getBackgroundColor());
         TextView workingCounter = findViewById(R.id.working_count);
+        this.setStateImage(workingCounter, workingParams);
 
-        ImageView maintenanceView = findViewById(R.id.maintenance_image);
         DeviceStateVisuals maintenanceParams = new DeviceStateVisuals(DeviceState.MAINTENANCE, this);
-        maintenanceView.setImageDrawable(maintenanceParams.getStateIcon());
-        maintenanceView.setColorFilter(maintenanceParams.getBackgroundColor());
         TextView maintenanceCounter = findViewById(R.id.maintenance_count);
+        this.setStateImage(maintenanceCounter, maintenanceParams);
 
-        ImageView repairView = findViewById(R.id.repair_image);
         DeviceStateVisuals repairParams = new DeviceStateVisuals(DeviceState.BROKEN, this);
-        repairView.setImageDrawable(repairParams.getStateIcon());
-        repairView.setColorFilter(repairParams.getBackgroundColor());
         TextView repairCounter = findViewById(R.id.repair_count);
+        this.setStateImage(repairCounter, repairParams);
 
-        ImageView progressView = findViewById(R.id.in_progress_image);
         DeviceStateVisuals progressParams = new DeviceStateVisuals(DeviceState.IN_PROGRESS, this);
-        progressView.setImageDrawable(progressParams.getStateIcon());
-        progressView.setColorFilter(progressParams.getBackgroundColor());
         TextView progressCounter = findViewById(R.id.in_progress_count);
+        this.setStateImage(progressCounter, progressParams);
 
-        ImageView brokenView = findViewById(R.id.broken_image);
         DeviceStateVisuals brokenParams = new DeviceStateVisuals(DeviceState.SALVAGE, this);
-        brokenView.setImageDrawable(brokenParams.getStateIcon());
-        brokenView.setColorFilter(brokenParams.getBackgroundColor());
         TextView brokenCounter = findViewById(R.id.broken_count);
+        this.setStateImage(brokenCounter, brokenParams);
 
-        ImageView limitedView = findViewById(R.id.limited_image);
         DeviceStateVisuals limitedParams = new DeviceStateVisuals(DeviceState.LIMITATIONS, this);
-        limitedView.setImageDrawable(limitedParams.getStateIcon());
-        limitedView.setColorFilter(limitedParams.getBackgroundColor());
         TextView limitedCounter = findViewById(R.id.limited_count);
+        this.setStateImage(limitedCounter, limitedParams);
 
         TextView overdueDevices = findViewById(R.id.amountOfOverdueDevices);
 
@@ -289,6 +280,13 @@ public class HospitalActivity extends BaseActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setStateImage(TextView stateView, DeviceStateVisuals visuals) {
+        Drawable stateIcon = visuals.getStateIcon();
+        stateIcon.setColorFilter(new PorterDuffColorFilter(visuals.getBackgroundColor(), PorterDuff.Mode.SRC_ATOP));
+        stateIcon.setBounds(0, 0, 40, 40);
+        stateView.setCompoundDrawables(null, stateIcon, null, null);
     }
 
     /**
