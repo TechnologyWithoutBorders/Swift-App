@@ -61,6 +61,9 @@ public class NewDeviceActivity2 extends BaseActivity {
     public static final int DEF_MAINT_INTERVAL = 3;
     public static final int MAX_MAINT_INTERVAL = 24;
 
+    private static final int WEEKS = 0;
+    private static final int MONTHS = 1;
+
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -97,7 +100,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         intervalPicker = findViewById(R.id.intervalPicker);
         weekMonthSpinner = findViewById(R.id.spinner2);
-        weekMonthSpinner.setSelection(1);
+        weekMonthSpinner.setSelection(MONTHS);
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
@@ -212,7 +215,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
                     int interval;
 
-                    if((weekMonthSpinner.getSelectedItem()).equals("Week")) {//TODO does not work for other languages
+                    if(weekMonthSpinner.getSelectedItemPosition() == WEEKS) {
                         interval = intervalPicker.getValue();
                     } else {
                         interval = intervalPicker.getValue()*4;
