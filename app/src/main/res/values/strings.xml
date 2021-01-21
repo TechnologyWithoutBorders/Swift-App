@@ -155,8 +155,11 @@
     <string name="new_device_button">new device</string>
     <string name="create_report_button">create report</string>
     <string name="phone_symbol">call</string>
+    <string name="mail_symbol">write mail</string>
     <string name="captured_image">captured image</string>
-    <string name="device_state_icon">device state icon</string>
+    <string name="device_state_icon">device state</string>
+    <string name="previous_state">previous state</string>
+    <string name="current_state">current state</string>
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>

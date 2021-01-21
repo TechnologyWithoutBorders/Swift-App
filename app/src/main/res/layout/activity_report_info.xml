@@ -32,7 +32,8 @@
             android:id="@+id/fromState"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:contentDescription="@string/previous_state" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +47,8 @@
             android:id="@+id/toState"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:contentDescription="@string/current_state" />
 
         <Space
             android:layout_width="0dp"
