@@ -13,7 +13,8 @@
         <ImageView
             android:id="@+id/fromState"
             android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:contentDescription="@string/previous_state" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,7 +26,8 @@
         <ImageView
             android:id="@+id/toState"
             android:layout_width="20dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:contentDescription="@string/current_state" />
     </LinearLayout>
 
     <TextView

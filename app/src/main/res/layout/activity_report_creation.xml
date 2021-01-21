@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="@string/report_title"
-        android:maxLength="25"/>
+        android:maxLength="25"
+        android:importantForAutofill="no"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -45,7 +46,8 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:hint="@string/report_description_description"
-        android:maxLength="600"/>
+        android:maxLength="600"
+        android:importantForAutofill="no"/>
 
     <Space
         android:layout_width="match_parent"

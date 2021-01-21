@@ -72,144 +72,66 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/working_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/working_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/working_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/maintenance_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/maintenance_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/maintenance_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/repair_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/repair_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/repair_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/in_progress_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/in_progress_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/in_progress_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/broken_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/broken_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/broken_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
+            android:id="@+id/limited_count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/limited_image"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="3dp" />
-
-            <TextView
-                android:id="@+id/limited_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center" />
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
 
         <Space
             android:layout_width="0dp"
@@ -217,7 +139,6 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/amountOfOverdueDevices"
@@ -243,6 +164,7 @@
         android:inputType="textFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:importantForAutofill="no"
         android:hint="@string/filter"/>
 
     <ExpandableListView
