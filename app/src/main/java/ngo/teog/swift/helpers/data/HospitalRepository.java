@@ -86,6 +86,14 @@ public class HospitalRepository {
         return hospitalDao.loadUserColleagues(userId);
     }
 
+    public List<User> getUserColleaguesSync(int userId) {
+        return hospitalDao.getUserColleagues(userId);
+    }
+
+    public List<DeviceInfo> getHospitalDevicesSync(int userId) {
+        return hospitalDao.getHospitalDevices(userId);
+    }
+
     public LiveData<DeviceInfo> getDevice(int userId, int deviceId) {
         refreshUserHospital(userId);
 
@@ -124,6 +132,22 @@ public class HospitalRepository {
 
             refreshUserHospitalSync(userId);
         });
+    }
+
+    public void updateHospitalSync(Hospital hospital) {
+        hospitalDao.save(hospital);
+    }
+
+    public void updateUserSync(User user) {
+        hospitalDao.save(user);
+    }
+
+    public void updateDeviceSync(HospitalDevice device) {
+        hospitalDao.save(device);
+    }
+
+    public void updateReportSync(Report report) {
+        hospitalDao.save(report);
     }
 
     private void refreshUserHospitalSync(int userId) {
