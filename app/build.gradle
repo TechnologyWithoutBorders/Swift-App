@@ -53,7 +53,7 @@ dependencies {
     //Dagger 2 for dependency injection
     def dagger_version = "2.30.1"
     implementation "com.google.dagger:dagger-android:$dagger_version"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version" //TODO do we need this?
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
 
     //Zebra Crossing (ZXing) barcode scanner library

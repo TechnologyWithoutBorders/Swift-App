@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
+import ngo.teog.swift.SwiftApplication;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -40,9 +41,5 @@ public interface AppComponent {
     void inject(CalendarFragment target);
     void inject(PortationActivity target);
 
-    HospitalDatabase hospitalDatabase();
-
-    HospitalRepository hospitalRepository();
-
-    Application application();
+    void inject(SwiftApplication application);
 }
