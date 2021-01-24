@@ -5,6 +5,7 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import dagger.android.AndroidInjectionModule;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity3;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -21,7 +22,7 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 
 @Singleton
-@Component(modules = {AppModule.class, RoomModule.class, ViewModelModule.class})
+@Component(modules = {AppModule.class, RoomModule.class, ViewModelModule.class, AndroidInjectionModule.class, WorkerModule.class})
 public interface AppComponent {
 
     void inject(UserProfileActivity target);
