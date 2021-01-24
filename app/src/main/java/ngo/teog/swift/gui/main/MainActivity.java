@@ -124,6 +124,7 @@ public class MainActivity extends BaseActivity {
         PeriodicWorkRequest syncWork =
                 new PeriodicWorkRequest.Builder(SynchronizeWorker.class, Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
                         //.setInitialDelay(Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
+                        .addTag(SynchronizeWorker.TAG)
                         .setConstraints(constraints)
                         .build();
 
@@ -277,6 +278,9 @@ public class MainActivity extends BaseActivity {
      * Logs out the user. Wipes the database and shared preferences and deletes all downloaded device images.
      */
     public void logout() {
+        //cancel background synchronization
+        WorkManager.getInstance(this.getApplicationContext()).cancelAllWorkByTag(SynchronizeWorker.TAG);
+
         //clear database
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.execute(() -> database.clearAllTables());
