@@ -19,6 +19,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -26,6 +31,7 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -110,6 +116,18 @@ public class MainActivity extends BaseActivity {
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
         }
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+
+        PeriodicWorkRequest syncWork =
+                new PeriodicWorkRequest.Builder(SynchronizeWorker.class, Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
+                        //.setInitialDelay(Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
+                        .setConstraints(constraints)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueueUniquePeriodicWork(SynchronizeWorker.TAG, ExistingPeriodicWorkPolicy.KEEP, syncWork);
     }
 
     @Override
