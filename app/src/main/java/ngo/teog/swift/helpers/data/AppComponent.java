@@ -1,7 +1,5 @@
 package ngo.teog.swift.helpers.data;
 
-import android.app.Application;
-
 import javax.inject.Singleton;
 
 import dagger.Component;
