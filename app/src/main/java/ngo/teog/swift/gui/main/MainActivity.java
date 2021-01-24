@@ -41,6 +41,7 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.SynchronizeWorker;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDatabase;
@@ -109,12 +110,6 @@ public class MainActivity extends BaseActivity {
                     tabLayout.newTab()
                             .setText("Tab " + (i + 1)));
         }
-
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplication()))
-                .roomModule(new RoomModule(getApplication()))
-                .build()
-                .inject(this);
     }
 
     @Override
