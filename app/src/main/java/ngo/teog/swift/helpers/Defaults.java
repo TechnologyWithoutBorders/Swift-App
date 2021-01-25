@@ -75,5 +75,6 @@ public final class Defaults {
     //Synchronization framework
 
     /** Background synchronization interval in hours */
-    public static final int SYNC_INTERVAL = 3;
+    public static final int SYNC_INTERVAL = 2;
+    public static final int SYNC_FLEX_INTERVAL = 30;
 }

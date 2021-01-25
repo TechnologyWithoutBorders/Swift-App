@@ -122,8 +122,8 @@ public class MainActivity extends BaseActivity {
                 .build();
 
         PeriodicWorkRequest syncWork =
-                new PeriodicWorkRequest.Builder(SynchronizeWorker.class, Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
-                        //.setInitialDelay(Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(SynchronizeWorker.class, Defaults.SYNC_INTERVAL, TimeUnit.HOURS, Defaults.SYNC_FLEX_INTERVAL, TimeUnit.MINUTES)
+                        .setInitialDelay(Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
                         .addTag(SynchronizeWorker.TAG)
                         .setConstraints(constraints)
                         .build();
