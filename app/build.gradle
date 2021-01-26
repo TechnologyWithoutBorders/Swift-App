@@ -51,7 +51,7 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
     //Dagger 2 for dependency injection
-    def dagger_version = "2.30.1"
+    def dagger_version = "2.31.2"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
