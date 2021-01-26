@@ -63,15 +63,22 @@ public class SynchronizeWorker extends Worker {
         Log.i(this.getClass().getName(), "synchronize worker running");
 
         SharedPreferences preferences = getApplicationContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int userId = preferences.getInt(Defaults.ID_PREFERENCE, 0);
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        RequestQueue queue = VolleyManager.getInstance(getApplicationContext()).getRequestQueue();
+        long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
+        long now = new Date().getTime();
 
-        HospitalRequest hospitalRequest = createHospitalRequest(getApplicationContext(), userId, executorService);
+        //check whether last sync was at least 15 mins ago
+        if(now >= (lastSync + 15*60*1000)) {
+            int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        if(hospitalRequest != null) {
-            queue.add(hospitalRequest);
+            ExecutorService executorService = Executors.newSingleThreadExecutor();//TODO maybe use future instead of spawning another thread? -> would make errors more transparent
+            RequestQueue queue = VolleyManager.getInstance(getApplicationContext()).getRequestQueue();
+
+            HospitalRequest hospitalRequest = createHospitalRequest(getApplicationContext(), userId, executorService);
+
+            if(hospitalRequest != null) {
+                queue.add(hospitalRequest);
+            }
         }
 
         return Result.success();
@@ -98,7 +105,7 @@ public class SynchronizeWorker extends Worker {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
 
-            //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
+            //the server then must resolve possible collisions (e.g. when multiple users have created a report with the same ID)
             Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
             params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(lastUpdate)));
 
