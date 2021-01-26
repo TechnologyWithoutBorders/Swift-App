@@ -67,8 +67,8 @@ public class SynchronizeWorker extends Worker {
         long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
         long now = new Date().getTime();
 
-        //check whether last sync was at least 15 mins ago
-        if(now >= (lastSync + 15*60*1000)) {
+        //check whether last sync was at least 30 mins ago
+        if(now >= (lastSync + 30*60*1000)) {
             int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
             ExecutorService executorService = Executors.newSingleThreadExecutor();//TODO maybe use future instead of spawning another thread? -> would make errors more transparent
