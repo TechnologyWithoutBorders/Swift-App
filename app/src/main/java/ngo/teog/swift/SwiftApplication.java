@@ -11,6 +11,10 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.RoomModule;
 
+/**
+ * Custom application implementation.
+ * @author nitelow
+ */
 public class SwiftApplication extends Application implements HasAndroidInjector {
 
     @Inject

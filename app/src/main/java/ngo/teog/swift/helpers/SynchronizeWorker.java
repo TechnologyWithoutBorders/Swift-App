@@ -44,6 +44,10 @@ import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.UtcDateTypeAdapter;
 
+/**
+ * This worker performs a synchronization with the server in the background.
+ * @author nitelow
+ */
 public class SynchronizeWorker extends Worker {
 
     public static final String TAG = "periodic_background_synchronization";
