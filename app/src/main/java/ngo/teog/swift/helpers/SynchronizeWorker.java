@@ -111,7 +111,7 @@ public class SynchronizeWorker extends Worker {
             long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
 
             //the server then must resolve possible collisions (e.g. when multiple users have created a report with the same ID)
-            Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
+            Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.PERIODIC_SYNC_HOSPITAL_INFO, true);
             params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(lastUpdate)));
 
             JSONArray jsonDevices = new JSONArray();

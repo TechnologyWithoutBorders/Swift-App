@@ -10,6 +10,9 @@ public final class DataAction {
     /** Client wants to synchronize changes in hospital data with the server (bidirectinally). */
     public static final String SYNC_HOSPITAL_INFO = "sync_hospital_info";
 
+    /** Does the same as SYNC_HOSPITAL_INFO but makes it possible for the server to distinguish. */
+    public static final String PERIODIC_SYNC_HOSPITAL_INFO = "periodic_sync_hospital_info";
+
     //Device actions
 
     /** Client wants to download a device image from the server */
