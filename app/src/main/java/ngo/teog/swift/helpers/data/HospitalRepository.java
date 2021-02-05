@@ -237,7 +237,7 @@ public class HospitalRepository {
             //assure that no dataset with invalid timestamp is synchronized to server
             long now = new Date().getTime();
 
-            List<User> users = hospitalDao.getUserColleagues(userID);
+            List<User> users = HospitalRepository.this.getUserColleaguesSync(userID);
 
             if(users != null) {
                 for (User user : users) {
@@ -247,7 +247,7 @@ public class HospitalRepository {
                 }
             }
 
-            List<DeviceInfo> deviceInfos = hospitalDao.getHospitalDevices(userID);
+            List<DeviceInfo> deviceInfos = HospitalRepository.this.getHospitalDevicesSync(userID);
 
             if(deviceInfos != null) {
                 for (DeviceInfo deviceInfo : deviceInfos) {
@@ -302,14 +302,14 @@ public class HospitalRepository {
 
                     Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLongitude(), hospitalInfo.getLatitude(), hospitalInfo.getLastUpdate());
 
-                    hospitalDao.save(hospital);
+                    HospitalRepository.this.updateHospitalSync(hospital);
 
                     for (User user : hospitalInfo.getUsers()) {
                         if (user.getLastUpdate().getTime() > now) {
                             user.setLastUpdate(new Date(now));
                         }
 
-                        hospitalDao.save(user);
+                        HospitalRepository.this.updateUserSync(user);
                     }
 
                     for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
@@ -317,14 +317,14 @@ public class HospitalRepository {
                             deviceInfo.getDevice().setLastUpdate(new Date(now));
                         }
 
-                        hospitalDao.save(deviceInfo.getDevice());
+                        HospitalRepository.this.updateDeviceSync(deviceInfo.getDevice());
 
                         List<ReportInfo> reportInfos = deviceInfo.getReports();
 
                         for (ReportInfo reportInfo : reportInfos) {
                             Report report = reportInfo.getReport();
 
-                            hospitalDao.save(report);
+                            HospitalRepository.this.updateReportSync(report);
                         }
                     }
 
