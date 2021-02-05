@@ -141,9 +141,9 @@ public class TodoFragment extends Fragment {
         if(resumed) {
             Log.i(this.getClass().getName(), "activity has resumed, refreshing...");
             refresh();
+        } else {
+            resumed = true;
         }
-
-        resumed = true;
     }
 
     private void refresh() {
