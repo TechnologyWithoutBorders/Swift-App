@@ -76,10 +76,10 @@ public class CalendarFragment extends Fragment {
                 .build()
                 .inject(this);
 
-        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        CalendarViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(CalendarViewModel.class);
+        MainViewModel viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {

@@ -48,7 +48,7 @@ public class TodoFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private TodoViewModel viewModel;
+    private MainViewModel viewModel;
 
     private CustomSimpleArrayAdapter adapter;
 
@@ -87,10 +87,10 @@ public class TodoFragment extends Fragment {
                 .build()
                 .inject(this);
 
-        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(TodoViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {
@@ -139,7 +139,7 @@ public class TodoFragment extends Fragment {
     }
 
     private void refresh() {
-        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         viewModel.refreshHospital(userId);
@@ -169,7 +169,7 @@ public class TodoFragment extends Fragment {
 
             if(deviceInfo != null) {
                 HospitalDevice device = deviceInfo.getDevice();
-                Report lastReport = deviceInfo.getReports().get(0).getReport();
+                Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size()-1).getReport();
 
                 nameView.setText(device.getType());
 
