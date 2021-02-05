@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  * @author nitelow
  */
 public class TodoFragment extends Fragment {
+
+    private boolean resumed = false;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -135,7 +138,12 @@ public class TodoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        refresh();
+        if(resumed) {
+            Log.i(this.getClass().getName(), "activity has resumed, refreshing...");
+            refresh();
+        }
+
+        resumed = true;
     }
 
     private void refresh() {
