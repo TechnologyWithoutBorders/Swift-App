@@ -18,7 +18,7 @@ public class DeviceInfoViewModel extends ViewModel {
             return;
         }
 
-        deviceInfo = hospitalRepo.getDevice(userId, deviceId);
+        deviceInfo = hospitalRepo.getDevice(userId, deviceId, true);
     }
 
     @Inject

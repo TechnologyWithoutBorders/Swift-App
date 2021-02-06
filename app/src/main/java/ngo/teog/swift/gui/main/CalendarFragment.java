@@ -76,7 +76,7 @@ public class CalendarFragment extends Fragment {
                 .build()
                 .inject(this);
 
-        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.requireContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         MainViewModel viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);

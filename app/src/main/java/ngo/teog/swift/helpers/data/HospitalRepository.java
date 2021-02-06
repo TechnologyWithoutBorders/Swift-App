@@ -96,8 +96,10 @@ public class HospitalRepository {
         return hospitalDao.getHospitalDevices(userId);
     }
 
-    public LiveData<DeviceInfo> getDevice(int userId, int deviceId) {
-        refreshUserHospital(userId);
+    public LiveData<DeviceInfo> getDevice(int userId, int deviceId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadDevice(deviceId);
     }

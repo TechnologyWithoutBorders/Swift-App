@@ -36,8 +36,14 @@ public class MainViewModel extends ViewModel {
         return hospital;
     }
 
+    /**
+     * Retrieves device info from the database. As this method is used for finding a device
+     * via barcode, no synchronization with the server will be invoked.
+     * @param deviceId device ID
+     * @return device info
+     */
     public LiveData<DeviceInfo> getDeviceInfo(int deviceId) {
-        return hospitalRepo.getDevice(userId, deviceId);
+        return hospitalRepo.getDevice(userId, deviceId, false);
     }
 
     public LiveData<List<DeviceInfo>> getDeviceInfos() {

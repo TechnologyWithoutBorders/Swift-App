@@ -105,7 +105,7 @@ public class BarcodeFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        if(ContextCompat.checkSelfPermission(this.requireActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.requireActivity(), new String[]{Manifest.permission.CAMERA}, 0);
         }
 
@@ -115,7 +115,7 @@ public class BarcodeFragment extends Fragment {
                 .build()
                 .inject(this);
 
-        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.requireContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
@@ -147,7 +147,7 @@ public class BarcodeFragment extends Fragment {
                 intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                 BarcodeFragment.this.startActivity(intent);
             } else {
-                Toast.makeText(this.getContext().getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.requireContext().getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
             }
 
             searchField.setText(null);
@@ -186,7 +186,7 @@ public class BarcodeFragment extends Fragment {
 
             this.invokeFetch(deviceNumber);
         } catch(NumberFormatException e) {
-            Toast.makeText(this.getContext().getApplicationContext(), getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.requireContext().getApplicationContext(), getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
         }
     }
 }
