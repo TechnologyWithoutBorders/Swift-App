@@ -29,8 +29,8 @@ public class HospitalViewModel extends ViewModel {
         }
 
         hospital = hospitalRepo.getUserHospital(userId);
-        users = hospitalRepo.getUserColleagues(userId);
-        deviceInfos = hospitalRepo.getHospitalDevices(userId);
+        users = hospitalRepo.getUserColleagues(userId, false);
+        deviceInfos = hospitalRepo.getHospitalDevices(userId, false);
     }
 
     public LiveData<Hospital> getHospital() {

@@ -80,8 +80,10 @@ public class HospitalRepository {
         return hospitalDao.loadUserInfo(userId);
     }
 
-    public LiveData<List<User>> getUserColleagues(int userId) {
-        refreshUserHospital(userId);
+    public LiveData<List<User>> getUserColleagues(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadUserColleagues(userId);
     }
@@ -100,8 +102,10 @@ public class HospitalRepository {
         return hospitalDao.loadDevice(deviceId);
     }
 
-    public LiveData<List<DeviceInfo>> getHospitalDevices(int userId) {
-        refreshUserHospital(userId);
+    public LiveData<List<DeviceInfo>> getHospitalDevices(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadHospitalDevices(userId);
     }

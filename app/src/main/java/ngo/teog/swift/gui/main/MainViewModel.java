@@ -29,7 +29,7 @@ public class MainViewModel extends ViewModel {
 
         this.userId = userId;
         hospital = hospitalRepo.getUserHospital(userId);
-        deviceInfos = hospitalRepo.getHospitalDevices(userId);
+        deviceInfos = hospitalRepo.getHospitalDevices(userId, false);
     }
 
     public LiveData<Hospital> getUserHospital() {
