@@ -28,8 +28,8 @@ public class MainViewModel extends ViewModel {
         }
 
         this.userId = userId;
-        hospital = hospitalRepo.getUserHospital(userId);
-        deviceInfos = hospitalRepo.getHospitalDevices(userId, false);
+        hospital = hospitalRepo.loadUserHospital(userId, true);
+        deviceInfos = hospitalRepo.loadHospitalDevices(userId, false);
     }
 
     public LiveData<Hospital> getUserHospital() {
@@ -43,7 +43,7 @@ public class MainViewModel extends ViewModel {
      * @return device info
      */
     public LiveData<DeviceInfo> getDeviceInfo(int deviceId) {
-        return hospitalRepo.getDevice(userId, deviceId, false);
+        return hospitalRepo.loadDevice(userId, deviceId, false);
     }
 
     public LiveData<List<DeviceInfo>> getDeviceInfos() {

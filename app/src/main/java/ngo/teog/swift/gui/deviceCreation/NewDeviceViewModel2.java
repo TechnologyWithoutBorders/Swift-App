@@ -24,7 +24,7 @@ public class NewDeviceViewModel2 extends ViewModel {
             return;
         }
 
-        deviceInfos = hospitalRepo.getHospitalDevices(userId, true);
+        deviceInfos = hospitalRepo.loadHospitalDevices(userId, true);
     }
 
     public LiveData<List<DeviceInfo>> getDeviceInfos() {

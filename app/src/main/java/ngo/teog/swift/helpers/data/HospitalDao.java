@@ -38,8 +38,8 @@ public interface HospitalDao {
     void save(Report report);
 
     @Transaction
-    @Query("SELECT * FROM reports WHERE device = :deviceId AND id = :reportId")
-    LiveData<ReportInfo> loadReportInfo(int deviceId, int reportId);
+    @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
+    LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId);
 
     @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")
@@ -55,14 +55,11 @@ public interface HospitalDao {
     LiveData<User> loadUser(int id);
 
     @Transaction
-    @Query("SELECT * FROM devices WHERE id = :deviceId")
-    LiveData<DeviceInfo> loadDevice(int deviceId);
+    @Query("SELECT * FROM devices WHERE devices.hospital = (SELECT hospital FROM users WHERE users.id = :userId) AND devices.id = :deviceId")
+    LiveData<DeviceInfo> loadDevice(int userId, int deviceId);
 
-    @Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastSync >= :currentMillis-(:timeout*1000)")
-    int hasUser(int id, long currentMillis, int timeout);
-
-    @Query("SELECT * FROM hospitals WHERE hospitals.id = (SELECT hospital FROM users WHERE users.id = :userId)")
-    Hospital getUserHospital(int userId);
+    /*@Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastSync >= :currentMillis-(:timeout*1000)")
+    int hasUser(int id, long currentMillis, int timeout);*/ //TODO
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     LiveData<List<User>> loadUserColleagues(int userId);

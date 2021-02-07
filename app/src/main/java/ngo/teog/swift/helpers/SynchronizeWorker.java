@@ -121,7 +121,7 @@ public class SynchronizeWorker extends Worker {
             //assure that no dataset with invalid timestamp is synchronized to server
             long now = new Date().getTime();
 
-            List<User> users = hospitalRepository.getUserColleaguesSync(userID);
+            List<User> users = hospitalRepository.getUserColleagues(userID);
 
             if(users != null) {
                 for (User user : users) {
@@ -131,7 +131,7 @@ public class SynchronizeWorker extends Worker {
                 }
             }
 
-            List<DeviceInfo> deviceInfos = hospitalRepository.getHospitalDevicesSync(userID);
+            List<DeviceInfo> deviceInfos = hospitalRepository.getHospitalDevices(userID);
 
             if(deviceInfos != null) {
                 for (DeviceInfo deviceInfo : deviceInfos) {
