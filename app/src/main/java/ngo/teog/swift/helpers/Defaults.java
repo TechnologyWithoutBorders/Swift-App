@@ -71,4 +71,12 @@ public final class Defaults {
     public static final String AUTH_PW_KEY = "authPw";
 
     public static final String TIMEZONE_UTC = "UTC";
+
+    //Synchronization framework
+
+    /** Background synchronization interval in hours */
+    public static final int SYNC_INTERVAL = 2;
+
+    /** Flex interval for background synchronization in minutes */
+    public static final int SYNC_FLEX_INTERVAL = 30;
 }
