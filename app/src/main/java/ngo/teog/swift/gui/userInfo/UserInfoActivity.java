@@ -48,41 +48,27 @@ public class UserInfoActivity extends BaseActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
 
         Intent intent = this.getIntent();
+        int userId = intent.getIntExtra(ResourceKeys.USER_ID, -1);
 
-        if(intent.hasExtra(ResourceKeys.USER)) {
-            user = (User)intent.getSerializableExtra(ResourceKeys.USER);
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
 
-            nameView.setText(user.getName());
-            phoneView.setText(user.getPhone());
-            mailView.setText(user.getMail());
-            positionView.setText(user.getPosition());
-            //hospitalView.setText(userInfo.getHospitals().get(0).getName());
-        } else {
-            int userId = intent.getIntExtra(ResourceKeys.USER_ID, -1);
+        UserInfoViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(UserInfoViewModel.class);
+        viewModel.init(userId);
+        viewModel.getUserInfo().observe(this, userInfo -> {
+            if(userInfo != null) {
+                this.user = userInfo.getUser();
 
-            DaggerAppComponent.builder()
-                    .appModule(new AppModule(getApplication()))
-                    .roomModule(new RoomModule(getApplication()))
-                    .build()
-                    .inject(this);
-
-            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int myId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-            UserInfoViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(UserInfoViewModel.class);
-            viewModel.init(myId, userId);
-            viewModel.getUserInfo().observe(this, userInfo -> {
-                if(userInfo != null) {
-                    this.user = userInfo.getUser();
-
-                    nameView.setText(user.getName());
-                    phoneView.setText(user.getPhone());
-                    mailView.setText(user.getMail());
-                    positionView.setText(user.getPosition());
-                    hospitalView.setText(userInfo.getHospitals().get(0).getName());
-                }
-            });
-        }
+                nameView.setText(user.getName());
+                phoneView.setText(user.getPhone());
+                mailView.setText(user.getMail());
+                positionView.setText(user.getPosition());
+                hospitalView.setText(userInfo.getHospitals().get(0).getName());
+            }
+        });
     }
 
     @Override

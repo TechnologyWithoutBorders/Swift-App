@@ -22,7 +22,7 @@ public class PortationViewModel extends ViewModel {
             return;
         }
 
-        hospital = hospitalRepo.getHospitalDump(userId);
+        hospital = hospitalRepo.loadHospitalDump(userId);
     }
 
     public LiveData<HospitalDump> getHospitalDump() {

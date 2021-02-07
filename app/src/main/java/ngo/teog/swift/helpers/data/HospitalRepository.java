@@ -58,62 +58,146 @@ public class HospitalRepository {
         this.context = context;
     }
 
-    public LiveData<HospitalDump> getHospitalDump(int userId) {
+    /**
+     * Returns an <b>asynchronically</b> retrieved dump of an entire hospital.
+     * @param userId User associated with specific hospital
+     * @return hospital dump
+     */
+    public LiveData<HospitalDump> loadHospitalDump(int userId) {
         return hospitalDao.loadHospitalDump(userId);
     }
 
-    public LiveData<User> getUser(int userId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved user.
+     * @param userId User
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return user
+     */
+    public LiveData<User> loadUser(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadUser(userId);
     }
 
-    public LiveData<Hospital> getUserHospital(int userId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved hospital.
+     * @param userId User associated with specific hospital
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return hospital
+     */
+    public LiveData<Hospital> loadUserHospital(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadUserHospital(userId);
     }
 
-    public LiveData<UserInfo> getUserProfileInfo(int userId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved user.
+     * @param userId User
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return information about user
+     */
+    public LiveData<UserInfo> loadUserProfileInfo(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadUserInfo(userId);
     }
 
-    public LiveData<List<User>> getUserColleagues(int userId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved list of users associated with the hospital of the given user.
+     * This list includes the given user itself.
+     * @param userId User associated with specific hospital
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return Users associated with hospital of given user
+     */
+    public LiveData<List<User>> loadUserColleagues(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadUserColleagues(userId);
     }
 
-    public List<User> getUserColleaguesSync(int userId) {
+    /**
+     * Returns a <b>synchronically</b> retrieved list of users associated with the hospital of the given user.
+     * This list includes the given user itself.
+     * @param userId User associated with specific hospital
+     * @return Users associated with hospital of given user
+     */
+    public List<User> getUserColleagues(int userId) {
         return hospitalDao.getUserColleagues(userId);
     }
 
-    public List<DeviceInfo> getHospitalDevicesSync(int userId) {
+    /**
+     * Returns a <b>synchronically</b> retrieved list of devices associated with the hospital of the given user.
+     * @param userId User associated with specific hospital
+     * @return Devices associated with hospital of given user
+     */
+    public List<DeviceInfo> getHospitalDevices(int userId) {
         return hospitalDao.getHospitalDevices(userId);
     }
 
-    public LiveData<DeviceInfo> getDevice(int userId, int deviceId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved device.
+     * @param userId User associated with specific hospital
+     * @param deviceId device ID
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return information about device
+     */
+    public LiveData<DeviceInfo> loadDevice(int userId, int deviceId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
-        return hospitalDao.loadDevice(deviceId);
+        return hospitalDao.loadDevice(userId, deviceId);
     }
 
-    public LiveData<List<DeviceInfo>> getHospitalDevices(int userId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved list of devices associated with the hospital of the given user.
+     * @param userId User associated with specific hospital
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return Devices associated with hospital of given user
+     */
+    public LiveData<List<DeviceInfo>> loadHospitalDevices(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadHospitalDevices(userId);
     }
 
-    public LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId) {
-        refreshUserHospital(userId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved report.
+     * @param userId User associated with specific hospital
+     * @param deviceId device ID
+     * @param reportId report ID
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return information about report
+     */
+    public LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
-        return hospitalDao.loadReportInfo(deviceId, reportId);
+        return hospitalDao.loadReportInfo(userId, deviceId, reportId);
     }
 
-    public LiveData<UserInfo> getUserInfo(int myId, int userId) {
-        refreshUserHospital(myId);
+    /**
+     * Returns an <b>asynchronically</b> retrieved user.
+     * @param userId User
+     * @param sync determines whether database should be synchronized with the server in the background
+     * @return information about user
+     */
+    public LiveData<UserInfo> loadUserInfo(int userId, boolean sync) {
+        if(sync) {
+            refreshUserHospital(userId);
+        }
 
         return hospitalDao.loadUserInfo(userId);
     }
@@ -126,7 +210,7 @@ public class HospitalRepository {
         });
     }
 
-    public void updateDevice(HospitalDevice device, int userId) {
+    public void updateDevice(HospitalDevice device, int userId) {//TODO refresh hospital of device as it is not necessarily the same as that of the requesting user
         executor.execute(() -> {
             hospitalDao.save(device);
 
@@ -148,21 +232,6 @@ public class HospitalRepository {
 
     public void updateReportSync(Report report) {
         hospitalDao.save(report);
-    }
-
-    private void refreshUserHospitalSync(int userId) {
-        //TODO check if user data has been fetched recently
-
-        //refresh
-        if(this.checkForInternetConnection()) {
-            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
-
-            HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
-
-            if(hospitalRequest != null) {
-                queue.add(hospitalRequest);
-            }
-        }
     }
 
     public void createDevice(HospitalDevice device, int userId) {
@@ -192,6 +261,21 @@ public class HospitalRepository {
 
             refreshUserHospitalSync(userId);
         });
+    }
+
+    private void refreshUserHospitalSync(int userId) {//TODO is there any actual difference to refreshUserHospital()?
+        //TODO check if user data has been fetched recently
+
+        //refresh
+        if(this.checkForInternetConnection()) {
+            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+            HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
+
+            if(hospitalRequest != null) {
+                queue.add(hospitalRequest);
+            }
+        }
     }
 
     public void refreshUserHospital(int userId) {
@@ -237,7 +321,7 @@ public class HospitalRepository {
             //assure that no dataset with invalid timestamp is synchronized to server
             long now = new Date().getTime();
 
-            List<User> users = hospitalDao.getUserColleagues(userID);
+            List<User> users = HospitalRepository.this.getUserColleagues(userID);
 
             if(users != null) {
                 for (User user : users) {
@@ -247,7 +331,7 @@ public class HospitalRepository {
                 }
             }
 
-            List<DeviceInfo> deviceInfos = hospitalDao.getHospitalDevices(userID);
+            List<DeviceInfo> deviceInfos = HospitalRepository.this.getHospitalDevices(userID);
 
             if(deviceInfos != null) {
                 for (DeviceInfo deviceInfo : deviceInfos) {
@@ -302,14 +386,14 @@ public class HospitalRepository {
 
                     Hospital hospital = new Hospital(hospitalInfo.getId(), hospitalInfo.getName(), hospitalInfo.getLocation(), hospitalInfo.getLongitude(), hospitalInfo.getLatitude(), hospitalInfo.getLastUpdate());
 
-                    hospitalDao.save(hospital);
+                    HospitalRepository.this.updateHospitalSync(hospital);
 
                     for (User user : hospitalInfo.getUsers()) {
                         if (user.getLastUpdate().getTime() > now) {
                             user.setLastUpdate(new Date(now));
                         }
 
-                        hospitalDao.save(user);
+                        HospitalRepository.this.updateUserSync(user);
                     }
 
                     for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
@@ -317,14 +401,14 @@ public class HospitalRepository {
                             deviceInfo.getDevice().setLastUpdate(new Date(now));
                         }
 
-                        hospitalDao.save(deviceInfo.getDevice());
+                        HospitalRepository.this.updateDeviceSync(deviceInfo.getDevice());
 
                         List<ReportInfo> reportInfos = deviceInfo.getReports();
 
                         for (ReportInfo reportInfo : reportInfos) {
                             Report report = reportInfo.getReport();
 
-                            hospitalDao.save(report);
+                            HospitalRepository.this.updateReportSync(report);
                         }
                     }
 

@@ -19,7 +19,7 @@ public class ReportInfoViewModel extends ViewModel {
             return;
         }
 
-        reportInfo = hospitalRepo.loadReportInfo(userId, deviceId, reportId);
+        reportInfo = hospitalRepo.loadReportInfo(userId, deviceId, reportId, true);
     }
 
     @Inject

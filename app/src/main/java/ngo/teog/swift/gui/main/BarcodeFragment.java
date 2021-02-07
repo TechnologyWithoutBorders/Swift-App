@@ -49,7 +49,7 @@ public class BarcodeFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private BarcodeViewModel viewModel;
+    private MainViewModel viewModel;
 
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
@@ -105,8 +105,8 @@ public class BarcodeFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
 
-        if(ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
+        if(ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.requireActivity(), new String[]{Manifest.permission.CAMERA}, 0);
         }
 
         DaggerAppComponent.builder()
@@ -115,7 +115,11 @@ public class BarcodeFragment extends Fragment {
                 .build()
                 .inject(this);
 
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(BarcodeViewModel.class);
+        SharedPreferences preferences = this.requireContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+        viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
+        viewModel.init(id);
     }
 
     @Override
@@ -136,17 +140,14 @@ public class BarcodeFragment extends Fragment {
         searchButton.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-        SharedPreferences preferences = this.getContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel.init(userId, deviceId);
-        viewModel.getDeviceInfo().observe(BarcodeFragment.this.getViewLifecycleOwner(), deviceInfo -> {
+        viewModel.getDeviceInfo(deviceId).observe(BarcodeFragment.this.getViewLifecycleOwner(), deviceInfo -> {
             if(deviceInfo != null) {
                 Intent intent = new Intent(BarcodeFragment.this.getContext(), DeviceInfoActivity.class);
                 intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                 BarcodeFragment.this.startActivity(intent);
             } else {
-                Toast.makeText(this.getContext().getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.requireContext().getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
             }
 
             searchField.setText(null);
@@ -185,7 +186,7 @@ public class BarcodeFragment extends Fragment {
 
             this.invokeFetch(deviceNumber);
         } catch(NumberFormatException e) {
-            Toast.makeText(this.getContext().getApplicationContext(), getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.requireContext().getApplicationContext(), getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
         }
     }
 }

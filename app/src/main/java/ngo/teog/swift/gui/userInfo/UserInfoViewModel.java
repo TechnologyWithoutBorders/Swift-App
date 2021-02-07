@@ -17,12 +17,12 @@ public class UserInfoViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int myId, int userId) {
+    public void init(int userId) {
         if(this.userInfo != null) {
             return;
         }
 
-        userInfo = hospitalRepo.getUserInfo(myId, userId);
+        userInfo = hospitalRepo.loadUserInfo(userId, true);
     }
 
     public LiveData<UserInfo> getUserInfo() {

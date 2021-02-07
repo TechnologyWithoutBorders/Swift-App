@@ -23,7 +23,7 @@ public class UserProfileViewModel extends ViewModel {
             return;
         }
 
-        userProfile = hospitalRepo.getUserProfileInfo(userId);
+        userProfile = hospitalRepo.loadUserProfileInfo(userId, true);
     }
 
     public LiveData<UserInfo> getUserProfile() {
