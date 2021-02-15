@@ -96,6 +96,9 @@ public class MainActivity extends BaseActivity {
 
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+        String country = preferences.getString(Defaults.COUNTRY_PREFERENCE, null);
+
+        this.setTitle(getResources().getString(R.string.app_name) + " - " + country);
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
