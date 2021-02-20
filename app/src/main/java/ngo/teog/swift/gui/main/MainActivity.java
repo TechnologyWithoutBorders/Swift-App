@@ -115,9 +115,7 @@ public class MainActivity extends BaseActivity {
         mViewPager.setCurrentItem(1);
 
         for(int i = 0; i < 3; i++) {
-            tabLayout.addTab(
-                    tabLayout.newTab()
-                            .setText("Tab " + (i + 1)));
+            tabLayout.addTab(tabLayout.newTab());
         }
 
         Constraints constraints = new Constraints.Builder()
