@@ -1,11 +1,5 @@
 package ngo.teog.swift.helpers;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
-
-import ngo.teog.swift.R;
-
 /**
  * Contains some global system constants/default values.
  * @author nitelow
