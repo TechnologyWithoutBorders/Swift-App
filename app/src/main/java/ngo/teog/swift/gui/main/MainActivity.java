@@ -43,6 +43,7 @@ import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.gui.hospital.HospitalActivity;
 import ngo.teog.swift.gui.login.LoginActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
+import ngo.teog.swift.gui.settings.SettingsActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
@@ -257,6 +258,8 @@ public class MainActivity extends BaseActivity {
             startUserProfileActivity();
         } else if(id == R.id.hospitalItem) {
             startHospitalActivity();
+        } else if(id == R.id.settingsItem) {
+            startSettingsActivity();
         } else if(id == R.id.logoutItem) {
             logout();
         } else if(id == R.id.aboutItem) {
@@ -323,6 +326,11 @@ public class MainActivity extends BaseActivity {
 
     public void startHospitalActivity() {
         Intent intent = new Intent(MainActivity.this, HospitalActivity.class);
+        startActivity(intent);
+    }
+
+    public void startSettingsActivity() {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 

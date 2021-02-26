@@ -1,5 +1,11 @@
 package ngo.teog.swift.helpers;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
+
+import ngo.teog.swift.R;
+
 /**
  * Contains some global system constants/default values.
  * @author nitelow
@@ -22,6 +28,12 @@ public final class Defaults {
 
     /** Key that identifies timestamp of last synchronization with server in shared preferences */
     public static final String LAST_SYNC_PREFERENCE = "LAST_SYNC_PREFERENCE";
+
+    public static final String NOTIFICATION_ID_PREFERENCE = "NOTIFICATION_ID_PREFERENCE";
+
+    //Channels
+
+    public static final String CHANNEL_ID = "dummy_channel";
 
     //Server URLs
 

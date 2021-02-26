@@ -1,10 +1,14 @@
 package ngo.teog.swift.helpers;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -31,10 +35,12 @@ import java.util.concurrent.Executors;
 import javax.inject.Inject;
 
 import dagger.android.HasAndroidInjector;
+import ngo.teog.swift.R;
 import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.ResponseParser;
 import ngo.teog.swift.communication.VolleyManager;
+import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
@@ -216,6 +222,31 @@ public class SynchronizeWorker extends Worker {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                     editor.apply();
+
+                    if(preferences.getBoolean("notifications", false)) {
+                        int oldNotificationId = preferences.getInt(Defaults.NOTIFICATION_ID_PREFERENCE, -1);
+                        int notificationId = oldNotificationId+1;
+
+                        // Create an explicit intent for an Activity in your app
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Defaults.CHANNEL_ID)//TODO make group notifications
+                                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                .setContentTitle("Title")
+                                .setContentText("content")
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)//TODO Category
+                                .setContentIntent(pendingIntent)
+                                .setAutoCancel(true);
+
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                        notificationManager.cancel(oldNotificationId);//TODO cancel vs. update previous
+                        notificationManager.notify(notificationId, builder.build());
+
+                        editor.putInt(Defaults.NOTIFICATION_ID_PREFERENCE, notificationId);
+                        editor.apply();
+                    }
 
                     executorService.shutdown();
                 } catch(Exception e) {
