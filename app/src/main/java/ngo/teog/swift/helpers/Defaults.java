@@ -27,7 +27,7 @@ public final class Defaults {
 
     //Channels
 
-    public static final String CHANNEL_ID = "dummy_channel";
+    public static final String CHANNEL_ID = "dummy_channel";//TODO rename
 
     //Server URLs
 

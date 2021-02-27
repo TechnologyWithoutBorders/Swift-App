@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.preference.PreferenceManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -223,7 +224,9 @@ public class SynchronizeWorker extends Worker {
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                     editor.apply();
 
-                    if(preferences.getBoolean("notifications", false)) {
+                    SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+                    if(defaultPreferences.getBoolean("notifications", true)) {
                         int oldNotificationId = preferences.getInt(Defaults.NOTIFICATION_ID_PREFERENCE, -1);
                         int notificationId = oldNotificationId+1;
 
@@ -233,7 +236,7 @@ public class SynchronizeWorker extends Worker {
                         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Defaults.CHANNEL_ID)//TODO make group notifications
-                                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                                .setSmallIcon(R.mipmap.ic_launcher_round)
                                 .setContentTitle("Title")
                                 .setContentText("content")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)//TODO Category
@@ -241,7 +244,7 @@ public class SynchronizeWorker extends Worker {
                                 .setAutoCancel(true);
 
                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                        notificationManager.cancel(oldNotificationId);//TODO cancel vs. update previous
+                        //notificationManager.cancel(oldNotificationId);//TODO cancel vs. update previous
                         notificationManager.notify(notificationId, builder.build());
 
                         editor.putInt(Defaults.NOTIFICATION_ID_PREFERENCE, notificationId);
