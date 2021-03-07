@@ -6,14 +6,16 @@
         android:icon="@drawable/ic_info_outline_white_24dp"
         android:title="@string/menu_information"
         app:showAsAction="always" />
+    <item android:id="@+id/settingsItem"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom">
+    </item>
     <item android:id="@+id/profileItem"
         android:title="@string/my_profile">
     </item>
     <item android:id="@+id/hospitalItem"
         android:title="@string/my_hospital">
-    </item>
-    <item android:id="@+id/settingsItem"
-        android:title="settings">
     </item>
     <item android:id="@+id/logoutItem"
         android:title="@string/log_out">
