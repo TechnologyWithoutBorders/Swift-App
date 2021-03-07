@@ -227,8 +227,9 @@ public class SynchronizeWorker extends Worker {
                     SharedPreferences defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
                     if(defaultPreferences.getBoolean("notifications", true)) {
-                        int oldNotificationId = preferences.getInt(Defaults.NOTIFICATION_ID_PREFERENCE, -1);
-                        int notificationId = oldNotificationId+1;
+                        //int oldNotificationId = preferences.getInt(Defaults.NOTIFICATION_ID_PREFERENCE, -1);
+                        //int notificationId = oldNotificationId+1;
+                        int notificationId = 0;//TODO update vs new notification
 
                         // Create an explicit intent for an Activity in your app
                         Intent intent = new Intent(context, MainActivity.class);
@@ -241,10 +242,9 @@ public class SynchronizeWorker extends Worker {
                                 .setContentText("content")
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)//TODO Category
                                 .setContentIntent(pendingIntent)
-                                .setAutoCancel(true);
+                                .setAutoCancel(true);//TODO cancel notifications when app is opened
 
                         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                        //notificationManager.cancel(oldNotificationId);//TODO cancel vs. update previous
                         notificationManager.notify(notificationId, builder.build());
 
                         editor.putInt(Defaults.NOTIFICATION_ID_PREFERENCE, notificationId);
