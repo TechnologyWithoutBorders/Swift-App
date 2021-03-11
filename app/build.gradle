@@ -7,8 +7,8 @@ android {
         applicationId "ngo.teog.swift"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 80
-        versionName "1.6.1"
+        versionCode 81
+        versionName "1.7"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
