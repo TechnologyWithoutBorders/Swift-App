@@ -252,12 +252,7 @@ public class HospitalRepository {
 
     public void createReport(Report report, int userId) {
         executor.execute(() -> {
-            //TODO muss Transaction sein, aber Vorsicht: Inserts sind synchron, Queries nicht!
-
-            int maxReportId = hospitalDao.getMaxReportId(report.getDevice());
-            report.setId(maxReportId+1);
-
-            hospitalDao.save(report);
+            hospitalDao.addReport(report);
 
             refreshUserHospitalSync(userId);
         });
