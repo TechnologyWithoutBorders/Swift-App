@@ -153,7 +153,7 @@ public class TodoFragment extends Fragment {
         viewModel.refreshHospital(userId);
     }
 
-    private class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {
+    private static class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {
         private CustomSimpleArrayAdapter(Context context, List<DeviceInfo> values) {
             super(context, -1, values);
         }

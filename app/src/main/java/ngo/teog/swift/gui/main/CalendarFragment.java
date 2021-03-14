@@ -178,7 +178,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private class MaintenanceInfo {
+    private static class MaintenanceInfo {
         private final DeviceInfo deviceInfo;
         private final int daysLeft;
 

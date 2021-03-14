@@ -138,7 +138,7 @@ public class RequestFactory {
         return new LoginRequest(context, anim, form, url, request, password, country);
     }
 
-    public class LoginRequest extends JsonObjectRequest {
+    public static class LoginRequest extends JsonObjectRequest {
 
         //use activity instead of plain context, because it must be removed from the stack afterwards
         public LoginRequest(final Activity activity, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password, final String country) {
@@ -268,9 +268,7 @@ public class RequestFactory {
 
                 builder.setNegativeButton(context.getString(R.string.dialog_cancel_text), (dialog, i) -> dialog.dismiss());
 
-                builder.setAdapter(adapter, (dialog, i) -> {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i))));
-                });
+                builder.setAdapter(adapter, (dialog, i) -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i)))));
 
                 AlertDialog dialog = builder.create();
 

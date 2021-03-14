@@ -128,7 +128,7 @@ public class ReportCreationActivity extends BaseActivity {
     /**
      * Adapter for displaying the device state spinner.
      */
-    private class StatusArrayAdapter extends ArrayAdapter<String> {
+    private static class StatusArrayAdapter extends ArrayAdapter<String> {
 
         private final Context context;
 
