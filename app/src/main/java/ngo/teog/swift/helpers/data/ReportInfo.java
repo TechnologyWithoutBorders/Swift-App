@@ -15,10 +15,10 @@ public class ReportInfo implements Serializable {
     private Report report;
 
     @Relation(parentColumn = "author", entityColumn = "id")
-    private List<User> authors;
+    private User author;
 
     @Relation(parentColumn = "hospital", entityColumn = "id")
-    private List<Hospital> hospitals;
+    private Hospital hospital;
 
     public ReportInfo(Report report) {
         this.report = report;
@@ -32,19 +32,19 @@ public class ReportInfo implements Serializable {
         this.report = report;
     }
 
-    public List<User> getAuthors() {
-        return authors;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setAuthors(List<User> authors) {
-        this.authors = authors;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
-    public void setHospitals(List<Hospital> hospitals) {
-        this.hospitals = hospitals;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
-    public List<Hospital> getHospitals() {
-        return hospitals;
+    public Hospital getHospital() {
+        return hospital;
     }
 }

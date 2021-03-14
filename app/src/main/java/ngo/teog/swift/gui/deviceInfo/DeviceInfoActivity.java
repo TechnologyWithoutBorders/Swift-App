@@ -204,7 +204,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
 
                     Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                    reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospitals().get(0).getId());
+                    reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
                     reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                     reportIntent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
                     startActivity(reportIntent);
@@ -221,7 +221,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 modelView.setText(device.getModel());
                 manufacturerView.setText(device.getManufacturer());
                 serialNumberView.setText(device.getSerialNumber());
-                hospitalView.setText(deviceInfo.getHospitals().get(0).getName());
+                hospitalView.setText(deviceInfo.getHospital().getName());
                 locationView.setText(device.getLocation());
 
                 int interval = device.getMaintenanceInterval();
@@ -434,7 +434,7 @@ public class DeviceInfoActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_SEND);
 
             String assetString = getString(R.string.device).toLowerCase();
-            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), deviceInfo.getHospitals().get(0).getId());
+            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), deviceInfo.getHospital().getId());
             intent.putExtra(Intent.EXTRA_TEXT,sharingString + deviceInfo.getDevice().getId());
             intent.setType("text/plain");
             startActivity(Intent.createChooser(intent, getString(R.string.share_link)));
@@ -517,7 +517,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 if(title.length() > 0) {
                     titleView.setText(title);
                 } else {
-                    titleView.setText(reportInfo.getAuthors().get(0).getName());
+                    titleView.setText(reportInfo.getAuthor().getName());
                 }
 
                 Date date = report.getCreated();

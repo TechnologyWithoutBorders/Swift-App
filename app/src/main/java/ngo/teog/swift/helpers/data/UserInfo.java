@@ -15,7 +15,7 @@ public class UserInfo implements Serializable {
     private User user;
 
     @Relation(parentColumn = "hospital", entityColumn = "id")
-    private List<Hospital> hospitals;
+    private Hospital hospital;
 
     public UserInfo(User user) {
         this.user = user;
@@ -29,11 +29,11 @@ public class UserInfo implements Serializable {
         this.user = user;
     }
 
-    public List<Hospital> getHospitals() {
-        return hospitals;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospitals(List<Hospital> hospitals) {
-        this.hospitals = hospitals;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 }

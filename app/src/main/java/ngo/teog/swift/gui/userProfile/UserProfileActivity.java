@@ -76,7 +76,7 @@ public class UserProfileActivity extends BaseActivity {
         viewModel.getUserProfile().observe(this, userProfile -> {
             if(userProfile != null) {
                 User user = userProfile.getUser();
-                Hospital hospital = userProfile.getHospitals().get(0);
+                Hospital hospital = userProfile.getHospital();
 
                 nameView.setText(user.getName());
                 telephoneView.setText(user.getPhone());

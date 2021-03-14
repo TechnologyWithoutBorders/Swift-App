@@ -66,7 +66,7 @@ public class UserInfoActivity extends BaseActivity {
                 phoneView.setText(user.getPhone());
                 mailView.setText(user.getMail());
                 positionView.setText(user.getPosition());
-                hospitalView.setText(userInfo.getHospitals().get(0).getName());
+                hospitalView.setText(userInfo.getHospital().getName());
             }
         });
     }

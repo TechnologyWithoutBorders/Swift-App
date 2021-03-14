@@ -87,7 +87,7 @@ public class ReportInfoActivity extends BaseActivity {
 
             if(reportInfo != null) {
                 Report report = reportInfo.getReport();
-                User author = reportInfo.getAuthors().get(0);
+                User author = reportInfo.getAuthor();
 
                 DeviceStateVisuals previousStateInfo = new DeviceStateVisuals(report.getPreviousState(), this);
                 fromState.setImageDrawable(previousStateInfo.getStateIcon());
@@ -126,7 +126,7 @@ public class ReportInfoActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_SEND);
 
             String assetString = getString(R.string.report).toLowerCase();
-            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), reportInfo.getHospitals().get(0).getId());
+            String sharingString = String.format(getString(R.string.want_to_show), assetString, Defaults.HOST, assetString, preferences.getString(Defaults.COUNTRY_PREFERENCE, null), reportInfo.getHospital().getId());
             intent.putExtra(Intent.EXTRA_TEXT, sharingString + reportInfo.getReport().getDevice() + "/" + reportInfo.getReport().getId());
             intent.setType("text/plain");
             startActivity(Intent.createChooser(intent, getString(R.string.share_link)));

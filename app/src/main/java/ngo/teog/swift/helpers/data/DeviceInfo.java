@@ -15,7 +15,7 @@ public class DeviceInfo implements Serializable {
     private HospitalDevice device;
 
     @Relation(parentColumn = "hospital", entityColumn = "id")
-    private List<Hospital> hospitals;
+    private Hospital hospital;
 
     @Relation(parentColumn = "id", entityColumn = "device", entity = Report.class)
     private List<ReportInfo> reports;
@@ -40,11 +40,11 @@ public class DeviceInfo implements Serializable {
         this.reports = reports;
     }
 
-    public List<Hospital> getHospitals() {
-        return hospitals;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospitals(List<Hospital> hospitals) {
-        this.hospitals = hospitals;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 }
