@@ -276,5 +276,6 @@
 
     <!-- Symbols -->
     <string name="transition_indicator">---></string>
+    <string name="line_break">%s\n%s</string>
 
 </resources>

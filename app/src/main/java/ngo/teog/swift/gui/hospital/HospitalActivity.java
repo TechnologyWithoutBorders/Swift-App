@@ -471,7 +471,7 @@ public class HospitalActivity extends BaseActivity {
 
                         statusView.setText(device.getLocation());
 
-                        detailsView.setText(device.getManufacturer() + "\n" + device.getModel());
+                        detailsView.setText(HospitalActivity.this.getString(R.string.line_break, device.getManufacturer(), device.getModel()));
 
                         nameView.setText(device.getType());
 

@@ -183,7 +183,7 @@ public class TodoFragment extends Fragment {
                 String dateString = (now-reportDate.getTime())/1000/60/60/24 + " d";
                 dateView.setText(dateString);
 
-                detailView.setText(device.getManufacturer() + "\n" + device.getModel());
+                detailView.setText(this.getContext().getString(R.string.line_break, device.getManufacturer(), device.getModel()));
 
                 DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), this.getContext());
 
