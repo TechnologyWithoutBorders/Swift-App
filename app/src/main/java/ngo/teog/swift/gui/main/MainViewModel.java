@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
