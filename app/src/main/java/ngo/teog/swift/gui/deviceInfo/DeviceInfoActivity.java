@@ -473,7 +473,7 @@ public class DeviceInfoActivity extends BaseActivity {
     /**
      * Adapter for displaying the recent report list.
      */
-    private class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
+    private static class ReportArrayAdapter extends ArrayAdapter<ReportInfo> {
         private final Context context;
         private final DateFormat dateFormat = new SimpleDateFormat(Defaults.DATE_PATTERN, Locale.getDefault());
 

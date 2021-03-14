@@ -4,7 +4,6 @@ import androidx.room.Embedded;
 import androidx.room.Relation;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Wraps all information regarding a user. Contains the user itself and the corresponding hospital.
