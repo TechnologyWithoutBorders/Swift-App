@@ -73,6 +73,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class DeviceInfoActivity extends BaseActivity {
 
+    private boolean resumed = false;
+
     private static final int ASSET_NUMBER = 0;
     private static final int TYPE = 1;
     private static final int MODEL = 2;
@@ -263,7 +265,12 @@ public class DeviceInfoActivity extends BaseActivity {
     public void onResume() {
         super.onResume();
 
-        refresh();
+        if(resumed) {
+            Log.i(this.getClass().getName(), "activity has resumed, refreshing...");
+            refresh();
+        } else {
+            resumed = true;
+        }
     }
 
     private void refresh() {
