@@ -100,11 +100,13 @@ public class TodoFragment extends Fragment {
                 this.values = deviceInfos;
                 adapter.clear();
 
+                //reverse report list of every device (so newest report has index 0)
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     List<ReportInfo> reports = deviceInfo.getReports();
                     Collections.reverse(reports);
                 }
 
+                //sort devices by state
                 Collections.sort(deviceInfos, (first, second) -> {
                     List<ReportInfo> firstReports = first.getReports();
                     List<ReportInfo> secondReports = second.getReports();
@@ -119,6 +121,7 @@ public class TodoFragment extends Fragment {
                     }
                 });
 
+                //filter relevant devices
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     List<ReportInfo> reportInfos = deviceInfo.getReports();
 
