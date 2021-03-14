@@ -147,10 +147,7 @@ public class TodoFragment extends Fragment {
     }
 
     private void refresh() {
-        SharedPreferences preferences = this.requireContext().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-        viewModel.refreshHospital(userId);
+        viewModel.refreshDeviceInfos();
     }
 
     private static class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {

@@ -50,7 +50,7 @@ public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
     private final Context context;
-    private final ExecutorService executor = Executors.newCachedThreadPool();
+    private final ExecutorService executor = Executors.newCachedThreadPool();//TODO build component that allows controlling order of execution
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
@@ -156,6 +156,10 @@ public class HospitalRepository {
         }
 
         return hospitalDao.loadDevice(userId, deviceId);
+    }
+
+    public DeviceInfo getDevice(int userId, int deviceId) {
+        return hospitalDao.getDevice(userId, deviceId);
     }
 
     /**

@@ -1,12 +1,14 @@
 package ngo.teog.swift.gui.main;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
@@ -14,7 +16,7 @@ import ngo.teog.swift.helpers.data.HospitalRepository;
 public class MainViewModel extends ViewModel {
     private int userId;
     private LiveData<Hospital> hospital;
-    private LiveData<List<DeviceInfo>> deviceInfos;
+    private final MutableLiveData<List<DeviceInfo>> liveDeviceInfos = new MutableLiveData<>();
     private final HospitalRepository hospitalRepo;
 
     @Inject
@@ -29,7 +31,8 @@ public class MainViewModel extends ViewModel {
 
         this.userId = userId;
         hospital = hospitalRepo.loadUserHospital(userId, true);
-        deviceInfos = hospitalRepo.loadHospitalDevices(userId, false);
+
+        new Thread(new LoadRunner()).start();
     }
 
     public LiveData<Hospital> getUserHospital() {
@@ -47,10 +50,18 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<List<DeviceInfo>> getDeviceInfos() {
-        return deviceInfos;
+        return liveDeviceInfos;
     }
 
-    public void refreshHospital(int userId) {
-        hospitalRepo.refreshUserHospital(userId);
+    public void refreshDeviceInfos() {
+        new Thread(new LoadRunner()).start();
+    }
+
+    private class LoadRunner implements Runnable {
+        @Override
+        public void run() {
+            List<DeviceInfo> deviceInfos = hospitalRepo.getHospitalDevices(userId);
+            liveDeviceInfos.postValue(deviceInfos);
+        }
     }
 }
