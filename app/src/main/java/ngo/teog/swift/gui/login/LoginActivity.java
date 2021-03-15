@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            String versionString = "v"  + pInfo.versionName;
+            String versionString = "v"  + pInfo.versionName + "-" + pInfo.versionCode;
             TextView versionView = findViewById(R.id.version_view);
             versionView.setText(versionString);
         } catch(PackageManager.NameNotFoundException e) {
