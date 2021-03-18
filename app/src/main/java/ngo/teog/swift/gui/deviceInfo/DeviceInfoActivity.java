@@ -191,7 +191,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(DeviceInfoViewModel.class);
         viewModel.init(userId, deviceId);
-
+        viewModel.getUpdateIndicator().observe(this, observable -> viewModel.refreshDevice());
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
             this.deviceInfo = deviceInfo;
 
