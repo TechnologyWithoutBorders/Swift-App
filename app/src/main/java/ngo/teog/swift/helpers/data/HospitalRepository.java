@@ -158,6 +158,10 @@ public class HospitalRepository {
         return hospitalDao.loadDevice(userId, deviceId);
     }
 
+    public LiveData<Observable> loadObservable(int id) {
+        return hospitalDao.loadObservable(id);
+    }
+
     public DeviceInfo getDevice(int userId, int deviceId) {
         return hospitalDao.getDevice(userId, deviceId);
     }

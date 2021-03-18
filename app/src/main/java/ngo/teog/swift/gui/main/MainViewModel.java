@@ -11,9 +11,11 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
+import ngo.teog.swift.helpers.data.Observable;
 
 public class MainViewModel extends ViewModel {
     private int userId;
+    private LiveData<Observable> observable;
     private LiveData<Hospital> hospital;
     private final MutableLiveData<List<DeviceInfo>> liveDeviceInfos = new MutableLiveData<>();
     private final HospitalRepository hospitalRepo;
@@ -29,6 +31,7 @@ public class MainViewModel extends ViewModel {
         }
 
         this.userId = userId;
+        observable = hospitalRepo.loadObservable(1);
         hospital = hospitalRepo.loadUserHospital(userId, true);
 
         new Thread(new LoadRunner()).start();
@@ -36,6 +39,12 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<Hospital> getUserHospital() {
         return hospital;
+    }
+
+    public LiveData<Observable> getUpdateIndicator() { return observable; }
+
+    public void refreshHospital() {
+        hospitalRepo.refreshUserHospital(userId);
     }
 
     /**
