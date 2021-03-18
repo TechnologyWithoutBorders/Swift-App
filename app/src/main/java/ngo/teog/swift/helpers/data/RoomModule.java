@@ -19,7 +19,7 @@ public class RoomModule {
 
     public RoomModule(Application mApplication) {
         hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                 .build();
     }
 
@@ -77,6 +77,13 @@ public class RoomModule {
             } finally {
                 database.endTransaction();
             }
+        }
+    };
+
+    public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //ignore as no noteworthy changes took place//TODO really?
         }
     };
 }
