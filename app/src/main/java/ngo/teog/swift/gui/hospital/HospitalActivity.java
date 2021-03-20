@@ -231,7 +231,7 @@ public class HospitalActivity extends BaseActivity {
                     }
                 }
 
-                overdueDevices.setText(getString(R.string.hospital_info_overdue_devices, overdueDeviceCount));
+                overdueDevices.setText(getResources().getQuantityString(R.plurals.hospital_info_overdue_devices, overdueDeviceCount, overdueDeviceCount));
 
                 workingCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.WORKING]));
                 maintenanceCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.MAINTENANCE]));
