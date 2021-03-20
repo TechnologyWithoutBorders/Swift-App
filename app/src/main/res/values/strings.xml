@@ -118,8 +118,15 @@
         <item>Months</item>
     </string-array>
 
-    <string name="months_count">%d Months</string>
-    <string name="weeks_count">%d Weeks</string>
+    <!--<string name="months_count">%d Months</string>-->
+    <plurals name="months_count">
+        <item quantity="one">%d Month</item>
+        <item quantity="other">%d Months</item>
+    </plurals>
+    <plurals name="weeks_count">
+        <item quantity="one">%d Week</item>
+        <item quantity="other">%d Weeks</item>
+    </plurals>
 
     <!-- Miscellaneous Actions -->
     <string name="edit">edit</string>
@@ -221,7 +228,10 @@
     <string name="hospital_info_tutorial_state_overview">These symbols give you a quick overview over the states of your devices.</string>
     <string name="hospital_info_tutorial_asset_list">You can browse through a list of your colleagues or devices by expanding the respective section.</string>
     <string name="hospital_info_tutorial_filter">Use this field for filtering.</string>
-    <string name="hospital_info_overdue_devices">%d devices are scheduled for maintenance</string>
+    <plurals name="hospital_info_overdue_devices">
+        <item quantity="one"> %d device is scheduled for maintenance</item>
+        <item quantity="other">%d devices are scheduled for maintenance</item>
+    </plurals>
 
     <!-- Main -->
     <string-array name="main_tab_names">

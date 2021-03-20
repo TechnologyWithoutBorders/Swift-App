@@ -114,7 +114,7 @@ public class CalendarFragment extends Fragment {
 
                             if (lastMaintenance != null) {
                                 int daysLeft = (device.getMaintenanceInterval()*7)-((int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24));
-
+                                // TODO:  if abfrage ob days left negativ oder positiv ist -> in zwei listen eintragen, überfällige Zählen
                                 values.add(new MaintenanceInfo(deviceInfo, daysLeft));
                             }
                         }
