@@ -121,6 +121,8 @@ public class DeviceInfoActivity extends BaseActivity {
 
         reportCreationButton = findViewById(R.id.reportCreationButton);
 
+        //Comment
+
         ImageView stateImageView = findViewById(R.id.stateView);
         TextView stateTextView = findViewById(R.id.stateTextView);
 
