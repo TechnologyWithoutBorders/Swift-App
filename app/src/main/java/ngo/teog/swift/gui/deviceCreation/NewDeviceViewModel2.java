@@ -24,9 +24,14 @@ public class NewDeviceViewModel2 extends ViewModel {
             return;
         }
 
-        deviceInfos = hospitalRepo.loadHospitalDevices(userId, true);
+        //do not sync as data is only used for making suggestions for text fields
+        deviceInfos = hospitalRepo.loadHospitalDevices(userId, false);
     }
 
+    /**
+     * Returns a snapshot of device infos which will <b>not be up-to-date in all cases</b>
+     * @return snapshot of device infos
+     */
     public LiveData<List<DeviceInfo>> getDeviceInfos() {
         return deviceInfos;
     }
