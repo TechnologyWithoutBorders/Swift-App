@@ -1,6 +1,7 @@
 package ngo.teog.swift.gui.hospital;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import ngo.teog.swift.helpers.data.User;
 
 public class HospitalViewModel extends ViewModel {
     private LiveData<Hospital> hospital;
+    //no mutable live data needed as the user list won't change that much
     private LiveData<List<User>> users;
     private LiveData<List<DeviceInfo>> deviceInfos;
     private final HospitalRepository hospitalRepo;
