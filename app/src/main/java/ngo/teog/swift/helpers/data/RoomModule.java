@@ -83,7 +83,7 @@ public class RoomModule {
     public static final Migration MIGRATION_4_5 = new Migration(4, 5) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            //ignore as no noteworthy changes took place//TODO really?
+            database.execSQL("CREATE TABLE IF NOT EXISTS observables (id INTEGER NOT NULL, PRIMARY KEY(id))");
         }
     };
 }
