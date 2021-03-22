@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
@@ -32,7 +33,7 @@ public class MainViewModel extends ViewModel {
 
         this.userId = userId;
 
-        observable = hospitalRepo.loadObservable(1);
+        observable = hospitalRepo.loadObservable(Defaults.SYNC_OBSERVABLE);
         hospital = hospitalRepo.loadUserHospital(userId, true);
 
         new Thread(new DeviceInfosLoadRunner(userId)).start();

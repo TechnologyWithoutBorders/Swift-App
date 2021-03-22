@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
@@ -26,7 +27,7 @@ public class DeviceInfoViewModel extends ViewModel {
         this.userId = userId;
         this.deviceId = deviceId;
 
-        observable = hospitalRepo.loadObservable(1);
+        observable = hospitalRepo.loadObservable(Defaults.SYNC_OBSERVABLE);
 
         new Thread(new DeviceInfoLoadRunner(userId, deviceId)).start();
 

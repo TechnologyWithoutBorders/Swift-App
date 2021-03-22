@@ -79,4 +79,9 @@ public final class Defaults {
 
     /** Flex interval for background synchronization in minutes */
     public static final int SYNC_FLEX_INTERVAL = 30;
+
+    //Observables
+
+    /** Observable that indicates when a server synchronization took place recently */
+    public static final int SYNC_OBSERVABLE = 1;
 }
