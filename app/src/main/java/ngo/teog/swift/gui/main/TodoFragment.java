@@ -95,7 +95,6 @@ public class TodoFragment extends Fragment {
 
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
-        viewModel.getUpdateIndicator().observe(this.getViewLifecycleOwner(), observable -> viewModel.refreshDeviceInfos());
         viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
             if(deviceInfos != null && deviceInfos.size() > 0) {
                 this.values = deviceInfos;

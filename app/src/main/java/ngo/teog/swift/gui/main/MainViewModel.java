@@ -25,26 +25,27 @@ public class MainViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int userId) {
-        if(this.hospital != null) {
-            return;
+    public LiveData<Observable> init(int userId) {
+        if(this.observable != null) {
+            return observable;
         }
 
         this.userId = userId;
+
         observable = hospitalRepo.loadObservable(1);
         hospital = hospitalRepo.loadUserHospital(userId, true);
 
-        new Thread(new LoadRunner()).start();
+        new Thread(new DeviceInfosLoadRunner(userId)).start();
+
+        return observable;
     }
 
     public LiveData<Hospital> getUserHospital() {
         return hospital;
     }
 
-    public LiveData<Observable> getUpdateIndicator() { return observable; }
-
     public void refreshHospital() {
-        hospitalRepo.refreshUserHospital(userId);
+        hospitalRepo.refreshUserHospital(this.userId);
     }
 
     /**
@@ -62,10 +63,16 @@ public class MainViewModel extends ViewModel {
     }
 
     public void refreshDeviceInfos() {
-        new Thread(new LoadRunner()).start();
+        new Thread(new DeviceInfosLoadRunner(this.userId)).start();
     }
 
-    private class LoadRunner implements Runnable {
+    private class DeviceInfosLoadRunner implements Runnable {
+        private final int userId;
+
+        public DeviceInfosLoadRunner(int userId) {
+            this.userId = userId;
+        }
+
         @Override
         public void run() {
             List<DeviceInfo> deviceInfos = hospitalRepo.getHospitalDevices(userId);

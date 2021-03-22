@@ -190,8 +190,7 @@ public class DeviceInfoActivity extends BaseActivity {
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(DeviceInfoViewModel.class);
-        viewModel.init(userId, deviceId);
-        viewModel.getUpdateIndicator().observe(this, observable -> viewModel.refreshDevice());
+        viewModel.init(userId, deviceId).observe(this, observable -> viewModel.refreshDevice());
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
             this.deviceInfo = deviceInfo;
 
@@ -399,11 +398,7 @@ public class DeviceInfoActivity extends BaseActivity {
             }
 
             device.setLastUpdate(new Date());
-
-            SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-            viewModel.updateDevice(device, userId);
+            viewModel.updateDevice(device);
         }
     }
 

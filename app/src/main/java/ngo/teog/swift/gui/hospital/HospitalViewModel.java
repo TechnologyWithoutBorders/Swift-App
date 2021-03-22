@@ -21,6 +21,7 @@ public class HospitalViewModel extends ViewModel {
     private LiveData<List<User>> users;
     private final MutableLiveData<List<DeviceInfo>> liveDeviceInfos = new MutableLiveData<>();
     private final HospitalRepository hospitalRepo;
+    private int userId;
 
     @Inject
     public HospitalViewModel(HospitalRepository hospitalRepo) {
@@ -31,6 +32,8 @@ public class HospitalViewModel extends ViewModel {
         if(this.observable != null) {
             return observable;
         }
+
+        this.userId = userId;
 
         observable = hospitalRepo.loadObservable(1);
         hospital = hospitalRepo.loadUserHospital(userId, true);
@@ -53,8 +56,8 @@ public class HospitalViewModel extends ViewModel {
         return liveDeviceInfos;
     }
 
-    public void refreshDeviceInfos(int userId) {
-        new Thread(new DeviceInfoLoadRunner(userId)).start();
+    public void refreshDeviceInfos() {
+        new Thread(new DeviceInfoLoadRunner(this.userId)).start();
     }
 
     private class DeviceInfoLoadRunner implements Runnable {
