@@ -166,7 +166,7 @@ public class HospitalActivity extends BaseActivity {
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         HospitalViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(HospitalViewModel.class);
-        viewModel.init(id);
+        viewModel.init(id).observe(this, observable -> viewModel.refreshDeviceInfos());
         viewModel.getHospital().observe(this, hospital -> {
             if(hospital != null) {
                 nameView.setText(hospital.getName());

@@ -158,6 +158,10 @@ public class HospitalRepository {
         return hospitalDao.loadDevice(userId, deviceId);
     }
 
+    public LiveData<Observable> loadObservable(int id) {
+        return hospitalDao.loadObservable(id);
+    }
+
     public DeviceInfo getDevice(int userId, int deviceId) {
         return hospitalDao.getDevice(userId, deviceId);
     }
@@ -260,6 +264,10 @@ public class HospitalRepository {
 
             refreshUserHospitalSync(userId);
         });
+    }
+
+    public void saveObservableSync(Observable observable) {
+        hospitalDao.save(observable);
     }
 
     private void refreshUserHospitalSync(int userId) {//TODO is there any actual difference to refreshUserHospital()?
@@ -415,6 +423,8 @@ public class HospitalRepository {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                     editor.apply();
+
+                    HospitalRepository.this.saveObservableSync(new Observable(1));//TODO constant
                 } catch(Exception e) {
                     Log.e(HospitalRepository.this.getClass().getName(), e.toString(), e);
                     //we cannot show any information to the user from here as it runs in an extra thread

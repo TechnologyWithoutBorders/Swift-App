@@ -8,12 +8,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalRepository;
+import ngo.teog.swift.helpers.data.Observable;
 
 public class MainViewModel extends ViewModel {
     private int userId;
+    private LiveData<Observable> observable;
     private LiveData<Hospital> hospital;
     private final MutableLiveData<List<DeviceInfo>> liveDeviceInfos = new MutableLiveData<>();
     private final HospitalRepository hospitalRepo;
@@ -23,19 +26,27 @@ public class MainViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public void init(int userId) {
-        if(this.hospital != null) {
-            return;
+    public LiveData<Observable> init(int userId) {
+        if(this.observable != null) {
+            return observable;
         }
 
         this.userId = userId;
+
+        observable = hospitalRepo.loadObservable(Defaults.SYNC_OBSERVABLE);
         hospital = hospitalRepo.loadUserHospital(userId, true);
 
-        new Thread(new LoadRunner()).start();
+        new Thread(new DeviceInfosLoadRunner(userId)).start();
+
+        return observable;
     }
 
     public LiveData<Hospital> getUserHospital() {
         return hospital;
+    }
+
+    public void refreshHospital() {
+        hospitalRepo.refreshUserHospital(this.userId);
     }
 
     /**
@@ -53,10 +64,16 @@ public class MainViewModel extends ViewModel {
     }
 
     public void refreshDeviceInfos() {
-        new Thread(new LoadRunner()).start();
+        new Thread(new DeviceInfosLoadRunner(this.userId)).start();
     }
 
-    private class LoadRunner implements Runnable {
+    private class DeviceInfosLoadRunner implements Runnable {
+        private final int userId;
+
+        public DeviceInfosLoadRunner(int userId) {
+            this.userId = userId;
+        }
+
         @Override
         public void run() {
             List<DeviceInfo> deviceInfos = hospitalRepo.getHospitalDevices(userId);

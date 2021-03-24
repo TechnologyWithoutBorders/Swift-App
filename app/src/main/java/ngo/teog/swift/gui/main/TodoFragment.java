@@ -142,15 +142,15 @@ public class TodoFragment extends Fragment {
         super.onResume();
 
         if(resumed) {
-            Log.i(this.getClass().getName(), "activity has resumed, refreshing...");
-            refresh();
+            Log.i(this.getClass().getName(), "activity has resumed, refreshing device infos...");
+            viewModel.refreshDeviceInfos();
         } else {
             resumed = true;
         }
     }
 
     private void refresh() {
-        viewModel.refreshDeviceInfos();
+        viewModel.refreshHospital();
     }
 
     private static class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {

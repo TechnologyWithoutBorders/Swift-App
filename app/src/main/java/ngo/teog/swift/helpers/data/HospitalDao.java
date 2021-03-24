@@ -37,6 +37,9 @@ public abstract class HospitalDao {
     @Insert(onConflict = REPLACE)
     public abstract void save(Report report);
 
+    @Insert(onConflict = REPLACE)
+    public abstract void save(Observable observable);
+
     @Transaction
     @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
     public abstract LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId);
@@ -53,6 +56,9 @@ public abstract class HospitalDao {
 
     @Query("SELECT * FROM users WHERE id = :id")
     public abstract LiveData<User> loadUser(int id);
+
+    @Query("SELECT * FROM observables WHERE id = :id")
+    public abstract LiveData<Observable> loadObservable(int id);
 
     @Transaction
     @Query("SELECT * FROM devices WHERE devices.hospital = (SELECT hospital FROM users WHERE users.id = :userId) AND devices.id = :deviceId")

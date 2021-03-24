@@ -39,6 +39,7 @@ import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
+import ngo.teog.swift.helpers.data.Observable;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.User;
@@ -216,6 +217,8 @@ public class SynchronizeWorker extends Worker {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
                     editor.apply();
+
+                    hospitalRepository.saveObservableSync(new Observable(1));//TODO constant
 
                     executorService.shutdown();
                 } catch(Exception e) {

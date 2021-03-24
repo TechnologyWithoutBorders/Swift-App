@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
         this.setTitle(getResources().getString(R.string.app_name) + " - " + country);
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(MainViewModel.class);
-        viewModel.init(id);
+        viewModel.init(id).observe(this, observable -> viewModel.refreshDeviceInfos());
 
         handleIntent(this.getIntent());
 
