@@ -122,14 +122,14 @@ public class MainActivity extends BaseActivity {
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
-        PeriodicWorkRequest syncWork =
+        /*PeriodicWorkRequest syncWork = //TODO activate
                 new PeriodicWorkRequest.Builder(SynchronizeWorker.class, Defaults.SYNC_INTERVAL, TimeUnit.HOURS, Defaults.SYNC_FLEX_INTERVAL, TimeUnit.MINUTES)
                         .setInitialDelay(Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
                         .addTag(SynchronizeWorker.TAG)
                         .setConstraints(constraints)
                         .build();
 
-        WorkManager.getInstance(getApplicationContext()).enqueueUniquePeriodicWork(SynchronizeWorker.TAG, ExistingPeriodicWorkPolicy.KEEP, syncWork);
+        WorkManager.getInstance(getApplicationContext()).enqueueUniquePeriodicWork(SynchronizeWorker.TAG, ExistingPeriodicWorkPolicy.KEEP, syncWork);*/
     }
 
     @Override
@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity {
      */
     public void logout() {
         //cancel background synchronization
-        WorkManager.getInstance(this.getApplicationContext()).cancelAllWorkByTag(SynchronizeWorker.TAG);
+        //WorkManager.getInstance(this.getApplicationContext()).cancelAllWorkByTag(SynchronizeWorker.TAG); TODO activate
 
         //clear database
         ExecutorService executor = Executors.newFixedThreadPool(1);

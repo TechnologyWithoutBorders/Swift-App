@@ -52,7 +52,7 @@ import ngo.teog.swift.helpers.data.UtcDateTypeAdapter;
 public class SynchronizeWorker extends Worker {
 
     /** Tag that identifies periodic background sync task. Must be set explicitly when queueing worker. */
-    public static final String TAG = "periodic_background_synchronization";
+    //public static final String TAG = "periodic_background_synchronization";
 
     @Inject
     HospitalRepository hospitalRepository;
