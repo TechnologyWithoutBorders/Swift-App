@@ -74,7 +74,7 @@ dependencies {
     implementation "com.github.chrisbanes:PhotoView:$photo_view_version"
 
     //FancyShowCaseView for tutorial/highlighting features
-    def fancy_showcase_view_version = "1.3.3"
+    def fancy_showcase_view_version = "1.3.5"
     implementation "me.toptas.fancyshowcase:fancyshowcaseview:$fancy_showcase_view_version"
 
     //Some miscellaneous dependencies
