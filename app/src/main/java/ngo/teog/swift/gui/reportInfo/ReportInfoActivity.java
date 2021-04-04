@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,12 +40,13 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class ReportInfoActivity extends BaseActivity {
 
-    private FancyShowCaseQueue tutorialQueue;
-
     @Inject
     ViewModelFactory viewModelFactory;
 
     private ReportInfo reportInfo;
+
+    private LinearLayout stateChange;
+    private LinearLayout descriptionLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,8 @@ public class ReportInfoActivity extends BaseActivity {
         ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
 
-        LinearLayout stateChange = findViewById(R.id.state_change);
-        LinearLayout descriptionLayout = findViewById(R.id.descriptionLayout);
-
-        //Build tutorial
-        tutorialQueue = new FancyShowCaseQueue()
-                .add(buildTutorialStep(stateChange, getString(R.string.report_tutorial_state_change)))
-                .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description)));
+        stateChange = findViewById(R.id.state_change);
+        descriptionLayout = findViewById(R.id.descriptionLayout);
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -133,6 +130,11 @@ public class ReportInfoActivity extends BaseActivity {
 
             return true;
         } else if (item.getItemId() == R.id.info) {
+            //Build tutorial
+            FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                    .add(buildTutorialStep(stateChange, getString(R.string.report_tutorial_state_change), Gravity.CENTER))
+                    .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description), Gravity.CENTER));
+
             tutorialQueue.show();
 
             return true;

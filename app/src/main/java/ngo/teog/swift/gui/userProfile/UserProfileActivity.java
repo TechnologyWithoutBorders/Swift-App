@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -101,8 +102,8 @@ public class UserProfileActivity extends BaseActivity {
         if(id == R.id.info) {
             //Show tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                .add(buildTutorialStep(tableLayout, getString(R.string.user_profile_tutorial_attribute_table)))
-                .add(buildTutorialStep(editView, getString(R.string.user_profile_tutorial_edit)));
+                .add(buildTutorialStep(tableLayout, getString(R.string.user_profile_tutorial_attribute_table), Gravity.CENTER))
+                .add(buildTutorialStep(editView, getString(R.string.user_profile_tutorial_edit), Gravity.CENTER));
 
             tutorialQueue.show();
 

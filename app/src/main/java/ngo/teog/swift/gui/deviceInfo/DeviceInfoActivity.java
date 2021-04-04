@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -442,11 +443,11 @@ public class DeviceInfoActivity extends BaseActivity {
         } else if(item.getItemId() == R.id.info) {
             //Show tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                    .add(buildTutorialStep(attributeTable, getString(R.string.device_info_tutorial_attribute_table)))
-                    .add(buildTutorialStep(stateSection, getString(R.string.device_info_tutorial_state_section)))
-                    .add(buildTutorialStep(reportListView, getString(R.string.device_info_tutorial_report_list)))
-                    .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation)))
-                    .add(buildTutorialStep(documentButton, getString(R.string.device_info_tutorial_documents)));
+                    .add(buildTutorialStep(attributeTable, getString(R.string.device_info_tutorial_attribute_table), Gravity.TOP))
+                    .add(buildTutorialStep(stateSection, getString(R.string.device_info_tutorial_state_section), Gravity.TOP))
+                    .add(buildTutorialStep(reportListView, getString(R.string.device_info_tutorial_report_list), Gravity.CENTER))
+                    .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation), Gravity.CENTER))
+                    .add(buildTutorialStep(documentButton, getString(R.string.device_info_tutorial_documents), Gravity.CENTER));
 
             tutorialQueue.show();
 
