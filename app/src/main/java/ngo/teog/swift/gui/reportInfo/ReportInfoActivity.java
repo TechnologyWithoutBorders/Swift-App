@@ -140,7 +140,7 @@ public class ReportInfoActivity extends BaseActivity {
             //Build tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
                     .add(buildTutorialStep(stateChange, getString(R.string.report_tutorial_state_change), Gravity.CENTER))
-                    .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description), Gravity.CENTER));
+                    .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description), Gravity.TOP));
 
             tutorialQueue.show();
 
