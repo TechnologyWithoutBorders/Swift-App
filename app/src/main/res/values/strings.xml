@@ -201,11 +201,16 @@
     <!-- Report Information -->
     <string name="report">Report</string>
     <string name="report_description">Description</string>
+    <string name="report_info">Information</string>
     <string name="report_date">Date</string>
     <string name="report_state_change">State Change</string>
+    <string name="report_previous_state">Previous State</string>
+    <string name="report_new_state">New State</string>
+    <string name="arrow_desc">arrow</string>
     <string name="report_author">Author</string>
     <string name="report_title">Title</string>
     <string name="report_description_description">please provide a description of what you have done</string>
+    <string name="report_no_description">no description available</string>
     <string name="report_creation_invalid_state">new state can not match old state</string>
     <string name="report_tutorial_state_change">This section shows you the change of state the device went through in the selected report.</string>
     <string name="report_tutorial_description">The description contains all the information the creator of the report deemed to be important.</string>

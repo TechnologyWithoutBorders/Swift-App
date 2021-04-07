@@ -58,6 +58,8 @@ public class ReportInfoActivity extends BaseActivity {
         TextView dateView = findViewById(R.id.dateView);
         TextView authorView = findViewById(R.id.authorView);
         TextView titleView = findViewById(R.id.title_view);
+        TextView fromStateText = findViewById(R.id.fromStateText);
+        TextView toStateText = findViewById(R.id.toStateText);
         ImageView fromState = findViewById(R.id.fromState);
         ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
@@ -92,10 +94,12 @@ public class ReportInfoActivity extends BaseActivity {
                 DeviceStateVisuals previousStateInfo = new DeviceStateVisuals(report.getPreviousState(), this);
                 fromState.setImageDrawable(previousStateInfo.getStateIcon());
                 fromState.setBackgroundColor(previousStateInfo.getBackgroundColor());
+                fromStateText.setText(previousStateInfo.getStateString());
 
                 DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(), this);
                 toState.setImageDrawable(currentStateInfo.getStateIcon());
                 toState.setBackgroundColor(currentStateInfo.getBackgroundColor());
+                toStateText.setText(currentStateInfo.getStateString());
 
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
                 dateView.setText(dateFormat.format(report.getCreated()));
@@ -106,7 +110,10 @@ public class ReportInfoActivity extends BaseActivity {
                     titleView.setText(title);
                 }
 
-                descriptionView.setText(report.getDescription());
+                if (!report.getDescription().isEmpty()){
+                    descriptionView.setText(report.getDescription());
+                }
+
             }
         });
     }
