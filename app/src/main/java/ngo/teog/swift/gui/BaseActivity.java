@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.Html;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -72,10 +73,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param message message to display during step
      * @return displayable tutorial step
      */
-    public FancyShowCaseView buildTutorialStep(View viewToFocus, String message) {
+    public FancyShowCaseView buildTutorialStep(View viewToFocus, String message, int titleGravity) {
         return new FancyShowCaseView.Builder(this)
                 .focusOn(viewToFocus)
                 .title(message)
+                .titleGravity(titleGravity | Gravity.CENTER_HORIZONTAL)
                 .titleSize(25, TypedValue.COMPLEX_UNIT_SP)
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .roundRectRadius(60)

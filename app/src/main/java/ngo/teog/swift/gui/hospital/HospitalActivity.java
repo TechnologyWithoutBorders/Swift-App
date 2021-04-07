@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -270,9 +271,9 @@ public class HospitalActivity extends BaseActivity {
         } else if(item.getItemId() == R.id.info) {
             //Show tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                    .add(buildTutorialStep(findViewById(R.id.device_state_overview), getString(R.string.hospital_info_tutorial_state_overview)))
-                    .add(buildTutorialStep(hospitalListView, getString(R.string.hospital_info_tutorial_asset_list)))
-                    .add(buildTutorialStep(searchView, getString(R.string.hospital_info_tutorial_filter)));
+                    .add(buildTutorialStep(findViewById(R.id.device_state_overview), getString(R.string.hospital_info_tutorial_state_overview), Gravity.CENTER))
+                    .add(buildTutorialStep(hospitalListView, getString(R.string.hospital_info_tutorial_asset_list), Gravity.TOP))
+                    .add(buildTutorialStep(searchView, getString(R.string.hospital_info_tutorial_filter), Gravity.CENTER));
 
             tutorialQueue.show();
 
