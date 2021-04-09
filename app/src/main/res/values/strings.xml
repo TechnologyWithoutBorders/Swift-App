@@ -5,12 +5,10 @@
 
     <!-- Information Texts -->
     <string name="menu_information">information</string>
-    <string name="hospital_activity">Use this view to find members of staff or devices associated with your hospital.</string>
     <string name="newdevice_activity_1">Please put a fresh barcode sticker on the device you want to register and scan it with your camera.</string>
     <string name="newdevice_activity_2">Please enter all general data known about the device.</string>
     <string name="newdevice_activity_3">Please take a snapshot of the device, so your colleagues can indentify it easily.</string>
     <string name="reportcreation_activity">Please add a short description about what problems the device has and what you have done in order to solve them.</string>
-    <string name="reportInfoActivity">Always consider browsing through the reports in order to get more information about the device before planning your repair.</string>
     <string name="userinfo_activity">You can use this data to contact your colleagues or staff at other hospitals.</string>
     <string name="userprofile_activity">This is your very own user profile. You can add some general information like your telephone number and position here.</string>
     <string name="mainactivity"><![CDATA[
@@ -204,9 +202,6 @@
     <string name="report_info">Information</string>
     <string name="report_date">Date</string>
     <string name="report_state_change">State Change</string>
-    <string name="report_previous_state">Previous State</string>
-    <string name="report_new_state">New State</string>
-    <string name="arrow_desc">arrow</string>
     <string name="report_author">Author</string>
     <string name="report_title">Title</string>
     <string name="report_description_description">please provide a description of what you have done</string>
@@ -290,7 +285,6 @@
     <string name="user_created">User has been created</string>
 
     <!-- Symbols -->
-    <string name="transition_indicator">---></string>
     <string name="line_break">%s\n%s</string>
 
 </resources>
