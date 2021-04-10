@@ -8,8 +8,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,10 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +62,7 @@ public class HospitalActivity extends BaseActivity {
     ViewModelFactory viewModelFactory;
 
     private ExpandableListView hospitalListView;
-    private EditText searchView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,20 +112,25 @@ public class HospitalActivity extends BaseActivity {
 
         searchView = findViewById(R.id.search_view);
 
-        searchView.addTextChangedListener(new TextWatcher() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                adapter.filter(charSequence.toString());
+            public boolean onQueryTextSubmit(String query) {
+                return true;
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public boolean onQueryTextChange(String newText) {
+                if(newText.isEmpty()) {
+                    hospitalInfo.setVisibility(View.VISIBLE);
+                }
+
+                adapter.filter(newText);
+
+                return true;
+            }
         });
 
-        searchView.setOnFocusChangeListener((v, hasFocus) -> {
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if(v.hasFocus()) {
                 hospitalInfo.setVisibility(View.GONE);
 
