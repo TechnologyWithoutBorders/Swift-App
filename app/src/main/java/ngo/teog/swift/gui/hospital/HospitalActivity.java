@@ -21,6 +21,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +89,7 @@ public class HospitalActivity extends BaseActivity {
             storageAccess.setVisibility(View.VISIBLE);
         }
 
+        LinearLayout hospitalInfo = findViewById(R.id.hospital_info);
         hospitalListView = findViewById(R.id.hospitalList);
 
         ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
@@ -127,6 +129,8 @@ public class HospitalActivity extends BaseActivity {
 
         searchView.setOnFocusChangeListener((v, hasFocus) -> {
             if(v.hasFocus()) {
+                hospitalInfo.setVisibility(View.GONE);
+
                 hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
                 hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
             }
