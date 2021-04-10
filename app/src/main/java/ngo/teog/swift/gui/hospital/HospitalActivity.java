@@ -122,20 +122,16 @@ public class HospitalActivity extends BaseActivity {
             public boolean onQueryTextChange(String newText) {
                 if(newText.isEmpty()) {
                     hospitalInfo.setVisibility(View.VISIBLE);
+                } else {
+                    hospitalInfo.setVisibility(View.GONE);
+
+                    hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
+                    hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
                 }
 
                 adapter.filter(newText);
 
                 return true;
-            }
-        });
-
-        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
-            if(v.hasFocus()) {
-                hospitalInfo.setVisibility(View.GONE);
-
-                hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
-                hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
             }
         });
 
