@@ -95,15 +95,15 @@ public class HospitalActivity extends BaseActivity {
 
         hospitalListView.setOnChildClickListener((parent, view, groupPosition, childPosition, id) -> {
             switch(groupPosition) {
-                case 0:
-                    Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
-                    intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
-                    startActivity(intent);
-                    break;
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
                     intent2.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
                     startActivity(intent2);
+                    break;
+                case ExpandableHospitalAdapter.USERS_GROUP:
+                    Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
+                    intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
+                    startActivity(intent);
                     break;
             }
 
@@ -301,6 +301,9 @@ public class HospitalActivity extends BaseActivity {
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
+        private static final int DEVICES_GROUP = 0;
+        private static final int USERS_GROUP = 1;
+
         private List<User> users = new ArrayList<>();
         private List<User> filteredUsers = new ArrayList<>();
         private List<DeviceInfo> deviceInfos = new ArrayList<>();
@@ -359,10 +362,10 @@ public class HospitalActivity extends BaseActivity {
         @Override
         public int getChildrenCount(int i) {
             switch(i) {
-                case 0:
-                    return filteredUsers.size();
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     return filteredDeviceInfos.size();
+                case ExpandableHospitalAdapter.USERS_GROUP:
+                    return filteredUsers.size();
                 default:
                     return 0;
             }
@@ -376,10 +379,10 @@ public class HospitalActivity extends BaseActivity {
         @Override
         public Object getChild(int groupPosition, int childPosition) {
             switch(groupPosition) {
-                case 0:
-                    return filteredUsers.get(childPosition);
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     return filteredDeviceInfos.get(childPosition);
+                case ExpandableHospitalAdapter.USERS_GROUP:
+                    return filteredUsers.get(childPosition);
                 default:
                     return null;
             }
@@ -412,11 +415,11 @@ public class HospitalActivity extends BaseActivity {
             TextView countView = convertView.findViewById(R.id.countView);
 
             switch(groupPosition) {
-                case 0:
+                case ExpandableHospitalAdapter.USERS_GROUP:
                     nameView.setText(R.string.hospital_members_heading);
                     countView.setText(String.format(Locale.ROOT, "%d", filteredUsers.size()));
                     break;
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     nameView.setText(R.string.hospital_devices_heading);
                     countView.setText(String.format(Locale.ROOT, "%d", filteredDeviceInfos.size()));
                     break;
@@ -428,7 +431,7 @@ public class HospitalActivity extends BaseActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             switch(groupPosition) {
-                case 0:
+                case ExpandableHospitalAdapter.USERS_GROUP:
                     if(convertView == null || (int)convertView.getTag() != groupPosition) {
                         LayoutInflater inflater = (LayoutInflater) HospitalActivity.this
                                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -452,7 +455,7 @@ public class HospitalActivity extends BaseActivity {
                         }
                     }
                     break;
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     if(convertView == null || (int)convertView.getTag() != groupPosition) {
                         LayoutInflater inflater = (LayoutInflater) HospitalActivity.this
                                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
