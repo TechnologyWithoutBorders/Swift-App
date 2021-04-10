@@ -125,6 +125,13 @@ public class HospitalActivity extends BaseActivity {
             public void afterTextChanged(Editable editable) {}
         });
 
+        searchView.setOnFocusChangeListener((v, hasFocus) -> {
+            if(v.hasFocus()) {
+                hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
+                hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
+            }
+        });
+
         TextView nameView = findViewById(R.id.nameView);
         TextView locationView = findViewById(R.id.locationView);
 
