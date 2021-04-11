@@ -24,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.transition.AutoTransition;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,6 +90,8 @@ public class HospitalActivity extends BaseActivity {
             storageAccess.setVisibility(View.VISIBLE);
         }
 
+        LinearLayout contentView = findViewById(R.id.content_view);
+
         LinearLayout hospitalInfo = findViewById(R.id.hospital_info);
         hospitalListView = findViewById(R.id.hospitalList);
 
@@ -112,6 +117,9 @@ public class HospitalActivity extends BaseActivity {
 
         searchView = findViewById(R.id.search_view);
 
+        Transition transition = new AutoTransition()
+                .setDuration(200);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -121,8 +129,10 @@ public class HospitalActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(newText.isEmpty()) {
+                    TransitionManager.beginDelayedTransition(contentView, transition);
                     hospitalInfo.setVisibility(View.VISIBLE);
                 } else {
+                    TransitionManager.beginDelayedTransition(contentView, transition);
                     hospitalInfo.setVisibility(View.GONE);
 
                     hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
@@ -132,6 +142,16 @@ public class HospitalActivity extends BaseActivity {
                 adapter.filter(newText);
 
                 return true;
+            }
+        });
+
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus) {
+                TransitionManager.beginDelayedTransition(contentView, transition);
+                hospitalInfo.setVisibility(View.GONE);
+
+                hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
+                hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
             }
         });
 
