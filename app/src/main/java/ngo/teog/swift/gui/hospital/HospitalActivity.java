@@ -355,6 +355,10 @@ public class HospitalActivity extends BaseActivity {
             this.notifyDataSetChanged();
         }
 
+        /**
+         * Fills the global filtered collections depending on the given search string.
+         * @param searchString text the user searched for
+         */
         public void filter(String searchString) {
             String matchingString = searchString.toLowerCase();
 
