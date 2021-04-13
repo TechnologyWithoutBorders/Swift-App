@@ -362,14 +362,26 @@ public class HospitalActivity extends BaseActivity {
         public void filter(String searchString) {
             String matchingString = searchString.toLowerCase();
 
-            filteredUsers = new ArrayList<>();
-            filteredDeviceInfos = new ArrayList<>();
+            List<PrioUser> prioUsers = new ArrayList<>();
+            List<PrioDeviceInfo> prioDeviceInfos = new ArrayList<>();
 
             //first filter users by name
             for (User user : users) {
-                if (user.getName().toLowerCase().contains(matchingString)) {
-                    filteredUsers.add(user);
+                String name = user.getName().toLowerCase();
+
+                int foundIndex = name.indexOf(matchingString);
+
+                if(foundIndex >= 0) {
+                    prioUsers.add(new PrioUser(user, foundIndex));
                 }
+            }
+
+            Collections.sort(prioUsers, (first, second) -> first.getPriority()-second.getPriority());
+
+            filteredUsers = new ArrayList<>();
+
+            for (PrioUser prioUser : prioUsers) {
+                filteredUsers.add(prioUser.getUser());
             }
 
             //now filter devices by type, model and manufacturer
@@ -380,12 +392,86 @@ public class HospitalActivity extends BaseActivity {
                 String manufacturer = device.getManufacturer().toLowerCase();
                 String model = device.getModel().toLowerCase();
 
-                if(type.contains(matchingString) || manufacturer.contains(matchingString) || model.contains(matchingString)) {
-                    filteredDeviceInfos.add(deviceInfo);
+                int typeIndex = type.indexOf(matchingString);
+
+                //one after another for better performance
+                if(typeIndex != 0) {
+                    int manufacturerIndex = manufacturer.indexOf(matchingString);
+
+                    if(manufacturerIndex != 0) {
+                        int highestPrio = Integer.MAX_VALUE;
+
+                        if(typeIndex >= 0) {
+                            highestPrio = typeIndex;
+                        }
+
+                        if(manufacturerIndex >= 0 && manufacturerIndex < highestPrio) {
+                            highestPrio = manufacturerIndex;
+                        }
+
+                        int modelIndex = model.indexOf(matchingString);
+                        if(modelIndex >= 0 && modelIndex < highestPrio) {
+                            highestPrio = modelIndex;
+                        }
+
+                        if(highestPrio != Integer.MAX_VALUE) {
+                            prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, highestPrio));
+                        }
+                    } else {
+                        prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, 0));
+                    }
+                } else {
+                    prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, 0));
                 }
             }
 
+            Collections.sort(prioDeviceInfos, (first, second) -> first.getPriority()-second.getPriority());
+
+            filteredDeviceInfos = new ArrayList<>();
+
+            for (PrioDeviceInfo prioDeviceInfo : prioDeviceInfos) {
+                filteredDeviceInfos.add(prioDeviceInfo.getDeviceInfo());
+            }
+
             this.notifyDataSetChanged();
+        }
+
+        //TODO Documentation
+        private class PrioUser {
+            private final User user;
+            private final int priority;
+
+            public PrioUser(User user, int priority) {
+                this.user = user;
+                this.priority = priority;
+            }
+
+            public User getUser() {
+                return user;
+            }
+
+            public int getPriority() {
+                return priority;
+            }
+        }
+
+        //TODO Documentation
+        private class PrioDeviceInfo {
+            private final DeviceInfo deviceInfo;
+            private final int priority;
+
+            public PrioDeviceInfo(DeviceInfo deviceInfo, int priority) {
+                this.deviceInfo = deviceInfo;
+                this.priority = priority;
+            }
+
+            public DeviceInfo getDeviceInfo() {
+                return deviceInfo;
+            }
+
+            public int getPriority() {
+                return priority;
+            }
         }
 
         @Override
