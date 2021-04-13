@@ -433,7 +433,9 @@ public class HospitalActivity extends BaseActivity {
             this.notifyDataSetChanged();
         }
 
-        //TODO Documentation
+        /**
+         * Wraps a user object and its filter priority.
+         */
         private class PrioUser {
             private final User user;
             private final int priority;
@@ -452,7 +454,9 @@ public class HospitalActivity extends BaseActivity {
             }
         }
 
-        //TODO Documentation
+        /**
+         * Wraps a deviceInfo object and its filter priority.
+         */
         private class PrioDeviceInfo {
             private final DeviceInfo deviceInfo;
             private final int priority;
