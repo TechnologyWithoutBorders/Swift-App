@@ -134,9 +134,6 @@ public class HospitalActivity extends BaseActivity {
                 } else {
                     TransitionManager.beginDelayedTransition(contentView, transition);
                     hospitalInfo.setVisibility(View.GONE);
-
-                    hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
-                    hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
                 }
 
                 adapter.filter(newText);
