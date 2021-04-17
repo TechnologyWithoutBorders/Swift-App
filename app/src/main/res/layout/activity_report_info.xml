@@ -61,7 +61,7 @@
             android:padding="5dp"
             android:layout_gravity="center_horizontal"
             app:srcCompat="@drawable/ic_baseline_arrow_right_alt_24"
-            android:contentDescription="@string/arrow_desc" />
+            android:contentDescription="@string/report_state_change" />
 
         <LinearLayout
             android:id="@+id/toStateLayout"

@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/arrow_desc"
+            android:contentDescription="@string/report_state_change"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:foregroundGravity="center"
