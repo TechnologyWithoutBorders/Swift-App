@@ -60,4 +60,12 @@ public class DatabaseMigrationTest {
 
         helper.runMigrationsAndValidate(TEST_DB, 5, true, RoomModule.MIGRATION_4_5);
     }
+
+    @Test
+    public void migrate5To6() throws IOException {
+        SupportSQLiteDatabase db = helper.createDatabase(TEST_DB, 5);
+        db.close();
+
+        helper.runMigrationsAndValidate(TEST_DB, 6, true, RoomModule.MIGRATION_5_6);
+    }
 }
