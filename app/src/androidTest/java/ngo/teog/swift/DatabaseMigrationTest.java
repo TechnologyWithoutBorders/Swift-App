@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import ngo.teog.swift.helpers.data.HospitalDatabase;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -23,7 +24,7 @@ public class DatabaseMigrationTest {
     public MigrationTestHelper helper;
 
     public DatabaseMigrationTest() {
-        helper = new MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), HospitalDatabase.class.getCanonicalName(), new FrameworkSQLiteOpenHelperFactory());
+        helper = new MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), Objects.requireNonNull(HospitalDatabase.class.getCanonicalName()), new FrameworkSQLiteOpenHelperFactory());
     }
 
     @Test
