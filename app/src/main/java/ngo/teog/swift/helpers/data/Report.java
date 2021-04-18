@@ -9,7 +9,7 @@ import java.util.Date;
  * Definition of "reports" table in Room database and wrapper class for a report.
  * @author nitelow
  */
-@Entity(tableName = "reports", primaryKeys = {"id", "device"})//TODO hospital muss auch in primary keys
+@Entity(tableName = "reports", primaryKeys = {"id", "device", "hospital"})
 public class Report implements  Serializable {
 
     private int id;
