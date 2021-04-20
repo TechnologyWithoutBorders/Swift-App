@@ -159,7 +159,7 @@
             android:label="My Hospital"
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
+             />
         <activity
             android:name=".gui.deviceCreation.NewDeviceActivity2"
             android:configChanges="orientation|keyboardHidden"

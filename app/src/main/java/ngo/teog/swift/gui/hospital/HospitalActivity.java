@@ -8,8 +8,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,13 +16,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.transition.AutoTransition;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +65,7 @@ public class HospitalActivity extends BaseActivity {
     ViewModelFactory viewModelFactory;
 
     private ExpandableListView hospitalListView;
-    private EditText searchView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,9 @@ public class HospitalActivity extends BaseActivity {
             storageAccess.setVisibility(View.VISIBLE);
         }
 
+        LinearLayout contentView = findViewById(R.id.content_view);
+
+        LinearLayout hospitalInfo = findViewById(R.id.hospital_info);
         hospitalListView = findViewById(R.id.hospitalList);
 
         ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
@@ -95,15 +100,15 @@ public class HospitalActivity extends BaseActivity {
 
         hospitalListView.setOnChildClickListener((parent, view, groupPosition, childPosition, id) -> {
             switch(groupPosition) {
-                case 0:
-                    Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
-                    intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
-                    startActivity(intent);
-                    break;
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     Intent intent2 = new Intent(HospitalActivity.this, DeviceInfoActivity.class);
                     intent2.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getDevice().getId());
                     startActivity(intent2);
+                    break;
+                case ExpandableHospitalAdapter.USERS_GROUP:
+                    Intent intent = new Intent(HospitalActivity.this, UserInfoActivity.class);
+                    intent.putExtra(ResourceKeys.USER_ID, ((User)hospitalListView.getExpandableListAdapter().getChild(groupPosition, childPosition)).getId());
+                    startActivity(intent);
                     break;
             }
 
@@ -112,17 +117,39 @@ public class HospitalActivity extends BaseActivity {
 
         searchView = findViewById(R.id.search_view);
 
-        searchView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        Transition transition = new AutoTransition()
+                .setDuration(200);
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                adapter.filter(charSequence.toString());
+            public boolean onQueryTextSubmit(String query) {
+                return true;
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {}
+            public boolean onQueryTextChange(String newText) {
+                if(newText.isEmpty()) {
+                    TransitionManager.beginDelayedTransition(contentView, transition);
+                    hospitalInfo.setVisibility(View.VISIBLE);
+                } else {
+                    TransitionManager.beginDelayedTransition(contentView, transition);
+                    hospitalInfo.setVisibility(View.GONE);
+                }
+
+                adapter.filter(newText);
+
+                return true;
+            }
+        });
+
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus) {
+                TransitionManager.beginDelayedTransition(contentView, transition);
+                hospitalInfo.setVisibility(View.GONE);
+
+                hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
+                hospitalListView.expandGroup(ExpandableHospitalAdapter.USERS_GROUP);
+            }
         });
 
         TextView nameView = findViewById(R.id.nameView);
@@ -301,6 +328,9 @@ public class HospitalActivity extends BaseActivity {
     }
 
     private class ExpandableHospitalAdapter extends BaseExpandableListAdapter {
+        private static final int DEVICES_GROUP = 0;
+        private static final int USERS_GROUP = 1;
+
         private List<User> users = new ArrayList<>();
         private List<User> filteredUsers = new ArrayList<>();
         private List<DeviceInfo> deviceInfos = new ArrayList<>();
@@ -322,17 +352,33 @@ public class HospitalActivity extends BaseActivity {
             this.notifyDataSetChanged();
         }
 
+        /**
+         * Fills the global filtered collections depending on the given search string.
+         * @param searchString text the user searched for
+         */
         public void filter(String searchString) {
             String matchingString = searchString.toLowerCase();
 
-            filteredUsers = new ArrayList<>();
-            filteredDeviceInfos = new ArrayList<>();
+            List<PrioUser> prioUsers = new ArrayList<>();
+            List<PrioDeviceInfo> prioDeviceInfos = new ArrayList<>();
 
             //first filter users by name
             for (User user : users) {
-                if (user.getName().toLowerCase().contains(matchingString)) {
-                    filteredUsers.add(user);
+                String name = user.getName().toLowerCase();
+
+                int foundIndex = name.indexOf(matchingString);
+
+                if(foundIndex >= 0) {
+                    prioUsers.add(new PrioUser(user, foundIndex));
                 }
+            }
+
+            Collections.sort(prioUsers, (first, second) -> first.getPriority()-second.getPriority());
+
+            filteredUsers = new ArrayList<>();
+
+            for (PrioUser prioUser : prioUsers) {
+                filteredUsers.add(prioUser.getUser());
             }
 
             //now filter devices by type, model and manufacturer
@@ -343,12 +389,90 @@ public class HospitalActivity extends BaseActivity {
                 String manufacturer = device.getManufacturer().toLowerCase();
                 String model = device.getModel().toLowerCase();
 
-                if(type.contains(matchingString) || manufacturer.contains(matchingString) || model.contains(matchingString)) {
-                    filteredDeviceInfos.add(deviceInfo);
+                int typeIndex = type.indexOf(matchingString);
+
+                //one after another for better performance
+                if(typeIndex != 0) {
+                    int manufacturerIndex = manufacturer.indexOf(matchingString);
+
+                    if(manufacturerIndex != 0) {
+                        int highestPrio = Integer.MAX_VALUE;
+
+                        if(typeIndex >= 0) {
+                            highestPrio = typeIndex;
+                        }
+
+                        if(manufacturerIndex >= 0 && manufacturerIndex < highestPrio) {
+                            highestPrio = manufacturerIndex;
+                        }
+
+                        int modelIndex = model.indexOf(matchingString);
+                        if(modelIndex >= 0 && modelIndex < highestPrio) {
+                            highestPrio = modelIndex;
+                        }
+
+                        if(highestPrio != Integer.MAX_VALUE) {
+                            prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, highestPrio));
+                        }
+                    } else {
+                        prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, 0));
+                    }
+                } else {
+                    prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, 0));
                 }
             }
 
+            Collections.sort(prioDeviceInfos, (first, second) -> first.getPriority()-second.getPriority());
+
+            filteredDeviceInfos = new ArrayList<>();
+
+            for (PrioDeviceInfo prioDeviceInfo : prioDeviceInfos) {
+                filteredDeviceInfos.add(prioDeviceInfo.getDeviceInfo());
+            }
+
             this.notifyDataSetChanged();
+        }
+
+        /**
+         * Wraps a user object and its filter priority.
+         */
+        private class PrioUser {
+            private final User user;
+            private final int priority;
+
+            public PrioUser(User user, int priority) {
+                this.user = user;
+                this.priority = priority;
+            }
+
+            public User getUser() {
+                return user;
+            }
+
+            public int getPriority() {
+                return priority;
+            }
+        }
+
+        /**
+         * Wraps a deviceInfo object and its filter priority.
+         */
+        private class PrioDeviceInfo {
+            private final DeviceInfo deviceInfo;
+            private final int priority;
+
+            public PrioDeviceInfo(DeviceInfo deviceInfo, int priority) {
+                this.deviceInfo = deviceInfo;
+                this.priority = priority;
+            }
+
+            public DeviceInfo getDeviceInfo() {
+                return deviceInfo;
+            }
+
+            public int getPriority() {
+                return priority;
+            }
         }
 
         @Override
@@ -359,10 +483,10 @@ public class HospitalActivity extends BaseActivity {
         @Override
         public int getChildrenCount(int i) {
             switch(i) {
-                case 0:
-                    return filteredUsers.size();
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     return filteredDeviceInfos.size();
+                case ExpandableHospitalAdapter.USERS_GROUP:
+                    return filteredUsers.size();
                 default:
                     return 0;
             }
@@ -376,10 +500,10 @@ public class HospitalActivity extends BaseActivity {
         @Override
         public Object getChild(int groupPosition, int childPosition) {
             switch(groupPosition) {
-                case 0:
-                    return filteredUsers.get(childPosition);
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     return filteredDeviceInfos.get(childPosition);
+                case ExpandableHospitalAdapter.USERS_GROUP:
+                    return filteredUsers.get(childPosition);
                 default:
                     return null;
             }
@@ -412,11 +536,11 @@ public class HospitalActivity extends BaseActivity {
             TextView countView = convertView.findViewById(R.id.countView);
 
             switch(groupPosition) {
-                case 0:
+                case ExpandableHospitalAdapter.USERS_GROUP:
                     nameView.setText(R.string.hospital_members_heading);
                     countView.setText(String.format(Locale.ROOT, "%d", filteredUsers.size()));
                     break;
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     nameView.setText(R.string.hospital_devices_heading);
                     countView.setText(String.format(Locale.ROOT, "%d", filteredDeviceInfos.size()));
                     break;
@@ -428,7 +552,7 @@ public class HospitalActivity extends BaseActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             switch(groupPosition) {
-                case 0:
+                case ExpandableHospitalAdapter.USERS_GROUP:
                     if(convertView == null || (int)convertView.getTag() != groupPosition) {
                         LayoutInflater inflater = (LayoutInflater) HospitalActivity.this
                                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -452,7 +576,7 @@ public class HospitalActivity extends BaseActivity {
                         }
                     }
                     break;
-                case 1:
+                case ExpandableHospitalAdapter.DEVICES_GROUP:
                     if(convertView == null || (int)convertView.getTag() != groupPosition) {
                         LayoutInflater inflater = (LayoutInflater) HospitalActivity.this
                                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
