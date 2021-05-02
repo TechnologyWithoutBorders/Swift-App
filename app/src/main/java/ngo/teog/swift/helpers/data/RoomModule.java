@@ -19,7 +19,7 @@ public class RoomModule {
 
     public RoomModule(Application mApplication) {
         hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build();
     }
 
@@ -84,6 +84,23 @@ public class RoomModule {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS observables (id INTEGER NOT NULL, PRIMARY KEY(id))");
+        }
+    };
+
+    public static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //Add the hospital column to primary key. This requires all report data to be copied into a new table.
+            database.beginTransaction();
+            try {
+                database.execSQL("CREATE TABLE reports_tmp(id INTEGER NOT NULL, author INTEGER NOT NULL, title TEXT, device INTEGER NOT NULL, hospital INTEGER NOT NULL, previousState INTEGER NOT NULL, currentState INTEGER NOT NULL, description TEXT, created INTEGER, lastSync INTEGER, PRIMARY KEY(id, device, hospital))");
+                database.execSQL("INSERT INTO reports_tmp(id, author, title, device, hospital, previousState, currentState, description, created, lastSync) SELECT id, author, title, device, hospital, previousState, currentState, description, created, lastSync FROM reports");
+                database.execSQL("DROP TABLE reports");
+                database.execSQL("ALTER TABLE reports_tmp RENAME TO reports");
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
         }
     };
 }
