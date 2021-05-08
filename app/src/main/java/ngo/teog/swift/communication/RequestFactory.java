@@ -268,7 +268,7 @@ public class RequestFactory {
 
                 builder.setNegativeButton(context.getString(R.string.dialog_cancel_text), (dialog, i) -> dialog.dismiss());
 
-                builder.setAdapter(adapter, (dialog, i) -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.BASE_URL + "device_documents/" + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i)))));
+                builder.setAdapter(adapter, (dialog, i) -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i)))));
 
                 AlertDialog dialog = builder.create();
 
