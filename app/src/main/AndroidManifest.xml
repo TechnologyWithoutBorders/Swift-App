@@ -21,11 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="LockedOrientationActivity">
-        <activity android:name=".gui.hospital.StorageAccessActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="Storage Access"
-            android:parentActivityName=".gui.main.MainActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".gui.hospital.PortationActivity"
             android:configChanges="orientation|keyboardHidden"
