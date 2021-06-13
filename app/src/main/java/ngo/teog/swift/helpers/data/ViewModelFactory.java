@@ -20,6 +20,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     @Override
     @NonNull
+    @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         Provider<ViewModel> viewModelProvider = viewModels.get(modelClass);
 
