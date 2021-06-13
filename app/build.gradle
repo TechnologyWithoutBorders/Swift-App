@@ -79,9 +79,10 @@ dependencies {
 
     //Some miscellaneous dependencies
 
-    //DO NOT UPGRADE!
-    def lifecycle_version = "2.2.0"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    //TODO this seems to be not necessary anymore or is it just buggy??
+    def lifecycle_version = "2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
