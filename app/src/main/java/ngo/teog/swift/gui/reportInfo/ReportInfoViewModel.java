@@ -5,21 +5,22 @@ import androidx.lifecycle.ViewModel;
 
 import javax.inject.Inject;
 
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.ReportInfo;
 
 public class ReportInfoViewModel extends ViewModel {
     private final HospitalRepository hospitalRepo;
-    private LiveData<ReportInfo> reportInfo;
+    private LiveData<DeviceInfo> deviceInfo;
 
-    public void init(int userId, int deviceId, int reportId) {
-        if(this.reportInfo != null) {
+    public void init(int userId, int deviceId) {
+        if(this.deviceInfo != null) {
             // ViewModel is created on a per-Fragment basis, so the userId
             // doesn't change.
             return;
         }
 
-        reportInfo = hospitalRepo.loadReportInfo(userId, deviceId, reportId, true);
+        deviceInfo = hospitalRepo.loadDevice(userId, deviceId, true);
     }
 
     @Inject
@@ -27,7 +28,7 @@ public class ReportInfoViewModel extends ViewModel {
         this.hospitalRepo = hospitalRepo;
     }
 
-    public LiveData<ReportInfo> getReportInfo() {
-        return reportInfo;
+    public LiveData<DeviceInfo> getDeviceInfo() {
+        return deviceInfo;
     }
 }
