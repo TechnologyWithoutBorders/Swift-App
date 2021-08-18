@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,17 +18,20 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
-import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -80,6 +83,9 @@ public class ReportInfoActivity extends BaseActivity {
                 ReportThreadAdapter adapter = new ReportThreadAdapter(this, deviceInfo.getReports());
                 reportThreadView.setAdapter(adapter);
                 reportThreadView.setLayoutManager(new LinearLayoutManager(this));
+                if(adapter.getItemCount() > 0) {
+                    reportThreadView.scrollToPosition(adapter.getItemCount() - 1);
+                }
             }
         });
     }
@@ -152,36 +158,57 @@ public class ReportInfoActivity extends BaseActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             if(viewType == VIEW_TYPE_MESSAGE_SENT) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report_thread_own, parent, false);
-                return new SentMessageHolder(view);
+                return new SentMessageHolder(this.context, view);
             } else {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report_thread_other, parent, false);
-                return new ReceivedMessageHolder(view);
+                return new ReceivedMessageHolder(this.context, view);
             }
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            Report report = reportList.get(position).getReport();
+            ReportInfo reportInfo = reportList.get(position);
 
             switch(holder.getItemViewType()) {
                 case VIEW_TYPE_MESSAGE_SENT:
-                    ((SentMessageHolder) holder).bind(report);
+                    ((SentMessageHolder) holder).bind(reportInfo);
                     break;
                 case VIEW_TYPE_MESSAGE_RECEIVED:
-                    ((ReceivedMessageHolder) holder).bind(report);
+                    ((ReceivedMessageHolder) holder).bind(reportInfo);
             }
         }
 
         private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
-            private final TextView titleView;
+            private final ImageView toState;
+            private final TextView dateView, authorView, titleView, descriptionView;
 
-            ReceivedMessageHolder(View itemView) {
+            private final Context context;
+
+            ReceivedMessageHolder(Context context, View itemView) {
                 super(itemView);
+                this.context = context;
+
+                toState = itemView.findViewById(R.id.toState);
+                dateView = itemView.findViewById(R.id.date_view);
+                authorView = itemView.findViewById(R.id.author_view);
                 titleView = itemView.findViewById(R.id.title_view);
+                descriptionView = itemView.findViewById(R.id.description_view);
             }
 
-            void bind(Report report) {
+            void bind(ReportInfo reportInfo) {
+                Report report = reportInfo.getReport();
+
+                DeviceStateVisuals stateVisuals = new DeviceStateVisuals(report.getCurrentState(),this.context);
+
+                toState.setImageDrawable(stateVisuals.getStateIcon());
+                toState.setColorFilter(stateVisuals.getBackgroundColor());
+
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
+                dateView.setText(dateFormat.format(report.getCreated()));
+
+                authorView.setText(reportInfo.getAuthor().getName() + ":");
                 titleView.setText(report.getTitle());
+                descriptionView.setText(report.getDescription());
 
                 /*
                 DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(), this);
@@ -196,15 +223,34 @@ public class ReportInfoActivity extends BaseActivity {
         }
 
         private class SentMessageHolder extends RecyclerView.ViewHolder {
-            private final TextView titleView;
+            private final ImageView toState;
+            private final TextView dateView, titleView, descriptionView;
 
-            SentMessageHolder(View itemView) {
+            private final Context context;
+
+            SentMessageHolder(Context context, View itemView) {
                 super(itemView);
+                this.context = context;
+
+                toState = itemView.findViewById(R.id.toState);
+                dateView = itemView.findViewById(R.id.date_view);
                 titleView = itemView.findViewById(R.id.title_view);
+                descriptionView = itemView.findViewById(R.id.description_view);
             }
 
-            void bind(Report report) {
+            void bind(ReportInfo reportInfo) {
+                Report report = reportInfo.getReport();
+
+                DeviceStateVisuals stateVisuals = new DeviceStateVisuals(report.getCurrentState(),this.context);
+
+                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
+                dateView.setText(dateFormat.format(report.getCreated()));
+
+                toState.setImageDrawable(stateVisuals.getStateIcon());
+                toState.setColorFilter(stateVisuals.getBackgroundColor());
+
                 titleView.setText(report.getTitle());
+                descriptionView.setText(report.getDescription());
             }
         }
     }
