@@ -138,7 +138,6 @@ public class DeviceInfoActivity extends BaseActivity {
             Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
             intent1.putExtra(ResourceKeys.DEVICE_ID, report.getDevice());
             intent1.putExtra(ResourceKeys.REPORT_ID, report.getId());
-            intent1.putExtra(ResourceKeys.HOSPITAL_ID, report.getHospital());
             startActivity(intent1);
         });
 
