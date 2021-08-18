@@ -103,13 +103,13 @@ public class CalendarFragment extends Fragment {
                             //look for last maintenance/repair or creation
                             for (ReportInfo info : reports) {
                                 Report report = info.getReport();
-                                int previousState = report.getPreviousState();
+                                //int previousState = report.getPreviousState();TODO: implement again
                                 int currentState = report.getCurrentState();
 
-                                if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
+                                /*if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
                                     lastMaintenance = report.getCreated();
                                     break;
-                                }
+                                }*/
                             }
 
                             if (lastMaintenance != null) {

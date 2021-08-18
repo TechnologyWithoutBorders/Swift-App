@@ -498,19 +498,13 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 TextView titleView = convertView.findViewById(R.id.title_view);
                 TextView dateView = convertView.findViewById(R.id.dateView);
-                ImageView fromState = convertView.findViewById(R.id.fromState);
-
-                DeviceStateVisuals triple = new DeviceStateVisuals(report.getPreviousState(),this.getContext());
-
-                fromState.setImageDrawable(triple.getStateIcon());
-                fromState.setColorFilter(triple.getBackgroundColor());
 
                 ImageView toState = convertView.findViewById(R.id.toState);
 
-                DeviceStateVisuals triple1 = new DeviceStateVisuals(report.getCurrentState(),this.getContext());
+                DeviceStateVisuals stateVisuals = new DeviceStateVisuals(report.getCurrentState(),this.getContext());
 
-                toState.setImageDrawable(triple1.getStateIcon());
-                toState.setColorFilter(triple1.getBackgroundColor());
+                toState.setImageDrawable(stateVisuals.getStateIcon());
+                toState.setColorFilter(stateVisuals.getBackgroundColor());
 
                 String title = reportInfo.getReport().getTitle();
 

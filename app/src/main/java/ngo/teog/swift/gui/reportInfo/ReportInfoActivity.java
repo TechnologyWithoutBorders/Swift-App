@@ -60,9 +60,7 @@ public class ReportInfoActivity extends BaseActivity {
         TextView dateView = findViewById(R.id.dateView);
         TextView authorView = findViewById(R.id.authorView);
         TextView titleView = findViewById(R.id.title_view);
-        TextView fromStateText = findViewById(R.id.fromStateText);
         TextView toStateText = findViewById(R.id.toStateText);
-        ImageView fromState = findViewById(R.id.fromState);
         ImageView toState = findViewById(R.id.toState);
         TextView descriptionView = findViewById(R.id.descriptionView);
 
@@ -87,11 +85,6 @@ public class ReportInfoActivity extends BaseActivity {
             if(reportInfo != null) {
                 Report report = reportInfo.getReport();
                 User author = reportInfo.getAuthor();
-
-                DeviceStateVisuals previousStateInfo = new DeviceStateVisuals(report.getPreviousState(), this);
-                fromState.setImageDrawable(previousStateInfo.getStateIcon());
-                fromState.setBackgroundColor(previousStateInfo.getBackgroundColor());
-                fromStateText.setText(previousStateInfo.getStateString());
 
                 DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(), this);
                 toState.setImageDrawable(currentStateInfo.getStateIcon());

@@ -224,13 +224,13 @@ public class HospitalActivity extends BaseActivity {
                         Date lastMaintenance = null;
                         for(ReportInfo reportInfo : reversedReportInfos) {
                             Report report = reportInfo.getReport();
-                            int previousState = report.getPreviousState();
+                            //int previousState = report.getPreviousState();TODO: implement again
                             int currentState = report.getCurrentState();
 
-                            if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
+                            /*if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
                                 lastMaintenance = report.getCreated();
                                 break;
-                            }
+                            }*/
                         }
                         if (lastMaintenance != null) {
                             int daysLeft = (device.getMaintenanceInterval()*7)-((int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24));
