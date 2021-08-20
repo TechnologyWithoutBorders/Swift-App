@@ -8,8 +8,8 @@
         android:id="@+id/date_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:paddingStart="6dp"/>
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
