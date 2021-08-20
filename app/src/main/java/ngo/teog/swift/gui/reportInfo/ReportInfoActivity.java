@@ -107,7 +107,8 @@ public class ReportInfoActivity extends BaseActivity {
         return true;
     }
 
-    /*private void shareReport(ReportInfo reportInfo) {//TODO
+    //TODO
+    /*private void shareReport(ReportInfo reportInfo) {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -136,8 +137,8 @@ public class ReportInfoActivity extends BaseActivity {
     }
 
     private class ReportThreadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private static final int VIEW_TYPE_MESSAGE_SENT = 0;//TODO rename
-        private static final int VIEW_TYPE_MESSAGE_RECEIVED = 1;
+        private static final int OWN_REPORT = 0;
+        private static final int OTHER_REPORT = 1;
 
         private final Context context;
         private final List<ReportInfo> reportList;
@@ -157,21 +158,21 @@ public class ReportInfoActivity extends BaseActivity {
             Report report = reportList.get(position).getReport();
 
             if(report.getAuthor() == userId) {
-                return VIEW_TYPE_MESSAGE_SENT;
+                return OWN_REPORT;
             } else {
-                return VIEW_TYPE_MESSAGE_RECEIVED;
+                return OTHER_REPORT;
             }
         }
 
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            if(viewType == VIEW_TYPE_MESSAGE_SENT) {
+            if(viewType == OWN_REPORT) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report_thread_own, parent, false);
-                return new SentMessageHolder(this.context, view);
+                return new OwnReportHolder(this.context, view);
             } else {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report_thread_other, parent, false);
-                return new ReceivedMessageHolder(this.context, view);
+                return new OtherReportHolder(this.context, view);
             }
         }
 
@@ -180,21 +181,21 @@ public class ReportInfoActivity extends BaseActivity {
             ReportInfo reportInfo = reportList.get(position);
 
             switch(holder.getItemViewType()) {
-                case VIEW_TYPE_MESSAGE_SENT:
-                    ((SentMessageHolder) holder).bind(reportInfo);
+                case OWN_REPORT:
+                    ((OwnReportHolder) holder).bind(reportInfo);
                     break;
-                case VIEW_TYPE_MESSAGE_RECEIVED:
-                    ((ReceivedMessageHolder) holder).bind(reportInfo);
+                case OTHER_REPORT:
+                    ((OtherReportHolder) holder).bind(reportInfo);
             }
         }
 
-        private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
+        private class OtherReportHolder extends RecyclerView.ViewHolder {
             private final ImageView toState;
             private final TextView dateView, authorView, titleView, descriptionView;
 
             private final Context context;
 
-            ReceivedMessageHolder(Context context, View itemView) {
+            public OtherReportHolder(Context context, View itemView) {
                 super(itemView);
                 this.context = context;
 
@@ -205,7 +206,7 @@ public class ReportInfoActivity extends BaseActivity {
                 descriptionView = itemView.findViewById(R.id.description_view);
             }
 
-            void bind(ReportInfo reportInfo) {
+            public void bind(ReportInfo reportInfo) {
                 Report report = reportInfo.getReport();
 
                 DeviceStateVisuals stateVisuals = new DeviceStateVisuals(report.getCurrentState(),this.context);
@@ -216,19 +217,19 @@ public class ReportInfoActivity extends BaseActivity {
                 DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
                 dateView.setText(dateFormat.format(report.getCreated()));
 
-                authorView.setText(reportInfo.getAuthor().getName() + ":");
+                authorView.setText(getString(R.string.report_author_name, reportInfo.getAuthor().getName()));
                 titleView.setText(report.getTitle());
                 descriptionView.setText(report.getDescription());
             }
         }
 
-        private class SentMessageHolder extends RecyclerView.ViewHolder {
+        private class OwnReportHolder extends RecyclerView.ViewHolder {
             private final ImageView toState;
             private final TextView dateView, titleView, descriptionView;
 
             private final Context context;
 
-            SentMessageHolder(Context context, View itemView) {
+            public OwnReportHolder(Context context, View itemView) {
                 super(itemView);
                 this.context = context;
 
@@ -238,7 +239,7 @@ public class ReportInfoActivity extends BaseActivity {
                 descriptionView = itemView.findViewById(R.id.description_view);
             }
 
-            void bind(ReportInfo reportInfo) {
+            public void bind(ReportInfo reportInfo) {
                 Report report = reportInfo.getReport();
 
                 DeviceStateVisuals stateVisuals = new DeviceStateVisuals(report.getCurrentState(),this.context);
