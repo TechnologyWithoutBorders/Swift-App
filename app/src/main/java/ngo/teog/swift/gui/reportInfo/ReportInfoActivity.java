@@ -51,8 +51,6 @@ public class ReportInfoActivity extends BaseActivity {
 
     private int userId;
 
-    //private DeviceInfo deviceInfo;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,6 @@ public class ReportInfoActivity extends BaseActivity {
 
         Intent intent = this.getIntent();
         int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
-        //int reportId = intent.getIntExtra(ResourceKeys.REPORT_ID, -1);TODO
 
         TextView titleView = findViewById(R.id.title_view);
         RecyclerView reportThreadView = findViewById(R.id.report_thread_view);
