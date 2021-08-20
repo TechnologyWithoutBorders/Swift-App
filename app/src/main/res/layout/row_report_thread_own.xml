@@ -9,19 +9,19 @@
         android:id="@+id/date_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:paddingStart="6dp"
         android:paddingEnd="6dp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
         android:layout_margin="8dp"
         app:cardBackgroundColor="@color/lighter_teog_blue">
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
 
