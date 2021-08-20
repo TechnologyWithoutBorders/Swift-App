@@ -202,12 +202,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
 
                 reportCreationButton.setOnClickListener((view) -> {
-                    int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
-
                     Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
                     reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
                     reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
-                    reportIntent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
                     startActivity(reportIntent);
                 });
 

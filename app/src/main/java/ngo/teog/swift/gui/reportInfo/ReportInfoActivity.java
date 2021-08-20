@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
+import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
+import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
@@ -62,6 +65,8 @@ public class ReportInfoActivity extends BaseActivity {
         TextView titleView = findViewById(R.id.title_view);
         RecyclerView reportThreadView = findViewById(R.id.report_thread_view);
 
+        Button reportCreationButton = findViewById(R.id.reportCreationButton);
+
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
                 .roomModule(new RoomModule(getApplication()))
@@ -75,9 +80,14 @@ public class ReportInfoActivity extends BaseActivity {
         viewModel.init(userId, deviceId);
 
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
-            //this.deviceInfo = deviceInfo;TODO
-
             if(deviceInfo != null) {
+                reportCreationButton.setOnClickListener((view) -> {
+                    Intent reportIntent = new Intent(ReportInfoActivity.this, ReportCreationActivity.class);
+                    reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
+                    reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
+                    startActivity(reportIntent);
+                });
+
                 titleView.setText(deviceInfo.getDevice().getType());
 
                 ReportThreadAdapter adapter = new ReportThreadAdapter(this, deviceInfo.getReports());
