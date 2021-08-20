@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
@@ -50,6 +52,9 @@ public class ReportInfoActivity extends BaseActivity {
 
     private int userId;
 
+    private RecyclerView reportThreadView;
+    private Button reportCreationButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +64,8 @@ public class ReportInfoActivity extends BaseActivity {
         int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
 
         TextView titleView = findViewById(R.id.title_view);
-        RecyclerView reportThreadView = findViewById(R.id.report_thread_view);
-
-        Button reportCreationButton = findViewById(R.id.reportCreationButton);
+        reportThreadView = findViewById(R.id.report_thread_view);
+        reportCreationButton = findViewById(R.id.reportCreationButton);
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -119,11 +123,11 @@ public class ReportInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.info) {
             //Build tutorial
-            /*FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()TODO
-                    .add(buildTutorialStep(stateChange, getString(R.string.report_tutorial_state_change), Gravity.CENTER))
-                    .add(buildTutorialStep(descriptionLayout, getString(R.string.report_tutorial_description), Gravity.TOP));
+            FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                    .add(buildTutorialStep(reportThreadView, getString(R.string.device_info_tutorial_report_list), Gravity.TOP))
+                    .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation), Gravity.CENTER));
 
-            tutorialQueue.show();*/
+            tutorialQueue.show();
 
             return true;
         }
