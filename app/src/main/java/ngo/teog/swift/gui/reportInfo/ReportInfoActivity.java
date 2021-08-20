@@ -215,16 +215,6 @@ public class ReportInfoActivity extends BaseActivity {
                 authorView.setText(reportInfo.getAuthor().getName() + ":");
                 titleView.setText(report.getTitle());
                 descriptionView.setText(report.getDescription());
-
-                /*
-                DeviceStateVisuals currentStateInfo = new DeviceStateVisuals(report.getCurrentState(), this);
-                toState.setImageDrawable(currentStateInfo.getStateIcon());
-                toState.setBackgroundColor(currentStateInfo.getBackgroundColor());
-                toStateText.setText(currentStateInfo.getStateString());
-                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PATTERN, Locale.getDefault());
-                dateView.setText(dateFormat.format(report.getCreated()));
-                authorView.setText(author.getName());
-                 */
             }
         }
 
