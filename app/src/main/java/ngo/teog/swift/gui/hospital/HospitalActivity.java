@@ -211,29 +211,34 @@ public class HospitalActivity extends BaseActivity {
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
 
-                    int state = latestReportInfo.getReport().getCurrentState();
+                    int newestState = latestReportInfo.getReport().getCurrentState();
 
-                    stateCounters[state]++;
+                    stateCounters[newestState]++;
 
                     HospitalDevice device = deviceInfo.getDevice();
-                    if (state != DeviceState.BROKEN && state != DeviceState.MAINTENANCE && state != DeviceState.IN_PROGRESS && state != DeviceState.SALVAGE) {
+
+                    if(newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
                         //look for last maintenance/repair or creation
+                        Date lastMaintenance = null;
 
                         List<ReportInfo> reversedReportInfos = deviceInfo.getReports();
                         Collections.reverse(reversedReportInfos);
-                        Date lastMaintenance = null;
+
                         for(ReportInfo reportInfo : reversedReportInfos) {
                             Report report = reportInfo.getReport();
-                            //int previousState = report.getPreviousState();TODO: implement again
-                            int currentState = report.getCurrentState();
 
-                            /*if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
-                                lastMaintenance = report.getCreated();
+                            int previousState = report.getCurrentState();
+
+                            if(previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN) {
                                 break;
-                            }*/
+                            }
+
+                            lastMaintenance = report.getCreated();
                         }
-                        if (lastMaintenance != null) {
+
+                        if(lastMaintenance != null) {
                             int daysLeft = (device.getMaintenanceInterval()*7)-((int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24));
+
                             if(daysLeft <= 0){
                                 overdueDeviceCount++;
                             }
