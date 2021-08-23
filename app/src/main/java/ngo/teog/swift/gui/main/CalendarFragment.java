@@ -89,27 +89,31 @@ public class CalendarFragment extends Fragment {
                 Date now = new Date();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    List<ReportInfo> reports = deviceInfo.getReports();
-                    Collections.reverse(reports);
+                    if(deviceInfo.getReports().size() > 0) {
+                        ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
 
-                    HospitalDevice device = deviceInfo.getDevice();
+                        int newestState = latestReportInfo.getReport().getCurrentState();
 
-                    if(reports.size() > 0) {
-                        int newestState = reports.get(0).getReport().getCurrentState();
-                        Date lastMaintenance = null;
+                        HospitalDevice device = deviceInfo.getDevice();
 
                         //ignore devices in the to-do list and salvage devices
-                        if (newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
+                        if(newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
                             //look for last maintenance/repair or creation
-                            for (ReportInfo info : reports) {
-                                Report report = info.getReport();
-                                int previousState = report.getPreviousState();
-                                int currentState = report.getCurrentState();
+                            Date lastMaintenance = null;
 
-                                if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN || (previousState == DeviceState.WORKING && currentState == DeviceState.WORKING)) {
-                                    lastMaintenance = report.getCreated();
+                            List<ReportInfo> reversedReportInfos = deviceInfo.getReports();
+                            Collections.reverse(reversedReportInfos);
+
+                            for(ReportInfo info : reversedReportInfos) {
+                                Report report = info.getReport();
+
+                                int previousState = report.getCurrentState();
+
+                                if (previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN) {
                                     break;
                                 }
+
+                                lastMaintenance = report.getCreated();
                             }
 
                             if (lastMaintenance != null) {

@@ -248,7 +248,7 @@ public class HospitalRepository {
 
             String creationText = context.getString(R.string.initial_report_text);
 
-            Report creationReport = new Report(1, userId, creationText, device.getId(), device.getHospital(), 0, 0, creationText, lastUpdate);
+            Report creationReport = new Report(1, userId, creationText, device.getId(), device.getHospital(), 0, creationText, lastUpdate);
             device.setLastUpdate(lastUpdate);
 
             hospitalDao.save(device);
