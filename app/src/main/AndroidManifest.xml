@@ -123,6 +123,7 @@
         <activity
             android:name=".gui.reportInfo.ReportInfoActivity"
             android:configChanges="orientation|keyboardHidden"
+            android:label="Report history"
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait" />
 

@@ -135,10 +135,9 @@ public class PortationActivity extends AppCompatActivity {
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     for(Report report : deviceDump.getReports()) {
-                                        DeviceStateVisuals oldVisuals = new DeviceStateVisuals(report.getPreviousState(), this);
                                         DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
-                                        csvWriter.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), report.getTitle(), oldVisuals.getStateString(), newVisuals.getStateString(), report.getDescription()});
+                                        csvWriter.writeNext(new String[] {Integer.toString(report.getId()), Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
                                     }
                                 }
 

@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,7 +46,7 @@ public class ReportCreationActivity extends BaseActivity {
     private ProgressBar progressBar;
     private Button saveButton;
 
-    private int oldState, device, hospital;
+    private int device, hospital;
 
     private Spinner stateSpinner;
 
@@ -64,11 +63,9 @@ public class ReportCreationActivity extends BaseActivity {
         Intent intent = getIntent();
         hospital = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
         device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
-        oldState = intent.getIntExtra(ResourceKeys.REPORT_OLD_STATE, -1);
 
         stateSpinner = findViewById(R.id.stateSpinner);
         stateSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
-        stateSpinner.setSelection(oldState);
 
         titleText = findViewById(R.id.report_title);
         descriptionText = findViewById(R.id.descriptionText);
@@ -100,28 +97,23 @@ public class ReportCreationActivity extends BaseActivity {
     public void createReport(View view) {
         int newState = stateSpinner.getSelectedItemPosition();
 
-        if(newState != oldState) {
-            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-            String description = descriptionText.getText().toString().trim();
-            String title = titleText.getText().toString().trim();
+        String description = descriptionText.getText().toString().trim();
+        String title = titleText.getText().toString().trim();
 
-            if (title.length() > 0) {
-                //ID = 0 means auto-generate ID
-                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, oldState, newState, description, new Date());
+        if(title.length() > 0) {
+            //ID = 0 means auto-generate ID
+            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, newState, description, new Date());
 
-                viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
+            viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
-                saveButton.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
-                ReportCreationActivity.this.finish();
-            } else {
-                titleText.setError(getString(R.string.empty_title));
-            }
+            ReportCreationActivity.this.finish();
         } else {
-            //TODO prevent this by not offering the old state in the spinner or better: allow transitions to old state (but change algorithm that determines next maintenance as it treats a transition from working to working as the device creation)
-            Toast.makeText(this.getApplicationContext(), getString(R.string.report_creation_invalid_state), Toast.LENGTH_SHORT).show();
+            titleText.setError(getString(R.string.empty_title));
         }
     }
 

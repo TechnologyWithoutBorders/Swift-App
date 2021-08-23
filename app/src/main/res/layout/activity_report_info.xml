@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="5dp">
 
     <TextView
@@ -15,187 +14,16 @@
         android:textStyle="bold"
         android:textAlignment="center"/>
 
-    <LinearLayout
-        android:id="@+id/state_change"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/report_thread_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button style="@style/AppTheme.Button"
+        android:id="@+id/reportCreationButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-
-        <LinearLayout
-            android:id="@+id/fromStateLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/fromState"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/previous_state"
-                android:padding="5dp" />
-
-            <TextView
-                android:id="@+id/fromStateText"
-                android:layout_width="100dp"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="5dp"
-            android:layout_gravity="center_horizontal"
-            app:srcCompat="@drawable/ic_baseline_arrow_right_alt_24"
-            android:contentDescription="@string/report_state_change" />
-
-        <LinearLayout
-            android:id="@+id/toStateLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/toState"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:contentDescription="@string/current_state" />
-
-            <TextView
-                android:id="@+id/toStateText"
-                android:layout_width="100dp"
-                android:gravity="center"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <TableLayout
-        android:id="@+id/attributeTable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="1">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/grey_table_bar"
-            android:padding="3dp">
-            <TextView
-                android:id="@+id/informationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:paddingEnd="5dp"
-                android:textStyle="bold"
-                android:text="@string/report_info" />
-
-            <TextView
-                android:id="@+id/freeInformationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:id="@+id/testDateView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingEnd="5dp"
-                android:textStyle="bold"
-                android:text="@string/report_date" />
-
-            <TextView
-                android:id="@+id/dateView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:id="@+id/textAuthorView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingEnd="5dp"
-                android:textStyle="bold"
-                android:text="@string/report_author" />
-
-            <TextView
-                android:id="@+id/authorView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </TableRow>
-
-    </TableLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_margin="5dp"/>
-
-    <LinearLayout
-        android:id="@+id/descriptionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textDescriptionView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textColor="#FFFFFF"
-            android:background="@color/grey_table_bar"
-            android:padding="3dp"
-            android:text="@string/report_description" />
-
-        <TextView
-            android:id="@+id/descriptionView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="@string/report_no_description"/>
-    </LinearLayout>
-
+        android:text="@string/create_report_button" />
 
 </LinearLayout>

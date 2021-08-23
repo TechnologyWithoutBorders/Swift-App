@@ -138,7 +138,6 @@ public class DeviceInfoActivity extends BaseActivity {
             Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
             intent1.putExtra(ResourceKeys.DEVICE_ID, report.getDevice());
             intent1.putExtra(ResourceKeys.REPORT_ID, report.getId());
-            intent1.putExtra(ResourceKeys.HOSPITAL_ID, report.getHospital());
             startActivity(intent1);
         });
 
@@ -203,12 +202,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
 
                 reportCreationButton.setOnClickListener((view) -> {
-                    int currentState = deviceInfo.getReports().get(0).getReport().getCurrentState();
-
                     Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
                     reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
                     reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
-                    reportIntent.putExtra(ResourceKeys.REPORT_OLD_STATE, currentState);
                     startActivity(reportIntent);
                 });
 
@@ -498,19 +494,13 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 TextView titleView = convertView.findViewById(R.id.title_view);
                 TextView dateView = convertView.findViewById(R.id.dateView);
-                ImageView fromState = convertView.findViewById(R.id.fromState);
-
-                DeviceStateVisuals triple = new DeviceStateVisuals(report.getPreviousState(),this.getContext());
-
-                fromState.setImageDrawable(triple.getStateIcon());
-                fromState.setColorFilter(triple.getBackgroundColor());
 
                 ImageView toState = convertView.findViewById(R.id.toState);
 
-                DeviceStateVisuals triple1 = new DeviceStateVisuals(report.getCurrentState(),this.getContext());
+                DeviceStateVisuals stateVisuals = new DeviceStateVisuals(report.getCurrentState(),this.getContext());
 
-                toState.setImageDrawable(triple1.getStateIcon());
-                toState.setColorFilter(triple1.getBackgroundColor());
+                toState.setImageDrawable(stateVisuals.getStateIcon());
+                toState.setColorFilter(stateVisuals.getBackgroundColor());
 
                 String title = reportInfo.getReport().getTitle();
 
