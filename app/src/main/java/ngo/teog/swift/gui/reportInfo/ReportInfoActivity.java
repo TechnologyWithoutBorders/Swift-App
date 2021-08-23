@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,6 +48,8 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class ReportInfoActivity extends BaseActivity {
 
+    private boolean resumed = false;
+
     @Inject
     ViewModelFactory viewModelFactory;
 
@@ -54,6 +57,8 @@ public class ReportInfoActivity extends BaseActivity {
 
     private RecyclerView reportThreadView;
     private Button reportCreationButton;
+
+    private ReportInfoViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +81,8 @@ public class ReportInfoActivity extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        ReportInfoViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(ReportInfoViewModel.class);
-        viewModel.init(userId, deviceId);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(ReportInfoViewModel.class);
+        viewModel.init(userId, deviceId).observe(this, observable -> viewModel.refreshDevice());
 
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
             if(deviceInfo != null) {
@@ -93,11 +98,28 @@ public class ReportInfoActivity extends BaseActivity {
                 ReportThreadAdapter adapter = new ReportThreadAdapter(this, deviceInfo.getReports());
                 reportThreadView.setAdapter(adapter);
                 reportThreadView.setLayoutManager(new LinearLayoutManager(this));
+
                 if(adapter.getItemCount() > 0) {
                     reportThreadView.scrollToPosition(adapter.getItemCount() - 1);
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(resumed) {
+            Log.i(this.getClass().getName(), "activity has resumed, refreshing...");
+            refresh();
+        } else {
+            resumed = true;
+        }
+    }
+
+    private void refresh() {
+        viewModel.refreshDevice();
     }
 
     @Override
