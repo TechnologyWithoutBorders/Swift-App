@@ -19,7 +19,7 @@ public class RoomModule {
 
     public RoomModule(Application mApplication) {
         hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                 .build();
     }
 
@@ -95,6 +95,23 @@ public class RoomModule {
             try {
                 database.execSQL("CREATE TABLE reports_tmp(id INTEGER NOT NULL, author INTEGER NOT NULL, title TEXT, device INTEGER NOT NULL, hospital INTEGER NOT NULL, previousState INTEGER NOT NULL, currentState INTEGER NOT NULL, description TEXT, created INTEGER, lastSync INTEGER, PRIMARY KEY(id, device, hospital))");
                 database.execSQL("INSERT INTO reports_tmp(id, author, title, device, hospital, previousState, currentState, description, created, lastSync) SELECT id, author, title, device, hospital, previousState, currentState, description, created, lastSync FROM reports");
+                database.execSQL("DROP TABLE reports");
+                database.execSQL("ALTER TABLE reports_tmp RENAME TO reports");
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
+        }
+    };
+
+    public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            //Drop column is not supported by SQLite, so we need to create a new table
+            database.beginTransaction();
+            try {
+                database.execSQL("CREATE TABLE reports_tmp(id INTEGER NOT NULL, author INTEGER NOT NULL, title TEXT, device INTEGER NOT NULL, hospital INTEGER NOT NULL, currentState INTEGER NOT NULL, description TEXT, created INTEGER, lastSync INTEGER, PRIMARY KEY(id, device, hospital))");
+                database.execSQL("INSERT INTO reports_tmp(id, author, title, device, hospital, currentState, description, created, lastSync) SELECT id, author, title, device, hospital, currentState, description, created, lastSync FROM reports");
                 database.execSQL("DROP TABLE reports");
                 database.execSQL("ALTER TABLE reports_tmp RENAME TO reports");
                 database.setTransactionSuccessful();
