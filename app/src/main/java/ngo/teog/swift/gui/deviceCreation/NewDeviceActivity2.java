@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -55,14 +54,10 @@ public class NewDeviceActivity2 extends BaseActivity {
     private EditText assetNumberField, serialNumberField;
 
     private NumberPicker intervalPicker;
-    private Spinner weekMonthSpinner;
 
     public static final int MIN_MAINT_INTERVAL = 1;
     public static final int DEF_MAINT_INTERVAL = 3;
     public static final int MAX_MAINT_INTERVAL = 24;
-
-    private static final int WEEKS = 0;
-    private static final int MONTHS = 1;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -99,8 +94,7 @@ public class NewDeviceActivity2 extends BaseActivity {
         locationField.setAdapter(locationAdapter);
 
         intervalPicker = findViewById(R.id.intervalPicker);
-        weekMonthSpinner = findViewById(R.id.spinner2);
-        weekMonthSpinner.setSelection(MONTHS);
+        intervalPicker.setValue(3);
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
@@ -213,13 +207,8 @@ public class NewDeviceActivity2 extends BaseActivity {
                         assetNumber = Integer.toString(deviceNumber);
                     }
 
-                    int interval;
-
-                    if(weekMonthSpinner.getSelectedItemPosition() == WEEKS) {
-                        interval = intervalPicker.getValue();
-                    } else {
-                        interval = intervalPicker.getValue()*4;
-                    }
+                    //we actually save the number of weeks, not months
+                    int interval = intervalPicker.getValue()*4;
 
                     HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
                             typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), locationField.getText().toString().trim(), -1, interval, new Date());

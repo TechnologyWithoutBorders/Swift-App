@@ -111,19 +111,10 @@
         <item>Test</item>
     </string-array>
 
-    <string-array name="maintenance_interval_options">
-        <item>Weeks</item>
-        <item>Months</item>
-    </string-array>
-
-    <!--<string name="months_count">%d Months</string>-->
+    <string name="months">Months</string>
     <plurals name="months_count">
         <item quantity="one">%d Month</item>
         <item quantity="other">%d Months</item>
-    </plurals>
-    <plurals name="weeks_count">
-        <item quantity="one">%d Week</item>
-        <item quantity="other">%d Weeks</item>
     </plurals>
 
     <!-- Miscellaneous Actions -->

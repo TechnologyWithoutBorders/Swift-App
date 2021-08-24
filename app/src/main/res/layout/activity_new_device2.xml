@@ -91,13 +91,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <Spinner
-                    android:id="@+id/spinner2"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:entries="@array/maintenance_interval_options" />
+                    android:text="@string/months" />
 
             </LinearLayout>
         </LinearLayout>
