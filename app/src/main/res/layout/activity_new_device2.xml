@@ -81,8 +81,9 @@
                     android:id="@+id/textView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:textAlignment="center"
                     android:text="@string/device_maintenance_interval" />
 
                 <NumberPicker
@@ -91,13 +92,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <Spinner
-                    android:id="@+id/spinner2"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:entries="@array/maintenance_interval_options" />
+                    android:textAlignment="center"
+                    android:text="@string/months" />
 
             </LinearLayout>
         </LinearLayout>

@@ -84,7 +84,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private static final int LOCATION = 5;
     private static final int MAINTENANCE_INTERVAL = 6;
 
-    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Location", "Maintenance Interval (Weeks)"};//TODO: Constants
+    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Location", "Maintenance Interval (Months)"};//TODO: Constants
 
     private ReportArrayAdapter adapter;
 
@@ -223,12 +223,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 locationView.setText(device.getLocation());
 
                 int interval = device.getMaintenanceInterval();
-
-                if(interval % 4 == 0) {
-                    intervalView.setText(getResources().getQuantityString(R.plurals.months_count, (interval/4), (interval/4)));
-                } else {
-                    intervalView.setText(getResources().getQuantityString(R.plurals.weeks_count, interval, interval));
-                }
+                intervalView.setText(getResources().getQuantityString(R.plurals.months_count, (interval/4), (interval/4)));
 
                 File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
                 boolean created = dir.mkdirs();
@@ -311,7 +306,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 NumberPicker numberPicker = new NumberPicker(this);
                 numberPicker.setMinValue(NewDeviceActivity2.MIN_MAINT_INTERVAL);
                 numberPicker.setMaxValue(NewDeviceActivity2.MAX_MAINT_INTERVAL);
-                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval());
+                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval()/4);
 
                 editView = numberPicker;
             } else {
@@ -383,14 +378,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 case MAINTENANCE_INTERVAL:
                     int interval = ((NumberPicker) editView).getValue();
 
-                    device.setMaintenanceInterval(interval);
+                    device.setMaintenanceInterval(interval*4);
 
-                    if(interval % 4 == 0) {
-                        intervalView.setText(getResources().getQuantityString(R.plurals.months_count, (interval/4), (interval/4)));
-                    } else {
-                        intervalView.setText(getResources().getQuantityString(R.plurals.weeks_count, interval, interval));
-                    }
-
+                    intervalView.setText(getResources().getQuantityString(R.plurals.months_count, interval, interval));
                     break;
             }
 
