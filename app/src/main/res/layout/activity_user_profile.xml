@@ -107,10 +107,19 @@
             </TableLayout>
 
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
     
     <Space
         android:layout_width="match_parent"
-        android:layout_height="30dp"/>
+        android:layout_height="20dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
