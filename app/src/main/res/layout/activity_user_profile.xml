@@ -18,7 +18,7 @@
                 android:textColor="@color/white"
                 android:text="@string/user_name"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:paddingRight="5dp"/>
 
             <TextView
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow
@@ -38,14 +38,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/user_telephone"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:paddingRight="5dp"/>
 
             <TextView
                 android:id="@+id/phoneView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -65,14 +65,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/user_mail"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:paddingRight="5dp"/>
 
             <TextView
                 android:id="@+id/mailView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -92,14 +92,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/hospital"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:paddingRight="5dp"/>
 
             <TextView
                 android:id="@+id/locationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow
@@ -111,14 +111,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/user_position"
                 android:textStyle="bold"
-                android:textSize="15sp"
+                android:textSize="20sp"
                 android:paddingRight="5dp"/>
 
             <TextView
                 android:id="@+id/positionView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/edit_view"
