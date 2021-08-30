@@ -1,133 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tableLayout"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:stretchColumns="1">
+    android:layout_height="match_parent">
 
-        <TableRow
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:padding="7dp"
+            android:contentDescription="@string/edit_button_desc"
+            app:srcCompat="@drawable/ic_baseline_person_24_black" />
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/grey_table_bar"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/user_name"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:paddingRight="5dp"/>
+            android:layout_weight="1"
+            android:stretchColumns="0">
 
-            <TextView
-                android:id="@+id/nameView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
-                android:textSize="15sp" />
-        </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp">
 
-        <TableRow
-            android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/nameView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="@string/user_name"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hospital"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="3dp">
+
+                    <TextView
+                        android:id="@+id/locationView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/user_position"/>
+
+                        <TextView
+                            android:id="@+id/positionView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/edit_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="3dp"
+                        android:paddingEnd="12dp"
+                        android:contentDescription="@string/edit_button_desc"
+                        app:drawableTopCompat="@drawable/ic_edit_black_24dp"
+                        android:text="@string/edit"/>
+                </TableRow>
+
+            </TableLayout>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+    
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/user_telephone"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:paddingRight="5dp"/>
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/edit_button_desc"
+                app:srcCompat="@drawable/ic_phone_green_24dp" />
 
             <TextView
                 android:id="@+id/phoneView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textAlignment="center"
+                android:text="@string/user_telephone"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+
+            <TextView
+                android:id="@+id/edit_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/edit_button_desc"
+                app:drawableTopCompat="@drawable/ic_edit_black_24dp"
+                android:text="@string/edit"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight="7dp"
-                android:onClick="editPhone"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/edit_button_desc"
-                app:srcCompat="@drawable/ic_edit_black_24dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/user_mail"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:paddingRight="5dp"/>
+                app:srcCompat="@drawable/ic_mail_outline_black_24dp" />
 
             <TextView
                 android:id="@+id/mailView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textAlignment="center"
+                android:text="@string/user_mail"/>
 
-            <ImageView
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight="7dp"
+                android:layout_height="10dp"/>
+
+            <TextView
+                android:id="@+id/edit_mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/edit_button_desc"
-                android:onClick="editMail"
-                app:srcCompat="@drawable/ic_edit_black_24dp" />
-        </TableRow>
+                app:drawableTopCompat="@drawable/ic_edit_black_24dp"
+                android:text="@string/edit"/>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/hospital"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:paddingRight="5dp"/>
 
-            <TextView
-                android:id="@+id/locationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </TableRow>
+        </LinearLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/user_position"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:paddingRight="5dp"/>
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/positionView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-
-            <ImageView
-                android:id="@+id/edit_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight="7dp"
-                android:contentDescription="@string/edit_button_desc"
-                android:onClick="editPosition"
-                app:srcCompat="@drawable/ic_edit_black_24dp" />
-        </TableRow>
-
-    </TableLayout>
+</LinearLayout>
