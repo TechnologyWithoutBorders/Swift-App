@@ -40,8 +40,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 public class UserProfileActivity extends BaseActivity {
 
     private TableLayout tableLayout;
-    private ImageView editView;
-    private TextView telephoneView, mailView, hospitalView, positionView, nameView;
+    private TextView telephoneView, mailView, hospitalView, positionView, nameView, editView;
 
     @Inject
     ViewModelFactory viewModelFactory;
