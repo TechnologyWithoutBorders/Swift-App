@@ -62,7 +62,7 @@ dependencies {
     implementation "com.journeyapps:zxing-android-embedded:$zxing_version"
 
     //Google Volley for managing HTTPS requests
-    def volley_version = "1.2.0"
+    def volley_version = "1.2.1"
     implementation "com.android.volley:volley:$volley_version"
 
     //Android WorkManager for asynchronous tasks
