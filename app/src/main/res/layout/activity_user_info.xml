@@ -10,23 +10,55 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="3dp">
+        android:paddingTop="3dp"
+        android:paddingBottom="7dp">
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:padding="8dp"
-            app:srcCompat="@drawable/ic_phone_green_24dp"
-            android:onClick="invokeCall"
-            android:contentDescription="@string/phone_symbol" />
+        <LinearLayout
+            android:id="@+id/call_layout"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:padding="8dp"
-            app:srcCompat="@drawable/ic_mail_outline_black_24dp"
-            android:onClick="invokeMail"
-            android:contentDescription="@string/mail_symbol" />
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:padding="3dp"
+                app:srcCompat="@drawable/ic_phone_green_24dp"
+                android:contentDescription="@string/phone_symbol" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:text="@string/phone_symbol"/>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:id="@+id/mail_layout"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:padding="3dp"
+                app:srcCompat="@drawable/ic_mail_outline_black_24dp"
+                android:contentDescription="@string/mail_symbol" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="16sp"
+                android:text="@string/mail_symbol"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <TableLayout
@@ -42,8 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/user_name" />
 
@@ -52,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -62,8 +94,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/user_telephone" />
 
@@ -71,7 +103,7 @@
                 android:id="@+id/phoneView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -81,8 +113,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/user_mail" />
 
@@ -90,7 +122,7 @@
                 android:id="@+id/mailView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -100,8 +132,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/hospital" />
 
@@ -109,7 +141,7 @@
                 android:id="@+id/hospitalView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
@@ -119,8 +151,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingRight="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/user_position" />
 
@@ -128,7 +160,7 @@
                 android:id="@+id/positionView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </TableRow>
 
     </TableLayout>

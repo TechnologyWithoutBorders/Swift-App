@@ -9,9 +9,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -40,8 +38,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
 public class UserProfileActivity extends BaseActivity {
 
     private TableLayout tableLayout;
-    private ImageView editView;
-    private TextView telephoneView, mailView, hospitalView, positionView, nameView;
+    private TextView telephoneView, mailView, hospitalView, positionView, nameView, editPosition;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -54,7 +51,12 @@ public class UserProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_user_profile);
 
         tableLayout = findViewById(R.id.tableLayout);
-        editView = findViewById(R.id.edit_view);
+        editPosition = findViewById(R.id.edit_position);
+        editPosition.setOnClickListener((view) -> editPosition());
+        TextView editPhone = findViewById(R.id.edit_phone);
+        editPhone.setOnClickListener((view) -> editPhone());
+        TextView editMail = findViewById(R.id.edit_mail);
+        editMail.setOnClickListener((view) -> editMail());
 
         nameView = findViewById(R.id.nameView);
 
@@ -103,7 +105,7 @@ public class UserProfileActivity extends BaseActivity {
             //Show tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
                 .add(buildTutorialStep(tableLayout, getString(R.string.user_profile_tutorial_attribute_table), Gravity.CENTER))
-                .add(buildTutorialStep(editView, getString(R.string.user_profile_tutorial_edit), Gravity.CENTER));
+                .add(buildTutorialStep(editPosition, getString(R.string.user_profile_tutorial_edit), Gravity.CENTER));
 
             tutorialQueue.show();
 
@@ -113,7 +115,7 @@ public class UserProfileActivity extends BaseActivity {
         }
     }
 
-    public void editPhone(View view) {
+    public void editPhone() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.user_telephone));
 
@@ -132,7 +134,7 @@ public class UserProfileActivity extends BaseActivity {
         builder.show();
     }
 
-    public void editMail(View view) {
+    public void editMail() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.user_mail));
         builder.setMessage(getString(R.string.edit_mail_address_warning));
@@ -152,7 +154,7 @@ public class UserProfileActivity extends BaseActivity {
         builder.show();
     }
 
-    public void editPosition(View view) {
+    public void editPosition() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getText(R.string.user_position));
 

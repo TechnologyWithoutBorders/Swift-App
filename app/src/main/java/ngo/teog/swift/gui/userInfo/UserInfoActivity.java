@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -46,6 +46,12 @@ public class UserInfoActivity extends BaseActivity {
         TextView mailView = findViewById(R.id.mailView);
         TextView positionView = findViewById(R.id.positionView);
         TextView hospitalView = findViewById(R.id.hospitalView);
+
+        LinearLayout callLayout = findViewById(R.id.call_layout);
+        callLayout.setOnClickListener((view) -> invokeCall());
+
+        LinearLayout mailLayout = findViewById(R.id.mail_layout);
+        mailLayout.setOnClickListener((view) -> invokeMail());
 
         Intent intent = this.getIntent();
         int userId = intent.getIntExtra(ResourceKeys.USER_ID, -1);
@@ -96,13 +102,13 @@ public class UserInfoActivity extends BaseActivity {
         return super.onOptionsItemSelected(item, R.string.userinfo_activity);//TODO Tutorial
     }
 
-    public void invokeCall(View view) {
+    public void invokeCall() {
         Intent dialIntent = new Intent(Intent.ACTION_DIAL);
         dialIntent.setData(Uri.parse(Defaults.URI_TEL_PREFIX + user.getPhone()));
         startActivity(dialIntent);
     }
 
-    public void invokeMail(View view) {
+    public void invokeMail() {
         Intent mailIntent = new Intent(Intent.ACTION_VIEW);
         Uri data = Uri.parse(Defaults.URI_MAILTO_PREFIX + user.getMail());
         mailIntent.setData(data);
