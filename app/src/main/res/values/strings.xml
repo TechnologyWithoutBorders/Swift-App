@@ -92,6 +92,7 @@
     <string name="title_activity_user_profile">My Profile</string>
     <string name="title_activity_create_device">Scan barcode</string>
     <string name="title_activity_device_info">Device info</string>
+    <string name="title_activity_user_info">User info</string>
     <string name="title_activity_about">About Swift</string>
 
     <!-- Device states -->
@@ -208,6 +209,8 @@
     <string name="user_telephone">Telephone</string>
     <string name="user_mail">E-Mail</string>
     <string name="user_position">Position</string>
+    <string name="tap_to_call">tap to call\n%s</string>
+    <string name="tap_to_mail">tap to mail\n%s</string>
 
     <!-- User Management -->
     <string name="create_user">Create new user</string>

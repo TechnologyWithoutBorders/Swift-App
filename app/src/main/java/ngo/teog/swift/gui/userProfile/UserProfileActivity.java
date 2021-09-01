@@ -48,7 +48,7 @@ public class UserProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_user_info);
 
         tableLayout = findViewById(R.id.tableLayout);
         editPosition = findViewById(R.id.edit_position);
@@ -62,7 +62,7 @@ public class UserProfileActivity extends BaseActivity {
 
         telephoneView = findViewById(R.id.phoneView);
         mailView = findViewById(R.id.mailView);
-        hospitalView = findViewById(R.id.locationView);
+        hospitalView = findViewById(R.id.hospitalView);
         positionView = findViewById(R.id.positionView);
 
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
