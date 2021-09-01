@@ -75,8 +75,8 @@ public class UserInfoActivity extends BaseActivity {
                 this.user = userInfo.getUser();
 
                 nameView.setText(user.getName());
-                phoneView.setText("tap to call\n" + user.getPhone());
-                mailView.setText("tap to mail\n" + user.getMail());
+                phoneView.setText(getString(R.string.tap_to_call, user.getPhone()));
+                mailView.setText(getString(R.string.tap_to_mail, user.getMail()));
                 positionView.setText(user.getPosition());
                 hospitalView.setText(userInfo.getHospital().getName());
             }
