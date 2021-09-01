@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,6 +48,11 @@ public class UserInfoActivity extends BaseActivity {
         TextView positionView = findViewById(R.id.positionView);
         TextView hospitalView = findViewById(R.id.hospitalView);
 
+        //make edit buttons disappear
+        findViewById(R.id.edit_position).setVisibility(View.GONE);
+        findViewById(R.id.edit_phone).setVisibility(View.GONE);
+        findViewById(R.id.edit_mail).setVisibility(View.GONE);
+
         LinearLayout callLayout = findViewById(R.id.call_layout);
         callLayout.setOnClickListener((view) -> invokeCall());
 
@@ -69,8 +75,8 @@ public class UserInfoActivity extends BaseActivity {
                 this.user = userInfo.getUser();
 
                 nameView.setText(user.getName());
-                phoneView.setText(user.getPhone());
-                mailView.setText(user.getMail());
+                phoneView.setText("tap to call\n" + user.getPhone());
+                mailView.setText("tap to mail\n" + user.getMail());
                 positionView.setText(user.getPosition());
                 hospitalView.setText(userInfo.getHospital().getName());
             }
