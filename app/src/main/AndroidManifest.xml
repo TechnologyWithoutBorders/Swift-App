@@ -140,6 +140,7 @@
         <activity
             android:name=".gui.userInfo.UserInfoActivity"
             android:configChanges="orientation|keyboardHidden"
+            android:label="@string/title_activity_user_info"
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
