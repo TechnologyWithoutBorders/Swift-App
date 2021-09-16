@@ -66,7 +66,7 @@ dependencies {
     implementation "com.android.volley:volley:$volley_version"
 
     //Android WorkManager for asynchronous tasks
-    def work_version = "2.5.0"
+    def work_version = "2.6.0"
     implementation "androidx.work:work-runtime:$work_version"
 
     //PhotoView provides an intuitive photo view implementation (that supports zooming)
