@@ -5,7 +5,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "ngo.teog.swift"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 31
         versionCode 89
         versionName "1.8"
@@ -58,7 +58,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
 
     //Zebra Crossing (ZXing) barcode scanner library
-    def zxing_version = "3.6.0"
+    def zxing_version = "4.3.0"
     implementation "com.journeyapps:zxing-android-embedded:$zxing_version"
 
     //Google Volley for managing HTTPS requests
@@ -89,6 +89,8 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 
