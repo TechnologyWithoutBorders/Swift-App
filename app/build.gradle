@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "ngo.teog.swift"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 89
         versionName "1.8"
         multiDexEnabled true
@@ -66,7 +66,7 @@ dependencies {
     implementation "com.android.volley:volley:$volley_version"
 
     //Android WorkManager for asynchronous tasks
-    def work_version = "2.7.0"
+    def work_version = "2.7.1"
     implementation "androidx.work:work-runtime:$work_version"
 
     //PhotoView provides an intuitive photo view implementation (that supports zooming)
@@ -87,10 +87,10 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.4.0'
