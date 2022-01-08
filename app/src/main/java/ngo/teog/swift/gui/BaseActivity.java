@@ -3,7 +3,6 @@ package ngo.teog.swift.gui;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -11,6 +10,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import me.toptas.fancyshowcase.FancyShowCaseView;
 import me.toptas.fancyshowcase.FocusShape;
@@ -28,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         StringBuilder info = new StringBuilder();
 
         for(int id : stringIds) {
-            info.append(Html.fromHtml(getString(id)));
+            info.append(HtmlCompat.fromHtml(getString(id), HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
 
         builder.setMessage(info)

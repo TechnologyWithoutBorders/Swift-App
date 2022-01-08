@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.core.text.HtmlCompat;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
@@ -35,13 +36,13 @@ public class AboutActivity extends BaseActivity {
         }
 
         TextView teogInfo = findViewById(R.id.teog_info);
-        teogInfo.setText(Html.fromHtml(versionString + getString(R.string.teog_info)));
+        teogInfo.setText(HtmlCompat.fromHtml(versionString + getString(R.string.teog_info), HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         TextView aboutText = findViewById(R.id.aboutText);
-        aboutText.setText(Html.fromHtml(getString(R.string.about_text)));
+        aboutText.setText(HtmlCompat.fromHtml(getString(R.string.about_text), HtmlCompat.FROM_HTML_MODE_LEGACY));
 
         TextView privacyPolicyView = findViewById(R.id.privacy_policy_view);
-        privacyPolicyView.setText(Html.fromHtml(getString(R.string.privacy_policy)));
+        privacyPolicyView.setText(HtmlCompat.fromHtml(getString(R.string.privacy_policy), HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
 
     @Override
