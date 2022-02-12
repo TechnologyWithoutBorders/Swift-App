@@ -7,10 +7,6 @@
         android:title="@string/menu_information"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/user_management"
-        android:title="@string/user_management"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/portation"
         android:title="@string/import_export"
         app:showAsAction="never" />

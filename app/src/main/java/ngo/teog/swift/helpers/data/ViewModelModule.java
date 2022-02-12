@@ -9,7 +9,6 @@ import dagger.multibindings.IntoMap;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel2;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
-import ngo.teog.swift.gui.hospital.AdvancedHospitalViewModel;
 import ngo.teog.swift.gui.hospital.HospitalViewModel;
 import ngo.teog.swift.gui.hospital.PortationViewModel;
 import ngo.teog.swift.gui.main.MainViewModel;
@@ -34,11 +33,6 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(HospitalViewModel.class)
     public abstract ViewModel hospitalViewModel(HospitalViewModel hospitalViewModel);
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(AdvancedHospitalViewModel.class)
-    public abstract ViewModel advancedHospitalViewModel(AdvancedHospitalViewModel advancedHospitalViewModel);
 
     @Binds
     @IntoMap
