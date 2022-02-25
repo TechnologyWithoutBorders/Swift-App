@@ -20,7 +20,7 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 
 @Singleton
-@Component(modules = {AppModule.class, RoomModule.class, ViewModelModule.class, AndroidInjectionModule.class, WorkerModule.class})
+@Component(modules = {AppModule.class, RoomModule.class, ViewModelModule.class, AndroidInjectionModule.class})
 public interface AppComponent {
 
     void inject(UserProfileActivity target);
