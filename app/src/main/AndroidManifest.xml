@@ -98,7 +98,7 @@
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gui.imageCapture.ImageCaptureActivity"
+            android:name=".gui.ImageCaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="Take image"
             android:parentActivityName=".gui.main.MainActivity"

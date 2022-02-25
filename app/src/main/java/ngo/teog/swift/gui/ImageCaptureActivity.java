@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui.imageCapture;
+package ngo.teog.swift.gui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
