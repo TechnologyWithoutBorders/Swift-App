@@ -40,6 +40,9 @@ public abstract class HospitalDao {
     @Insert(onConflict = REPLACE)
     public abstract void save(Observable observable);
 
+    @Insert(onConflict = REPLACE)
+    public abstract void save(ImageUploadJob imageUploadJob);
+
     @Transaction
     @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
     public abstract LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId);

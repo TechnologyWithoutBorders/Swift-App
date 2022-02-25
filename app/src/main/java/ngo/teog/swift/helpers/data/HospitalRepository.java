@@ -253,6 +253,7 @@ public class HospitalRepository {
 
             hospitalDao.save(device);
             hospitalDao.save(creationReport);
+            hospitalDao.save(new ImageUploadJob(device.getId()));
 
             refreshUserHospitalSync(userId);
         });

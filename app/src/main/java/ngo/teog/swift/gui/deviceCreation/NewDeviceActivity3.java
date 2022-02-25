@@ -161,25 +161,7 @@ public class NewDeviceActivity3 extends BaseActivity {
                 if(!deleted) {
                     Log.w(this.getClass().getName(), "temporary file has not been deleted");
                 }
-
-                Constraints constraints = new Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build();
-
-                Data imageData = new Data.Builder()
-                        .putString(ResourceKeys.PATH, targetName)
-                        .putInt(ResourceKeys.DEVICE_ID, device.getId())
-                        .build();
-
-                OneTimeWorkRequest uploadWork =
-                        new OneTimeWorkRequest.Builder(ImageUploader.class)
-                                .setConstraints(constraints)
-                                .setInputData(imageData)
-                                .build();
-
-                WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
-                Log.e(this.getClass().getName(), "creating image upload worker failed", e);
                 Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
 
