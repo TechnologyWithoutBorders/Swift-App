@@ -2,8 +2,11 @@ package ngo.teog.swift.helpers.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -18,8 +21,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +41,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.BaseRequest;
+import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.communication.DataAction;
@@ -156,6 +167,10 @@ public class HospitalRepository {
         }
 
         return hospitalDao.loadDevice(userId, deviceId);
+    }
+
+    public List<ImageUploadJob> getImageUploadJobs() {
+        return hospitalDao.getImageUploadJobs();
     }
 
     public LiveData<Observable> loadObservable(int id) {
@@ -283,6 +298,12 @@ public class HospitalRepository {
             if(hospitalRequest != null) {
                 queue.add(hospitalRequest);
             }
+
+            List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+
+            for(JsonObjectRequest request : uploadRequests) {
+                queue.add(request);
+            }
         }
     }
 
@@ -299,8 +320,61 @@ public class HospitalRepository {
                 if(hospitalRequest != null) {
                     queue.add(hospitalRequest);
                 }
+
+                List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+
+                for(JsonObjectRequest request : uploadRequests) {
+                    queue.add(request);
+                }
             }
         });
+    }
+
+    private List<JsonObjectRequest> getImageUploadRequests(Context context, ExecutorService executor) {
+        List<ImageUploadJob> jobs = this.getImageUploadJobs();
+        List<JsonObjectRequest> requests = new ArrayList<>(jobs.size());
+
+        File dir = new File(context.getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+
+        for(ImageUploadJob job : jobs) {
+            int deviceId = job.getDeviceId();
+            String targetName = deviceId + ".jpg";
+
+            File image = new File(dir, targetName);
+
+            try(FileInputStream inputStream = new FileInputStream(image.getPath())) {
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                requests.add(createDeviceImageUploadRequest(context, deviceId, bitmap, executor));
+            } catch (Exception e) {
+                Log.e(this.getClass().getName(), e.toString(), e);
+            }
+        }
+
+        return requests;
+    }
+
+    public JsonObjectRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap, ExecutorService executor) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
+
+        Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.UPLOAD_DEVICE_IMAGE, true);
+
+        params.put(ResourceKeys.DEVICE_ID, Integer.toString(deviceId));
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] imageBytes = stream.toByteArray();
+        try {
+            stream.close();
+        } catch(IOException e) {
+            //ignore
+        }
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        params.put(ResourceKeys.IMAGE, encodedImage);
+
+        JSONObject request = new JSONObject(params);
+
+        return new BaseRequest(context, url, request, new BaseResponseListener(context));
     }
 
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
