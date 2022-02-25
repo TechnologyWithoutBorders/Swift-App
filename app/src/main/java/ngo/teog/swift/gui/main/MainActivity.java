@@ -19,11 +19,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -31,7 +26,6 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -47,7 +41,6 @@ import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
-import ngo.teog.swift.helpers.SynchronizeWorker;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.HospitalDatabase;
@@ -117,19 +110,6 @@ public class MainActivity extends BaseActivity {
         for(int i = 0; i < 3; i++) {
             tabLayout.addTab(tabLayout.newTab());
         }
-
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-
-        /*PeriodicWorkRequest syncWork = //TODO activate
-                new PeriodicWorkRequest.Builder(SynchronizeWorker.class, Defaults.SYNC_INTERVAL, TimeUnit.HOURS, Defaults.SYNC_FLEX_INTERVAL, TimeUnit.MINUTES)
-                        .setInitialDelay(Defaults.SYNC_INTERVAL, TimeUnit.HOURS)
-                        .addTag(SynchronizeWorker.TAG)
-                        .setConstraints(constraints)
-                        .build();
-
-        WorkManager.getInstance(getApplicationContext()).enqueueUniquePeriodicWork(SynchronizeWorker.TAG, ExistingPeriodicWorkPolicy.KEEP, syncWork);*/
     }
 
     @Override
