@@ -1,4 +1,4 @@
-package ngo.teog.swift.gui;
+package ngo.teog.swift.gui.imageCapture;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ImageUploader;
 import ngo.teog.swift.helpers.ResourceKeys;
