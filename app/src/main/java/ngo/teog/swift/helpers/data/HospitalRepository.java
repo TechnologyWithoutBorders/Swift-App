@@ -44,6 +44,7 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.communication.BaseRequest;
 import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.SwiftResponse;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.helpers.Defaults;
@@ -257,6 +258,10 @@ public class HospitalRepository {
         hospitalDao.save(report);
     }
 
+    public void deleteImageUploadJobSync(int deviceId) {
+        hospitalDao.deleteImageUploadJob(deviceId);
+    }
+
     public void createDevice(HospitalDevice device, int userId) {
         executor.execute(() -> {
             Date lastUpdate = new Date();
@@ -374,7 +379,25 @@ public class HospitalRepository {
 
         JSONObject request = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context));
+        return new ImageUploadRequest(url, request, executor, deviceId);
+    }
+
+    private class ImageUploadRequest extends JsonObjectRequest {
+
+        private ImageUploadRequest(final String url, JSONObject request, ExecutorService executor, int deviceId) {
+            super(Request.Method.POST, url, request, response -> executor.execute(() -> {
+                try {
+                    ResponseParser.probeResponseCode(response);
+
+                    HospitalRepository.this.deleteImageUploadJobSync(deviceId);
+                } catch(Exception e) {
+                    Log.e(HospitalRepository.this.getClass().getName(), e.toString(), e);
+                    //we cannot show any information to the user from here as it runs in an extra thread
+                }
+            }), error -> {
+                //we cannot show any information to the user from here as it runs in an extra thread
+            });
+        }
     }
 
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {

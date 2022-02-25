@@ -2,6 +2,7 @@ package ngo.teog.swift.helpers.data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -42,6 +43,9 @@ public abstract class HospitalDao {
 
     @Insert(onConflict = REPLACE)
     public abstract void save(ImageUploadJob imageUploadJob);
+
+    @Query("DELETE FROM image_upload_jobs WHERE deviceId = :deviceId")
+    public abstract void deleteImageUploadJob(int deviceId);
 
     @Transaction
     @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
