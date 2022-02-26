@@ -48,8 +48,8 @@ public class NewDeviceActivity2 extends BaseActivity {
 
     private int deviceNumber;
 
-    private AutoCompleteTextView typeField, manufacturerField, modelField, locationField;
-    private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter, locationAdapter;
+    private AutoCompleteTextView typeField, manufacturerField, modelField;
+    private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter;
 
     private EditText assetNumberField, serialNumberField;
 
@@ -87,11 +87,6 @@ public class NewDeviceActivity2 extends BaseActivity {
         modelField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         modelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         modelField.setAdapter(modelAdapter);
-
-        locationField = findViewById(R.id.locationText);
-        locationField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
-        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
-        locationField.setAdapter(locationAdapter);
 
         intervalPicker = findViewById(R.id.intervalPicker);
         intervalPicker.setValue(3);
@@ -144,7 +139,6 @@ public class NewDeviceActivity2 extends BaseActivity {
                 typeAdapter.clear();
                 manufacturerAdapter.clear();
                 modelAdapter.clear();
-                locationAdapter.clear();
 
                 for(Map.Entry<String, Integer> entry : typeCountMap.entrySet()) {
                     if(entry.getValue() >= 3) {
@@ -161,12 +155,6 @@ public class NewDeviceActivity2 extends BaseActivity {
                 for(Map.Entry<String, Integer> entry : modelCountMap.entrySet()) {
                     if(entry.getValue() >= 3) {
                         modelAdapter.add(entry.getKey());
-                    }
-                }
-
-                for(Map.Entry<String, Integer> entry : locationCountMap.entrySet()) {
-                    if(entry.getValue() >= 3) {
-                        locationAdapter.add(entry.getKey());
                     }
                 }
             }
@@ -211,7 +199,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     int interval = intervalPicker.getValue()*4;
 
                     HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), locationField.getText().toString().trim(), -1, interval, new Date());
+                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), "", -1, interval, new Date());
 
                     Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                     intent.putExtra(ResourceKeys.DEVICE, device);

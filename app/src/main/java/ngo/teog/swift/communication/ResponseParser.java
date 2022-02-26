@@ -38,7 +38,7 @@ public class ResponseParser {
      * @throws ServerException if server indicates an error that should <b>not</b> be visible to the user
      * @throws TransparentServerException if server indicates an error that should be visible to the user
      */
-    private static void probeResponseCode(JSONObject raw) throws ServerException, TransparentServerException {
+    public static void probeResponseCode(JSONObject raw) throws ServerException, TransparentServerException {
         try {
             int responseCode = raw.getInt(SwiftResponse.CODE_FIELD);
 

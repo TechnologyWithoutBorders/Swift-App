@@ -22,11 +22,6 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.NetworkType;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,7 +33,6 @@ import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
-import ngo.teog.swift.helpers.ImageUploader;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
@@ -161,25 +155,7 @@ public class NewDeviceActivity3 extends BaseActivity {
                 if(!deleted) {
                     Log.w(this.getClass().getName(), "temporary file has not been deleted");
                 }
-
-                Constraints constraints = new Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build();
-
-                Data imageData = new Data.Builder()
-                        .putString(ResourceKeys.PATH, targetName)
-                        .putInt(ResourceKeys.DEVICE_ID, device.getId())
-                        .build();
-
-                OneTimeWorkRequest uploadWork =
-                        new OneTimeWorkRequest.Builder(ImageUploader.class)
-                                .setConstraints(constraints)
-                                .setInputData(imageData)
-                                .build();
-
-                WorkManager.getInstance(getApplicationContext()).enqueue(uploadWork);
             } catch(Exception e) {
-                Log.e(this.getClass().getName(), "creating image upload worker failed", e);
                 Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
 

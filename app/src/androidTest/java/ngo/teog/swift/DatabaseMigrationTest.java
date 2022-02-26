@@ -77,4 +77,12 @@ public class DatabaseMigrationTest {
 
         helper.runMigrationsAndValidate(TEST_DB, 7, true, RoomModule.MIGRATION_6_7);
     }
+
+    @Test
+    public void migrate7To8() throws IOException {
+        SupportSQLiteDatabase db = helper.createDatabase(TEST_DB, 7);
+        db.close();
+
+        helper.runMigrationsAndValidate(TEST_DB, 8, true, RoomModule.MIGRATION_7_8);
+    }
 }

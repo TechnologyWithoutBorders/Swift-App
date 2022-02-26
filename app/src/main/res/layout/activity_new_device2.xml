@@ -63,15 +63,6 @@
                 android:maxLength="20"
                 android:completionThreshold="1"/>
 
-            <AutoCompleteTextView
-                android:id="@+id/locationText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/device_location"
-                android:inputType="text"
-                android:maxLength="20"
-                android:completionThreshold="1"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
