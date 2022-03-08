@@ -488,7 +488,7 @@ public class HospitalRepository {
 
                     HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
 
-                    long now = new Date().getTime();
+                    long now = syncTime.getTime();
 
                     if (hospitalInfo.getLastUpdate().getTime() > now) {
                         hospitalInfo.setLastUpdate(new Date(now));
@@ -524,7 +524,7 @@ public class HospitalRepository {
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, syncTime.getTime());
+                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, now);
                     editor.apply();
 
                     HospitalRepository.this.saveObservableSync(new Observable(1));//TODO constant
