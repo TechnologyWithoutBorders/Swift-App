@@ -403,8 +403,6 @@ public class HospitalRepository {
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
-        long syncTime = new Date().getTime();
-
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
@@ -470,7 +468,7 @@ public class HospitalRepository {
 
             request.put(ResourceKeys.DATA, data);
 
-            return new HospitalRequest(context, url, request, syncTime, executor);
+            return new HospitalRequest(context, url, request, executor);
         } catch(JSONException e) {
             return null;
         }
@@ -478,12 +476,13 @@ public class HospitalRepository {
 
     private class HospitalRequest extends JsonObjectRequest {
 
-        private HospitalRequest(final Context context, final String url, JSONObject request, long syncTime, ExecutorService executor) {
+        private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
                     Log.i(HospitalRepository.this.getClass().getName(), "Server Response:\n" + response.toString(4));
 
-                    HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
+                    long syncTime = response.getLong("syncTime");
+                    HospitalInfo hospitalInfo = ResponseParser.parseHospital(response.getJSONObject("hospital"));
 
                     long now = new Date().getTime();
 
