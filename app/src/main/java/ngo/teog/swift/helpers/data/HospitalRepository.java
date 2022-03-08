@@ -403,6 +403,8 @@ public class HospitalRepository {
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {
         final String url = Defaults.BASE_URL + Defaults.HOSPITALS_URL;
 
+        long syncTime = new Date().getTime();
+
         DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
@@ -468,7 +470,7 @@ public class HospitalRepository {
 
             request.put(ResourceKeys.DATA, data);
 
-            return new HospitalRequest(context, url, request, executor);
+            return new HospitalRequest(context, url, request, syncTime, executor);
         } catch(JSONException e) {
             return null;
         }
@@ -476,7 +478,7 @@ public class HospitalRepository {
 
     private class HospitalRequest extends JsonObjectRequest {
 
-        private HospitalRequest(final Context context, final String url, JSONObject request, ExecutorService executor) {
+        private HospitalRequest(final Context context, final String url, JSONObject request, long syncTime, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
                     Log.i(HospitalRepository.this.getClass().getName(), "Server Response:\n" + response.toString(4));
@@ -519,7 +521,7 @@ public class HospitalRepository {
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, new Date().getTime());
+                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, syncTime);
                     editor.apply();
 
                     HospitalRepository.this.saveObservableSync(new Observable(1));//TODO constant
