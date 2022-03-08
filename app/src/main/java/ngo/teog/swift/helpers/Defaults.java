@@ -27,7 +27,7 @@ public final class Defaults {
 
     public static final String HOST = "https://teog.virlep.de/";
     public static final String INTERFACE_PATH = "interface/";
-    public static final int INTERFACE_ID = 5;
+    public static final int INTERFACE_ID = 4;
 
     public static final String BASE_URL = HOST+INTERFACE_PATH+INTERFACE_ID+"/";
 

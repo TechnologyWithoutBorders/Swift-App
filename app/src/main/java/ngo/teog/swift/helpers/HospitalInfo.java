@@ -13,7 +13,6 @@ import ngo.teog.swift.helpers.data.User;
  * @author nitelow
  */
 public class HospitalInfo {
-    private Date syncTime;
     private final int id;
     private final String name;
     private final String location;
@@ -34,8 +33,7 @@ public class HospitalInfo {
      * @param users list of members
      * @param devices list of devices
      */
-    public HospitalInfo(Date syncTime, int id, String name, String location, float longitude, float latitude, Date lastUpdate, List<User> users, List<DeviceInfo> devices) {
-        this.syncTime = syncTime;
+    public HospitalInfo(int id, String name, String location, float longitude, float latitude, Date lastUpdate, List<User> users, List<DeviceInfo> devices) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -44,10 +42,6 @@ public class HospitalInfo {
         this.lastUpdate = lastUpdate;
         this.users = users;
         this.devices = devices;
-    }
-
-    public Date getSyncTime() {
-        return syncTime;
     }
 
     /**
