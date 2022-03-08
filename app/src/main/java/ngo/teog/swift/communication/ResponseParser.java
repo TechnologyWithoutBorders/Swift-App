@@ -86,10 +86,17 @@ public class ResponseParser {
         probeResponseCode(raw);
 
         try {
-            JSONObject hospitalObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
+            JSONObject dataObject = raw.getJSONObject(SwiftResponse.DATA_FIELD);
+
+            DateFormat syncTimeFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
+            syncTimeFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+
+            Date syncTime = syncTimeFormat.parse(dataObject.getString("syncTime"));
 
             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
             dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+
+            JSONObject hospitalObject = dataObject.getJSONObject("hospital");
 
             int hospitalId = hospitalObject.getInt(HospitalAttribute.ID);
             String name = hospitalObject.getString(HospitalAttribute.NAME);
@@ -163,7 +170,7 @@ public class ResponseParser {
                 deviceList.add(deviceInfo);
             }
 
-            return new HospitalInfo(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate, userList, deviceList);
+            return new HospitalInfo(syncTime, hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate, userList, deviceList);
         } catch(JSONException | ParseException e) {
             throw new ServerException(e);
         }

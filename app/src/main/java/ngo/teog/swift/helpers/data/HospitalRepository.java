@@ -484,8 +484,7 @@ public class HospitalRepository {
                     DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
                     dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
-                    long syncTime = dateFormat.parse(response.getString("syncTime")).getTime();
-                    HospitalInfo hospitalInfo = ResponseParser.parseHospital(response.getJSONObject("hospital"));
+                    HospitalInfo hospitalInfo = ResponseParser.parseHospital(response);
 
                     long now = new Date().getTime();
 
@@ -523,7 +522,7 @@ public class HospitalRepository {
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, syncTime);
+                    editor.putLong(Defaults.LAST_SYNC_PREFERENCE, hospitalInfo.getSyncTime().getTime());
                     editor.apply();
 
                     HospitalRepository.this.saveObservableSync(new Observable(1));//TODO constant
