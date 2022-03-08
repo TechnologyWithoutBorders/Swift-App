@@ -131,7 +131,7 @@ public class PortationActivity extends AppCompatActivity {
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
-                                csvWriter.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Title", "Previous State", "Current State", "Description"});
+                                csvWriter.writeNext(new String[] {"ID", "Device", "Hospital", "Author", "Title", "Current State", "Description"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     for(Report report : deviceDump.getReports()) {
