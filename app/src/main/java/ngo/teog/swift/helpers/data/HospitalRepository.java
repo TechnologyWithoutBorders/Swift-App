@@ -481,7 +481,10 @@ public class HospitalRepository {
                 try {
                     Log.i(HospitalRepository.this.getClass().getName(), "Server Response:\n" + response.toString(4));
 
-                    long syncTime = response.getLong("syncTime");
+                    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
+                    dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+
+                    long syncTime = dateFormat.parse(response.getString("syncTime")).getTime();
                     HospitalInfo hospitalInfo = ResponseParser.parseHospital(response.getJSONObject("hospital"));
 
                     long now = new Date().getTime();
