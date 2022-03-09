@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -95,7 +96,10 @@ public class ReportInfoActivity extends BaseActivity {
 
                 titleView.setText(deviceInfo.getDevice().getType());
 
-                ReportThreadAdapter adapter = new ReportThreadAdapter(this, deviceInfo.getReports());
+                List<ReportInfo> reports = deviceInfo.getReports();
+                Collections.sort(reports, (first, second) -> first.getReport().getId()-second.getReport().getId());
+
+                ReportThreadAdapter adapter = new ReportThreadAdapter(this, reports);
                 reportThreadView.setAdapter(adapter);
                 reportThreadView.setLayoutManager(new LinearLayoutManager(this));
 

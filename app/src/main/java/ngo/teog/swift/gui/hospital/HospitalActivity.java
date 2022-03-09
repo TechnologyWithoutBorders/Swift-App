@@ -326,7 +326,15 @@ public class HospitalActivity extends BaseActivity {
         }
 
         public void setDeviceInfos(List<DeviceInfo> deviceInfos) {
-            this.deviceInfos = deviceInfos;
+            List<DeviceInfo> deviceInfoCopy = new ArrayList<>(deviceInfos);
+
+            for(DeviceInfo deviceInfo : deviceInfoCopy) {
+                List<ReportInfo> reports = deviceInfo.getReports();
+
+                Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
+            }
+
+            this.deviceInfos = deviceInfoCopy;
 
             filteredDeviceInfos = new ArrayList<>(deviceInfos);
 
@@ -574,6 +582,7 @@ public class HospitalActivity extends BaseActivity {
 
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();
+                        List<ReportInfo> reportInfos = deviceInfo.getReports();
 
                         statusView.setText(device.getLocation());
 
@@ -581,8 +590,9 @@ public class HospitalActivity extends BaseActivity {
 
                         nameView.setText(device.getType());
 
-                        if(deviceInfo.getReports().size() > 0) {
-                            Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size() - 1).getReport();
+                        if(reportInfos.size() > 0) {
+                            //reports have been sorted so latest report has index 0
+                            Report lastReport = deviceInfo.getReports().get(0).getReport();
 
                             DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), HospitalActivity.this);
 

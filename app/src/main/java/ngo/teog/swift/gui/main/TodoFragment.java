@@ -103,7 +103,8 @@ public class TodoFragment extends Fragment {
                 //reverse report list of every device (so newest report has index 0)
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     List<ReportInfo> reports = deviceInfo.getReports();
-                    Collections.reverse(reports);
+
+                    Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
                 }
 
                 //sort devices by state
