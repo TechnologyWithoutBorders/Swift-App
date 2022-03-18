@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -63,6 +64,7 @@ public class HospitalRepository {
     private final HospitalDao hospitalDao;
     private final Context context;
     private final ExecutorService executor = Executors.newCachedThreadPool();//TODO build component that allows controlling order of execution
+    private volatile AtomicBoolean syncOngoing = new AtomicBoolean(false);
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
@@ -295,7 +297,7 @@ public class HospitalRepository {
         //TODO check if user data has been fetched recently
 
         //refresh
-        if(this.checkForInternetConnection()) {
+        if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
             RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
             HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
@@ -317,7 +319,7 @@ public class HospitalRepository {
             //TODO check if user data has been fetched recently
 
             //refresh
-            if(this.checkForInternetConnection()) {
+            if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
                 RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
                 HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
@@ -531,9 +533,12 @@ public class HospitalRepository {
                 } catch(Exception e) {
                     Log.e(HospitalRepository.this.getClass().getName(), e.toString(), e);
                     //we cannot show any information to the user from here as it runs in an extra thread
+                } finally {
+                    syncOngoing.set(false);
                 }
             }), error -> {
                 //we cannot show any information to the user from here as it runs in an extra thread
+                syncOngoing.set(false);
             });
         }
     }
