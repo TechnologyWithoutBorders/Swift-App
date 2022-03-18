@@ -100,27 +100,14 @@ public class TodoFragment extends Fragment {
                 this.values = deviceInfos;
                 adapter.clear();
 
+                List<DeviceInfo> newDeviceInfos = new ArrayList<>();
+
                 //reverse report list of every device (so newest report has index 0)
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     List<ReportInfo> reports = deviceInfo.getReports();
 
                     Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
                 }
-
-                //sort devices by state
-                Collections.sort(deviceInfos, (first, second) -> {
-                    List<ReportInfo> firstReports = first.getReports();
-                    List<ReportInfo> secondReports = second.getReports();
-
-                    if(firstReports.size() > 0 && secondReports.size() > 0) {
-                        int firstState = firstReports.get(0).getReport().getCurrentState();
-                        int secondState = secondReports.get(0).getReport().getCurrentState();
-
-                        return (firstState-secondState)*-1;
-                    } else {
-                        return 0;
-                    }
-                });
 
                 //filter relevant devices
                 for(DeviceInfo deviceInfo : deviceInfos) {
@@ -130,10 +117,27 @@ public class TodoFragment extends Fragment {
                         int currentState = reportInfos.get(0).getReport().getCurrentState();
 
                         if(currentState == DeviceState.MAINTENANCE || currentState == DeviceState.BROKEN || currentState == DeviceState.IN_PROGRESS) {
-                            adapter.add(deviceInfo);
+                            newDeviceInfos.add(deviceInfo);
                         }
                     }
                 }
+
+                //sort devices by state
+                Collections.sort(newDeviceInfos, (first, second) -> {
+                    List<ReportInfo> firstReports = first.getReports();
+                    List<ReportInfo> secondReports = second.getReports();
+
+                    if(firstReports.size() > 0 && secondReports.size() > 0) {
+                        long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                        long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                        return (int)(firstCreated-secondCreated);
+                    } else {
+                        return 0;
+                    }
+                });
+
+                adapter.addAll(newDeviceInfos);
             }
         });
     }
