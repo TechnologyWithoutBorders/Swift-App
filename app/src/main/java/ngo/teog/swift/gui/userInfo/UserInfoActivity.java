@@ -49,6 +49,7 @@ public class UserInfoActivity extends BaseActivity {
         TextView hospitalView = findViewById(R.id.hospitalView);
 
         //make edit buttons disappear
+        findViewById(R.id.edit_name).setVisibility(View.GONE);
         findViewById(R.id.edit_position).setVisibility(View.GONE);
         findViewById(R.id.edit_phone).setVisibility(View.GONE);
         findViewById(R.id.edit_mail).setVisibility(View.GONE);
