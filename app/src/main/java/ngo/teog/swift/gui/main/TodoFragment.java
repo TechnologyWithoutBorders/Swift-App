@@ -138,10 +138,6 @@ public class TodoFragment extends Fragment {
                     }
                 });
 
-                for(DeviceInfo info : newDeviceInfos) {
-                    Log.d("BLABLUB", info.getDevice().getType() + ": " + info.getReports().get(0).getReport().getTitle());
-                }
-
                 adapter.addAll(newDeviceInfos);
             }
         });
