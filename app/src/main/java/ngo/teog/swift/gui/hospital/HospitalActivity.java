@@ -377,37 +377,22 @@ public class HospitalActivity extends BaseActivity {
                 String type = device.getType().toLowerCase();
                 String manufacturer = device.getManufacturer().toLowerCase();
                 String model = device.getModel().toLowerCase();
+                String serialNumber = device.getSerialNumber().toLowerCase();
 
                 int typeIndex = type.indexOf(matchingString);
+                int manufacturerIndex = manufacturer.indexOf(matchingString);
+                int modelIndex = model.indexOf(matchingString);
+                int serialNumberIndex = serialNumber.indexOf(matchingString);
 
-                //one after another for better performance
-                if(typeIndex != 0) {
-                    int manufacturerIndex = manufacturer.indexOf(matchingString);
+                if(typeIndex >= 0 || manufacturerIndex >= 0 || modelIndex >= 0 || serialNumberIndex >= 0) {
+                    if(typeIndex == -1) typeIndex = Integer.MAX_VALUE;
+                    if(manufacturerIndex == -1) manufacturerIndex = Integer.MAX_VALUE;
+                    if(modelIndex == -1) modelIndex = Integer.MAX_VALUE;
+                    if(serialNumberIndex == -1) serialNumberIndex = Integer.MAX_VALUE;
 
-                    if(manufacturerIndex != 0) {
-                        int highestPrio = Integer.MAX_VALUE;
+                    int priority = Math.min(typeIndex, Math.min(manufacturerIndex, Math.min(modelIndex, serialNumberIndex)));
 
-                        if(typeIndex >= 0) {
-                            highestPrio = typeIndex;
-                        }
-
-                        if(manufacturerIndex >= 0 && manufacturerIndex < highestPrio) {
-                            highestPrio = manufacturerIndex;
-                        }
-
-                        int modelIndex = model.indexOf(matchingString);
-                        if(modelIndex >= 0 && modelIndex < highestPrio) {
-                            highestPrio = modelIndex;
-                        }
-
-                        if(highestPrio != Integer.MAX_VALUE) {
-                            prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, highestPrio));
-                        }
-                    } else {
-                        prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, 0));
-                    }
-                } else {
-                    prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, 0));
+                    prioDeviceInfos.add(new PrioDeviceInfo(deviceInfo, priority));
                 }
             }
 
