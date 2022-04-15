@@ -122,7 +122,7 @@ public class TodoFragment extends Fragment {
                     }
                 }
 
-                //sort devices by state
+                //sort devices by last change date
                 Collections.sort(newDeviceInfos, (first, second) -> {
                     List<ReportInfo> firstReports = first.getReports();
                     List<ReportInfo> secondReports = second.getReports();
