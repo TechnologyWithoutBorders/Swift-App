@@ -164,8 +164,6 @@ public class HospitalActivity extends BaseActivity {
         TextView limitedCounter = findViewById(R.id.limited_count);
         this.setStateImage(limitedCounter, limitedParams);
 
-        TextView overdueDevices = findViewById(R.id.amountOfOverdueDevices);
-
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
                 .roomModule(new RoomModule(getApplication()))
@@ -204,49 +202,13 @@ public class HospitalActivity extends BaseActivity {
             if(deviceInfos != null) {
                 int[] stateCounters = {0, 0, 0, 0, 0, 0};
 
-                Date now = new Date();
-
-                int overdueDeviceCount = 0;
-
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
 
                     int newestState = latestReportInfo.getReport().getCurrentState();
 
                     stateCounters[newestState]++;
-
-                    HospitalDevice device = deviceInfo.getDevice();
-
-                    if(newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
-                        //look for last maintenance/repair or creation
-                        Date lastMaintenance = null;
-
-                        List<ReportInfo> reversedReportInfos = deviceInfo.getReports();
-                        Collections.reverse(reversedReportInfos);
-
-                        for(ReportInfo reportInfo : reversedReportInfos) {
-                            Report report = reportInfo.getReport();
-
-                            int previousState = report.getCurrentState();
-
-                            if(previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN) {
-                                break;
-                            }
-
-                            lastMaintenance = report.getCreated();
-                        }
-
-                        if(lastMaintenance != null) {
-                            int daysLeft = (device.getMaintenanceInterval()*7)-((int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24));
-
-                            if(daysLeft <= 0){
-                                overdueDeviceCount++;
-                            }
-                        }
-                    }
                 }
-
-                overdueDevices.setText(getResources().getQuantityString(R.plurals.hospital_info_overdue_devices, overdueDeviceCount, overdueDeviceCount));
 
                 workingCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.WORKING]));
                 maintenanceCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.MAINTENANCE]));
