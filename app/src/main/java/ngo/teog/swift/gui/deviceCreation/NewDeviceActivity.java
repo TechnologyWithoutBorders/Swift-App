@@ -51,6 +51,7 @@ public class NewDeviceActivity extends BaseActivity {
                     intent.putExtra(ResourceKeys.DEVICE_ID, deviceNumber);
 
                     startActivity(intent);
+                    NewDeviceActivity.this.finish();
                 } else {
                     Toast.makeText(NewDeviceActivity.this, getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
                 }

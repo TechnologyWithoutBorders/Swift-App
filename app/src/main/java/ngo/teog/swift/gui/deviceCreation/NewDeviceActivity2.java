@@ -205,6 +205,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     intent.putExtra(ResourceKeys.DEVICE, device);
 
                     startActivity(intent);
+                    NewDeviceActivity2.this.finish();
                 } else {
                     modelField.setError(getString(R.string.empty_model));
                 }
