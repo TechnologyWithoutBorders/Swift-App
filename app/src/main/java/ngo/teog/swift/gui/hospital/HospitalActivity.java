@@ -141,26 +141,32 @@ public class HospitalActivity extends BaseActivity {
 
         DeviceStateVisuals workingParams = new DeviceStateVisuals(DeviceState.WORKING, this);
         TextView workingCounter = findViewById(R.id.working_count);
+        workingCounter.setOnClickListener(view -> adapter.filter(DeviceState.WORKING));
         this.setStateImage(workingCounter, workingParams);
 
         DeviceStateVisuals maintenanceParams = new DeviceStateVisuals(DeviceState.MAINTENANCE, this);
         TextView maintenanceCounter = findViewById(R.id.maintenance_count);
+        maintenanceCounter.setOnClickListener(view -> adapter.filter(DeviceState.MAINTENANCE));
         this.setStateImage(maintenanceCounter, maintenanceParams);
 
         DeviceStateVisuals repairParams = new DeviceStateVisuals(DeviceState.BROKEN, this);
         TextView repairCounter = findViewById(R.id.repair_count);
+        repairCounter.setOnClickListener(view -> adapter.filter(DeviceState.BROKEN));
         this.setStateImage(repairCounter, repairParams);
 
         DeviceStateVisuals progressParams = new DeviceStateVisuals(DeviceState.IN_PROGRESS, this);
         TextView progressCounter = findViewById(R.id.in_progress_count);
+        progressCounter.setOnClickListener(view -> adapter.filter(DeviceState.IN_PROGRESS));
         this.setStateImage(progressCounter, progressParams);
 
         DeviceStateVisuals brokenParams = new DeviceStateVisuals(DeviceState.SALVAGE, this);
         TextView brokenCounter = findViewById(R.id.broken_count);
+        brokenCounter.setOnClickListener(view -> adapter.filter(DeviceState.SALVAGE));
         this.setStateImage(brokenCounter, brokenParams);
 
         DeviceStateVisuals limitedParams = new DeviceStateVisuals(DeviceState.LIMITATIONS, this);
         TextView limitedCounter = findViewById(R.id.limited_count);
+        limitedCounter.setOnClickListener(view -> adapter.filter(DeviceState.LIMITATIONS));
         this.setStateImage(limitedCounter, limitedParams);
 
         DaggerAppComponent.builder()
@@ -300,6 +306,22 @@ public class HospitalActivity extends BaseActivity {
             filteredDeviceInfos = new ArrayList<>(deviceInfos);
 
             this.notifyDataSetChanged();
+        }
+
+        public void filter(int state) {
+            filteredDeviceInfos.clear();
+
+            for(DeviceInfo deviceInfo : deviceInfos) {
+                Report lastReport = deviceInfo.getReports().get(0).getReport();
+
+                if(lastReport.getCurrentState() == state) {
+                    filteredDeviceInfos.add(deviceInfo);
+                }
+            }
+
+            this.notifyDataSetChanged();
+
+            hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
         }
 
         /**
