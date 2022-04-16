@@ -24,7 +24,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,15 +35,13 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.BaseRequest;
-import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.RequestFactory;
-import ngo.teog.swift.communication.SwiftResponse;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.helpers.Defaults;
@@ -63,6 +60,7 @@ public class HospitalRepository {
     private final HospitalDao hospitalDao;
     private final Context context;
     private final ExecutorService executor = Executors.newCachedThreadPool();//TODO build component that allows controlling order of execution
+    private final AtomicBoolean syncOngoing = new AtomicBoolean(false);
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
@@ -295,7 +293,7 @@ public class HospitalRepository {
         //TODO check if user data has been fetched recently
 
         //refresh
-        if(this.checkForInternetConnection()) {
+        if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
             RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
             HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
@@ -317,7 +315,7 @@ public class HospitalRepository {
             //TODO check if user data has been fetched recently
 
             //refresh
-            if(this.checkForInternetConnection()) {
+            if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
                 RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
                 HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
@@ -531,9 +529,12 @@ public class HospitalRepository {
                 } catch(Exception e) {
                     Log.e(HospitalRepository.this.getClass().getName(), e.toString(), e);
                     //we cannot show any information to the user from here as it runs in an extra thread
+                } finally {
+                    syncOngoing.set(false);
                 }
             }), error -> {
                 //we cannot show any information to the user from here as it runs in an extra thread
+                syncOngoing.set(false);
             });
         }
     }
