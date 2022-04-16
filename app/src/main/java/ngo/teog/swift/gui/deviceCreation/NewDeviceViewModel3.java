@@ -10,13 +10,13 @@ import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 
-public class NewDeviceViewModel extends ViewModel {
+public class NewDeviceViewModel3 extends ViewModel {
     private LiveData<DeviceInfo> device;
     private LiveData<User> user;
     private final HospitalRepository hospitalRepo;
 
     @Inject
-    public NewDeviceViewModel(HospitalRepository hospitalRepo) {
+    public NewDeviceViewModel3(HospitalRepository hospitalRepo) {
         this.hospitalRepo = hospitalRepo;
     }
 

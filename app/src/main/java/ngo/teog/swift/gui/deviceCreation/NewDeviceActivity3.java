@@ -56,10 +56,12 @@ public class NewDeviceActivity3 extends BaseActivity {
 
     private String imagePath = null;
 
+    private boolean deviceCreated = false;
+
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private NewDeviceViewModel viewModel;
+    private NewDeviceViewModel3 viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class NewDeviceActivity3 extends BaseActivity {
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(NewDeviceViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(NewDeviceViewModel3.class);
         viewModel.init(userId, device.getId());
 
         viewModel.getUser().observe(this, user -> {
@@ -101,11 +103,16 @@ public class NewDeviceActivity3 extends BaseActivity {
 
         viewModel.getDevice().observe(this, device -> {
             if(device != null) {
-                Intent intent = new Intent(NewDeviceActivity3.this, DeviceInfoActivity.class);
-                intent.putExtra(ResourceKeys.DEVICE_ID, device.getDevice().getId());
-                startActivity(intent);
+                //this event is sometimes dispatched multiple times, so we remember if we have already handled it
+                if(!deviceCreated) {
+                    deviceCreated = true;
 
-                NewDeviceActivity3.this.finish();
+                    Intent intent = new Intent(NewDeviceActivity3.this, DeviceInfoActivity.class);
+                    intent.putExtra(ResourceKeys.DEVICE_ID, device.getDevice().getId());
+                    startActivity(intent);
+
+                    NewDeviceActivity3.this.finish();
+                }
             }
         });
     }
