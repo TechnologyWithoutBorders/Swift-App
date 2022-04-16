@@ -60,7 +60,7 @@ public class HospitalRepository {
     private final HospitalDao hospitalDao;
     private final Context context;
     private final ExecutorService executor = Executors.newCachedThreadPool();//TODO build component that allows controlling order of execution
-    private volatile AtomicBoolean syncOngoing = new AtomicBoolean(false);
+    private final AtomicBoolean syncOngoing = new AtomicBoolean(false);
 
     @Inject
     public HospitalRepository(HospitalDao hospitalDao, Context context) {
