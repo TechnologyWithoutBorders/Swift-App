@@ -3,6 +3,7 @@ package ngo.teog.swift.gui.hospital;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -29,7 +30,6 @@ import androidx.transition.TransitionManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,6 +66,21 @@ public class HospitalActivity extends BaseActivity {
     private ExpandableListView hospitalListView;
     private SearchView searchView;
 
+    private ExpandableHospitalAdapter adapter;
+
+    private final int[] STATE_VIEW_IDS = {
+            R.id.working_count,
+            R.id.maintenance_count,
+            R.id.repair_count,
+            R.id.broken_count,
+            R.id.in_progress_count,
+            R.id.limited_count
+    };
+
+    private final TextView[] COUNTER_VIEWS = new TextView[STATE_VIEW_IDS.length];
+
+    private int filteredState = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +91,7 @@ public class HospitalActivity extends BaseActivity {
         LinearLayout hospitalInfo = findViewById(R.id.hospital_info);
         hospitalListView = findViewById(R.id.hospitalList);
 
-        ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
+        adapter = new ExpandableHospitalAdapter();
         hospitalListView.setAdapter(adapter);
 
         hospitalListView.setOnChildClickListener((parent, view, groupPosition, childPosition, id) -> {
@@ -138,33 +153,13 @@ public class HospitalActivity extends BaseActivity {
 
         TextView mapButton = findViewById(R.id.map_button);
 
-        //TODO in Methode ausgliedern
-
-        DeviceStateVisuals workingParams = new DeviceStateVisuals(DeviceState.WORKING, this);
-        TextView workingCounter = findViewById(R.id.working_count);
-        this.setStateImage(workingCounter, workingParams);
-
-        DeviceStateVisuals maintenanceParams = new DeviceStateVisuals(DeviceState.MAINTENANCE, this);
-        TextView maintenanceCounter = findViewById(R.id.maintenance_count);
-        this.setStateImage(maintenanceCounter, maintenanceParams);
-
-        DeviceStateVisuals repairParams = new DeviceStateVisuals(DeviceState.BROKEN, this);
-        TextView repairCounter = findViewById(R.id.repair_count);
-        this.setStateImage(repairCounter, repairParams);
-
-        DeviceStateVisuals progressParams = new DeviceStateVisuals(DeviceState.IN_PROGRESS, this);
-        TextView progressCounter = findViewById(R.id.in_progress_count);
-        this.setStateImage(progressCounter, progressParams);
-
-        DeviceStateVisuals brokenParams = new DeviceStateVisuals(DeviceState.SALVAGE, this);
-        TextView brokenCounter = findViewById(R.id.broken_count);
-        this.setStateImage(brokenCounter, brokenParams);
-
-        DeviceStateVisuals limitedParams = new DeviceStateVisuals(DeviceState.LIMITATIONS, this);
-        TextView limitedCounter = findViewById(R.id.limited_count);
-        this.setStateImage(limitedCounter, limitedParams);
-
-        TextView overdueDevices = findViewById(R.id.amountOfOverdueDevices);
+        for(int state : DeviceState.IDS) {
+            DeviceStateVisuals visuals = new DeviceStateVisuals(state, this);
+            TextView counterView = findViewById(STATE_VIEW_IDS[state]);
+            counterView.setOnClickListener(view -> filterByState(state));
+            this.setStateImage(counterView, visuals, true);
+            COUNTER_VIEWS[state] = counterView;
+        }
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -202,11 +197,7 @@ public class HospitalActivity extends BaseActivity {
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
-                int[] stateCounters = {0, 0, 0, 0, 0, 0};
-
-                Date now = new Date();
-
-                int overdueDeviceCount = 0;
+                int[] stateCounters = new int[DeviceState.IDS.length];
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
@@ -214,46 +205,11 @@ public class HospitalActivity extends BaseActivity {
                     int newestState = latestReportInfo.getReport().getCurrentState();
 
                     stateCounters[newestState]++;
-
-                    HospitalDevice device = deviceInfo.getDevice();
-
-                    if(newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
-                        //look for last maintenance/repair or creation
-                        Date lastMaintenance = null;
-
-                        List<ReportInfo> reversedReportInfos = deviceInfo.getReports();
-                        Collections.reverse(reversedReportInfos);
-
-                        for(ReportInfo reportInfo : reversedReportInfos) {
-                            Report report = reportInfo.getReport();
-
-                            int previousState = report.getCurrentState();
-
-                            if(previousState == DeviceState.MAINTENANCE || previousState == DeviceState.BROKEN) {
-                                break;
-                            }
-
-                            lastMaintenance = report.getCreated();
-                        }
-
-                        if(lastMaintenance != null) {
-                            int daysLeft = (device.getMaintenanceInterval()*7)-((int) ((now.getTime() - lastMaintenance.getTime()) / 1000 / 60 / 60 / 24));
-
-                            if(daysLeft <= 0){
-                                overdueDeviceCount++;
-                            }
-                        }
-                    }
                 }
 
-                overdueDevices.setText(getResources().getQuantityString(R.plurals.hospital_info_overdue_devices, overdueDeviceCount, overdueDeviceCount));
-
-                workingCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.WORKING]));
-                maintenanceCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.MAINTENANCE]));
-                repairCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.BROKEN]));
-                progressCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.IN_PROGRESS]));
-                brokenCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.SALVAGE]));
-                limitedCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.LIMITATIONS]));
+                for(int state = 0; state < COUNTER_VIEWS.length; state++) {
+                    COUNTER_VIEWS[state].setText(String.format(Locale.ROOT, "%d", stateCounters[state]));
+                }
 
                 Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().toLowerCase().compareTo(second.getDevice().getType().toLowerCase()));
                 adapter.setDeviceInfos(deviceInfos);
@@ -291,11 +247,46 @@ public class HospitalActivity extends BaseActivity {
         }
     }
 
-    private void setStateImage(TextView stateView, DeviceStateVisuals visuals) {
+    private void setStateImage(TextView stateView, DeviceStateVisuals visuals, boolean colored) {
         Drawable stateIcon = visuals.getStateIcon();
-        stateIcon.setColorFilter(new PorterDuffColorFilter(visuals.getBackgroundColor(), PorterDuff.Mode.SRC_ATOP));
+        if(colored) {
+            stateIcon.setColorFilter(new PorterDuffColorFilter(visuals.getBackgroundColor(), PorterDuff.Mode.SRC_ATOP));
+        } else {
+            stateIcon.setColorFilter(new PorterDuffColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP));
+        }
         stateIcon.setBounds(0, 0, 40, 40);
         stateView.setCompoundDrawables(null, stateIcon, null, null);
+    }
+
+    private void filterByState(int state) {
+        if(state == filteredState) {
+            for(int i = 0; i < COUNTER_VIEWS.length; i++) {
+                TextView counterView = COUNTER_VIEWS[i];
+                DeviceStateVisuals visuals = new DeviceStateVisuals(i, this);
+
+                setStateImage(counterView, visuals, true);
+                counterView.setTextColor(Color.BLACK);
+            }
+
+            adapter.preFilter(-1);
+            filteredState = -1;
+        } else {
+            for(int i = 0; i < COUNTER_VIEWS.length; i++) {
+                TextView counterView = COUNTER_VIEWS[i];
+                DeviceStateVisuals visuals = new DeviceStateVisuals(i, this);
+
+                if(i == state) {
+                    setStateImage(counterView, visuals, true);
+                    counterView.setTextColor(Color.BLACK);
+                } else {
+                    setStateImage(counterView, visuals, false);
+                    counterView.setTextColor(Color.LTGRAY);
+                }
+            }
+
+            adapter.preFilter(state);
+            filteredState = state;
+        }
     }
 
     /**
@@ -313,14 +304,15 @@ public class HospitalActivity extends BaseActivity {
         private static final int USERS_GROUP = 1;
 
         private List<User> users = new ArrayList<>();
-        private List<User> filteredUsers = new ArrayList<>();
+        private List<User> displayedUsers = new ArrayList<>();
         private List<DeviceInfo> deviceInfos = new ArrayList<>();
-        private List<DeviceInfo> filteredDeviceInfos = new ArrayList<>();
+        private List<DeviceInfo> preFilteredDeviceInfos = new ArrayList<>();
+        private List<DeviceInfo> displayedDeviceInfos = new ArrayList<>();
 
         public void setUsers(List<User> users) {
             this.users = users;
 
-            filteredUsers = new ArrayList<>(users);
+            displayedUsers = new ArrayList<>(users);
 
             this.notifyDataSetChanged();
         }
@@ -336,9 +328,35 @@ public class HospitalActivity extends BaseActivity {
 
             this.deviceInfos = deviceInfoCopy;
 
-            filteredDeviceInfos = new ArrayList<>(deviceInfos);
+            preFilteredDeviceInfos = new ArrayList<>(deviceInfos);
+            displayedDeviceInfos = new ArrayList<>(preFilteredDeviceInfos);
 
             this.notifyDataSetChanged();
+        }
+
+        public void preFilter(int state) {
+            displayedDeviceInfos.clear();
+            preFilteredDeviceInfos.clear();
+            searchView.setQuery("", false);
+
+            if(state == -1) {
+                //disable filter
+                preFilteredDeviceInfos.addAll(deviceInfos);
+            } else {
+                for (DeviceInfo deviceInfo : deviceInfos) {
+                    Report lastReport = deviceInfo.getReports().get(0).getReport();
+
+                    if (lastReport.getCurrentState() == state) {
+                        preFilteredDeviceInfos.add(deviceInfo);
+                    }
+                }
+            }
+
+            displayedDeviceInfos.addAll(preFilteredDeviceInfos);
+
+            this.notifyDataSetChanged();
+
+            hospitalListView.expandGroup(ExpandableHospitalAdapter.DEVICES_GROUP);
         }
 
         /**
@@ -364,14 +382,14 @@ public class HospitalActivity extends BaseActivity {
 
             Collections.sort(prioUsers, (first, second) -> first.getPriority()-second.getPriority());
 
-            filteredUsers = new ArrayList<>();
+            displayedUsers.clear();
 
-            for (PrioUser prioUser : prioUsers) {
-                filteredUsers.add(prioUser.getUser());
+            for(PrioUser prioUser : prioUsers) {
+                displayedUsers.add(prioUser.getUser());
             }
 
             //now filter devices by type, model and manufacturer
-            for (DeviceInfo deviceInfo : deviceInfos) {
+            for (DeviceInfo deviceInfo : preFilteredDeviceInfos) {
                 HospitalDevice device = deviceInfo.getDevice();
 
                 String type = device.getType().toLowerCase();
@@ -398,10 +416,10 @@ public class HospitalActivity extends BaseActivity {
 
             Collections.sort(prioDeviceInfos, (first, second) -> first.getPriority()-second.getPriority());
 
-            filteredDeviceInfos = new ArrayList<>();
+            displayedDeviceInfos.clear();
 
-            for (PrioDeviceInfo prioDeviceInfo : prioDeviceInfos) {
-                filteredDeviceInfos.add(prioDeviceInfo.getDeviceInfo());
+            for(PrioDeviceInfo prioDeviceInfo : prioDeviceInfos) {
+                displayedDeviceInfos.add(prioDeviceInfo.getDeviceInfo());
             }
 
             this.notifyDataSetChanged();
@@ -458,9 +476,9 @@ public class HospitalActivity extends BaseActivity {
         public int getChildrenCount(int i) {
             switch(i) {
                 case ExpandableHospitalAdapter.DEVICES_GROUP:
-                    return filteredDeviceInfos.size();
+                    return displayedDeviceInfos.size();
                 case ExpandableHospitalAdapter.USERS_GROUP:
-                    return filteredUsers.size();
+                    return displayedUsers.size();
                 default:
                     return 0;
             }
@@ -475,9 +493,9 @@ public class HospitalActivity extends BaseActivity {
         public Object getChild(int groupPosition, int childPosition) {
             switch(groupPosition) {
                 case ExpandableHospitalAdapter.DEVICES_GROUP:
-                    return filteredDeviceInfos.get(childPosition);
+                    return displayedDeviceInfos.get(childPosition);
                 case ExpandableHospitalAdapter.USERS_GROUP:
-                    return filteredUsers.get(childPosition);
+                    return displayedUsers.get(childPosition);
                 default:
                     return null;
             }
@@ -512,11 +530,11 @@ public class HospitalActivity extends BaseActivity {
             switch(groupPosition) {
                 case ExpandableHospitalAdapter.USERS_GROUP:
                     nameView.setText(R.string.hospital_members_heading);
-                    countView.setText(String.format(Locale.ROOT, "%d", filteredUsers.size()));
+                    countView.setText(String.format(Locale.ROOT, "%d", displayedUsers.size()));
                     break;
                 case ExpandableHospitalAdapter.DEVICES_GROUP:
                     nameView.setText(R.string.hospital_devices_heading);
-                    countView.setText(String.format(Locale.ROOT, "%d", filteredDeviceInfos.size()));
+                    countView.setText(String.format(Locale.ROOT, "%d", displayedDeviceInfos.size()));
                     break;
             }
 
@@ -534,7 +552,7 @@ public class HospitalActivity extends BaseActivity {
                         convertView.setTag(groupPosition);
                     }
 
-                    User user = filteredUsers.get(childPosition);
+                    User user = displayedUsers.get(childPosition);
 
                     if(user != null) {
                         TextView nameView = convertView.findViewById(R.id.nameView);
@@ -563,7 +581,7 @@ public class HospitalActivity extends BaseActivity {
                     ImageView imageView = convertView.findViewById(R.id.imageView);
                     TextView detailsView = convertView.findViewById(R.id.detailView);
 
-                    DeviceInfo deviceInfo = filteredDeviceInfos.get(childPosition);
+                    DeviceInfo deviceInfo = displayedDeviceInfos.get(childPosition);
 
                     if(deviceInfo != null) {
                         HospitalDevice device = deviceInfo.getDevice();
