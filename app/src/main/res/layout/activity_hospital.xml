@@ -58,7 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp">
 
         <Space
             android:layout_width="0dp"
