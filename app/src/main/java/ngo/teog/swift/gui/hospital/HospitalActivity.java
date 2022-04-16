@@ -3,6 +3,7 @@ package ngo.teog.swift.gui.hospital;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -77,6 +78,8 @@ public class HospitalActivity extends BaseActivity {
     };
 
     private final TextView[] COUNTER_VIEWS = new TextView[STATE_VIEW_IDS.length];
+
+    private int filteredState = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +157,7 @@ public class HospitalActivity extends BaseActivity {
             DeviceStateVisuals visuals = new DeviceStateVisuals(state, this);
             TextView counterView = findViewById(STATE_VIEW_IDS[state]);
             counterView.setOnClickListener(view -> filterByState(state));
-            this.setStateImage(counterView, visuals);
+            this.setStateImage(counterView, visuals, true);
             COUNTER_VIEWS[state] = counterView;
         }
 
@@ -244,17 +247,46 @@ public class HospitalActivity extends BaseActivity {
         }
     }
 
-    private void setStateImage(TextView stateView, DeviceStateVisuals visuals) {
+    private void setStateImage(TextView stateView, DeviceStateVisuals visuals, boolean colored) {
         Drawable stateIcon = visuals.getStateIcon();
-        stateIcon.setColorFilter(new PorterDuffColorFilter(visuals.getBackgroundColor(), PorterDuff.Mode.SRC_ATOP));
+        if(colored) {
+            stateIcon.setColorFilter(new PorterDuffColorFilter(visuals.getBackgroundColor(), PorterDuff.Mode.SRC_ATOP));
+        } else {
+            stateIcon.setColorFilter(new PorterDuffColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP));
+        }
         stateIcon.setBounds(0, 0, 40, 40);
         stateView.setCompoundDrawables(null, stateIcon, null, null);
     }
 
     private void filterByState(int state) {
+        if(state == filteredState) {
+            for(int i = 0; i < COUNTER_VIEWS.length; i++) {
+                TextView counterView = COUNTER_VIEWS[i];
+                DeviceStateVisuals visuals = new DeviceStateVisuals(i, this);
 
+                setStateImage(counterView, visuals, true);
+                counterView.setTextColor(Color.BLACK);
+            }
 
-        adapter.preFilter(state);
+            adapter.preFilter(-1);
+            filteredState = -1;
+        } else {
+            for(int i = 0; i < COUNTER_VIEWS.length; i++) {
+                TextView counterView = COUNTER_VIEWS[i];
+                DeviceStateVisuals visuals = new DeviceStateVisuals(i, this);
+
+                if(i == state) {
+                    setStateImage(counterView, visuals, true);
+                    counterView.setTextColor(Color.BLACK);
+                } else {
+                    setStateImage(counterView, visuals, false);
+                    counterView.setTextColor(Color.LTGRAY);
+                }
+            }
+
+            adapter.preFilter(state);
+            filteredState = state;
+        }
     }
 
     /**
@@ -307,11 +339,16 @@ public class HospitalActivity extends BaseActivity {
             preFilteredDeviceInfos.clear();
             searchView.setQuery("", false);
 
-            for(DeviceInfo deviceInfo : deviceInfos) {
-                Report lastReport = deviceInfo.getReports().get(0).getReport();
+            if(state == -1) {
+                //disable filter
+                preFilteredDeviceInfos.addAll(deviceInfos);
+            } else {
+                for (DeviceInfo deviceInfo : deviceInfos) {
+                    Report lastReport = deviceInfo.getReports().get(0).getReport();
 
-                if(lastReport.getCurrentState() == state) {
-                    preFilteredDeviceInfos.add(deviceInfo);
+                    if (lastReport.getCurrentState() == state) {
+                        preFilteredDeviceInfos.add(deviceInfo);
+                    }
                 }
             }
 
