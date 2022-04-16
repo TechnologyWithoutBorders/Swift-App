@@ -5,6 +5,8 @@ package ngo.teog.swift.helpers;
  * @author nitelow
  */
 public final class DeviceState {
+    public static final int[] IDS = {0, 1, 2, 3, 4, 5};
+
     public static final int WORKING = 0;
     public static final int MAINTENANCE = 1;
     public static final int BROKEN = 2;

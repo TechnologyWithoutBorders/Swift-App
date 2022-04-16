@@ -65,6 +65,19 @@ public class HospitalActivity extends BaseActivity {
     private ExpandableListView hospitalListView;
     private SearchView searchView;
 
+    private ExpandableHospitalAdapter adapter;
+
+    private final int[] STATE_VIEW_IDS = {
+            R.id.working_count,
+            R.id.maintenance_count,
+            R.id.repair_count,
+            R.id.broken_count,
+            R.id.in_progress_count,
+            R.id.limited_count
+    };
+
+    private final TextView[] COUNTER_VIEWS = new TextView[STATE_VIEW_IDS.length];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +88,7 @@ public class HospitalActivity extends BaseActivity {
         LinearLayout hospitalInfo = findViewById(R.id.hospital_info);
         hospitalListView = findViewById(R.id.hospitalList);
 
-        ExpandableHospitalAdapter adapter = new ExpandableHospitalAdapter();
+        adapter = new ExpandableHospitalAdapter();
         hospitalListView.setAdapter(adapter);
 
         hospitalListView.setOnChildClickListener((parent, view, groupPosition, childPosition, id) -> {
@@ -137,37 +150,13 @@ public class HospitalActivity extends BaseActivity {
 
         TextView mapButton = findViewById(R.id.map_button);
 
-        //TODO in Methode ausgliedern
-
-        DeviceStateVisuals workingParams = new DeviceStateVisuals(DeviceState.WORKING, this);
-        TextView workingCounter = findViewById(R.id.working_count);
-        workingCounter.setOnClickListener(view -> adapter.preFilter(DeviceState.WORKING));
-        this.setStateImage(workingCounter, workingParams);
-
-        DeviceStateVisuals maintenanceParams = new DeviceStateVisuals(DeviceState.MAINTENANCE, this);
-        TextView maintenanceCounter = findViewById(R.id.maintenance_count);
-        maintenanceCounter.setOnClickListener(view -> adapter.preFilter(DeviceState.MAINTENANCE));
-        this.setStateImage(maintenanceCounter, maintenanceParams);
-
-        DeviceStateVisuals repairParams = new DeviceStateVisuals(DeviceState.BROKEN, this);
-        TextView repairCounter = findViewById(R.id.repair_count);
-        repairCounter.setOnClickListener(view -> adapter.preFilter(DeviceState.BROKEN));
-        this.setStateImage(repairCounter, repairParams);
-
-        DeviceStateVisuals progressParams = new DeviceStateVisuals(DeviceState.IN_PROGRESS, this);
-        TextView progressCounter = findViewById(R.id.in_progress_count);
-        progressCounter.setOnClickListener(view -> adapter.preFilter(DeviceState.IN_PROGRESS));
-        this.setStateImage(progressCounter, progressParams);
-
-        DeviceStateVisuals brokenParams = new DeviceStateVisuals(DeviceState.SALVAGE, this);
-        TextView brokenCounter = findViewById(R.id.broken_count);
-        brokenCounter.setOnClickListener(view -> adapter.preFilter(DeviceState.SALVAGE));
-        this.setStateImage(brokenCounter, brokenParams);
-
-        DeviceStateVisuals limitedParams = new DeviceStateVisuals(DeviceState.LIMITATIONS, this);
-        TextView limitedCounter = findViewById(R.id.limited_count);
-        limitedCounter.setOnClickListener(view -> adapter.preFilter(DeviceState.LIMITATIONS));
-        this.setStateImage(limitedCounter, limitedParams);
+        for(int state : DeviceState.IDS) {
+            DeviceStateVisuals visuals = new DeviceStateVisuals(state, this);
+            TextView counterView = findViewById(STATE_VIEW_IDS[state]);
+            counterView.setOnClickListener(view -> filterByState(state));
+            this.setStateImage(counterView, visuals);
+            COUNTER_VIEWS[state] = counterView;
+        }
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -205,7 +194,7 @@ public class HospitalActivity extends BaseActivity {
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
-                int[] stateCounters = {0, 0, 0, 0, 0, 0};
+                int[] stateCounters = new int[DeviceState.IDS.length];
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
@@ -215,12 +204,9 @@ public class HospitalActivity extends BaseActivity {
                     stateCounters[newestState]++;
                 }
 
-                workingCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.WORKING]));
-                maintenanceCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.MAINTENANCE]));
-                repairCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.BROKEN]));
-                progressCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.IN_PROGRESS]));
-                brokenCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.SALVAGE]));
-                limitedCounter.setText(String.format(Locale.ROOT, "%d", stateCounters[DeviceState.LIMITATIONS]));
+                for(int state = 0; state < COUNTER_VIEWS.length; state++) {
+                    COUNTER_VIEWS[state].setText(String.format(Locale.ROOT, "%d", stateCounters[state]));
+                }
 
                 Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().toLowerCase().compareTo(second.getDevice().getType().toLowerCase()));
                 adapter.setDeviceInfos(deviceInfos);
@@ -263,6 +249,12 @@ public class HospitalActivity extends BaseActivity {
         stateIcon.setColorFilter(new PorterDuffColorFilter(visuals.getBackgroundColor(), PorterDuff.Mode.SRC_ATOP));
         stateIcon.setBounds(0, 0, 40, 40);
         stateView.setCompoundDrawables(null, stateIcon, null, null);
+    }
+
+    private void filterByState(int state) {
+
+
+        adapter.preFilter(state);
     }
 
     /**
