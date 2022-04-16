@@ -101,7 +101,7 @@
         <item>maintenance due</item>
         <item>repair needed</item>
         <item>in progress</item>
-        <item>broken/salvage</item>
+        <item>beyond repair</item>
         <item>limited use</item>
     </string-array>
 

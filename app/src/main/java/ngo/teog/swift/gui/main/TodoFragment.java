@@ -122,7 +122,7 @@ public class TodoFragment extends Fragment {
                     }
                 }
 
-                //sort devices by state
+                //sort devices by last change date
                 Collections.sort(newDeviceInfos, (first, second) -> {
                     List<ReportInfo> firstReports = first.getReports();
                     List<ReportInfo> secondReports = second.getReports();
@@ -131,7 +131,7 @@ public class TodoFragment extends Fragment {
                         long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
                         long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
 
-                        return (int)(firstCreated-secondCreated);
+                        return (int)((firstCreated-secondCreated)/1000);
                     } else {
                         return 0;
                     }

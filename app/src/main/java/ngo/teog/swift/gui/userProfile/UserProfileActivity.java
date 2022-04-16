@@ -51,6 +51,8 @@ public class UserProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_user_info);
 
         tableLayout = findViewById(R.id.tableLayout);
+        TextView editName = findViewById(R.id.edit_name);
+        editName.setOnClickListener((view) -> editName());
         editPosition = findViewById(R.id.edit_position);
         editPosition.setOnClickListener((view) -> editPosition());
         TextView editPhone = findViewById(R.id.edit_phone);
@@ -166,6 +168,25 @@ public class UserProfileActivity extends BaseActivity {
 
         builder.setPositiveButton(getText(R.string.dialog_ok_text), (dialog, which) -> {
             positionView.setText(input.getText().toString());
+            save();
+        });
+        builder.setNegativeButton(getText(R.string.dialog_cancel_text), (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    public void editName() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getText(R.string.user_name));
+
+        final EditText input = new EditText(this);
+        input.setFilters(new InputFilter[] {new InputFilter.LengthFilter(30)});
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(nameView.getText());
+        builder.setView(input);
+
+        builder.setPositiveButton(getText(R.string.dialog_ok_text), (dialog, which) -> {
+            nameView.setText(input.getText().toString());
             save();
         });
         builder.setNegativeButton(getText(R.string.dialog_cancel_text), (dialog, which) -> dialog.cancel());
