@@ -93,9 +93,10 @@ public class CalendarFragment extends Fragment {
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     if(deviceInfo.getReports().size() > 0) {
-                        //copy report list as well
+                        //copy report list as well and assign it to the device info
                         List<ReportInfo> reversedReportInfos = new ArrayList<>(deviceInfo.getReports());
                         Collections.sort(reversedReportInfos, (first, second) -> second.getReport().getId()-first.getReport().getId());
+                        deviceInfo.setReports(reversedReportInfos);
 
                         ReportInfo latestReportInfo = reversedReportInfos.get(0);
 

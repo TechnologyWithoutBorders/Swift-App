@@ -95,26 +95,25 @@ public class TodoFragment extends Fragment {
 
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
-        viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
-            if(deviceInfos != null && deviceInfos.size() > 0) {
+        viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), dbDeviceInfos -> {
+            if(dbDeviceInfos != null && dbDeviceInfos.size() > 0) {
+                //make copies of device infos as data is shared between the fragments
+                List<DeviceInfo> deviceInfos = new ArrayList<>(dbDeviceInfos);
+
                 this.values = deviceInfos;
                 adapter.clear();
 
                 List<DeviceInfo> newDeviceInfos = new ArrayList<>();
 
-                //reverse report list of every device (so newest report has index 0)
-                for(DeviceInfo deviceInfo : deviceInfos) {
-                    List<ReportInfo> reports = deviceInfo.getReports();
-
-                    Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
-                }
-
                 //filter relevant devices
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    List<ReportInfo> reportInfos = deviceInfo.getReports();
+                    if(deviceInfo.getReports().size() > 0) {
+                        //copy report list as well and assign it to the device info
+                        List<ReportInfo> reversedReportInfos = new ArrayList<>(deviceInfo.getReports());
+                        Collections.sort(reversedReportInfos, (first, second) -> second.getReport().getId()-first.getReport().getId());
+                        deviceInfo.setReports(reversedReportInfos);
 
-                    if(reportInfos.size() > 0) {
-                        int currentState = reportInfos.get(0).getReport().getCurrentState();
+                        int currentState = reversedReportInfos.get(0).getReport().getCurrentState();
 
                         if(currentState == DeviceState.MAINTENANCE || currentState == DeviceState.BROKEN || currentState == DeviceState.IN_PROGRESS) {
                             newDeviceInfos.add(deviceInfo);
