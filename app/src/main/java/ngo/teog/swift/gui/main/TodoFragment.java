@@ -182,7 +182,7 @@ public class TodoFragment extends Fragment {
 
             if(deviceInfo != null) {
                 HospitalDevice device = deviceInfo.getDevice();
-                Report lastReport = deviceInfo.getReports().get(deviceInfo.getReports().size()-1).getReport();
+                Report lastReport = deviceInfo.getReports().get(0).getReport();
 
                 nameView.setText(device.getType());
 

@@ -81,8 +81,11 @@ public class CalendarFragment extends Fragment {
 
         MainViewModel viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
-        viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), deviceInfos -> {
-            if(deviceInfos != null && deviceInfos.size() > 0) {
+        viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), dbDeviceInfos -> {
+            if(dbDeviceInfos != null && dbDeviceInfos.size() > 0) {
+                //make copies of device infos as data is shared between the fragments
+                List<DeviceInfo> deviceInfos = new ArrayList<>(dbDeviceInfos);
+
                 adapter.clear();
                 List<MaintenanceInfo> values = new ArrayList<>();
 
@@ -90,7 +93,11 @@ public class CalendarFragment extends Fragment {
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     if(deviceInfo.getReports().size() > 0) {
-                        ReportInfo latestReportInfo = deviceInfo.getReports().get(deviceInfo.getReports().size()-1);
+                        //copy report list as well
+                        List<ReportInfo> reversedReportInfos = new ArrayList<>(deviceInfo.getReports());
+                        Collections.sort(reversedReportInfos, (first, second) -> second.getReport().getId()-first.getReport().getId());
+
+                        ReportInfo latestReportInfo = reversedReportInfos.get(0);
 
                         int newestState = latestReportInfo.getReport().getCurrentState();
 
@@ -100,9 +107,6 @@ public class CalendarFragment extends Fragment {
                         if(newestState != DeviceState.BROKEN && newestState != DeviceState.MAINTENANCE && newestState != DeviceState.IN_PROGRESS && newestState != DeviceState.SALVAGE) {
                             //look for last maintenance/repair or creation
                             Date lastMaintenance = null;
-
-                            List<ReportInfo> reversedReportInfos = deviceInfo.getReports();
-                            Collections.reverse(reversedReportInfos);
 
                             for(ReportInfo info : reversedReportInfos) {
                                 Report report = info.getReport();
