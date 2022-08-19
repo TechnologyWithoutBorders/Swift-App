@@ -56,6 +56,7 @@ public final class Defaults {
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm";
     public static final String DATETIME_PRECISE_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
+    public static final String VERSION_CODE_KEY = "version_code";
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
 
