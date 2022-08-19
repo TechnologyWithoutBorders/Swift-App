@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
@@ -115,7 +117,7 @@ public class RequestFactory {
                     outputStream.write(decodedString);
                     outputStream.close();
                 } catch(IOException e) {
-                    Log.w(this.getClass().getName(), "writing image data failed: " + e.toString());
+                    Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
 
                 ((ImageView) enable).setImageBitmap(bitmap);
@@ -238,7 +240,7 @@ public class RequestFactory {
                         imageView.setImageBitmap(bitmap);
                     }
                 } catch(IOException e) {
-                    Log.w(this.getClass().getName(), "writing image data failed: " + e.toString());
+                    Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
             }
         });
@@ -296,6 +298,14 @@ public class RequestFactory {
         SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         HashMap<String, String> parameterMap = new HashMap<>();
+
+        try {
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            parameterMap.put(Defaults.VERSION_CODE_KEY, Integer.toString(pInfo.versionCode));
+        } catch(PackageManager.NameNotFoundException e) {
+            parameterMap.put(Defaults.VERSION_CODE_KEY, Integer.toString(-1));
+        }
+
         if (action != null) {
             parameterMap.put(Defaults.ACTION_KEY, action);
         }
