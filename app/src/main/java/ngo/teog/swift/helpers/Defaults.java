@@ -74,14 +74,6 @@ public final class Defaults {
 
     public static final String TIMEZONE_UTC = "UTC";
 
-    //Synchronization framework
-
-    /** Background synchronization interval in hours */
-    public static final int SYNC_INTERVAL = 2;
-
-    /** Flex interval for background synchronization in minutes */
-    public static final int SYNC_FLEX_INTERVAL = 30;
-
     //Observables
 
     /** Observable that indicates when a server synchronization took place recently */
