@@ -29,7 +29,6 @@
         <activity
             android:name=".gui.main.MainActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
@@ -105,7 +104,6 @@
         <activity
             android:name=".gui.login.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
             android:exported="true">
