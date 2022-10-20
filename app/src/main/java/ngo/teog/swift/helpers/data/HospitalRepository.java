@@ -290,44 +290,57 @@ public class HospitalRepository {
     }
 
     private void refreshUserHospitalSync(int userId) {//TODO is there any actual difference to refreshUserHospital()?
-        //TODO check if user data has been fetched recently
-
         //refresh
         if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
-            RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+            long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
+            long now = new Date().getTime();
 
-            HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
+            if(now-lastSync >= 3000) {
+                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-            if(hospitalRequest != null) {
-                queue.add(hospitalRequest);
-            }
+                HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
-            List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+                if (hospitalRequest != null) {
+                    queue.add(hospitalRequest);
+                }
 
-            for(JsonObjectRequest request : uploadRequests) {
-                queue.add(request);
+                List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+
+                for (JsonObjectRequest request : uploadRequests) {
+                    queue.add(request);
+                }
+            } else {
+                syncOngoing.set(false);
             }
         }
     }
 
     public void refreshUserHospital(int userId) {
         executor.execute(() -> {
-            //TODO check if user data has been fetched recently
-
             //refresh
             if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
-                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+                SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
+                long now = new Date().getTime();
 
-                HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
+                if(now-lastSync >= 3000) {
+                    RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
 
-                if(hospitalRequest != null) {
-                    queue.add(hospitalRequest);
-                }
+                    HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
-                List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+                    if(hospitalRequest != null) {
+                        queue.add(hospitalRequest);
+                    }
 
-                for(JsonObjectRequest request : uploadRequests) {
-                    queue.add(request);
+                    //TODO: also check if image uploads are ongoing as those use a lot of data
+                    List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+
+                    for(JsonObjectRequest request : uploadRequests) {
+                        queue.add(request);
+                    }
+                } else {
+                    syncOngoing.set(false);
                 }
             }
         });
