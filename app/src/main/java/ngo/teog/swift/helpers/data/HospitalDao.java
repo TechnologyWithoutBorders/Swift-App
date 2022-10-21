@@ -78,9 +78,6 @@ public abstract class HospitalDao {
     @Query("SELECT * FROM devices WHERE devices.hospital = (SELECT hospital FROM users WHERE users.id = :userId) AND devices.id = :deviceId")
     public abstract DeviceInfo getDevice(int userId, int deviceId);
 
-    /*@Query("SELECT COUNT(*) FROM users WHERE id = :id AND lastSync >= :currentMillis-(:timeout*1000)")
-    int hasUser(int id, long currentMillis, int timeout);*/ //TODO
-
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     public abstract LiveData<List<User>> loadUserColleagues(int userId);
 
