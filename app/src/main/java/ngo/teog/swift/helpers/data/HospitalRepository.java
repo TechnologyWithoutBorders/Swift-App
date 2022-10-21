@@ -428,7 +428,6 @@ public class HospitalRepository {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
 
-            //Der Server muss dann eventuelle Kollisionen bei den Reports ausgleichen
             Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
             params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(lastUpdate)));
 
