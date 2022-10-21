@@ -7,11 +7,8 @@ package ngo.teog.swift.communication;
 public final class DataAction {
     //General actions
 
-    /** Client wants to synchronize changes in hospital data with the server (bidirectinally). */
+    /** Client wants to synchronize changes in hospital data with the server (bidirectionally). */
     public static final String SYNC_HOSPITAL_INFO = "sync_hospital_info";
-
-    /** Does the same as SYNC_HOSPITAL_INFO but makes it possible for the server to distinguish. */
-    public static final String PERIODIC_SYNC_HOSPITAL_INFO = "periodic_sync_hospital_info";
 
     //Device actions
 
@@ -31,9 +28,4 @@ public final class DataAction {
 
     /** Client wants the server to reset the password of a user */
     public static final String RESET_PASSWORD = "reset_password";
-
-    /** Client wants the server to create a new user */
-    public static final String CREATE_USER = "create_user";
-
-    public static final String ACCESS_STORAGE = "access_storage";
 }
