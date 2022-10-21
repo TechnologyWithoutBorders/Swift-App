@@ -21,7 +21,7 @@ public class DatabaseMigrationTest {
     private static final String TEST_DB = "migration-test";
 
     @Rule
-    public MigrationTestHelper helper;
+    public final MigrationTestHelper helper;
 
     public DatabaseMigrationTest() {
         helper = new MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), Objects.requireNonNull(HospitalDatabase.class.getCanonicalName()), new FrameworkSQLiteOpenHelperFactory());
