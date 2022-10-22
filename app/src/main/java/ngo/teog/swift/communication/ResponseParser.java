@@ -145,7 +145,15 @@ public class ResponseParser {
                 String serialNumber = deviceObject.getString(DeviceAttribute.SERIAL_NUMBER);
                 String manufacturer = deviceObject.getString(DeviceAttribute.MANUFACTURER);
                 String model = deviceObject.getString(DeviceAttribute.MODEL);
-                int organizationalUnit = deviceObject.getInt(DeviceAttribute.ORGANIZATIONAL_UNIT);
+                //Org unit can be null
+                Integer organizationalUnit;
+
+                if(deviceObject.isNull(DeviceAttribute.ORGANIZATIONAL_UNIT)) {
+                    organizationalUnit = null;
+                } else {
+                    organizationalUnit = deviceObject.getInt(DeviceAttribute.ORGANIZATIONAL_UNIT);
+                }
+
                 int hospital = deviceObject.getInt(DeviceAttribute.HOSPITAL);
                 int maintenanceInterval = deviceObject.getInt(DeviceAttribute.MAINTENANCE_INTERVAL);
                 Date lastUpdate = dateFormat.parse(deviceObject.getString(DeviceAttribute.LAST_UPDATE));
