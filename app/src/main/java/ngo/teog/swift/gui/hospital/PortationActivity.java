@@ -34,6 +34,7 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
@@ -115,6 +116,17 @@ public class PortationActivity extends AppCompatActivity {
 
                                 csvWriter.flush();
                                 zipOut.closeEntry();
+                                ZipEntry orgUnitEntry = new ZipEntry("orgUnits.csv");
+                                zipOut.putNextEntry(orgUnitEntry);
+
+                                csvWriter.writeNext(new String[] {"Hospital", "ID", "Name"});
+
+                                for(OrganizationalUnit orgUnit : hospitalDump.getOrganizationalUnits()) {
+                                    csvWriter.writeNext(new String[] {Integer.toString(orgUnit.getHospital()), Integer.toString(orgUnit.getId()), orgUnit.getName()});
+                                }
+
+                                csvWriter.flush();
+                                zipOut.closeEntry();
                                 ZipEntry deviceEntry = new ZipEntry("devices.csv");
                                 zipOut.putNextEntry(deviceEntry);
 
@@ -123,7 +135,7 @@ public class PortationActivity extends AppCompatActivity {
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     HospitalDevice device = deviceDump.getDevice();
 
-                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), "", device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
+                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), Integer.toString(device.getOrganizationalUnit()), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
                                 }
 
                                 csvWriter.flush();
