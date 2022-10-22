@@ -196,7 +196,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     int interval = intervalPicker.getValue()*4;
 
                     HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), -1, -1, interval, new Date());
+                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval, new Date());
 
                     Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                     intent.putExtra(ResourceKeys.DEVICE, device);
