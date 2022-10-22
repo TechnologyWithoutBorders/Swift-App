@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,7 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -81,10 +83,10 @@ public class DeviceInfoActivity extends BaseActivity {
     private static final int MODEL = 2;
     private static final int MANUFACTURER = 3;
     private static final int SERIAL_NUMBER = 4;
-    private static final int LOCATION = 5;
+    private static final int ORG_UNIT = 5;
     private static final int MAINTENANCE_INTERVAL = 6;
 
-    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Location", "Maintenance Interval (Months)"};//TODO: Constants
+    private static final String[] PARAM_TITLES = {"Asset Number", "Type", "Model", "Manufacturer", "Serial Number", "Department", "Maintenance Interval (Months)"};//TODO: Constants
 
     private ReportArrayAdapter adapter;
 
@@ -101,8 +103,9 @@ public class DeviceInfoActivity extends BaseActivity {
     private LinearLayout stateSection;
     private TableLayout attributeTable;
 
-    private TextView assetNumberView, typeView, modelView, manufacturerView, serialNumberView, locationView, intervalView;
+    private TextView assetNumberView, typeView, modelView, manufacturerView, serialNumberView, orgUnitView, intervalView;
 
+    private List<OrganizationalUnit> orgUnits;
     private DeviceInfo deviceInfo;
 
     @Inject
@@ -176,7 +179,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
         TextView hospitalView = findViewById(R.id.hospitalView);
 
-        locationView = findViewById(R.id.locationView);
+        orgUnitView = findViewById(R.id.locationView);
 
         intervalView = findViewById(R.id.intervalView);
 
@@ -191,6 +194,13 @@ public class DeviceInfoActivity extends BaseActivity {
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(DeviceInfoViewModel.class);
         viewModel.init(userId, deviceId).observe(this, observable -> viewModel.refreshDevice());
+        viewModel.getOrgUnits().observe(this, orgUnits -> {
+            if(orgUnits != null) {
+                Collections.sort(orgUnits, (first, second) -> first.getName().compareTo(second.getName()));
+
+                this.orgUnits = orgUnits;
+            }
+        });
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
             this.deviceInfo = deviceInfo;
 
@@ -220,7 +230,12 @@ public class DeviceInfoActivity extends BaseActivity {
                 manufacturerView.setText(device.getManufacturer());
                 serialNumberView.setText(device.getSerialNumber());
                 hospitalView.setText(deviceInfo.getHospital().getName());
-                locationView.setText(device.getLocation());
+
+                OrganizationalUnit orgUnit = deviceInfo.getOrganizationalUnit();
+
+                if(orgUnit != null) {
+                    orgUnitView.setText(deviceInfo.getOrganizationalUnit().getName());
+                }
 
                 int interval = device.getMaintenanceInterval();
                 intervalView.setText(getResources().getQuantityString(R.plurals.months_count, (interval/4), (interval/4)));
@@ -288,8 +303,8 @@ public class DeviceInfoActivity extends BaseActivity {
         this.edit(SERIAL_NUMBER, serialNumberView.getText().toString(), 25);
     }
 
-    public void editLocation(View view) {
-        this.edit(LOCATION, locationView.getText().toString(), 25);
+    public void editOrgUnit(View view) {
+        this.edit(ORG_UNIT, orgUnitView.getText().toString(), 25);
     }
 
     public void editMaintenanceInterval(View view) {
@@ -306,9 +321,64 @@ public class DeviceInfoActivity extends BaseActivity {
                 NumberPicker numberPicker = new NumberPicker(this);
                 numberPicker.setMinValue(NewDeviceActivity2.MIN_MAINT_INTERVAL);
                 numberPicker.setMaxValue(NewDeviceActivity2.MAX_MAINT_INTERVAL);
-                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval()/4);
+                numberPicker.setValue(deviceInfo.getDevice().getMaintenanceInterval() / 4);
 
                 editView = numberPicker;
+            } else if(parameter == ORG_UNIT) {
+                Spinner orgUnitSpinner = new Spinner(this);
+
+                class OrgUnitAdapter extends ArrayAdapter<OrganizationalUnit> {
+                    public OrgUnitAdapter(Context context, List<OrganizationalUnit> orgUnits) {
+                        super(context, android.R.layout.simple_spinner_item, orgUnits);
+                    }
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        OrganizationalUnit orgUnit = getItem(position);
+
+                        if(convertView == null) {
+                            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+                        }
+
+                        TextView textView = convertView.findViewById(android.R.id.text1);
+                        textView.setText(orgUnit.getName());
+
+                        return convertView;
+                    }
+
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        OrganizationalUnit orgUnit = getItem(position);
+
+                        if(convertView == null) {
+                            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+                        }
+
+                        TextView textView = convertView.findViewById(android.R.id.text1);
+                        textView.setText(orgUnit.getName());
+
+                        return convertView;
+                    }
+                }
+
+                orgUnitSpinner.setAdapter(new OrgUnitAdapter(this, orgUnits));
+
+                int previousOrgUnit = 0;
+
+                if(deviceInfo.getDevice().getOrganizationalUnit() != null) {
+                    for (int i = 0; i < orgUnits.size(); i++) {
+                        OrganizationalUnit reference = orgUnits.get(i);
+
+                        if (reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
+                            previousOrgUnit = i;
+                            break;
+                        }
+                    }
+                }
+
+                orgUnitSpinner.setSelection(previousOrgUnit);
+
+                editView = orgUnitSpinner;
             } else {
                 EditText editText = new EditText(this);
                 editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
@@ -369,11 +439,11 @@ public class DeviceInfoActivity extends BaseActivity {
                     serialNumberView.setText(serialNumber);
                     device.setSerialNumber(serialNumber);
                     break;
-                case LOCATION:
-                    String location = ((EditText) editView).getText().toString().trim();
+                case ORG_UNIT:
+                    OrganizationalUnit orgUnit = (OrganizationalUnit)(((Spinner) editView).getSelectedItem());
 
-                    locationView.setText(location);
-                    device.setLocation(location);
+                    orgUnitView.setText(orgUnit.getName());
+                    device.setOrganizationalUnit(orgUnit.getId());
                     break;
                 case MAINTENANCE_INTERVAL:
                     int interval = ((NumberPicker) editView).getValue();

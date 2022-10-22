@@ -19,7 +19,7 @@ public class RoomModule {
 
     public RoomModule(Application mApplication) {
         hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                 .build();
     }
 
@@ -125,6 +125,27 @@ public class RoomModule {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS image_upload_jobs (deviceId INTEGER NOT NULL, created INTEGER, PRIMARY KEY(deviceId))");
+        }
+    };
+
+    /**
+     * Adds table organizational_units and adds organizationalUnit to devices table
+     */
+    public static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS organizational_units (id INTEGER NOT NULL, hospital INTEGER NOT NULL, name TEXT, lastUpdate INTEGER, PRIMARY KEY(id, hospital))");
+
+            database.beginTransaction();
+            try {
+                database.execSQL("CREATE TABLE devices_tmp(id INTEGER NOT NULL, assetNumber TEXT, type TEXT, serialNumber TEXT, manufacturer TEXT, model TEXT, organizationalUnit INTEGER NOT NULL, hospital INTEGER NOT NULL, maintenanceInterval INTEGER NOT NULL, lastUpdate INTEGER, lastSync INTEGER, PRIMARY KEY(id, hospital))");
+                database.execSQL("INSERT INTO devices_tmp(id, assetNumber, type, serialNumber, manufacturer, model, organizationalUnit, hospital, maintenanceInterval, lastUpdate, lastSync) SELECT id, assetNumber, type, serialNumber, manufacturer, model, -1, hospital, maintenanceInterval, lastUpdate, lastSync FROM devices");
+                database.execSQL("DROP TABLE devices");
+                database.execSQL("ALTER TABLE devices_tmp RENAME TO devices");
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
         }
     };
 }

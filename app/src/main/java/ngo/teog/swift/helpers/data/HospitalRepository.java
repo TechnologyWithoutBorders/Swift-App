@@ -176,6 +176,10 @@ public class HospitalRepository {
         return hospitalDao.loadObservable(id);
     }
 
+    public LiveData<List<OrganizationalUnit>> loadOrgUnits(int userId) {
+        return hospitalDao.loadOrgUnits(userId);
+    }
+
     public DeviceInfo getDevice(int userId, int deviceId) {
         return hospitalDao.getDevice(userId, deviceId);
     }
@@ -232,6 +236,10 @@ public class HospitalRepository {
         hospitalDao.save(user);
     }
 
+    public void updateOrgUnitSync(OrganizationalUnit orgUnit) {
+        hospitalDao.save(orgUnit);
+    }
+
     public void updateDeviceSync(HospitalDevice device) {
         hospitalDao.save(device);
     }
@@ -242,6 +250,10 @@ public class HospitalRepository {
 
     public void deleteImageUploadJobSync(int deviceId) {
         hospitalDao.deleteImageUploadJob(deviceId);
+    }
+
+    public void deleteOrgUnitsSync() {
+        hospitalDao.deleteOrgUnits();
     }
 
     public void createDevice(HospitalDevice device, int userId) {
@@ -498,6 +510,19 @@ public class HospitalRepository {
                         }
 
                         HospitalRepository.this.updateUserSync(user);
+                    }
+
+                    //remove old units as they change completely
+                    if(hospitalInfo.getOrgUnits().size() > 0) {
+                        HospitalRepository.this.deleteOrgUnitsSync();
+                    }
+
+                    for (OrganizationalUnit orgUnit : hospitalInfo.getOrgUnits()) {
+                        if (orgUnit.getLastUpdate().getTime() > now) {
+                            orgUnit.setLastUpdate(new Date(now));
+                        }
+
+                        HospitalRepository.this.updateOrgUnitSync(orgUnit);
                     }
 
                     for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {

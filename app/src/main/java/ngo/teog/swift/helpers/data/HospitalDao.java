@@ -32,6 +32,9 @@ public abstract class HospitalDao {
     public abstract void save(User user);
 
     @Insert(onConflict = REPLACE)
+    public abstract void save(OrganizationalUnit orgUnit);
+
+    @Insert(onConflict = REPLACE)
     public abstract void save(HospitalDevice device);
 
     @Insert(onConflict = REPLACE)
@@ -46,6 +49,9 @@ public abstract class HospitalDao {
     @Query("DELETE FROM image_upload_jobs WHERE deviceId = :deviceId")
     public abstract void deleteImageUploadJob(int deviceId);
 
+    @Query("DELETE FROM organizational_units")
+    public abstract void deleteOrgUnits();
+
     @Transaction
     @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
     public abstract LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId);
@@ -56,9 +62,6 @@ public abstract class HospitalDao {
 
     @Query("SELECT MAX(id) FROM reports WHERE device = :deviceId")
     public abstract int getMaxReportId(int deviceId);
-
-    @Query("SELECT * FROM users")
-    public abstract List<User> getUsers();
 
     @Query("SELECT * FROM users WHERE id = :id")
     public abstract LiveData<User> loadUser(int id);
@@ -82,6 +85,9 @@ public abstract class HospitalDao {
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     public abstract List<User> getUserColleagues(int userId);
+
+    @Query("SELECT * FROM organizational_units WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
+    public abstract LiveData<List<OrganizationalUnit>> loadOrgUnits(int userId);
 
     @Transaction
     @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")

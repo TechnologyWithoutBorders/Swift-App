@@ -7,6 +7,7 @@ import java.util.List;
 
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.User;
 
 /**
@@ -20,6 +21,9 @@ public class HospitalDump {
     @Relation(parentColumn = "id", entityColumn = "hospital")
     private List<User> users;
 
+    @Relation(parentColumn = "id", entityColumn = "hospital")
+    private List<OrganizationalUnit> organizationalUnits;
+
     @Relation(parentColumn = "id", entityColumn = "hospital", entity = HospitalDevice.class)
     private List<DeviceDump> devices;
 
@@ -29,6 +33,10 @@ public class HospitalDump {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public void setOrganizationalUnits(List<OrganizationalUnit> organizationalUnits) {
+        this.organizationalUnits = organizationalUnits;
     }
 
     public void setDevices(List<DeviceDump> devices) {
@@ -41,6 +49,10 @@ public class HospitalDump {
 
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<OrganizationalUnit> getOrganizationalUnits() {
+        return organizationalUnits;
     }
 
     public List<DeviceDump> getDeviceDumps() {

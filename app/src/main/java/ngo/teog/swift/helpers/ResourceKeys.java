@@ -14,6 +14,9 @@ public final class ResourceKeys {
     /** Identifier for device object lists */
     public static final String DEVICES = "devices";
 
+    /** Identifier for organizational unit object lists */
+    public static final String ORGANIZATIONAL_UNITS = "organizational_units";
+
     /** Identifier for user IDs */
     public static final String USER_ID = "user_id";
 

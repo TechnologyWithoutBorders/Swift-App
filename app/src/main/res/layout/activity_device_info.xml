@@ -258,7 +258,7 @@
                 android:textSize="15sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
-                android:text="@string/device_location" />
+                android:text="@string/device_department" />
 
             <TextView
                 android:id="@+id/locationView"
@@ -270,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingEnd="7dp"
-                android:onClick="editLocation"
+                android:onClick="editOrgUnit"
                 android:contentDescription="@string/edit_button_desc"
                 app:srcCompat="@drawable/ic_edit_black_24dp" />
         </TableRow>

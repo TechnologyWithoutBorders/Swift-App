@@ -118,7 +118,6 @@ public class NewDeviceActivity2 extends BaseActivity {
                 Map<String, Integer> typeCountMap = new HashMap<>();
                 Map<String, Integer> manufacturerCountMap = new HashMap<>();
                 Map<String, Integer> modelCountMap = new HashMap<>();
-                Map<String, Integer> locationCountMap = new HashMap<>();
 
                 for(DeviceInfo deviceInfo : deviceInfos) {
                     HospitalDevice device = deviceInfo.getDevice();
@@ -126,12 +125,10 @@ public class NewDeviceActivity2 extends BaseActivity {
                     String type = WordUtils.capitalize(device.getType().trim());
                     String manufacturer = WordUtils.capitalize(device.getManufacturer().trim());
                     String model = device.getModel().trim();
-                    String location = WordUtils.capitalize(device.getLocation().trim());
 
                     updateSuggestionMap(typeCountMap, type);
                     updateSuggestionMap(manufacturerCountMap, manufacturer);
                     updateSuggestionMap(modelCountMap, model);
-                    updateSuggestionMap(locationCountMap, location);
                 }
 
                 //Make sure each value is present at least three times, so spelling mistakes do not spread
@@ -199,7 +196,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     int interval = intervalPicker.getValue()*4;
 
                     HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), "", -1, interval, new Date());
+                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval, new Date());
 
                     Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                     intent.putExtra(ResourceKeys.DEVICE, device);

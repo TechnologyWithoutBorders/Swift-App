@@ -48,6 +48,7 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -577,7 +578,7 @@ public class HospitalActivity extends BaseActivity {
                     }
 
                     TextView nameView = convertView.findViewById(R.id.nameView);
-                    TextView statusView = convertView.findViewById(R.id.statusView);
+                    TextView orgUnitView = convertView.findViewById(R.id.statusView);
                     ImageView imageView = convertView.findViewById(R.id.imageView);
                     TextView detailsView = convertView.findViewById(R.id.detailView);
 
@@ -587,7 +588,11 @@ public class HospitalActivity extends BaseActivity {
                         HospitalDevice device = deviceInfo.getDevice();
                         List<ReportInfo> reportInfos = deviceInfo.getReports();
 
-                        statusView.setText(device.getLocation());
+                        OrganizationalUnit orgUnit = deviceInfo.getOrganizationalUnit();
+
+                        if(orgUnit != null) {
+                            orgUnitView.setText(deviceInfo.getOrganizationalUnit().getName());
+                        }
 
                         detailsView.setText(HospitalActivity.this.getString(R.string.line_break, device.getManufacturer(), device.getModel()));
 
