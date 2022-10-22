@@ -18,13 +18,13 @@ public class HospitalDevice implements Serializable {
     private String serialNumber;
     private String manufacturer;
     private String model;
-    private int organizationalUnit;
+    private Integer organizationalUnit;
     private int hospital;
     private int maintenanceInterval;
     private Date lastUpdate;
     private Date lastSync;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, int organizationalUnit, int hospital, int maintenanceInterval, Date lastUpdate) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, Integer organizationalUnit, int hospital, int maintenanceInterval, Date lastUpdate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -102,11 +102,11 @@ public class HospitalDevice implements Serializable {
         this.maintenanceInterval = maintenanceInterval;
     }
 
-    public int getOrganizationalUnit() {
+    public Integer getOrganizationalUnit() {
         return organizationalUnit;
     }
 
-    public void setOrganizationalUnit(int organizationalUnit) {
+    public void setOrganizationalUnit(Integer organizationalUnit) {
         this.organizationalUnit = organizationalUnit;
     }
 
