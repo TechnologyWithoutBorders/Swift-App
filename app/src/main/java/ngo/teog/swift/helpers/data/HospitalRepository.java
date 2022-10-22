@@ -252,6 +252,10 @@ public class HospitalRepository {
         hospitalDao.deleteImageUploadJob(deviceId);
     }
 
+    public void deleteOrgUnitsSync() {
+        hospitalDao.deleteOrgUnits();
+    }
+
     public void createDevice(HospitalDevice device, int userId) {
         executor.execute(() -> {
             Date lastUpdate = new Date();
@@ -506,6 +510,11 @@ public class HospitalRepository {
                         }
 
                         HospitalRepository.this.updateUserSync(user);
+                    }
+
+                    //remove old units as they change completely
+                    if(hospitalInfo.getOrgUnits().size() > 0) {
+                        HospitalRepository.this.deleteOrgUnitsSync();
                     }
 
                     for (OrganizationalUnit orgUnit : hospitalInfo.getOrgUnits()) {

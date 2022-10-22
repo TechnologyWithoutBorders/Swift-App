@@ -49,6 +49,9 @@ public abstract class HospitalDao {
     @Query("DELETE FROM image_upload_jobs WHERE deviceId = :deviceId")
     public abstract void deleteImageUploadJob(int deviceId);
 
+    @Query("DELETE FROM organizational_units")
+    public abstract void deleteOrgUnits();
+
     @Transaction
     @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
     public abstract LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId);
