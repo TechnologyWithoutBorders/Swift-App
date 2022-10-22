@@ -17,9 +17,6 @@ public final class ResourceKeys {
     /** Identifier for user IDs */
     public static final String USER_ID = "user_id";
 
-    public static final String USER_MAIL = "user_mail";
-    public static final String USER_NAME = "user_name";
-
     /** Identifier for user objects */
     public static final String USER = "user";
 
@@ -41,19 +38,7 @@ public final class ResourceKeys {
     public static final String IMAGE_HASH = "image_hash";//TODO der müsste eher wo anders hin
     public static final String LAST_SYNC = "lastSync";//TODO der auch
 
-    /** Identifier for all kinds of paths */
-    public static final String PATH = "path";
-
     public static final String HOSPITAL_ID = "hospital_id";
-
-    /** Identifier for hospital objects */
-    public static final String HOSPITAL = "hospital";
-
-    /** Identifier for previous states used in reports */
-    public static final String REPORT_OLD_STATE = "old_state";
-
-    /** Identifier for current states used in reports */
-    public static final String REPORT_NEW_STATE = "new_state";
 
     /** Identifier for all kinds of data */
     public static final String DATA = "data";
