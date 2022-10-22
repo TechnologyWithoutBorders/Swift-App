@@ -139,7 +139,7 @@ public class RoomModule {
             database.beginTransaction();
             try {
                 database.execSQL("CREATE TABLE devices_tmp(id INTEGER NOT NULL, assetNumber TEXT, type TEXT, serialNumber TEXT, manufacturer TEXT, model TEXT, organizationalUnit INTEGER, hospital INTEGER NOT NULL, maintenanceInterval INTEGER NOT NULL, lastUpdate INTEGER, lastSync INTEGER, PRIMARY KEY(id, hospital))");
-                database.execSQL("INSERT INTO devices_tmp(id, assetNumber, type, serialNumber, manufacturer, model, organizationalUnit, hospital, maintenanceInterval, lastUpdate, lastSync) SELECT id, assetNumber, type, serialNumber, manufacturer, model, null, hospital, maintenanceInterval, lastUpdate, lastSync FROM devices");
+                database.execSQL("INSERT INTO devices_tmp(id, assetNumber, type, serialNumber, manufacturer, model, hospital, maintenanceInterval, lastUpdate, lastSync) SELECT id, assetNumber, type, serialNumber, manufacturer, model, hospital, maintenanceInterval, lastUpdate, lastSync FROM devices");
                 database.execSQL("DROP TABLE devices");
                 database.execSQL("ALTER TABLE devices_tmp RENAME TO devices");
                 database.setTransactionSuccessful();
