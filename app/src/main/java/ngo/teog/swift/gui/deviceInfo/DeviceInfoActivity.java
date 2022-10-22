@@ -370,6 +370,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                     if(reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
                         previousOrgUnit = i;
+                        break;
                     }
                 }
 
