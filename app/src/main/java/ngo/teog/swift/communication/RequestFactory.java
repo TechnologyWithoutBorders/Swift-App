@@ -29,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,29 +60,6 @@ public class RequestFactory {
 
     // make default constructor private (singleton class!)
     private RequestFactory() {}
-
-    public JsonObjectRequest createDeviceImageUploadRequest(final Context context, final int deviceId, final Bitmap bitmap) {
-        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
-
-        Map<String, String> params = generateParameterMap(context, DataAction.UPLOAD_DEVICE_IMAGE, true);
-
-        params.put(ResourceKeys.DEVICE_ID, Integer.toString(deviceId));
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] imageBytes = stream.toByteArray();
-        try {
-            stream.close();
-        } catch(IOException e) {
-            //ignore
-        }
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        params.put(ResourceKeys.IMAGE, encodedImage);
-
-        JSONObject request = new JSONObject(params);
-
-        return new BaseRequest(context, url, request, new BaseResponseListener(context));
-    }
 
     public JsonObjectRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
