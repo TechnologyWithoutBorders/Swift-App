@@ -365,12 +365,14 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 int previousOrgUnit = 0;
 
-                for(int i = 0; i < orgUnits.size(); i++) {
-                    OrganizationalUnit reference = orgUnits.get(i);
+                if(deviceInfo.getDevice().getOrganizationalUnit() != null) {
+                    for (int i = 0; i < orgUnits.size(); i++) {
+                        OrganizationalUnit reference = orgUnits.get(i);
 
-                    if(reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
-                        previousOrgUnit = i;
-                        break;
+                        if (reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
+                            previousOrgUnit = i;
+                            break;
+                        }
                     }
                 }
 
