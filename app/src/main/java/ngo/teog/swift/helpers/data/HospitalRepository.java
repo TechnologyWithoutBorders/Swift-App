@@ -195,22 +195,6 @@ public class HospitalRepository {
     }
 
     /**
-     * Returns an <b>asynchronically</b> retrieved report.
-     * @param userId User associated with specific hospital
-     * @param deviceId device ID
-     * @param reportId report ID
-     * @param sync determines whether database should be synchronized with the server in the background
-     * @return information about report
-     */
-    public LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId, boolean sync) {
-        if(sync) {
-            refreshUserHospital(userId);
-        }
-
-        return hospitalDao.loadReportInfo(userId, deviceId, reportId);
-    }
-
-    /**
      * Returns an <b>asynchronically</b> retrieved user.
      * @param userId User
      * @param sync determines whether database should be synchronized with the server in the background
