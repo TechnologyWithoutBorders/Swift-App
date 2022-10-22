@@ -577,7 +577,7 @@ public class HospitalActivity extends BaseActivity {
                     }
 
                     TextView nameView = convertView.findViewById(R.id.nameView);
-                    TextView statusView = convertView.findViewById(R.id.statusView);
+                    TextView orgUnitView = convertView.findViewById(R.id.statusView);
                     ImageView imageView = convertView.findViewById(R.id.imageView);
                     TextView detailsView = convertView.findViewById(R.id.detailView);
 
@@ -587,7 +587,7 @@ public class HospitalActivity extends BaseActivity {
                         HospitalDevice device = deviceInfo.getDevice();
                         List<ReportInfo> reportInfos = deviceInfo.getReports();
 
-                        statusView.setText(device.getLocation());
+                        //orgUnitView.setText(device.getLocation());
 
                         detailsView.setText(HospitalActivity.this.getString(R.string.line_break, device.getManufacturer(), device.getModel()));
 

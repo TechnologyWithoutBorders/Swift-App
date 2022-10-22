@@ -220,7 +220,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 manufacturerView.setText(device.getManufacturer());
                 serialNumberView.setText(device.getSerialNumber());
                 hospitalView.setText(deviceInfo.getHospital().getName());
-                locationView.setText(device.getLocation());
+                //locationView.setText(device.getLocation());
 
                 int interval = device.getMaintenanceInterval();
                 intervalView.setText(getResources().getQuantityString(R.plurals.months_count, (interval/4), (interval/4)));
@@ -372,8 +372,8 @@ public class DeviceInfoActivity extends BaseActivity {
                 case LOCATION:
                     String location = ((EditText) editView).getText().toString().trim();
 
-                    locationView.setText(location);
-                    device.setLocation(location);
+                    //locationView.setText(location);
+                    //device.setLocation(location);
                     break;
                 case MAINTENANCE_INTERVAL:
                     int interval = ((NumberPicker) editView).getValue();

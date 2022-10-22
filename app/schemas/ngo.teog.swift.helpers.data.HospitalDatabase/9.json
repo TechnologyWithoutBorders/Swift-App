@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "e142281ff0dcc3ce1ece71a5adfc6fe8",
+    "identityHash": "2917e1fe1dc2449c178352a124b1e1be",
     "entities": [
       {
         "tableName": "users",
@@ -124,7 +124,7 @@
       },
       {
         "tableName": "devices",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assetNumber` TEXT, `type` TEXT, `serialNumber` TEXT, `manufacturer` TEXT, `model` TEXT, `location` TEXT, `hospital` INTEGER NOT NULL, `maintenanceInterval` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `assetNumber` TEXT, `type` TEXT, `serialNumber` TEXT, `manufacturer` TEXT, `model` TEXT, `organizationalUnit` INTEGER NOT NULL, `hospital` INTEGER NOT NULL, `maintenanceInterval` INTEGER NOT NULL, `lastUpdate` INTEGER, `lastSync` INTEGER, PRIMARY KEY(`id`, `hospital`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -163,10 +163,10 @@
             "notNull": false
           },
           {
-            "fieldPath": "location",
-            "columnName": "location",
-            "affinity": "TEXT",
-            "notNull": false
+            "fieldPath": "organizationalUnit",
+            "columnName": "organizationalUnit",
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "hospital",
@@ -356,7 +356,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e142281ff0dcc3ce1ece71a5adfc6fe8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2917e1fe1dc2449c178352a124b1e1be')"
     ]
   }
 }

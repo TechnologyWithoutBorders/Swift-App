@@ -128,7 +128,7 @@ public class ResponseParser {
                 String serialNumber = deviceObject.getString(DeviceAttribute.SERIAL_NUMBER);
                 String manufacturer = deviceObject.getString(DeviceAttribute.MANUFACTURER);
                 String model = deviceObject.getString(DeviceAttribute.MODEL);
-                String location = deviceObject.getString(DeviceAttribute.LOCATION);
+                int organizationalUnit = deviceObject.getInt(DeviceAttribute.ORGANIZATIONAL_UNIT);
                 int hospital = deviceObject.getInt(DeviceAttribute.HOSPITAL);
                 int maintenanceInterval = deviceObject.getInt(DeviceAttribute.MAINTENANCE_INTERVAL);
                 Date lastUpdate = dateFormat.parse(deviceObject.getString(DeviceAttribute.LAST_UPDATE));
@@ -155,7 +155,7 @@ public class ResponseParser {
                     reportList.add(reportInfo);
                 }
 
-                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, location, hospital, maintenanceInterval, lastUpdate);
+                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, organizationalUnit, hospital, maintenanceInterval, lastUpdate);
 
                 DeviceInfo deviceInfo = new DeviceInfo(device);
                 deviceInfo.setReports(reportList);

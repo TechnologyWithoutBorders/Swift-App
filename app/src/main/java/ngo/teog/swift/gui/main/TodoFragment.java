@@ -173,7 +173,7 @@ public class TodoFragment extends Fragment {
 
             TextView nameView = convertView.findViewById(R.id.nameView);
             TextView dateView = convertView.findViewById(R.id.dateView);
-            TextView statusView = convertView.findViewById(R.id.statusView);
+            TextView orgUnitView = convertView.findViewById(R.id.statusView);
             ImageView imageView = convertView.findViewById(R.id.imageView);
             TextView detailView = convertView.findViewById(R.id.detailView);
 
@@ -194,7 +194,7 @@ public class TodoFragment extends Fragment {
 
                 DeviceStateVisuals triple = new DeviceStateVisuals(lastReport.getCurrentState(), this.getContext());
 
-                statusView.setText(device.getLocation());
+                //orgUnitView.setText(device.getLocation());
                 imageView.setImageDrawable(triple.getStateIcon());
                 imageView.setBackgroundColor(triple.getBackgroundColor());
             }

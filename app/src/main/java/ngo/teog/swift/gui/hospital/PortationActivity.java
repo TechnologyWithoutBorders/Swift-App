@@ -118,12 +118,12 @@ public class PortationActivity extends AppCompatActivity {
                                 ZipEntry deviceEntry = new ZipEntry("devices.csv");
                                 zipOut.putNextEntry(deviceEntry);
 
-                                csvWriter.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Location", "Type", "Manufacturer", "Model", "Serial Number"});
+                                csvWriter.writeNext(new String[] {"Hospital", "ID", "Asset Number", "Organizational Unit", "Type", "Manufacturer", "Model", "Serial Number"});
 
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     HospitalDevice device = deviceDump.getDevice();
 
-                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), device.getLocation(), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
+                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), "", device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
                                 }
 
                                 csvWriter.flush();

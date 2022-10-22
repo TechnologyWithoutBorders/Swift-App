@@ -128,10 +128,24 @@ public class RoomModule {
         }
     };
 
+    /**
+     * Adds table organizational_units and adds organizationalUnit to devices table
+     */
     public static final Migration MIGRATION_8_9 = new Migration(8, 9) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE IF NOT EXISTS organizational_units (id INTEGER NOT NULL, hospital INTEGER NOT NULL, name TEXT, PRIMARY KEY(id, hospital))");
+
+            database.beginTransaction();
+            try {
+                database.execSQL("CREATE TABLE devices_tmp(id INTEGER NOT NULL, assetNumber TEXT, type TEXT, serialNumber TEXT, manufacturer TEXT, model TEXT, organizationalUnit INTEGER NOT NULL, hospital INTEGER NOT NULL, maintenanceInterval INTEGER NOT NULL, lastUpdate INTEGER, lastSync INTEGER, PRIMARY KEY(id, hospital))");
+                database.execSQL("INSERT INTO devices_tmp(id, assetNumber, type, serialNumber, manufacturer, model, organizationalUnit, hospital, maintenanceInterval, lastUpdate, lastSync) SELECT id, assetNumber, type, serialNumber, manufacturer, model, -1, hospital, maintenanceInterval, lastUpdate, lastSync FROM devices");
+                database.execSQL("DROP TABLE devices");
+                database.execSQL("ALTER TABLE devices_tmp RENAME TO devices");
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
         }
     };
 }
