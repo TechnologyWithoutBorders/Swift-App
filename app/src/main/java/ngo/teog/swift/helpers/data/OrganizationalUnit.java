@@ -10,7 +10,7 @@ public class OrganizationalUnit implements Serializable {
     private final int id;
     private final int hospital;
     private final String name;
-    private final Date lastUpdate;
+    private Date lastUpdate;
 
     public OrganizationalUnit(int id, int hospital, String name, Date lastUpdate) {
         this.id = id;
@@ -33,5 +33,9 @@ public class OrganizationalUnit implements Serializable {
 
     public Date getLastUpdate() {
         return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

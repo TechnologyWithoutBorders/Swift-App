@@ -232,6 +232,10 @@ public class HospitalRepository {
         hospitalDao.save(user);
     }
 
+    public void updateOrgUnitSync(OrganizationalUnit orgUnit) {
+        hospitalDao.save(orgUnit);
+    }
+
     public void updateDeviceSync(HospitalDevice device) {
         hospitalDao.save(device);
     }
@@ -498,6 +502,14 @@ public class HospitalRepository {
                         }
 
                         HospitalRepository.this.updateUserSync(user);
+                    }
+
+                    for (OrganizationalUnit orgUnit : hospitalInfo.getOrgUnits()) {
+                        if (orgUnit.getLastUpdate().getTime() > now) {
+                            orgUnit.setLastUpdate(new Date(now));
+                        }
+
+                        HospitalRepository.this.updateOrgUnitSync(orgUnit);
                     }
 
                     for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {

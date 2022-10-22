@@ -32,6 +32,9 @@ public abstract class HospitalDao {
     public abstract void save(User user);
 
     @Insert(onConflict = REPLACE)
+    public abstract void save(OrganizationalUnit orgUnit);
+
+    @Insert(onConflict = REPLACE)
     public abstract void save(HospitalDevice device);
 
     @Insert(onConflict = REPLACE)
