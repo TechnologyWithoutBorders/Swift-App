@@ -60,9 +60,6 @@ public abstract class HospitalDao {
     @Query("SELECT MAX(id) FROM reports WHERE device = :deviceId")
     public abstract int getMaxReportId(int deviceId);
 
-    @Query("SELECT * FROM users")
-    public abstract List<User> getUsers();
-
     @Query("SELECT * FROM users WHERE id = :id")
     public abstract LiveData<User> loadUser(int id);
 
@@ -85,6 +82,9 @@ public abstract class HospitalDao {
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     public abstract List<User> getUserColleagues(int userId);
+
+    @Query("SELECT * FROM organizational_units WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
+    public abstract LiveData<List<OrganizationalUnit>> loadOrgUnits(int userId);
 
     @Transaction
     @Query("SELECT * from devices WHERE hospital = (SELECT hospital from users WHERE id = :userId)")

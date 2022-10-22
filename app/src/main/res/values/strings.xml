@@ -177,7 +177,7 @@
     <string name="device_model">Model</string>
     <string name="device_manufacturer">Manufacturer</string>
     <string name="device_serial_number">Serial Number</string>
-    <string name="device_location">Location</string>
+    <string name="device_department">Department</string>
     <string name="device_maintenance_interval">Maint. Interval</string>
     <string name="device_recent_reports">Recent Reports</string>
     <string name="documents_overview">Available Documents</string>

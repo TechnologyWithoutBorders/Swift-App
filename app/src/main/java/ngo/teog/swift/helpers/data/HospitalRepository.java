@@ -176,6 +176,10 @@ public class HospitalRepository {
         return hospitalDao.loadObservable(id);
     }
 
+    public LiveData<List<OrganizationalUnit>> loadOrgUnits(int userId) {
+        return hospitalDao.loadOrgUnits(userId);
+    }
+
     public DeviceInfo getDevice(int userId, int deviceId) {
         return hospitalDao.getDevice(userId, deviceId);
     }
