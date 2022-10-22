@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "2917e1fe1dc2449c178352a124b1e1be",
+    "identityHash": "a2215f554f3f47aaee66fcd10462abe8",
     "entities": [
       {
         "tableName": "users",
@@ -275,7 +275,7 @@
       },
       {
         "tableName": "organizational_units",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `hospital` INTEGER NOT NULL, `name` TEXT, PRIMARY KEY(`id`, `hospital`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `hospital` INTEGER NOT NULL, `name` TEXT, `lastUpdate` INTEGER, PRIMARY KEY(`id`, `hospital`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -293,6 +293,12 @@
             "fieldPath": "name",
             "columnName": "name",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastUpdate",
+            "columnName": "lastUpdate",
+            "affinity": "INTEGER",
             "notNull": false
           }
         ],
@@ -356,7 +362,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2917e1fe1dc2449c178352a124b1e1be')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a2215f554f3f47aaee66fcd10462abe8')"
     ]
   }
 }

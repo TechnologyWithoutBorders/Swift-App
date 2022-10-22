@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.User;
 
 /**
@@ -20,6 +21,7 @@ public class HospitalInfo {
     private final float latitude;
     private Date lastUpdate;
     private final List<User> users;
+    private final List<OrganizationalUnit> orgUnits;
     private final List<DeviceInfo> devices;
 
     /**
@@ -33,7 +35,7 @@ public class HospitalInfo {
      * @param users list of members
      * @param devices list of devices
      */
-    public HospitalInfo(int id, String name, String location, float longitude, float latitude, Date lastUpdate, List<User> users, List<DeviceInfo> devices) {
+    public HospitalInfo(int id, String name, String location, float longitude, float latitude, Date lastUpdate, List<User> users, List<OrganizationalUnit> orgUnits, List<DeviceInfo> devices) {
         this.id = id;
         this.name = name;
         this.location = location;
@@ -41,6 +43,7 @@ public class HospitalInfo {
         this.latitude = latitude;
         this.lastUpdate = lastUpdate;
         this.users = users;
+        this.orgUnits = orgUnits;
         this.devices = devices;
     }
 
@@ -98,6 +101,10 @@ public class HospitalInfo {
      */
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<OrganizationalUnit> getOrgUnits() {
+        return orgUnits;
     }
 
     /**

@@ -134,7 +134,7 @@ public class RoomModule {
     public static final Migration MIGRATION_8_9 = new Migration(8, 9) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE IF NOT EXISTS organizational_units (id INTEGER NOT NULL, hospital INTEGER NOT NULL, name TEXT, PRIMARY KEY(id, hospital))");
+            database.execSQL("CREATE TABLE IF NOT EXISTS organizational_units (id INTEGER NOT NULL, hospital INTEGER NOT NULL, name TEXT, lastUpdate INTEGER, PRIMARY KEY(id, hospital))");
 
             database.beginTransaction();
             try {

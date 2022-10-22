@@ -18,11 +18,13 @@ import ngo.teog.swift.helpers.HospitalInfo;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.filters.DeviceAttribute;
 import ngo.teog.swift.helpers.filters.HospitalAttribute;
+import ngo.teog.swift.helpers.filters.OrganizationalUnitAttribute;
 import ngo.teog.swift.helpers.filters.ReportAttribute;
 import ngo.teog.swift.helpers.filters.UserAttribute;
 
@@ -98,6 +100,7 @@ public class ResponseParser {
             float latitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LATITUDE));
             Date hospitalLastUpdate = dateFormat.parse(hospitalObject.getString(HospitalAttribute.LAST_UPDATE));
             JSONArray users = hospitalObject.getJSONArray(ResourceKeys.USERS);
+            JSONArray organizationalUnits = hospitalObject.getJSONArray(ResourceKeys.ORGANIZATIONAL_UNITS);
             JSONArray devices = hospitalObject.getJSONArray(ResourceKeys.DEVICES);
 
             List<User> userList = new ArrayList<>(users.length());
@@ -115,6 +118,20 @@ public class ResponseParser {
 
                 User user = new User(id, phone, mail, fullName, hospital, position, lastUpdate);
                 userList.add(user);
+            }
+
+            List<OrganizationalUnit> orgUnitList = new ArrayList<>(organizationalUnits.length());
+
+            for (int i = 0; i < organizationalUnits.length(); i++) {
+                JSONObject orgUnitUnitObject = organizationalUnits.getJSONObject(i);
+
+                int id = orgUnitUnitObject.getInt(OrganizationalUnitAttribute.ID);
+                int hospital = orgUnitUnitObject.getInt(OrganizationalUnitAttribute.HOSPITAL);
+                String orgUnitName = orgUnitUnitObject.getString(OrganizationalUnitAttribute.NAME);
+                Date lastUpdate = dateFormat.parse(orgUnitUnitObject.getString(OrganizationalUnitAttribute.LAST_UPDATE));
+
+                OrganizationalUnit orgUnit = new OrganizationalUnit(id, hospital, orgUnitName, lastUpdate);
+                orgUnitList.add(orgUnit);
             }
 
             List<DeviceInfo> deviceList = new ArrayList<>(devices.length());
@@ -163,7 +180,7 @@ public class ResponseParser {
                 deviceList.add(deviceInfo);
             }
 
-            return new HospitalInfo(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate, userList, deviceList);
+            return new HospitalInfo(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate, userList, orgUnitList, deviceList);
         } catch(JSONException | ParseException e) {
             throw new ServerException(e);
         }
