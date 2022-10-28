@@ -289,7 +289,7 @@ public class HospitalRepository {
 
     private void refreshUserHospitalSync(int userId) {//TODO is there any actual difference to refreshUserHospital()?
         //refresh
-        if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
+        if(syncOngoing.compareAndSet(false, true) && this.checkForInternetConnection()) {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
             long now = new Date().getTime();
@@ -322,7 +322,7 @@ public class HospitalRepository {
     public void refreshUserHospital(int userId) {
         executor.execute(() -> {
             //refresh
-            if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
+            if(syncOngoing.compareAndSet(false, true) && this.checkForInternetConnection()) {
                 SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                 long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
                 long now = new Date().getTime();
