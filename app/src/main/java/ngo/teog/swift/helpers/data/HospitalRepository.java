@@ -11,7 +11,6 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -36,7 +35,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
@@ -289,7 +287,7 @@ public class HospitalRepository {
 
     private void refreshUserHospitalSync(int userId) {//TODO is there any actual difference to refreshUserHospital()?
         //refresh
-        if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
+        if(syncOngoing.compareAndSet(false, true) && this.checkForInternetConnection()) {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
             long now = new Date().getTime();
@@ -300,11 +298,6 @@ public class HospitalRepository {
                 HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
                 if (hospitalRequest != null) {
-                    hospitalRequest.setRetryPolicy(new DefaultRetryPolicy(
-                            (int) TimeUnit.SECONDS.toMillis(10),
-                            0,
-                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
                     queue.add(hospitalRequest);
                 }
 
@@ -322,7 +315,7 @@ public class HospitalRepository {
     public void refreshUserHospital(int userId) {
         executor.execute(() -> {
             //refresh
-            if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
+            if(syncOngoing.compareAndSet(false, true) && this.checkForInternetConnection()) {
                 SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                 long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
                 long now = new Date().getTime();
@@ -333,11 +326,6 @@ public class HospitalRepository {
                     HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
                     if(hospitalRequest != null) {
-                        hospitalRequest.setRetryPolicy(new DefaultRetryPolicy(
-                                (int) TimeUnit.SECONDS.toMillis(10),
-                                0,
-                                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
                         queue.add(hospitalRequest);
                     }
 
