@@ -1,5 +1,6 @@
 package ngo.teog.swift.helpers.data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -484,6 +485,7 @@ public class HospitalRepository {
 
     private class HospitalRequest extends JsonObjectRequest {
 
+        @SuppressLint("ApplySharedPref")
         private HospitalRequest(final Context context, final String url, JSONObject request, Date syncTime, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
@@ -544,7 +546,8 @@ public class HospitalRepository {
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, now);
-                    editor.apply();
+                    //we use commit() instead of apply() as we are in a separate thread
+                    editor.commit();
 
                     HospitalRepository.this.saveObservableSync(new Observable(1));//TODO constant
                 } catch(Exception e) {
