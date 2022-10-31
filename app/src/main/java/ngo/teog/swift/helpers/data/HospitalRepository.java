@@ -286,7 +286,7 @@ public class HospitalRepository {
         hospitalDao.save(observable);
     }
 
-    private void refreshUserHospital(int userId) {
+    public void refreshUserHospital(int userId) {
         //refresh
         if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
