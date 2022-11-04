@@ -67,6 +67,8 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
                 android:text="@string/device_maintenance_interval" />
 
             <LinearLayout
@@ -75,6 +77,7 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/decButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-" />
@@ -89,12 +92,12 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:text="@string/months" />
 
                 <Button
+                    android:id="@+id/incButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="+" />

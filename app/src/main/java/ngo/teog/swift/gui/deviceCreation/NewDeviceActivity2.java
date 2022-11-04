@@ -88,6 +88,29 @@ public class NewDeviceActivity2 extends BaseActivity {
         intervalField = findViewById(R.id.intervalField);
         intervalField.setText(Integer.toString(DEF_MAINT_INTERVAL));
 
+        Button incButton = findViewById(R.id.incButton);
+        incButton.setOnClickListener((view) -> {
+            try {
+                int oldInterval = Integer.parseInt(intervalField.getText().toString().trim());
+                if(oldInterval+1 <= MAX_MAINT_INTERVAL) {
+                    intervalField.setText(Integer.toString(oldInterval + 1));
+                }
+            } catch(NumberFormatException e) {
+                intervalField.setText(Integer.toString(DEF_MAINT_INTERVAL));
+            }
+        });
+        Button decButton = findViewById(R.id.decButton);
+        decButton.setOnClickListener((view) -> {
+            try {
+                int oldInterval = Integer.parseInt(intervalField.getText().toString().trim());
+                if(oldInterval-1 >= MIN_MAINT_INTERVAL) {
+                    intervalField.setText(Integer.toString(oldInterval - 1));
+                }
+            } catch(NumberFormatException e) {
+                intervalField.setText(Integer.toString(DEF_MAINT_INTERVAL));
+            }
+        });
+
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
 
