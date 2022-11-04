@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -51,9 +50,7 @@ public class NewDeviceActivity2 extends BaseActivity {
     private AutoCompleteTextView typeField, manufacturerField, modelField;
     private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter;
 
-    private EditText assetNumberField, serialNumberField;
-
-    private NumberPicker intervalPicker;
+    private EditText assetNumberField, serialNumberField, intervalField;
 
     public static final int MIN_MAINT_INTERVAL = 1;
     public static final int DEF_MAINT_INTERVAL = 3;
@@ -88,15 +85,11 @@ public class NewDeviceActivity2 extends BaseActivity {
         modelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         modelField.setAdapter(modelAdapter);
 
-        intervalPicker = findViewById(R.id.intervalPicker);
-        intervalPicker.setValue(3);
+        intervalField = findViewById(R.id.intervalField);
+        intervalField.setText(Integer.toString(DEF_MAINT_INTERVAL));
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
-
-        intervalPicker.setMinValue(MIN_MAINT_INTERVAL);
-        intervalPicker.setMaxValue(MAX_MAINT_INTERVAL);
-        intervalPicker.setValue(DEF_MAINT_INTERVAL);
 
         Intent intent = this.getIntent();
         deviceNumber = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
@@ -192,17 +185,31 @@ public class NewDeviceActivity2 extends BaseActivity {
                         assetNumber = Integer.toString(deviceNumber);
                     }
 
-                    //we actually save the number of weeks, not months
-                    int interval = intervalPicker.getValue()*4;
+                    boolean intervalSet = false;
+                    int interval = -1;
 
-                    HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                            typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval, new Date());
+                    try {
+                        //we actually save the number of weeks, not months
+                        interval = Integer.parseInt(intervalField.getText().toString().trim()) * 4;
+                        intervalSet = true;
+                    } catch (NumberFormatException e) {
+                        intervalField.setError("invalid number");
+                    }
 
-                    Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
-                    intent.putExtra(ResourceKeys.DEVICE, device);
+                    if(intervalSet) {
+                        if(interval >= MIN_MAINT_INTERVAL && interval <= MAX_MAINT_INTERVAL) {
+                            HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
+                                    typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval, new Date());
 
-                    startActivity(intent);
-                    NewDeviceActivity2.this.finish();
+                            Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
+                            intent.putExtra(ResourceKeys.DEVICE, device);
+
+                            startActivity(intent);
+                            NewDeviceActivity2.this.finish();
+                        } else {
+                            intervalField.setError("interval must be between " + MIN_MAINT_INTERVAL + " and " + MAX_MAINT_INTERVAL + " months");
+                        }
+                    }
                 } else {
                     modelField.setError(getString(R.string.empty_model));
                 }
