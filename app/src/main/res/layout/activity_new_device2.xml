@@ -80,7 +80,7 @@
                     android:id="@+id/decButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-" />
+                    android:text="@string/decrement_symbol" />
 
                 <EditText
                     android:id="@+id/intervalField"
@@ -101,7 +101,7 @@
                     android:id="@+id/incButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+" />
+                    android:text="@string/increment_symbol" />
 
             </LinearLayout>
         </LinearLayout>

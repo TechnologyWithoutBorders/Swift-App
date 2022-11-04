@@ -131,6 +131,8 @@
     <string name="my_hospital">my hospital</string>
     <string name="user_management">User Management</string>
     <string name="import_export">Import/Export</string>
+    <string name="increment_symbol">+</string>
+    <string name="decrement_symbol">-</string>
 
     <!-- Hospital Overview -->
     <string name="hospital_location_symbol">hospital location symbol</string>
