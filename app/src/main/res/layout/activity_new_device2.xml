@@ -76,7 +76,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
+                <Button style="@style/AppTheme.Button"
                     android:id="@+id/decButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                     android:textAlignment="center"
                     android:text="@string/months" />
 
-                <Button
+                <Button style="@style/AppTheme.Button"
                     android:id="@+id/incButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,11 +112,10 @@
         android:layout_height="wrap_content">
 
         <Button style="@style/AppTheme.Button"
-            android:id="@+id/nextButton"
+            android:id="@+id/createButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/next_button"
-            android:onClick="createDevice"/>
+            android:text="@string/next_button" />
 
         <ProgressBar
             android:id="@+id/progressBar"

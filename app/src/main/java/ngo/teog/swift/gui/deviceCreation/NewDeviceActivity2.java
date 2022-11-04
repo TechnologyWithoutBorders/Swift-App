@@ -42,7 +42,7 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class NewDeviceActivity2 extends BaseActivity {
 
-    private Button nextButton;
+    private Button createButton;
     private ProgressBar progressBar;
 
     private int deviceNumber;
@@ -111,7 +111,8 @@ public class NewDeviceActivity2 extends BaseActivity {
             }
         });
 
-        nextButton = findViewById(R.id.nextButton);
+        createButton = findViewById(R.id.createButton);
+        createButton.setOnClickListener((view) -> createDevice());
         progressBar = findViewById(R.id.progressBar);
 
         Intent intent = this.getIntent();
@@ -195,13 +196,10 @@ public class NewDeviceActivity2 extends BaseActivity {
         return super.onOptionsItemSelected(item, R.string.newdevice_activity_2);
     }
 
-    public void createDevice(View view) {
+    public void createDevice() {
         if(typeField.getText().length() > 0) {
             if(manufacturerField.getText().length() > 0) {
                 if(modelField.getText().length() > 0) {
-                    nextButton.setVisibility(View.INVISIBLE);
-                    progressBar.setVisibility(View.VISIBLE);
-
                     String assetNumber = assetNumberField.getText().toString().trim();
 
                     if(assetNumber.length() == 0) {
@@ -221,6 +219,9 @@ public class NewDeviceActivity2 extends BaseActivity {
 
                     if(intervalSet) {
                         if(interval >= MIN_MAINT_INTERVAL && interval <= MAX_MAINT_INTERVAL) {
+                            createButton.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.VISIBLE);
+
                             HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
                                     typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval, new Date());
 
