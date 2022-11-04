@@ -131,6 +131,8 @@
     <string name="my_hospital">my hospital</string>
     <string name="user_management">User Management</string>
     <string name="import_export">Import/Export</string>
+    <string name="increment_symbol">+</string>
+    <string name="decrement_symbol">-</string>
 
     <!-- Hospital Overview -->
     <string name="hospital_location_symbol">hospital location symbol</string>
@@ -173,7 +175,7 @@
     <string name="device_id">Device ID</string>
     <string name="device_image_placeholder">device image</string>
     <string name="device_asset_number">Asset Number</string>
-    <string name="device_type">Type</string>
+    <string name="device_type">Device Type</string>
     <string name="device_model">Model</string>
     <string name="device_manufacturer">Manufacturer</string>
     <string name="device_serial_number">Serial Number</string>

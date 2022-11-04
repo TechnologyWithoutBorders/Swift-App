@@ -63,33 +63,45 @@
                 android:maxLength="20"
                 android:completionThreshold="1"/>
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:text="@string/device_maintenance_interval" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView"
+                <Button style="@style/AppTheme.Button"
+                    android:id="@+id/decButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/decrement_symbol" />
+
+                <EditText
+                    android:id="@+id/intervalField"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:text="@string/device_maintenance_interval" />
-
-                <NumberPicker
-                    android:id="@+id/intervalPicker"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:inputType="number"
+                    android:importantForAutofill="no" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:text="@string/months" />
+
+                <Button style="@style/AppTheme.Button"
+                    android:id="@+id/incButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/increment_symbol" />
 
             </LinearLayout>
         </LinearLayout>
@@ -101,11 +113,10 @@
         android:layout_height="wrap_content">
 
         <Button style="@style/AppTheme.Button"
-            android:id="@+id/nextButton"
+            android:id="@+id/createButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/next_button"
-            android:onClick="createDevice"/>
+            android:text="@string/next_button" />
 
         <ProgressBar
             android:id="@+id/progressBar"
