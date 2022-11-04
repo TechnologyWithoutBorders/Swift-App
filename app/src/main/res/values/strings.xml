@@ -173,7 +173,7 @@
     <string name="device_id">Device ID</string>
     <string name="device_image_placeholder">device image</string>
     <string name="device_asset_number">Asset Number</string>
-    <string name="device_type">Type</string>
+    <string name="device_type">Device Type</string>
     <string name="device_model">Model</string>
     <string name="device_manufacturer">Manufacturer</string>
     <string name="device_serial_number">Serial Number</string>
