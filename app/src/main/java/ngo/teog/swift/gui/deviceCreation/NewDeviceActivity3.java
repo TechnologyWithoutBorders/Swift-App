@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -215,13 +214,7 @@ public class NewDeviceActivity3 extends BaseActivity {
             File imageFile = createImageFile();
             imagePath = imageFile.getAbsolutePath();
 
-            Uri photoURI;
-
-            if(Build.VERSION.SDK_INT >= 24) {
-                photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);//TODO constant
-            } else {
-                photoURI = Uri.fromFile(imageFile);
-            }
+            Uri photoURI = FileProvider.getUriForFile(this,"ngo.teog.swift.provider", imageFile);//TODO constant
 
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
