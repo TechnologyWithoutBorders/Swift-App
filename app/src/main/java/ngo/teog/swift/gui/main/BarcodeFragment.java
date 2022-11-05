@@ -168,11 +168,11 @@ public class BarcodeFragment extends Fragment {
     private void switchTorchState() {
         if(!torchIsOn){
             barcodeScannerView.setTorchOn();
-            torchButton.setColorFilter(this.getResources().getColor(R.color.white));
+            torchButton.setColorFilter(this.getResources().getColor(R.color.white, requireContext().getTheme()));
             torchIsOn = true;
         } else {
             barcodeScannerView.setTorchOff();
-            torchButton.setColorFilter(this.getResources().getColor(R.color.grey_table_bar));
+            torchButton.setColorFilter(this.getResources().getColor(R.color.grey_table_bar, requireContext().getTheme()));
             torchIsOn = false;
         }
 

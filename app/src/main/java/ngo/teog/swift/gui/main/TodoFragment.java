@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -86,8 +85,8 @@ public class TodoFragment extends Fragment {
         );
 
         DaggerAppComponent.builder()
-                .appModule(new AppModule(getActivity().getApplication()))
-                .roomModule(new RoomModule(getActivity().getApplication()))
+                .appModule(new AppModule(requireActivity().getApplication()))
+                .roomModule(new RoomModule(requireActivity().getApplication()))
                 .build()
                 .inject(this);
 
@@ -111,7 +110,7 @@ public class TodoFragment extends Fragment {
                     if(deviceInfo.getReports().size() > 0) {
                         //copy report list as well and assign it to the device info
                         List<ReportInfo> reversedReportInfos = new ArrayList<>(deviceInfo.getReports());
-                        Collections.sort(reversedReportInfos, (first, second) -> second.getReport().getId()-first.getReport().getId());
+                        reversedReportInfos.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
                         deviceInfo.setReports(reversedReportInfos);
 
                         int currentState = reversedReportInfos.get(0).getReport().getCurrentState();
@@ -123,7 +122,7 @@ public class TodoFragment extends Fragment {
                 }
 
                 //sort devices by last change date
-                Collections.sort(newDeviceInfos, (first, second) -> {
+                newDeviceInfos.sort((first, second) -> {
                     List<ReportInfo> firstReports = first.getReports();
                     List<ReportInfo> secondReports = second.getReports();
 
@@ -131,7 +130,7 @@ public class TodoFragment extends Fragment {
                         long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
                         long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
 
-                        return (int)((firstCreated-secondCreated)/1000);
+                        return (int)((firstCreated - secondCreated) / 1000);
                     } else {
                         return 0;
                     }

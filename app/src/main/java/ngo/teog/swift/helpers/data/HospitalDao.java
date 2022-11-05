@@ -53,10 +53,6 @@ public abstract class HospitalDao {
     public abstract void deleteOrgUnits();
 
     @Transaction
-    @Query("SELECT * FROM reports WHERE (SELECT hospital from devices WHERE reports.device = :deviceId) = (SELECT hospital FROM users WHERE users.id = :userId) AND reports.id = :reportId")
-    public abstract LiveData<ReportInfo> loadReportInfo(int userId, int deviceId, int reportId);
-
-    @Transaction
     @Query("SELECT * FROM users WHERE id = :userId")
     public abstract LiveData<UserInfo> loadUserInfo(int userId);
 

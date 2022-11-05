@@ -39,7 +39,7 @@ public class DeviceStateVisuals {
     public DeviceStateVisuals(int state, Context context) {
         this.stateString = context.getResources().getStringArray(R.array.device_states)[state];
         this.stateIcon = ResourcesCompat.getDrawable(context.getResources(), ICONS[state], null);
-        this.backgroundColor = context.getResources().getColor(COLORS[state]);
+        this.backgroundColor = context.getResources().getColor(COLORS[state], context.getTheme());
     }
 
     /**

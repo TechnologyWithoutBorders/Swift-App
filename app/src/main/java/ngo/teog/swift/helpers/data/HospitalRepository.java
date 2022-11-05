@@ -26,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,9 +46,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.BaseErrorListener;
 import ngo.teog.swift.communication.BaseRequest;
-import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.communication.DataAction;
@@ -445,7 +442,7 @@ public class HospitalRepository {
             if(inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
+                String receiveString;
                 StringBuilder stringBuilder = new StringBuilder();
 
                 while((receiveString = bufferedReader.readLine()) != null) {
