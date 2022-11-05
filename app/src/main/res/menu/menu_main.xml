@@ -7,15 +7,11 @@
         android:title="@string/menu_information"
         app:showAsAction="always" />
     <item android:id="@+id/profileItem"
-        android:title="@string/my_profile">
-    </item>
+        android:title="@string/my_profile" />
     <item android:id="@+id/hospitalItem"
-        android:title="@string/my_hospital">
-    </item>
+        android:title="@string/my_hospital" />
     <item android:id="@+id/logoutItem"
-        android:title="@string/log_out">
-    </item>
+        android:title="@string/log_out" />
     <item android:id="@+id/aboutItem"
-        android:title="@string/about">
-    </item>
+        android:title="@string/about" />
 </menu>
