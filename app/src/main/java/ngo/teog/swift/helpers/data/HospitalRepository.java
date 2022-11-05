@@ -22,10 +22,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,6 +47,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.BaseErrorListener;
+import ngo.teog.swift.communication.BaseRequest;
+import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.communication.DataAction;
@@ -290,12 +297,20 @@ public class HospitalRepository {
     private void refreshUserHospitalSync(int userId) {
         //refresh
         if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
-            SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
             long now = new Date().getTime();
 
             if(now-lastSync >= 3000) {
                 RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+                File logFile = new File(context.getFilesDir(), "error.log");
+
+                if(logFile.exists()) {
+                    queue.add(createLogFileUploadRequest(context, logFile));
+                    
+                    logFile.delete();
+                }
 
                 HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
@@ -324,6 +339,14 @@ public class HospitalRepository {
 
                 if(now-lastSync >= 3000) {
                     RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+
+                    File logFile = new File(context.getFilesDir(), "error.log");
+
+                    if(logFile.exists()) {
+                        queue.add(createLogFileUploadRequest(context, logFile));
+
+                        logFile.delete();
+                    }
 
                     HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
 
@@ -407,6 +430,42 @@ public class HospitalRepository {
                 //we cannot show any information to the user from here as it runs in an extra thread
             });
         }
+    }
+
+    public JsonObjectRequest createLogFileUploadRequest(final Context context, File logFile) {
+        final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;//TODO other URL
+
+        Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.UPLOAD_LOG_FILE, true);
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput(logFile.getName());
+
+            if(inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while((receiveString = bufferedReader.readLine()) != null) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+
+            params.put("message", ret);//TODO: constant
+
+            JSONObject request = new JSONObject(params);
+
+            return new BaseRequest(context, url, request);
+        } catch (Exception e) {
+            //TODO
+        }
+
+        return null;
     }
 
     private HospitalRequest createHospitalRequest(Context context, int userID, ExecutorService executor) {

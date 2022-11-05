@@ -15,6 +15,10 @@ import org.json.JSONObject;
  * @author nitelow
  */
 public class BaseRequest extends JsonObjectRequest {
+    public BaseRequest(Context context, String url, JSONObject request) {
+        super(Request.Method.POST, url, request, new BaseResponseListener(context), new BaseErrorListener(context));
+    }
+
     public BaseRequest(Context context, String url, JSONObject request, BaseResponseListener listener) {
         super(Request.Method.POST, url, request, listener, new BaseErrorListener(context));
     }

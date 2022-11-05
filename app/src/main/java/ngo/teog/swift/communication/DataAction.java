@@ -10,6 +10,9 @@ public final class DataAction {
     /** Client wants to synchronize changes in hospital data with the server (bidirectionally). */
     public static final String SYNC_HOSPITAL_INFO = "sync_hospital_info";
 
+    /** Client wants to upload a log file to the server. */
+    public static final String UPLOAD_LOG_FILE = "upload_log_file";
+
     //Device actions
 
     /** Client wants to download a device image from the server */
