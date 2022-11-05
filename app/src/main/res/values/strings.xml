@@ -160,6 +160,7 @@
     <string name="previous_state">previous state</string>
     <string name="current_state">current state</string>
     <string name="toggle_light">toggle camera light</string>
+    <string name="you_header">You:</string>
 
     <!-- Login Screen -->
     <string name="login_button_text">Login</string>
