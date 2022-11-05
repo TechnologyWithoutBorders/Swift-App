@@ -29,7 +29,7 @@ import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -191,7 +191,7 @@ public class HospitalActivity extends BaseActivity {
 
         viewModel.getUsers().observe(this, users -> {
            if(users != null) {
-               Collections.sort(users, (first, second) -> first.getName().toLowerCase().compareTo(second.getName().toLowerCase()));
+               users.sort(Comparator.comparing(user -> user.getName().toLowerCase()));
                adapter.setUsers(users);
            }
         });
@@ -212,7 +212,7 @@ public class HospitalActivity extends BaseActivity {
                     COUNTER_VIEWS[state].setText(String.format(Locale.ROOT, "%d", stateCounters[state]));
                 }
 
-                Collections.sort(deviceInfos, (first, second) -> first.getDevice().getType().toLowerCase().compareTo(second.getDevice().getType().toLowerCase()));
+                deviceInfos.sort(Comparator.comparing(deviceInfo -> deviceInfo.getDevice().getType().toLowerCase()));
                 adapter.setDeviceInfos(deviceInfos);
             }
         });
@@ -324,7 +324,7 @@ public class HospitalActivity extends BaseActivity {
             for(DeviceInfo deviceInfo : deviceInfoCopy) {
                 List<ReportInfo> reports = deviceInfo.getReports();
 
-                Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
+                reports.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
             }
 
             this.deviceInfos = deviceInfoCopy;
@@ -381,7 +381,7 @@ public class HospitalActivity extends BaseActivity {
                 }
             }
 
-            Collections.sort(prioUsers, (first, second) -> first.getPriority()-second.getPriority());
+            prioUsers.sort(Comparator.comparingInt(PrioUser::getPriority));
 
             displayedUsers.clear();
 
@@ -415,7 +415,7 @@ public class HospitalActivity extends BaseActivity {
                 }
             }
 
-            Collections.sort(prioDeviceInfos, (first, second) -> first.getPriority()-second.getPriority());
+            prioDeviceInfos.sort(Comparator.comparingInt(PrioDeviceInfo::getPriority));
 
             displayedDeviceInfos.clear();
 
