@@ -210,8 +210,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                     int interval = -1;
 
                     try {
-                        //we actually save the number of weeks, not months
-                        interval = Integer.parseInt(intervalField.getText().toString().trim()) * 4;
+                        interval = Integer.parseInt(intervalField.getText().toString().trim());
                         intervalSet = true;
                     } catch (NumberFormatException e) {
                         intervalField.setError("invalid number");
@@ -222,8 +221,9 @@ public class NewDeviceActivity2 extends BaseActivity {
                             createButton.setVisibility(View.INVISIBLE);
                             progressBar.setVisibility(View.VISIBLE);
 
+                            //we actually save the number of weeks, not months
                             HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                    typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval, new Date());
+                                    typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval*4, new Date());
 
                             Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                             intent.putExtra(ResourceKeys.DEVICE, device);
