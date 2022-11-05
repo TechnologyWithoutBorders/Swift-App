@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -551,6 +552,13 @@ public class HospitalRepository {
 
                     HospitalRepository.this.saveObservableSync(new Observable(1));//TODO constant
                 } catch(Exception e) {
+                    try {
+                        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("error.log", Context.MODE_PRIVATE));
+                        outputStreamWriter.write(e.toString());
+                        outputStreamWriter.close();
+                    } catch(IOException ex) {
+                        //ignore
+                    }
                     Log.e(HospitalRepository.this.getClass().getName(), e.toString(), e);
                     //we cannot show any information to the user from here as it runs in an extra thread
                 } finally {
