@@ -5,7 +5,7 @@ android {
     compileSdkVersion 32
     defaultConfig {
         applicationId "ngo.teog.swift"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 32
         versionCode 104
         versionName "1.12.1"
