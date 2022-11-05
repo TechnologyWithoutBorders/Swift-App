@@ -41,7 +41,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -196,7 +196,7 @@ public class DeviceInfoActivity extends BaseActivity {
         viewModel.init(userId, deviceId).observe(this, observable -> viewModel.refreshDevice());
         viewModel.getOrgUnits().observe(this, orgUnits -> {
             if(orgUnits != null) {
-                Collections.sort(orgUnits, (first, second) -> first.getName().compareTo(second.getName()));
+                orgUnits.sort(Comparator.comparing(OrganizationalUnit::getName));
 
                 this.orgUnits = orgUnits;
             }
@@ -209,7 +209,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 List<ReportInfo> reports = deviceInfo.getReports();
 
-                Collections.sort(reports, (first, second) -> second.getReport().getId()-first.getReport().getId());
+                reports.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
 
                 reportCreationButton.setOnClickListener((view) -> {
                     Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
