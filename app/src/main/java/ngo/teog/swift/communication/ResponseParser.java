@@ -114,9 +114,10 @@ public class ResponseParser {
                 String fullName = userObject.getString(UserAttribute.FULL_NAME);
                 int hospital = userObject.getInt(UserAttribute.HOSPITAL);
                 String position = userObject.getString(UserAttribute.POSITION);
+                boolean valid = userObject.getBoolean(UserAttribute.VALID);
                 Date lastUpdate = dateFormat.parse(userObject.getString(UserAttribute.LAST_UPDATE));
 
-                User user = new User(id, phone, mail, fullName, hospital, position, lastUpdate);
+                User user = new User(id, phone, mail, fullName, hospital, position, valid, lastUpdate);
                 userList.add(user);
             }
 
