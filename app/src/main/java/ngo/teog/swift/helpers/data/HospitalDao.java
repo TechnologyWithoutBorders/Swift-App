@@ -76,8 +76,8 @@ public abstract class HospitalDao {
     @Query("SELECT * FROM devices WHERE devices.hospital = (SELECT hospital FROM users WHERE users.id = :userId) AND devices.id = :deviceId")
     public abstract DeviceInfo getDevice(int userId, int deviceId);
 
-    @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
-    public abstract LiveData<List<User>> loadUserColleagues(int userId);
+    @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId) AND valid != 0")
+    public abstract LiveData<List<User>> loadValidUserColleagues(int userId);
 
     @Query("SELECT * from users WHERE hospital = (SELECT hospital from users WHERE id = :userId)")
     public abstract List<User> getUserColleagues(int userId);

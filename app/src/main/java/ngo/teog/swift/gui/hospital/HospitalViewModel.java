@@ -19,7 +19,7 @@ public class HospitalViewModel extends ViewModel {
     private LiveData<Hospital> hospital;
     private LiveData<Observable> observable;
     //no mutable live data needed as the user list won't change that much
-    private LiveData<List<User>> users;
+    private LiveData<List<User>> validUsers;
     private final MutableLiveData<List<DeviceInfo>> liveDeviceInfos = new MutableLiveData<>();
     private final HospitalRepository hospitalRepo;
     private int userId;
@@ -38,7 +38,7 @@ public class HospitalViewModel extends ViewModel {
 
         observable = hospitalRepo.loadObservable(Defaults.SYNC_OBSERVABLE);
         hospital = hospitalRepo.loadUserHospital(userId, true);
-        users = hospitalRepo.loadUserColleagues(userId, false);
+        validUsers = hospitalRepo.loadValidUserColleagues(userId, false);
 
         new Thread(new DeviceInfoLoadRunner(userId)).start();
 
@@ -49,8 +49,8 @@ public class HospitalViewModel extends ViewModel {
         return hospital;
     }
 
-    public LiveData<List<User>> getUsers() {
-        return users;
+    public LiveData<List<User>> getValidUsers() {
+        return validUsers;
     }
 
     public LiveData<List<DeviceInfo>> getDeviceInfos() {
