@@ -189,7 +189,7 @@ public class HospitalActivity extends BaseActivity {
             }
         });
 
-        viewModel.getUsers().observe(this, users -> {
+        viewModel.getValidUsers().observe(this, users -> {
            if(users != null) {
                users.sort(Comparator.comparing(user -> user.getName().toLowerCase()));
                adapter.setUsers(users);

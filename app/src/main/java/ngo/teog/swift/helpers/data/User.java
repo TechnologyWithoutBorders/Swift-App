@@ -22,16 +22,18 @@ public class User implements Serializable {
     private final int hospital;
 
     private final String position;
+    private final boolean valid;
     private Date lastUpdate;
     private Date lastSync;
 
-    public User(int id, String phone, String mail, String name, int hospital, String position, Date lastUpdate) {
+    public User(int id, String phone, String mail, String name, int hospital, String position, boolean valid, Date lastUpdate) {
         this.id = id;
         this.phone = phone;
         this.mail = mail;
         this.name = name;
         this.hospital = hospital;
         this.position = position;
+        this.valid = valid;
         this.lastUpdate = lastUpdate;
         this.lastSync = new Date();
     }
@@ -58,6 +60,10 @@ public class User implements Serializable {
 
     public String getPosition() {
         return position;
+    }
+
+    public boolean getValid() {
+        return valid;
     }
 
     public Date getLastUpdate() {

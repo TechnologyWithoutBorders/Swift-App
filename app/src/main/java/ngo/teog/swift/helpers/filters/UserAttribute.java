@@ -12,5 +12,6 @@ public final class UserAttribute {
     public static final String PHONE = "phone";
     public static final String HOSPITAL = "hospital";
     public static final String POSITION = "position";
+    public static final String VALID = "valid";
     public static final String LAST_UPDATE = "lastUpdate";
 }

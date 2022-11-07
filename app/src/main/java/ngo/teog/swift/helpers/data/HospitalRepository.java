@@ -126,18 +126,18 @@ public class HospitalRepository {
     }
 
     /**
-     * Returns an <b>asynchronically</b> retrieved list of users associated with the hospital of the given user.
+     * Returns an <b>asynchronically</b> retrieved list of valid users associated with the hospital of the given user.
      * This list includes the given user itself.
      * @param userId User associated with specific hospital
      * @param sync determines whether database should be synchronized with the server in the background
      * @return Users associated with hospital of given user
      */
-    public LiveData<List<User>> loadUserColleagues(int userId, boolean sync) {
+    public LiveData<List<User>> loadValidUserColleagues(int userId, boolean sync) {
         if(sync) {
             refreshUserHospital(userId);
         }
 
-        return hospitalDao.loadUserColleagues(userId);
+        return hospitalDao.loadValidUserColleagues(userId);
     }
 
     /**
