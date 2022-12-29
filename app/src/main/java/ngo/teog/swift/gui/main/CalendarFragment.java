@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +95,7 @@ public class CalendarFragment extends Fragment {
                     if(deviceInfo.getReports().size() > 0) {
                         //copy report list as well and assign it to the device info
                         List<ReportInfo> reversedReportInfos = new ArrayList<>(deviceInfo.getReports());
-                        Collections.sort(reversedReportInfos, (first, second) -> second.getReport().getId()-first.getReport().getId());
+                        reversedReportInfos.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
                         deviceInfo.setReports(reversedReportInfos);
 
                         ReportInfo latestReportInfo = reversedReportInfos.get(0);
@@ -130,7 +130,7 @@ public class CalendarFragment extends Fragment {
                     }
                 }
 
-                Collections.sort(values, (first, second) -> (first.getDaysLeft()-second.getDaysLeft()));
+                values.sort(Comparator.comparingInt(MaintenanceInfo::getDaysLeft));
 
                 adapter.addAll(values);
             }
