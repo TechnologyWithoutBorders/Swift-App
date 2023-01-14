@@ -305,7 +305,8 @@ public class HospitalRepository {
 
                 if(logFile.exists()) {
                     queue.add(createLogFileUploadRequest(context, logFile));
-                    
+
+                    //noinspection ResultOfMethodCallIgnored
                     logFile.delete();
                 }
 
@@ -342,6 +343,7 @@ public class HospitalRepository {
                     if(logFile.exists()) {
                         queue.add(createLogFileUploadRequest(context, logFile));
 
+                        //noinspection ResultOfMethodCallIgnored
                         logFile.delete();
                     }
 
