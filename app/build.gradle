@@ -42,7 +42,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
 
     //Room Persistence Library for easy access of SQLite database
-    def room_version = "2.4.3"
+    def room_version = "2.5.0"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
@@ -79,7 +79,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
