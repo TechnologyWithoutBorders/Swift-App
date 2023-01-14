@@ -31,4 +31,6 @@ public final class DataAction {
 
     /** Client wants the server to reset the password of a user */
     public static final String RESET_PASSWORD = "reset_password";
+
+    public static final String GET_COUNTRIES = "get_countries";
 }

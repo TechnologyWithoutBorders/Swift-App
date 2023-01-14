@@ -56,6 +56,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:hint="@string/hospital"/>
+
+                <Spinner
+                    android:id="@+id/hospitalSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <EditText
                     android:id="@+id/mailText"
                     android:layout_width="match_parent"

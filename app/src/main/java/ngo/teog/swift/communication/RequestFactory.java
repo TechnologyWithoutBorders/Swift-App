@@ -61,7 +61,7 @@ public class RequestFactory {
     // make default constructor private (singleton class!)
     private RequestFactory() {}
 
-    public JsonObjectRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
+    public JsonObjectRequest createDeviceImageRequest(final Context context, View loadingView, final ImageView imageView, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE, true);
@@ -69,7 +69,15 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+
+            @Override
+            public  void onResponse(JSONObject response) {
+                super.onResponse(response);
+
+                loadingView.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(View.VISIBLE);
+            }
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);
@@ -96,7 +104,7 @@ public class RequestFactory {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
 
-                ((ImageView) enable).setImageBitmap(bitmap);
+                imageView.setImageBitmap(bitmap);
             }
         });
     }
@@ -231,7 +239,15 @@ public class RequestFactory {
 
         JSONObject request = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, progressBar, button, new BaseResponseListener(context, progressBar, button) {
+        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+
+            @Override
+            public  void onResponse(JSONObject response) {
+                super.onResponse(response);
+
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.VISIBLE);
+            }
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);

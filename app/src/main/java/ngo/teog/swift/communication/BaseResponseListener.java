@@ -2,10 +2,7 @@ package ngo.teog.swift.communication;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
 
@@ -20,17 +17,9 @@ import ngo.teog.swift.R;
  */
 public class BaseResponseListener implements Response.Listener<JSONObject> {
     private final Context context;
-    private View disable;
-    private View enable;
 
     public BaseResponseListener(Context context) {
         this.context = context;
-    }
-
-    public BaseResponseListener(Context context, @Nullable View disableOnFinish, @Nullable View enableOnFinish) {
-        this.context = context;
-        this.disable = disableOnFinish;
-        this.enable = enableOnFinish;
     }
 
     /**
@@ -67,19 +56,11 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
             Log.w(this.getClass().getName(), e.toString());
             Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
         }
-
-        if(disable != null) {
-            disable.setVisibility(View.INVISIBLE);
-        }
-
-        if(enable != null) {
-            enable.setVisibility(View.VISIBLE);
-        }
     }
 
     /**
      * Called when a response containing the correct response code has been received.
-     * @param response JSON formatted response
+     * @param response JSON formatted payload
      * @throws JSONException if parsing the response fails for some reason
      */
     public void onSuccess(JSONObject response) throws JSONException {}

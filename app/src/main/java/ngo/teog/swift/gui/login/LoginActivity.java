@@ -27,13 +27,23 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.BaseErrorListener;
+import ngo.teog.swift.communication.BaseResponseListener;
+import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.SwiftResponse;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -48,7 +58,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mailField, passwordField;
     private LinearLayout form;
     private ImageView imageView;
-    private Spinner countrySpinner;
+    private Spinner countrySpinner, hospitalSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +86,7 @@ public class LoginActivity extends BaseActivity {
         passwordField = findViewById(R.id.pwText);
 
         countrySpinner = findViewById(R.id.countrySpinner);
+        hospitalSpinner = findViewById(R.id.hospitalSpinner);
 
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
@@ -94,9 +105,32 @@ public class LoginActivity extends BaseActivity {
             //finish activity, so it is removed from the stack
             LoginActivity.this.finish();
         } else {
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.countries_options, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            countrySpinner.setAdapter(adapter);
+            Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.GET_COUNTRIES, false);
+            JSONObject jsonRequest = new JSONObject(params);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,//TODO: use get
+                    Defaults.BASE_URL + Defaults.INFO_URL,
+                    jsonRequest,
+                    new BaseResponseListener(this) {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException {
+                            JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                            String[] countries = new String[countriesArray.length()];
+
+                            for(int i = 0; i < countriesArray.length(); i++) {
+                                countries[i] = countriesArray.getString(i);
+                            }
+
+                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            countrySpinner.setAdapter(adapter);
+                        }
+                    },
+                    new BaseErrorListener(this)
+            );
+
+            VolleyManager.getInstance(this).getRequestQueue().add(request);
         }
     }
 
