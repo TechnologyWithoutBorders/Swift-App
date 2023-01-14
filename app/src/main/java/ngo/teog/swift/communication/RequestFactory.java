@@ -67,9 +67,9 @@ public class RequestFactory {
         Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE, true);
         params.put(DeviceAttribute.ID, Integer.toString(id));
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
 
             @Override
             public  void onResponse(JSONObject response) {
@@ -106,7 +106,7 @@ public class RequestFactory {
 
                 imageView.setImageBitmap(bitmap);
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
@@ -175,16 +175,16 @@ public class RequestFactory {
         //Override country, because the shared preferences contain no country at this point
         params.put(Defaults.COUNTRY_KEY, country);
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);
 
                 Toast.makeText(context.getApplicationContext(), context.getString(R.string.e_mail_sent), Toast.LENGTH_SHORT).show();
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     //TODO merge with createDeviceImageRequest
@@ -196,9 +196,9 @@ public class RequestFactory {
         params.put(DeviceAttribute.ID, Integer.toString(device));
         params.put(ResourceKeys.IMAGE_HASH, hash);
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
             @Override
             public void onSuccess(JSONObject response) throws JSONException {
                 super.onSuccess(response);
@@ -227,7 +227,7 @@ public class RequestFactory {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     public JsonObjectRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
@@ -237,9 +237,9 @@ public class RequestFactory {
         params.put(DeviceAttribute.MANUFACTURER, device.getManufacturer());
         params.put(DeviceAttribute.MODEL, device.getModel());
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
 
             @Override
             public  void onResponse(JSONObject response) {
@@ -275,7 +275,7 @@ public class RequestFactory {
                 adapter.notifyDataSetChanged();
                 dialog.show();
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     /**

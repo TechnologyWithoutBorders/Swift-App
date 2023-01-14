@@ -46,7 +46,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ngo.teog.swift.R;
-import ngo.teog.swift.communication.BaseRequest;
+import ngo.teog.swift.communication.BaseErrorListener;
+import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.communication.DataAction;
@@ -457,9 +458,15 @@ public class HospitalRepository {
 
             params.put("message", ret);//TODO: constant
 
-            JSONObject request = new JSONObject(params);
+            JSONObject jsonRequest = new JSONObject(params);
 
-            return new BaseRequest(context, url, request);
+            return new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    jsonRequest,
+                    new BaseResponseListener(context),
+                    new BaseErrorListener(context)
+            );
         } catch (Exception e) {
             //TODO
         }
