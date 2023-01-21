@@ -62,6 +62,8 @@ public final class Defaults {
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
 
+    public static final String HOSPITAL_KEY = "hospital";
+
     /** Prefix for telephone URIs */
     public static final String URI_TEL_PREFIX = "tel:";
 

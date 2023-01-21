@@ -109,7 +109,7 @@ public class RequestFactory {
         }, new BaseErrorListener(context));
     }
 
-    public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
+    public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country, int hospital) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, DataAction.LOGIN_USER, false);
@@ -118,6 +118,7 @@ public class RequestFactory {
         params.put(UserAttribute.PASSWORD, password);
         //Override country, because the shared preferences contain no country at this point
         params.put(Defaults.COUNTRY_KEY, country);
+        params.put(Defaults.HOSPITAL_KEY, Integer.toString(hospital));
 
         JSONObject request = new JSONObject(params);
 

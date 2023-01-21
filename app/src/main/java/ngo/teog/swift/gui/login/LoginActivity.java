@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,6 +49,8 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.filters.HospitalAttribute;
 
 /**
  * Provides login functionality
@@ -88,7 +91,47 @@ public class LoginActivity extends BaseActivity {
         countrySpinner = findViewById(R.id.countrySpinner);
         hospitalSpinner = findViewById(R.id.hospitalSpinner);
 
+        countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String country = parent.getItemAtPosition(position).toString();
+
+                Map<String, String> params = RequestFactory.generateParameterMap(LoginActivity.this, DataAction.GET_HOSPITALS, false);
+                params.put(ResourceKeys.COUNTRY, country);
+
+                JSONObject jsonRequest = new JSONObject(params);
+
+                JsonObjectRequest request = new JsonObjectRequest(
+                        Request.Method.POST,//TODO: use get
+                        Defaults.BASE_URL + Defaults.INFO_URL,
+                        jsonRequest,
+                        new BaseResponseListener(LoginActivity.this) {
+                            @Override
+                            public void onSuccess(JSONObject response) throws JSONException {
+                                JSONArray hospitalsArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                                String[] hospitals = new String[hospitalsArray.length()];
+
+                                for(int i = 0; i < hospitalsArray.length(); i++) {
+                                    hospitals[i] = hospitalsArray.getJSONObject(i).getString(HospitalAttribute.ID);
+                                }
+
+                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, hospitals);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                hospitalSpinner.setAdapter(adapter);
+                            }
+                        },
+                        new BaseErrorListener(LoginActivity.this)
+                );
+
+                VolleyManager.getInstance(LoginActivity.this).getRequestQueue().add(request);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                //ignore
+            }
+        });
+
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
             form.setVisibility(View.GONE);
 
@@ -155,23 +198,28 @@ public class LoginActivity extends BaseActivity {
         String mailAddress = mailField.getText().toString();
         String password = passwordField.getText().toString();
         String country = (String)countrySpinner.getSelectedItem();
+        Object hospital = hospitalSpinner.getSelectedItem();
 
         if(mailAddress.length() > 0) {
             if(password.length() > 0) {
-                if(checkForInternetConnection()) {
-                    AnimationDrawable anim = (AnimationDrawable)imageView.getBackground();
+                if(country != null && hospital != null) {
+                    if (checkForInternetConnection()) {
+                        AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();
 
-                    JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country);
+                        JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country, (int)hospital);
 
-                    form.setVisibility(View.GONE);
+                        form.setVisibility(View.GONE);
 
-                    imageView.setImageDrawable(null);
-                    anim.start();
+                        imageView.setImageDrawable(null);
+                        anim.start();
 
-                    Log.v(this.getClass().getName(), "trying to log in user with mail address " + mailAddress);
-                    VolleyManager.getInstance(this).getRequestQueue().add(request);
+                        Log.v(this.getClass().getName(), "trying to log in user with mail address " + mailAddress);
+                        VolleyManager.getInstance(this).getRequestQueue().add(request);
+                    } else {
+                        Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getApplicationContext(), "please select your hospital", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 passwordField.setError(getText(R.string.error_empty_password));
