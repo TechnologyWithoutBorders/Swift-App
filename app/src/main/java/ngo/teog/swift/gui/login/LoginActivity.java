@@ -9,10 +9,12 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -37,7 +39,15 @@ import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.communication.BaseErrorListener;
@@ -50,6 +60,7 @@ import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.filters.HospitalAttribute;
 
 /**
@@ -106,16 +117,27 @@ public class LoginActivity extends BaseActivity {
                         jsonRequest,
                         new BaseResponseListener(LoginActivity.this) {
                             @Override
-                            public void onSuccess(JSONObject response) throws JSONException {
+                            public void onSuccess(JSONObject response) throws JSONException, ParseException {
                                 JSONArray hospitalsArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
-                                String[] hospitals = new String[hospitalsArray.length()];
+                                List<Hospital> hospitals = new ArrayList<>();
 
-                                for(int i = 0; i < hospitalsArray.length(); i++) {
-                                    hospitals[i] = hospitalsArray.getJSONObject(i).getString(HospitalAttribute.ID);
+                                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
+                                dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+
+                                for (int i = 0; i < hospitalsArray.length(); i++) {
+                                    JSONObject hospitalObject = hospitalsArray.getJSONObject(i);
+
+                                    int hospitalId = hospitalObject.getInt(HospitalAttribute.ID);
+                                    String name = hospitalObject.getString(HospitalAttribute.NAME);
+                                    String hospitalLocation = hospitalObject.getString(HospitalAttribute.LOCATION);
+                                    float longitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LONGITUDE));
+                                    float latitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LATITUDE));
+                                    Date hospitalLastUpdate = dateFormat.parse(hospitalObject.getString(HospitalAttribute.LAST_UPDATE));
+
+                                    hospitals.add(new Hospital(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate));
                                 }
 
-                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, hospitals);
-                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                ArrayAdapter<Hospital> adapter = new HospitalAdapter(LoginActivity.this, hospitals);
                                 hospitalSpinner.setAdapter(adapter);
                             }
                         },
@@ -282,6 +304,41 @@ public class LoginActivity extends BaseActivity {
             return sb.toString();
         } catch (NoSuchAlgorithmException e1) {
             return null;
+        }
+    }
+
+    public static class HospitalAdapter extends ArrayAdapter<Hospital> {
+
+        public HospitalAdapter(Context context, List<Hospital> hospitals) {
+            super(context, -1, hospitals);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) this.getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+            }
+
+            TextView text = convertView.findViewById(android.R.id.text1);
+            text.setText(getItem(position).getName());
+
+            return convertView;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) this.getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+            }
+
+            TextView text = convertView.findViewById(android.R.id.text1);
+            text.setText(getItem(position).getName());
+
+            return convertView;
         }
     }
 }

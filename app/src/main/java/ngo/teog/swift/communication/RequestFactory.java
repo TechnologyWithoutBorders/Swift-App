@@ -26,7 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -79,7 +78,7 @@ public class RequestFactory {
                 imageView.setVisibility(View.VISIBLE);
             }
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 String imageData = response.getString(SwiftResponse.DATA_FIELD);
@@ -180,7 +179,7 @@ public class RequestFactory {
 
         return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 Toast.makeText(context.getApplicationContext(), context.getString(R.string.e_mail_sent), Toast.LENGTH_SHORT).show();
@@ -201,7 +200,7 @@ public class RequestFactory {
 
         return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 String imageData = response.getString(SwiftResponse.DATA_FIELD);
@@ -250,7 +249,7 @@ public class RequestFactory {
                 button.setVisibility(View.VISIBLE);
             }
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 //The response provides a list of links to matching documents.

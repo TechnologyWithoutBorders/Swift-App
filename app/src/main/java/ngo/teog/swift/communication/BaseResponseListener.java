@@ -9,6 +9,8 @@ import com.android.volley.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+
 import ngo.teog.swift.R;
 
 /**
@@ -61,7 +63,7 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
     /**
      * Called when a response containing the correct response code has been received.
      * @param response JSON formatted payload
-     * @throws JSONException if parsing the response fails for some reason
+     * @throws Exception if parsing the response fails for some reason
      */
-    public void onSuccess(JSONObject response) throws JSONException {}
+    public void onSuccess(JSONObject response) throws Exception {}
 }
