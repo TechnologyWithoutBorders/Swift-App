@@ -102,49 +102,57 @@ public class LoginActivity extends BaseActivity {
         countrySpinner = findViewById(R.id.countrySpinner);
         hospitalSpinner = findViewById(R.id.hospitalSpinner);
 
+        ArrayAdapter<Hospital> adapter = new HospitalAdapter(LoginActivity.this, new ArrayList<>());
+        hospitalSpinner.setAdapter(adapter);
+
         countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String country = parent.getItemAtPosition(position).toString();
+                adapter.clear();
 
-                Map<String, String> params = RequestFactory.generateParameterMap(LoginActivity.this, DataAction.GET_HOSPITALS, false);
-                params.put(ResourceKeys.COUNTRY, country);
+                if(checkForInternetConnection()) {
+                    String country = parent.getItemAtPosition(position).toString();
 
-                JSONObject jsonRequest = new JSONObject(params);
+                    Map<String, String> params = RequestFactory.generateParameterMap(LoginActivity.this, DataAction.GET_HOSPITALS, false);
+                    params.put(ResourceKeys.COUNTRY, country);
 
-                JsonObjectRequest request = new JsonObjectRequest(
-                        Request.Method.POST,//TODO: use get
-                        Defaults.BASE_URL + Defaults.INFO_URL,
-                        jsonRequest,
-                        new BaseResponseListener(LoginActivity.this) {
-                            @Override
-                            public void onSuccess(JSONObject response) throws JSONException, ParseException {
-                                JSONArray hospitalsArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
-                                List<Hospital> hospitals = new ArrayList<>();
+                    JSONObject jsonRequest = new JSONObject(params);
 
-                                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
-                                dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+                    JsonObjectRequest request = new JsonObjectRequest(
+                            Request.Method.POST,//TODO: use get
+                            Defaults.BASE_URL + Defaults.INFO_URL,
+                            jsonRequest,
+                            new BaseResponseListener(LoginActivity.this) {
+                                @Override
+                                public void onSuccess(JSONObject response) throws JSONException, ParseException {
+                                    JSONArray hospitalsArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                                    List<Hospital> hospitals = new ArrayList<>();
 
-                                for (int i = 0; i < hospitalsArray.length(); i++) {
-                                    JSONObject hospitalObject = hospitalsArray.getJSONObject(i);
+                                    DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
+                                    dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
-                                    int hospitalId = hospitalObject.getInt(HospitalAttribute.ID);
-                                    String name = hospitalObject.getString(HospitalAttribute.NAME);
-                                    String hospitalLocation = hospitalObject.getString(HospitalAttribute.LOCATION);
-                                    float longitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LONGITUDE));
-                                    float latitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LATITUDE));
-                                    Date hospitalLastUpdate = dateFormat.parse(hospitalObject.getString(HospitalAttribute.LAST_UPDATE));
+                                    for (int i = 0; i < hospitalsArray.length(); i++) {
+                                        JSONObject hospitalObject = hospitalsArray.getJSONObject(i);
 
-                                    hospitals.add(new Hospital(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate));
+                                        int hospitalId = hospitalObject.getInt(HospitalAttribute.ID);
+                                        String name = hospitalObject.getString(HospitalAttribute.NAME);
+                                        String hospitalLocation = hospitalObject.getString(HospitalAttribute.LOCATION);
+                                        float longitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LONGITUDE));
+                                        float latitude = Float.parseFloat(hospitalObject.getString(HospitalAttribute.LATITUDE));
+                                        Date hospitalLastUpdate = dateFormat.parse(hospitalObject.getString(HospitalAttribute.LAST_UPDATE));
+
+                                        hospitals.add(new Hospital(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate));
+                                    }
+
+                                    adapter.addAll(hospitals);
                                 }
+                            },
+                            new BaseErrorListener(LoginActivity.this)
+                    );
 
-                                ArrayAdapter<Hospital> adapter = new HospitalAdapter(LoginActivity.this, hospitals);
-                                hospitalSpinner.setAdapter(adapter);
-                            }
-                        },
-                        new BaseErrorListener(LoginActivity.this)
-                );
-
-                VolleyManager.getInstance(LoginActivity.this).getRequestQueue().add(request);
+                    VolleyManager.getInstance(LoginActivity.this).getRequestQueue().add(request);
+                } else {
+                    Toast.makeText(LoginActivity.this, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+                }
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -170,32 +178,36 @@ public class LoginActivity extends BaseActivity {
             //finish activity, so it is removed from the stack
             LoginActivity.this.finish();
         } else {
-            Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.GET_COUNTRIES, false);
-            JSONObject jsonRequest = new JSONObject(params);
+            if(checkForInternetConnection()) {
+                Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.GET_COUNTRIES, false);
+                JSONObject jsonRequest = new JSONObject(params);
 
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,//TODO: use get
-                    Defaults.BASE_URL + Defaults.INFO_URL,
-                    jsonRequest,
-                    new BaseResponseListener(this) {
-                        @Override
-                        public void onSuccess(JSONObject response) throws JSONException {
-                            JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
-                            String[] countries = new String[countriesArray.length()];
+                JsonObjectRequest request = new JsonObjectRequest(
+                        Request.Method.POST,//TODO: use get
+                        Defaults.BASE_URL + Defaults.INFO_URL,
+                        jsonRequest,
+                        new BaseResponseListener(this) {
+                            @Override
+                            public void onSuccess(JSONObject response) throws JSONException {
+                                JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                                String[] countries = new String[countriesArray.length()];
 
-                            for(int i = 0; i < countriesArray.length(); i++) {
-                                countries[i] = countriesArray.getString(i);
+                                for (int i = 0; i < countriesArray.length(); i++) {
+                                    countries[i] = countriesArray.getString(i);
+                                }
+
+                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                countrySpinner.setAdapter(adapter);
                             }
+                        },
+                        new BaseErrorListener(this)
+                );
 
-                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            countrySpinner.setAdapter(adapter);
-                        }
-                    },
-                    new BaseErrorListener(this)
-            );
-
-            VolleyManager.getInstance(this).getRequestQueue().add(request);
+                VolleyManager.getInstance(this).getRequestQueue().add(request);
+            } else {
+                Toast.makeText(this, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
