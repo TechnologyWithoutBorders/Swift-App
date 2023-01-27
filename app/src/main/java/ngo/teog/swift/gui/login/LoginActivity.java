@@ -183,25 +183,25 @@ public class LoginActivity extends BaseActivity {
                 JSONObject jsonRequest = new JSONObject(params);
 
                 JsonObjectRequest request = new JsonObjectRequest(
-                        Request.Method.POST,//TODO: use get
-                        Defaults.BASE_URL + Defaults.INFO_URL,
-                        jsonRequest,
-                        new BaseResponseListener(this) {
-                            @Override
-                            public void onSuccess(JSONObject response) throws JSONException {
-                                JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
-                                String[] countries = new String[countriesArray.length()];
+                    Request.Method.POST,//TODO: use get
+                    Defaults.BASE_URL + Defaults.INFO_URL,
+                    jsonRequest,
+                    new BaseResponseListener(this) {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException {
+                            JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                            String[] countries = new String[countriesArray.length()];
 
-                                for (int i = 0; i < countriesArray.length(); i++) {
-                                    countries[i] = countriesArray.getString(i);
-                                }
-
-                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
-                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                countrySpinner.setAdapter(adapter);
+                            for (int i = 0; i < countriesArray.length(); i++) {
+                                countries[i] = countriesArray.getString(i);
                             }
-                        },
-                        new BaseErrorListener(this)
+
+                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            countrySpinner.setAdapter(adapter);
+                        }
+                    },
+                    new BaseErrorListener(this)
                 );
 
                 VolleyManager.getInstance(this).getRequestQueue().add(request);
@@ -240,7 +240,7 @@ public class LoginActivity extends BaseActivity {
                     if (checkForInternetConnection()) {
                         AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();
 
-                        JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country, (int)hospital);
+                        JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country, ((Hospital)hospital).getId());
 
                         form.setVisibility(View.GONE);
 
@@ -344,11 +344,14 @@ public class LoginActivity extends BaseActivity {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+                convertView = inflater.inflate(R.layout.row_hospital, parent, false);
             }
 
-            TextView text = convertView.findViewById(android.R.id.text1);
-            text.setText(getItem(position).getName());
+            TextView nameView = convertView.findViewById(R.id.name_view);
+            nameView.setText(getItem(position).getName());
+
+            TextView locationView = convertView.findViewById(R.id.location_view);
+            locationView.setText(getItem(position).getLocation());
 
             return convertView;
         }
