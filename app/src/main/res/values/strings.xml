@@ -105,12 +105,6 @@
         <item>limited use</item>
     </string-array>
 
-    <string-array name="countries_options">
-        <item>Ghana</item>
-        <item>Nepal</item>
-        <item>Test</item>
-    </string-array>
-
     <string name="months">Months</string>
     <plurals name="months_count">
         <item quantity="one">%d Month</item>
@@ -168,7 +162,7 @@
     <string name="login_password_hint">Password</string>
     <string name="reset_pw_mail_missing">Please enter your e-mail address first</string>
     <string name="reset_pw">Reset password</string>
-    <string name="forgot_pw_hint">Forgot your password?\nPlease select your country, enter your e-mail address and tap this text.</string>
+    <string name="forgot_pw_hint">Forgot your password?\nPlease select your hospital, enter your e-mail address and tap this text.</string>
     <string name="reset_pw_hint">Do you want to reset your password?\nA new one will be sent to:\n</string>
 
     <!-- Device Information -->

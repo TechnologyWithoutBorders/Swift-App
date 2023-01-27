@@ -18,23 +18,9 @@ import ngo.teog.swift.R;
  */
 public class BaseErrorListener implements Response.ErrorListener {
     private final Context context;
-    private View disable = null;
-    private View enable = null;
 
     public BaseErrorListener(Context context) {
         this.context = context;
-    }
-
-    /**
-     * Returns a new BaseErrorListener.
-     * @param context Context
-     * @param disableOnFinish View that should be hidden after the request has failed.
-     * @param enableOnFinish View that should be visible after the request has failed.
-     */
-    public BaseErrorListener(Context context, @Nullable View disableOnFinish, @Nullable View enableOnFinish) {
-        this.context = context;
-        this.disable = disableOnFinish;
-        this.enable = enableOnFinish;
     }
 
     /**
@@ -43,14 +29,6 @@ public class BaseErrorListener implements Response.ErrorListener {
      */
     @Override
     public void onErrorResponse(VolleyError error) {
-        if(disable != null) {
-            disable.setVisibility(View.INVISIBLE);
-        }
-
-        if(enable != null) {
-            enable.setVisibility(View.VISIBLE);
-        }
-
         Log.w(this.getClass().getName(), error.toString());
         Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
     }

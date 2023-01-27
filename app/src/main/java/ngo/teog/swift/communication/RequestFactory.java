@@ -26,7 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -61,17 +60,25 @@ public class RequestFactory {
     // make default constructor private (singleton class!)
     private RequestFactory() {}
 
-    public JsonObjectRequest createDeviceImageRequest(final Context context, View disable, final View enable, final int id) {
+    public JsonObjectRequest createDeviceImageRequest(final Context context, View loadingView, final ImageView imageView, final int id) {
         final String url = Defaults.BASE_URL + Defaults.DEVICES_URL;
 
         Map<String, String> params = generateParameterMap(context, DataAction.FETCH_DEVICE_IMAGE, true);
         params.put(DeviceAttribute.ID, Integer.toString(id));
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, disable, enable, new BaseResponseListener(context, disable, enable) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
+
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public  void onResponse(JSONObject response) {
+                super.onResponse(response);
+
+                loadingView.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 String imageData = response.getString(SwiftResponse.DATA_FIELD);
@@ -96,12 +103,12 @@ public class RequestFactory {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
 
-                ((ImageView) enable).setImageBitmap(bitmap);
+                imageView.setImageBitmap(bitmap);
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
-    public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country) {
+    public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country, int hospital) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
         Map<String, String> params = generateParameterMap(context, DataAction.LOGIN_USER, false);
@@ -110,6 +117,7 @@ public class RequestFactory {
         params.put(UserAttribute.PASSWORD, password);
         //Override country, because the shared preferences contain no country at this point
         params.put(Defaults.COUNTRY_KEY, country);
+        params.put(Defaults.HOSPITAL_KEY, Integer.toString(hospital));
 
         JSONObject request = new JSONObject(params);
 
@@ -167,16 +175,16 @@ public class RequestFactory {
         //Override country, because the shared preferences contain no country at this point
         params.put(Defaults.COUNTRY_KEY, country);
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 Toast.makeText(context.getApplicationContext(), context.getString(R.string.e_mail_sent), Toast.LENGTH_SHORT).show();
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     //TODO merge with createDeviceImageRequest
@@ -188,11 +196,11 @@ public class RequestFactory {
         params.put(DeviceAttribute.ID, Integer.toString(device));
         params.put(ResourceKeys.IMAGE_HASH, hash);
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, new BaseResponseListener(context) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 String imageData = response.getString(SwiftResponse.DATA_FIELD);
@@ -219,7 +227,7 @@ public class RequestFactory {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     public JsonObjectRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
@@ -229,11 +237,19 @@ public class RequestFactory {
         params.put(DeviceAttribute.MANUFACTURER, device.getManufacturer());
         params.put(DeviceAttribute.MODEL, device.getModel());
 
-        JSONObject request = new JSONObject(params);
+        JSONObject jsonRequest = new JSONObject(params);
 
-        return new BaseRequest(context, url, request, progressBar, button, new BaseResponseListener(context, progressBar, button) {
+        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
+
             @Override
-            public void onSuccess(JSONObject response) throws JSONException {
+            public  void onResponse(JSONObject response) {
+                super.onResponse(response);
+
+                progressBar.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onSuccess(JSONObject response) throws Exception {
                 super.onSuccess(response);
 
                 //The response provides a list of links to matching documents.
@@ -259,7 +275,7 @@ public class RequestFactory {
                 adapter.notifyDataSetChanged();
                 dialog.show();
             }
-        });
+        }, new BaseErrorListener(context));
     }
 
     /**

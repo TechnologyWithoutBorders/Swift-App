@@ -135,7 +135,14 @@ public class PortationActivity extends AppCompatActivity {
                                 for(DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
                                     HospitalDevice device = deviceDump.getDevice();
 
-                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), Integer.toString(device.getOrganizationalUnit()), device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
+                                    Integer orgUnit = device.getOrganizationalUnit();
+                                    String exportOrgUnit = "";
+
+                                    if(orgUnit != null) {
+                                        exportOrgUnit = Integer.toString(orgUnit);
+                                    }
+
+                                    csvWriter.writeNext(new String[] {Integer.toString(device.getHospital()), Integer.toString(device.getId()), device.getAssetNumber(), exportOrgUnit, device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber()});
                                 }
 
                                 csvWriter.flush();

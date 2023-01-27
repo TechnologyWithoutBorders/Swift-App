@@ -42,6 +42,8 @@ public final class Defaults {
     /** Additional URL segment for server communication regarding hospitals (general synchronization) */
     public static final String HOSPITALS_URL = "hospitals.php";
 
+    public static final String INFO_URL = "info.php";
+
     public static final String DOCUMENTS_URL = "documents.php";
 
     //Local paths
@@ -59,6 +61,8 @@ public final class Defaults {
     public static final String VERSION_CODE_KEY = "version_code";
     public static final String ACTION_KEY = "action";
     public static final String COUNTRY_KEY = "country";
+
+    public static final String HOSPITAL_KEY = "hospital";
 
     /** Prefix for telephone URIs */
     public static final String URI_TEL_PREFIX = "tel:";
