@@ -1,5 +1,6 @@
 package ngo.teog.swift.gui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -51,8 +54,6 @@ public class ImageCaptureActivity extends BaseActivity {
 
     private Button nextButton;
     private ProgressBar progressBar;
-
-    private final int REQUEST_IMAGE_CAPTURE = 100;
     private ImageView imageView;
 
     private int deviceId;
@@ -63,6 +64,8 @@ public class ImageCaptureActivity extends BaseActivity {
     ViewModelFactory viewModelFactory;
 
     private ImageCaptureViewModel viewModel;
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,15 @@ public class ImageCaptureActivity extends BaseActivity {
                 .inject(this);
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(ImageCaptureViewModel.class);
+
+        activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == Activity.RESULT_OK) {
+                    imageView.setImageBitmap(decode(imagePath));
+                }
+            }
+        );
     }
 
     @Override
@@ -125,7 +137,7 @@ public class ImageCaptureActivity extends BaseActivity {
         return super.onOptionsItemSelected(item, R.string.newdevice_activity_3);
     }
 
-    public void createDevice(View view) {
+    public void createDevice(View view) {//TODO: rename
         if(imagePath != null) {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
@@ -192,15 +204,6 @@ public class ImageCaptureActivity extends BaseActivity {
         return BitmapFactory.decodeFile(filePath);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageView.setImageBitmap(decode(imagePath));
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
     public void dispatchTakePictureIntent(View view) {
         try {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -213,7 +216,7 @@ public class ImageCaptureActivity extends BaseActivity {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
             if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                activityResultLauncher.launch(takePictureIntent);
             }
         } catch(Exception e) {
             Log.e(this.getClass().getName(), "dispatching picture event failed", e);
