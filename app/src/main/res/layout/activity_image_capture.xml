@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hold your phone sideways while taking the picture."
+        android:textSize="18sp"
         app:drawableLeftCompat="@drawable/baseline_screen_rotation_24"
         android:drawablePadding="10dp" />
 
