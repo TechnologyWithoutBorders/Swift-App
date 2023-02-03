@@ -64,7 +64,7 @@ public class ImageCaptureActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acitivty_image_capture);
+        setContentView(R.layout.activity_image_capture);
 
         imageView = findViewById(R.id.imageView);
 
