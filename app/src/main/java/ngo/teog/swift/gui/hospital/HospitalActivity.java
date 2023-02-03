@@ -255,7 +255,12 @@ public class HospitalActivity extends BaseActivity {
         } else {
             stateIcon.setColorFilter(new PorterDuffColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_ATOP));
         }
-        stateIcon.setBounds(0, 0, 40, 40);
+
+        final float density = getResources().getDisplayMetrics().density;
+        final int width = Math.round(20 * density);
+        final int height = Math.round(20 * density);
+
+        stateIcon.setBounds(0, 0, width, height);
         stateView.setCompoundDrawables(null, stateIcon, null, null);
     }
 
