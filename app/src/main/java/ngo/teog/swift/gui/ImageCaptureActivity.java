@@ -32,7 +32,6 @@ import javax.inject.Inject;
 
 import id.zelory.compressor.Compressor;
 import ngo.teog.swift.R;
-import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel3;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
