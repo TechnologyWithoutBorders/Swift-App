@@ -1,6 +1,8 @@
 package ngo.teog.swift.gui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -18,14 +20,25 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 
+import javax.inject.Inject;
+
+import id.zelory.compressor.Compressor;
 import ngo.teog.swift.R;
+import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel3;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
+import ngo.teog.swift.helpers.data.AppModule;
+import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.RoomModule;
+import ngo.teog.swift.helpers.data.ViewModelFactory;
 
 /**
  * Activity that is used to capture, decode and upload a device image.
@@ -40,9 +53,14 @@ public class ImageCaptureActivity extends BaseActivity {
     private final int REQUEST_IMAGE_CAPTURE = 100;
     private ImageView imageView;
 
-    private int device;
+    private int deviceId;
 
     private String imagePath = null;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+    private ImageCaptureViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +70,29 @@ public class ImageCaptureActivity extends BaseActivity {
         imageView = findViewById(R.id.imageView);
 
         if(savedInstanceState != null) {
-            device = savedInstanceState.getInt(ResourceKeys.DEVICE_ID);
+            deviceId = savedInstanceState.getInt(ResourceKeys.DEVICE_ID);
             imagePath = savedInstanceState.getString(ResourceKeys.IMAGE);
             imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         } else {
             Intent intent = this.getIntent();
-            device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+            deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
         }
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
+
+        DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplication()))
+                .roomModule(new RoomModule(getApplication()))
+                .build()
+                .inject(this);
+
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(ImageCaptureViewModel.class);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(ResourceKeys.DEVICE_ID, device);
+        outState.putSerializable(ResourceKeys.DEVICE_ID, deviceId);
         outState.putString(ResourceKeys.IMAGE, imagePath);
 
         super.onSaveInstanceState(outState);
@@ -90,20 +116,33 @@ public class ImageCaptureActivity extends BaseActivity {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
-            Bitmap decodedImage = decode(imagePath, 640);
-            String targetName = device + ".jpg";
+            File tempFile = new File(imagePath);
+            String targetName = deviceId + ".jpg";
 
-            FileOutputStream outputStream;
+            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+            File image = new File(dir, targetName);
 
-            try {
-                File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                File image = new File(dir, targetName);
+            try(FileInputStream source = new FileInputStream(tempFile); FileOutputStream destination = new FileOutputStream(image)) {
+                new Compressor(this)
+                        .setMaxWidth(800)
+                        .setMaxHeight(600)
+                        .setQuality(100)
+                        .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .compressToFile(tempFile);
 
-                outputStream = new FileOutputStream(image);
-                decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                outputStream.close();
+                FileChannel inputChannel = source.getChannel();
+                FileChannel outputChannel = destination.getChannel();
 
-                File tempFile = new File(imagePath);
+                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+
+                source.close();
+                destination.close();
+
+                SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+                viewModel.updateDeviceImage(deviceId, userId);
+
                 boolean deleted = tempFile.delete();
 
                 if(!deleted) {
@@ -122,31 +161,17 @@ public class ImageCaptureActivity extends BaseActivity {
     private File createImageFile() throws IOException {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
-        return File.createTempFile("image_" + device, ".jpg", storageDir);
+        return File.createTempFile("image_" + deviceId, ".jpg", storageDir);
     }
 
-    private Bitmap decode(String filePath, int targetW) {
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.max(photoW/targetW, photoH/targetW);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        return BitmapFactory.decodeFile(filePath, bmOptions);
+    private Bitmap decode(String filePath) {
+        return BitmapFactory.decodeFile(filePath);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageView.setImageBitmap(decode(imagePath, 800));
+            imageView.setImageBitmap(decode(imagePath));
         }
 
         super.onActivityResult(requestCode, resultCode, data);

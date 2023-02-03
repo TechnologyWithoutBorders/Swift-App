@@ -166,9 +166,9 @@ public class NewDeviceActivity3 extends BaseActivity {
             }
 
             SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int user = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+            int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-            viewModel.createDevice(device, user);
+            viewModel.createDevice(device, userId);
         } else {
             Toast.makeText(this, getString(R.string.no_picture_attached), Toast.LENGTH_LONG).show();
         }

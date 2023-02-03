@@ -65,6 +65,10 @@ dependencies {
     def photo_view_version = "2.3.0"
     implementation "com.github.chrisbanes:PhotoView:$photo_view_version"
 
+    //Image compression library
+    def compressor_version = "2.1.1"
+    implementation "id.zelory:compressor:$compressor_version"
+
     //FancyShowCaseView for tutorial/highlighting features
     def fancy_showcase_view_version = "1.3.9"
     implementation "com.github.faruktoptas:FancyShowCaseView:$fancy_showcase_view_version"

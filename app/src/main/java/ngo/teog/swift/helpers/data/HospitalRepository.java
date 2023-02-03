@@ -280,6 +280,14 @@ public class HospitalRepository {
         });
     }
 
+    public void updateDeviceImage(int deviceId, int userId) {
+        executor.execute(() -> {
+            hospitalDao.save(new ImageUploadJob(deviceId));
+
+            refreshUserHospitalSync(userId);
+        });
+    }
+
     public void createReport(Report report, int userId) {
         executor.execute(() -> {
             hospitalDao.addReport(report);
