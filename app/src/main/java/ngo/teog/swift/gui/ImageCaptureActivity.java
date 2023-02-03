@@ -118,37 +118,47 @@ public class ImageCaptureActivity extends BaseActivity {
             File tempFile = new File(imagePath);
             String targetName = deviceId + ".jpg";
 
-            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
+            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);//TODO: maybe use cache dir as well?
             File image = new File(dir, targetName);
 
-            try(FileInputStream source = new FileInputStream(tempFile); FileOutputStream destination = new FileOutputStream(image)) {
-                new Compressor(this)
+            try {
+                File compressedImage = new Compressor(this)
                         .setMaxWidth(800)
                         .setMaxHeight(600)
                         .setQuality(100)
                         .setCompressFormat(Bitmap.CompressFormat.JPEG)
                         .compressToFile(tempFile);
 
-                FileChannel inputChannel = source.getChannel();
-                FileChannel outputChannel = destination.getChannel();
+                try(FileInputStream source = new FileInputStream(compressedImage); FileOutputStream destination = new FileOutputStream(image)) {
+                    FileChannel inputChannel = source.getChannel();
+                    FileChannel outputChannel = destination.getChannel();
 
-                outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+                    outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
 
-                source.close();
-                destination.close();
+                    source.close();
+                    destination.close();
 
-                SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+                    SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-                viewModel.updateDeviceImage(deviceId, userId);
+                    viewModel.updateDeviceImage(deviceId, userId);
+                } catch(Exception e) {
+                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                } finally {
+                    boolean deleted = compressedImage.delete();
 
+                    if(!deleted) {
+                        Log.w(this.getClass().getName(), "compressed image has not been deleted");
+                    }
+                }
+            } catch(IOException e) {
+                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+            } finally {
                 boolean deleted = tempFile.delete();
 
                 if(!deleted) {
-                    Log.w(this.getClass().getName(), "temporary file has not been deleted");
+                    Log.w(this.getClass().getName(), "temporary image has not been deleted");
                 }
-            } catch(Exception e) {
-                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
 
             this.finish();
