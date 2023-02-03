@@ -272,6 +272,8 @@
 
     <string name="image_download_hint">tap icon to download image</string>
 
+    <string name="screen_orientation_hint">Hold your phone sideways while taking the picture.</string>
+
     <string name="e_mail_sent">E-mail has been sent</string>
     <string name="user_created">User has been created</string>
 
