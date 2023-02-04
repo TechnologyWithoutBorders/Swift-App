@@ -1,5 +1,6 @@
 package ngo.teog.swift.gui.deviceCreation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,15 +20,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 import javax.inject.Inject;
 
+import id.zelory.compressor.Compressor;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoActivity;
@@ -47,8 +53,6 @@ public class NewDeviceActivity3 extends BaseActivity {
 
     private Button nextButton;
     private ProgressBar progressBar;
-
-    private final int REQUEST_IMAGE_CAPTURE = 100;
     private ImageView imageView;
 
     private HospitalDevice device;
@@ -61,6 +65,8 @@ public class NewDeviceActivity3 extends BaseActivity {
     ViewModelFactory viewModelFactory;
 
     private NewDeviceViewModel3 viewModel;
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +120,15 @@ public class NewDeviceActivity3 extends BaseActivity {
                 }
             }
         });
+
+        activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if(result.getResultCode() == Activity.RESULT_OK) {
+                    imageView.setImageBitmap(decode(imagePath));
+                }
+            }
+        );
     }
 
     @Override
@@ -142,33 +157,48 @@ public class NewDeviceActivity3 extends BaseActivity {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
-            Bitmap decodedImage = decode(imagePath, 640);
+            File tempFile = new File(imagePath);
             String targetName = device.getId() + ".jpg";
 
-            FileOutputStream outputStream;
+            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);//TODO: maybe use cache dir as well?
+            File image = new File(dir, targetName);
 
             try {
-                File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);
-                File image = new File(dir, targetName);
+                File compressedImage = new Compressor(this)
+                        .setMaxWidth(800)
+                        .setMaxHeight(600)
+                        .setQuality(100)
+                        .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                        .compressToFile(tempFile);
 
-                outputStream = new FileOutputStream(image);
-                decodedImage.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                outputStream.close();
+                try(FileInputStream source = new FileInputStream(compressedImage); FileOutputStream destination = new FileOutputStream(image)) {
+                    FileChannel inputChannel = source.getChannel();
+                    FileChannel outputChannel = destination.getChannel();
 
-                File tempFile = new File(imagePath);
+                    outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+
+                    SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                    int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
+                    viewModel.createDevice(device, userId);
+                } catch(Exception e) {
+                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                } finally {
+                    boolean deleted = compressedImage.delete();
+
+                    if(!deleted) {
+                        Log.w(this.getClass().getName(), "compressed image has not been deleted");
+                    }
+                }
+            } catch(IOException e) {
+                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+            } finally {
                 boolean deleted = tempFile.delete();
 
                 if(!deleted) {
-                    Log.w(this.getClass().getName(), "temporary file has not been deleted");
+                    Log.w(this.getClass().getName(), "temporary image has not been deleted");
                 }
-            } catch(Exception e) {
-                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             }
-
-            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-            int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-
-            viewModel.createDevice(device, userId);
         } else {
             Toast.makeText(this, getString(R.string.no_picture_attached), Toast.LENGTH_LONG).show();
         }
@@ -180,31 +210,8 @@ public class NewDeviceActivity3 extends BaseActivity {
         return File.createTempFile("image_" + device.getId(), ".jpg", storageDir);
     }
 
-    private Bitmap decode(String filePath, int targetW) {
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.max(photoW/targetW, photoH/targetW);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-
-        return BitmapFactory.decodeFile(filePath, bmOptions);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageView.setImageBitmap(decode(imagePath, 800));
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
+    private Bitmap decode(String filePath) {
+        return BitmapFactory.decodeFile(filePath);
     }
 
     public void dispatchTakePictureIntent(View view) {
@@ -219,10 +226,11 @@ public class NewDeviceActivity3 extends BaseActivity {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
             if(takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                activityResultLauncher.launch(takePictureIntent);
             }
         } catch(Exception e) {
-            Log.e(this.getClass().getName(), e.getMessage(), e);
+            Log.e(this.getClass().getName(), "dispatching picture event failed", e);
+            Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
         }
     }
 }

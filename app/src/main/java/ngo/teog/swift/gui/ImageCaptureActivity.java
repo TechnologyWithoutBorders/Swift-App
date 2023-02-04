@@ -162,9 +162,6 @@ public class ImageCaptureActivity extends BaseActivity {
 
                     outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
 
-                    source.close();
-                    destination.close();
-
                     SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
