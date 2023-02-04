@@ -13,10 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,13 +59,11 @@ public class ReportInfoActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private int userId;
+    private int userId, deviceId, hospitalId;
 
     private RecyclerView reportThreadView;
     private EditText titleText, descriptionText;
     private Spinner stateSpinner;
-    private ProgressBar progressBar;
-    private Button saveButton;
 
     private ReportInfoViewModel viewModel;
 
@@ -77,15 +73,14 @@ public class ReportInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_report_info);
 
         Intent intent = this.getIntent();
-        int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        hospitalId = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
         //TODO: scroll to report
 
         reportThreadView = findViewById(R.id.report_thread_view);
 
         titleText = findViewById(R.id.report_title);
         descriptionText = findViewById(R.id.descriptionText);
-        progressBar = findViewById(R.id.progressBar);
-        saveButton = findViewById(R.id.saveButton);
 
         List<Integer> states = new ArrayList<>(DeviceState.IDS.length+1);
         states.add(-1);
@@ -308,12 +303,13 @@ public class ReportInfoActivity extends BaseActivity {
 
             if(title.length() > 0) {
                 //ID = 0 means auto-generate ID
-                /*Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, newState, description, new Date());
+                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, deviceId, hospitalId, newState, description, new Date());
 
                 viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
-                saveButton.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);*/
+                stateSpinner.setSelection(0);
+                titleText.getText().clear();
+                descriptionText.getText().clear();
             } else {
                 titleText.setError(getString(R.string.empty_title));
             }

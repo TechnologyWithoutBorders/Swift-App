@@ -139,6 +139,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
             Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
             intent1.putExtra(ResourceKeys.DEVICE_ID, report.getDevice());
+            intent1.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
             intent1.putExtra(ResourceKeys.REPORT_ID, report.getId());
             startActivity(intent1);
         });
@@ -213,6 +214,7 @@ public class DeviceInfoActivity extends BaseActivity {
                 reportCreationButton.setOnClickListener((view) -> {
                     Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
                     intent1.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
+                    intent1.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
                     startActivity(intent1);
                 });
 

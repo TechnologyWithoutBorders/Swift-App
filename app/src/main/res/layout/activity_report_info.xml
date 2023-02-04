@@ -77,25 +77,13 @@
                 android:maxLength="600"
                 android:importantForAutofill="no"/>
 
-            <RelativeLayout
+            <Button
+                android:id="@+id/saveButton"
+                style="@style/AppTheme.Button"
+                android:onClick="createReport"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/saveButton"
-                    style="@style/AppTheme.Button"
-                    android:onClick="createReport"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="post report" />
-
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible" />
-            </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:text="post report" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
