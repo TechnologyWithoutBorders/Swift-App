@@ -133,6 +133,8 @@ public class DeviceInfoActivity extends BaseActivity {
         attributeTable = findViewById(R.id.attributeTable);
 
         reportListView = findViewById(R.id.reportList);
+        reportListView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        reportListView.setStackFromBottom(true);
 
         reportListView.setOnItemClickListener((adapterView, view, i, l) -> {
             Report report = ((ReportInfo)adapterView.getItemAtPosition(i)).getReport();
@@ -209,7 +211,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 List<ReportInfo> reports = deviceInfo.getReports();
 
-                reports.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
+                reports.sort(Comparator.comparingInt(reportInfo -> reportInfo.getReport().getId()));
 
                 reportCreationButton.setOnClickListener((view) -> {
                     Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
@@ -218,7 +220,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     startActivity(intent1);
                 });
 
-                DeviceStateVisuals visuals = new DeviceStateVisuals(deviceInfo.getReports().get(0).getReport().getCurrentState(), this);
+                DeviceStateVisuals visuals = new DeviceStateVisuals(reports.get(reports.size()-1).getReport().getCurrentState(), this);
 
                 stateTextView.setText(visuals.getStateString());
                 stateImageView.setImageDrawable(visuals.getStateIcon());
