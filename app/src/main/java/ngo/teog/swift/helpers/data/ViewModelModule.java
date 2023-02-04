@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
+import ngo.teog.swift.gui.ImageCaptureViewModel;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel3;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceViewModel2;
 import ngo.teog.swift.gui.deviceInfo.DeviceInfoViewModel;
@@ -73,4 +74,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel.class)
     public abstract ViewModel mainViewModel(MainViewModel mainViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ImageCaptureViewModel.class)
+    public abstract ViewModel imageCaptureViewModel(ImageCaptureViewModel imageCaptureViewModel);
 }
