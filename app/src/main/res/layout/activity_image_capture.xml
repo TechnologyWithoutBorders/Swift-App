@@ -8,22 +8,30 @@
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:contentDescription="@string/captured_image"/>
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/orientation_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/screen_orientation_hint"
-        android:textSize="18sp"
-        android:drawablePadding="10dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"/>
+        <TextView
+            android:id="@+id/orientation_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/screen_orientation_hint"
+            android:textSize="18sp"
+            android:drawablePadding="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/captured_image"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+    </RelativeLayout>
 
     <Button style="@style/AppTheme.Button"
         android:id="@+id/pictureButton"

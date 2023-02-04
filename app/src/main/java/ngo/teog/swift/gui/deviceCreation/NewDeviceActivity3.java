@@ -77,11 +77,14 @@ public class NewDeviceActivity3 extends BaseActivity {
         setContentView(R.layout.activity_image_capture);
 
         imageView = findViewById(R.id.imageView);
+        TextView orientationHint = findViewById(R.id.orientation_hint);
 
         if(savedInstanceState != null) {
             device = (HospitalDevice)savedInstanceState.getSerializable(ResourceKeys.DEVICE);
             imagePath = savedInstanceState.getString(ResourceKeys.IMAGE);
             imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            imageView.setVisibility(View.VISIBLE);
+            orientationHint.setVisibility(View.INVISIBLE);
         } else {
             Intent intent = this.getIntent();
             device = (HospitalDevice)intent.getSerializableExtra(ResourceKeys.DEVICE);
@@ -99,7 +102,7 @@ public class NewDeviceActivity3 extends BaseActivity {
 
             drawable.setBounds(0, 0, width, height);
 
-            ((TextView)findViewById(R.id.orientation_hint)).setCompoundDrawables(drawable, null, null, null);
+            orientationHint.setCompoundDrawables(drawable, null, null, null);
         }
 
         DaggerAppComponent.builder()
@@ -141,6 +144,8 @@ public class NewDeviceActivity3 extends BaseActivity {
             result -> {
                 if(result.getResultCode() == Activity.RESULT_OK) {
                     imageView.setImageBitmap(decode(imagePath));
+                    imageView.setVisibility(View.VISIBLE);
+                    orientationHint.setVisibility(View.INVISIBLE);
                 }
             }
         );

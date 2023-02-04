@@ -73,11 +73,14 @@ public class ImageCaptureActivity extends BaseActivity {
         setContentView(R.layout.activity_image_capture);
 
         imageView = findViewById(R.id.imageView);
+        TextView orientationHint = findViewById(R.id.orientation_hint);
 
         if(savedInstanceState != null) {
             deviceId = savedInstanceState.getInt(ResourceKeys.DEVICE_ID);
             imagePath = savedInstanceState.getString(ResourceKeys.IMAGE);
             imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            imageView.setVisibility(View.VISIBLE);
+            orientationHint.setVisibility(View.INVISIBLE);
         } else {
             Intent intent = this.getIntent();
             deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
@@ -95,7 +98,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
             drawable.setBounds(0, 0, width, height);
 
-            ((TextView)findViewById(R.id.orientation_hint)).setCompoundDrawables(drawable, null, null, null);
+            orientationHint.setCompoundDrawables(drawable, null, null, null);
         }
 
         DaggerAppComponent.builder()
@@ -111,6 +114,8 @@ public class ImageCaptureActivity extends BaseActivity {
             result -> {
                 if(result.getResultCode() == Activity.RESULT_OK) {
                     imageView.setImageBitmap(decode(imagePath));
+                    imageView.setVisibility(View.VISIBLE);
+                    orientationHint.setVisibility(View.INVISIBLE);
                 }
             }
         );
