@@ -142,7 +142,7 @@ public class ImageCaptureActivity extends BaseActivity {
         return super.onOptionsItemSelected(item, R.string.newdevice_activity_3);
     }
 
-    public void createDevice(View view) {//TODO: rename
+    public void save(View view) {//TODO: rename
         if(imagePath != null) {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);

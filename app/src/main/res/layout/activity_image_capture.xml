@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/save_button"
-            android:onClick="createDevice"/>
+            android:onClick="save"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

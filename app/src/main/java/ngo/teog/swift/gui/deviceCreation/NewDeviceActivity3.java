@@ -172,7 +172,7 @@ public class NewDeviceActivity3 extends BaseActivity {
         return super.onOptionsItemSelected(item, R.string.newdevice_activity_3);
     }
 
-    public void createDevice(View view) {
+    public void save(View view) {
         if(imagePath != null) {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
