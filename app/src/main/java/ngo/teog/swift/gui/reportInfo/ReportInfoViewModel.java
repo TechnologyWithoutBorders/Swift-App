@@ -10,6 +10,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.Observable;
+import ngo.teog.swift.helpers.data.Report;
 
 public class ReportInfoViewModel extends ViewModel {
     private final HospitalRepository hospitalRepo;
@@ -44,6 +45,10 @@ public class ReportInfoViewModel extends ViewModel {
 
     public void refreshDevice() {
         new Thread(new DeviceInfoLoadRunner(this.userId, this.deviceId)).start();
+    }
+
+    public void createReport(Report report, int userId) {
+        hospitalRepo.createReport(report, userId);
     }
 
     private class DeviceInfoLoadRunner implements Runnable {

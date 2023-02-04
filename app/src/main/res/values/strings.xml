@@ -197,8 +197,7 @@
     <string name="report_no_description">no description available</string>
     <string name="report_tutorial_state_change">This section shows you the change of state the device went through in the selected report.</string>
     <string name="report_tutorial_description">The description contains all the information the creator of the report deemed to be important.</string>
-    <string name="arrow_right">➔</string>
-    <string name="select_state">select state…</string>
+    <string name="select_state">state…</string>
 
     <!-- User Information -->
     <string name="user">User</string>

@@ -55,7 +55,6 @@ import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
 import ngo.teog.swift.gui.deviceCreation.NewDeviceActivity2;
-import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
@@ -212,12 +211,9 @@ public class DeviceInfoActivity extends BaseActivity {
                 reports.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
 
                 reportCreationButton.setOnClickListener((view) -> {
-                    Intent reportIntent = new Intent(DeviceInfoActivity.this, ReportCreationActivity.class);
-                    reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
-                    reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
-                    reportIntent.putExtra(ResourceKeys.DEVICE_TYPE, deviceInfo.getDevice().getType());
-                    reportIntent.putExtra(ResourceKeys.REPORT_STATE, reports.get(0).getReport().getCurrentState());
-                    startActivity(reportIntent);
+                    Intent intent1 = new Intent(DeviceInfoActivity.this, ReportInfoActivity.class);
+                    intent1.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
+                    startActivity(intent1);
                 });
 
                 DeviceStateVisuals visuals = new DeviceStateVisuals(deviceInfo.getReports().get(0).getReport().getCurrentState(), this);
