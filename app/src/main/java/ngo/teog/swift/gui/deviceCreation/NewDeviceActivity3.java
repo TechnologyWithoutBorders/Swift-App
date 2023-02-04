@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,11 +19,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.io.File;
@@ -71,7 +74,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_device3);
+        setContentView(R.layout.activity_image_capture);
 
         imageView = findViewById(R.id.imageView);
 
@@ -86,6 +89,18 @@ public class NewDeviceActivity3 extends BaseActivity {
 
         nextButton = findViewById(R.id.nextButton);
         progressBar = findViewById(R.id.progressBar);
+
+        Drawable drawable = ResourcesCompat.getDrawable(this.getResources(), R.drawable.baseline_screen_rotation_24, null);
+
+        if(drawable != null) {
+            final float density = getResources().getDisplayMetrics().density;
+            final int width = Math.round(30 * density);
+            final int height = Math.round(30 * density);
+
+            drawable.setBounds(0, 0, width, height);
+
+            ((TextView)findViewById(R.id.orientation_hint)).setCompoundDrawables(drawable, null, null, null);
+        }
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
