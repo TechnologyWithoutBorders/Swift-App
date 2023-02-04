@@ -180,8 +180,8 @@
     <string name="documents_overview">Available Documents</string>
     <string name="device_info_tutorial_attribute_table">This table lists all relevant data of a device.</string>
     <string name="device_info_tutorial_state_section">The current state of the device is shown up here.</string>
-    <string name="device_info_tutorial_report_list">You can see the recent maintenance/repair history in the bottom section.</string>
-    <string name="device_info_tutorial_report_creation">Use this button to create a new report.</string>
+    <string name="device_info_tutorial_report_list">You can see the recent maintenance/repair history in this section.</string>
+    <string name="device_info_tutorial_report_creation">Use this form to post a new report.</string>
     <string name="device_info_tutorial_documents">If available, related documents can be retrieved by tapping this button.</string>
 
     <!-- Report Information -->
@@ -198,6 +198,7 @@
     <string name="report_tutorial_state_change">This section shows you the change of state the device went through in the selected report.</string>
     <string name="report_tutorial_description">The description contains all the information the creator of the report deemed to be important.</string>
     <string name="select_state">state…</string>
+    <string name="post_report">post report</string>
 
     <!-- User Information -->
     <string name="user">User</string>

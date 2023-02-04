@@ -13,6 +13,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/reportForm"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
@@ -83,7 +84,7 @@
                 android:onClick="createReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="post report" />
+                android:text="@string/post_report" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

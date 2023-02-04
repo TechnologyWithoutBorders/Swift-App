@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,6 +63,7 @@ public class ReportInfoActivity extends BaseActivity {
     private int userId, deviceId, hospitalId;
 
     private RecyclerView reportThreadView;
+    private CardView reportForm;
     private EditText titleText, descriptionText;
     private Spinner stateSpinner;
 
@@ -79,6 +81,7 @@ public class ReportInfoActivity extends BaseActivity {
 
         reportThreadView = findViewById(R.id.report_thread_view);
 
+        reportForm = findViewById(R.id.reportForm);
         titleText = findViewById(R.id.report_title);
         descriptionText = findViewById(R.id.descriptionText);
 
@@ -160,11 +163,11 @@ public class ReportInfoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.info) {
             //Build tutorial
-            /*FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                    .add(buildTutorialStep(reportThreadView, getString(R.string.device_info_tutorial_report_list), Gravity.TOP))
-                    .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation), Gravity.CENTER));
+            FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
+                    .add(buildTutorialStep(reportThreadView, getString(R.string.device_info_tutorial_report_list), Gravity.BOTTOM))
+                    .add(buildTutorialStep(reportForm, getString(R.string.device_info_tutorial_report_creation), Gravity.CENTER));
 
-            tutorialQueue.show();*///TODO
+            tutorialQueue.show();
 
             return true;
         }
