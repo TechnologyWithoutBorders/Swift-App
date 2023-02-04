@@ -193,11 +193,12 @@
     <string name="report_author">Author</string>
     <string name="report_author_name" translatable="false">%s:</string>
     <string name="report_title">Title</string>
-    <string name="report_description_description">please provide a description of what you have done</string>
+    <string name="report_description_description">Please provide a description of what you have done</string>
     <string name="report_no_description">no description available</string>
-    <string name="report_creation_invalid_state">new state can not match old state</string>
     <string name="report_tutorial_state_change">This section shows you the change of state the device went through in the selected report.</string>
     <string name="report_tutorial_description">The description contains all the information the creator of the report deemed to be important.</string>
+    <string name="arrow_right">➔</string>
+    <string name="select_state">select state…</string>
 
     <!-- User Information -->
     <string name="user">User</string>
@@ -263,6 +264,7 @@
     <string name="invalid_item_link">invalid item link</string>
     <string name="asset_wrong_hospital">asset is from a different hospital</string>
     <string name="asset_wrong_country">asset is from a different country</string>
+    <string name="no_state_selected">no state selected</string>
 
     <!-- Dialog Texts -->
     <string name="dialog_cancel_text">Cancel</string>

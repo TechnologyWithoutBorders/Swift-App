@@ -8,6 +8,8 @@ public final class ResourceKeys {
     /** Identifier for device IDs */
     public static final String DEVICE_ID = "device_id";
 
+    public static final String DEVICE_TYPE = "device_type";
+
     /** Identifier for device objects */
     public static final String DEVICE = "device";
 
@@ -34,6 +36,8 @@ public final class ResourceKeys {
 
     /** Identifier for report object lists */
     public static final String REPORTS = "reports";
+
+    public static final String REPORT_STATE = "report_state";
 
     /** Identifier for all kinds of images */
     public static final String IMAGE = "image";

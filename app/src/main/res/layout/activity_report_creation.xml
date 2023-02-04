@@ -3,20 +3,56 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    android:paddingBottom="10dp">
 
-    <Spinner
-        android:id="@+id/stateSpinner"
+    <TextView
+        android:id="@+id/deviceType"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="3dp">
+
+        <ImageView
+            android:id="@+id/oldState"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/device_state_icon"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="@string/arrow_right"/>
+
+        <Spinner
+            android:id="@+id/stateSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"/>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teog_blue"
+        android:background="@color/grey_table_bar"
         android:textColor="#FFFFFF"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:padding="3dp"
         android:textStyle="bold"
         android:text="@string/report_title" />
@@ -33,9 +69,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teog_blue"
+        android:background="@color/grey_table_bar"
         android:textColor="#FFFFFF"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:padding="3dp"
         android:textStyle="bold"
         android:text="@string/report_description" />
@@ -43,16 +79,13 @@
     <EditText
         android:id="@+id/descriptionText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
         android:inputType="textMultiLine"
         android:hint="@string/report_description_description"
         android:maxLength="600"
         android:importantForAutofill="no"/>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

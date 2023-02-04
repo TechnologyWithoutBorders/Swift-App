@@ -17,17 +17,21 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -63,9 +67,26 @@ public class ReportCreationActivity extends BaseActivity {
         Intent intent = getIntent();
         hospital = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
         device = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        String deviceType = intent.getStringExtra(ResourceKeys.DEVICE_TYPE);
+        int oldState = intent.getIntExtra(ResourceKeys.REPORT_STATE, -1);
+
+        ((TextView)findViewById(R.id.deviceType)).setText(deviceType);
+
+        ImageView oldStateView = findViewById(R.id.oldState);
+        DeviceStateVisuals visuals = new DeviceStateVisuals(oldState, this);
+
+        oldStateView.setImageDrawable(visuals.getStateIcon());
+        oldStateView.setBackgroundColor(visuals.getBackgroundColor());
+
+        List<Integer> states = new ArrayList<>(DeviceState.IDS.length+1);
+        states.add(-1);
+
+        for(int s : DeviceState.IDS) {
+            states.add(s);
+        }
 
         stateSpinner = findViewById(R.id.stateSpinner);
-        stateSpinner.setAdapter(new StatusArrayAdapter(this, getResources().getStringArray(R.array.device_states)));
+        stateSpinner.setAdapter(new StatusArrayAdapter(this, states));
 
         titleText = findViewById(R.id.report_title);
         descriptionText = findViewById(R.id.descriptionText);
@@ -95,36 +116,40 @@ public class ReportCreationActivity extends BaseActivity {
     }
 
     public void createReport(View view) {
-        int newState = stateSpinner.getSelectedItemPosition();
+        int newState = (int)stateSpinner.getSelectedItem();
 
-        SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        if(newState >= 0) {
+            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
-        String description = descriptionText.getText().toString().trim();
-        String title = titleText.getText().toString().trim();
+            String description = descriptionText.getText().toString().trim();
+            String title = titleText.getText().toString().trim();
 
-        if(title.length() > 0) {
-            //ID = 0 means auto-generate ID
-            Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, newState, description, new Date());
+            if (title.length() > 0) {
+                //ID = 0 means auto-generate ID
+                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, device, hospital, newState, description, new Date());
 
-            viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
+                viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 
-            saveButton.setVisibility(View.INVISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
-            ReportCreationActivity.this.finish();
+                ReportCreationActivity.this.finish();
+            } else {
+                titleText.setError(getString(R.string.empty_title));
+            }
         } else {
-            titleText.setError(getString(R.string.empty_title));
+            Toast.makeText(this.getApplicationContext(), getString(R.string.no_state_selected), Toast.LENGTH_LONG).show();
         }
     }
 
     /**
      * Adapter for displaying the device state spinner.
      */
-    private static class StatusArrayAdapter extends ArrayAdapter<String> {
+    private static class StatusArrayAdapter extends ArrayAdapter<Integer> {
 
         private final Context context;
 
-        private StatusArrayAdapter(Context context, String[] values) {
+        private StatusArrayAdapter(Context context, List<Integer> values) {
             super(context, -1, values);
             this.context = context;
         }
@@ -137,14 +162,21 @@ public class ReportCreationActivity extends BaseActivity {
             }
 
             TextView statusTextView = convertView.findViewById(R.id.statusTextView);
-            statusTextView.setText(getItem(position));
 
-            ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
+            int state = getItem(position);
 
-            DeviceStateVisuals triple = new DeviceStateVisuals(position,this.getContext());
+            if(state >= 0) {
+                DeviceStateVisuals visuals = new DeviceStateVisuals(state, this.getContext());
 
-            statusImageView.setImageDrawable(triple.getStateIcon());
-            statusImageView.setBackgroundColor(triple.getBackgroundColor());
+                statusTextView.setText(visuals.getStateString());
+
+                ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
+
+                statusImageView.setImageDrawable(visuals.getStateIcon());
+                statusImageView.setBackgroundColor(visuals.getBackgroundColor());
+            } else {
+                statusTextView.setText(context.getString(R.string.select_state));
+            }
 
             return convertView;
         }
