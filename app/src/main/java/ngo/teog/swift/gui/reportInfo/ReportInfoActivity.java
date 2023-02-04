@@ -327,21 +327,19 @@ public class ReportInfoActivity extends BaseActivity {
      */
     private static class StatusArrayAdapter extends ArrayAdapter<Integer> {
 
-        private final Context context;
-
         private StatusArrayAdapter(Context context, List<Integer> values) {
             super(context, -1, values);
-            this.context = context;
         }
 
         @Override
         public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
+                LayoutInflater inflater = (LayoutInflater) getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.spinner_status, parent, false);
             }
 
+            ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
             TextView statusTextView = convertView.findViewById(R.id.statusTextView);
 
             int state = getItem(position);
@@ -351,12 +349,13 @@ public class ReportInfoActivity extends BaseActivity {
 
                 statusTextView.setText(visuals.getStateString());
 
-                ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
-
                 statusImageView.setImageDrawable(visuals.getStateIcon());
                 statusImageView.setBackgroundColor(visuals.getBackgroundColor());
+
+                statusImageView.setVisibility(View.VISIBLE);
             } else {
-                statusTextView.setText(context.getString(R.string.select_state));
+                statusTextView.setText(getContext().getString(R.string.select_state));
+                statusImageView.setVisibility(View.INVISIBLE);
             }
 
             return convertView;
@@ -366,9 +365,9 @@ public class ReportInfoActivity extends BaseActivity {
         @NonNull
         public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context
+                LayoutInflater inflater = (LayoutInflater) getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.spinner_status, parent, false);
+                convertView = inflater.inflate(R.layout.spinner_status_short, parent, false);
             }
 
             ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
@@ -382,12 +381,12 @@ public class ReportInfoActivity extends BaseActivity {
                 statusImageView.setImageDrawable(visuals.getStateIcon());
                 statusImageView.setBackgroundColor(visuals.getBackgroundColor());
 
-                statusTextView.setVisibility(View.INVISIBLE);
+                statusTextView.setVisibility(View.GONE);
                 statusImageView.setVisibility(View.VISIBLE);
             } else {
-                statusTextView.setText(context.getString(R.string.select_state));
+                statusTextView.setText(getContext().getString(R.string.select_state));
                 statusTextView.setVisibility(View.VISIBLE);
-                statusImageView.setVisibility(View.INVISIBLE);
+                statusImageView.setVisibility(View.GONE);
             }
 
             return convertView;

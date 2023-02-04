@@ -46,12 +46,14 @@
                     android:hint="@string/report_title"
                     android:maxLength="25"
                     android:importantForAutofill="no"/>
+
                 <Spinner
                     android:id="@+id/stateSpinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:spinnerMode="dialog"
                     android:layout_gravity="center"
-                    android:layout_margin="3dp"/>
+                    android:layout_margin="3dp" />
             </LinearLayout>
 
             <TextView
