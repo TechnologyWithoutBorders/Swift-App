@@ -60,7 +60,7 @@ public class ReportInfoActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private int userId, deviceId, hospitalId;
+    private int userId, deviceId, hospitalId, reportId;
 
     private RecyclerView reportThreadView;
     private CardView reportForm;
@@ -77,7 +77,7 @@ public class ReportInfoActivity extends BaseActivity {
         Intent intent = this.getIntent();
         deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
         hospitalId = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
-        //TODO: scroll to report
+        reportId = intent.getIntExtra(ResourceKeys.REPORT_ID, -1);
 
         reportThreadView = findViewById(R.id.report_thread_view);
 
@@ -117,7 +117,20 @@ public class ReportInfoActivity extends BaseActivity {
                 reportThreadView.setLayoutManager(new LinearLayoutManager(this));
 
                 if(adapter.getItemCount() > 0) {
-                    reportThreadView.scrollToPosition(adapter.getItemCount() - 1);
+                    if(reportId >= 0) {
+                        int i = 0;
+
+                        for(ReportInfo reportInfo : reports) {
+                            if(reportInfo.getReport().getId() == reportId) {
+                                break;
+                            }
+
+                            i++;
+                        }
+                        reportThreadView.scrollToPosition(i);
+                    } else {
+                        reportThreadView.scrollToPosition(adapter.getItemCount()-1);
+                    }
                 }
             }
         });
