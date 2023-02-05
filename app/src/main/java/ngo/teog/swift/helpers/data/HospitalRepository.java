@@ -239,20 +239,20 @@ public class HospitalRepository {
         hospitalDao.save(hospital);
     }
 
-    public void updateUserSync(User user) {
-        hospitalDao.save(user);
+    public void updateUsersSync(List<User> users) {
+        hospitalDao.saveUsers(users);
     }
 
-    public void updateOrgUnitSync(OrganizationalUnit orgUnit) {
-        hospitalDao.save(orgUnit);
+    public void updateOrgUnitsSync(List<OrganizationalUnit> orgUnits) {
+        hospitalDao.saveOrgUnits(orgUnits);
     }
 
-    public void updateDeviceSync(HospitalDevice device) {
-        hospitalDao.save(device);
+    public void updateDevicesSync(List<HospitalDevice> devices) {
+        hospitalDao.saveDevices(devices);
     }
 
-    public void updateReportSync(Report report) {
-        hospitalDao.save(report);
+    public void updateReportsSync(List<Report> reports) {
+        hospitalDao.saveReports(reports);
     }
 
     public void deleteImageUploadJobSync(int deviceId) {
@@ -584,9 +584,9 @@ public class HospitalRepository {
                         if (user.getLastUpdate().getTime() > now) {
                             user.setLastUpdate(new Date(now));
                         }
-
-                        HospitalRepository.this.updateUserSync(user);
                     }
+
+                    HospitalRepository.this.updateUsersSync(hospitalInfo.getUsers());
 
                     //remove old units as they change completely
                     if(hospitalInfo.getOrgUnits().size() > 0) {
@@ -597,25 +597,32 @@ public class HospitalRepository {
                         if (orgUnit.getLastUpdate().getTime() > now) {
                             orgUnit.setLastUpdate(new Date(now));
                         }
-
-                        HospitalRepository.this.updateOrgUnitSync(orgUnit);
                     }
+
+                    HospitalRepository.this.updateOrgUnitsSync(hospitalInfo.getOrgUnits());
+
+                    List<HospitalDevice> devices = new ArrayList<>(hospitalInfo.getDevices().size());
+                    List<Report> reports = new ArrayList<>();
 
                     for (DeviceInfo deviceInfo : hospitalInfo.getDevices()) {
                         if (deviceInfo.getDevice().getLastUpdate().getTime() > now) {
                             deviceInfo.getDevice().setLastUpdate(new Date(now));
                         }
 
-                        HospitalRepository.this.updateDeviceSync(deviceInfo.getDevice());
+                        devices.add(deviceInfo.getDevice());
 
                         List<ReportInfo> reportInfos = deviceInfo.getReports();
+                        List<Report> tmpReports = new ArrayList<>(reportInfos.size());
 
                         for (ReportInfo reportInfo : reportInfos) {
-                            Report report = reportInfo.getReport();
-
-                            HospitalRepository.this.updateReportSync(report);
+                            tmpReports.add(reportInfo.getReport());
                         }
+
+                        reports.addAll(tmpReports);
                     }
+
+                    HospitalRepository.this.updateDevicesSync(devices);
+                    HospitalRepository.this.updateReportsSync(reports);
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
