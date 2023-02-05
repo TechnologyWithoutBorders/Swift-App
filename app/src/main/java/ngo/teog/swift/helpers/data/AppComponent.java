@@ -15,7 +15,6 @@ import ngo.teog.swift.gui.main.BarcodeFragment;
 import ngo.teog.swift.gui.main.CalendarFragment;
 import ngo.teog.swift.gui.main.MainActivity;
 import ngo.teog.swift.gui.main.TodoFragment;
-import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.gui.reportInfo.ReportInfoActivity;
 import ngo.teog.swift.gui.userInfo.UserInfoActivity;
 import ngo.teog.swift.gui.userProfile.UserProfileActivity;
@@ -32,7 +31,6 @@ public interface AppComponent {
     void inject(BarcodeFragment target);
     void inject(NewDeviceActivity3 target);
     void inject(NewDeviceActivity2 target);
-    void inject(ReportCreationActivity target);
     void inject(MainActivity target);
     void inject(ReportInfoActivity target);
     void inject(CalendarFragment target);

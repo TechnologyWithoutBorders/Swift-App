@@ -12,18 +12,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,8 +38,8 @@ import javax.inject.Inject;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.reportCreation.ReportCreationActivity;
 import ngo.teog.swift.helpers.Defaults;
+import ngo.teog.swift.helpers.DeviceState;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -54,10 +60,12 @@ public class ReportInfoActivity extends BaseActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private int userId;
+    private int userId, deviceId, hospitalId;
 
     private RecyclerView reportThreadView;
-    private Button reportCreationButton;
+    private CardView reportForm;
+    private EditText titleText, descriptionText;
+    private Spinner stateSpinner;
 
     private ReportInfoViewModel viewModel;
 
@@ -67,11 +75,25 @@ public class ReportInfoActivity extends BaseActivity {
         setContentView(R.layout.activity_report_info);
 
         Intent intent = this.getIntent();
-        int deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        deviceId = intent.getIntExtra(ResourceKeys.DEVICE_ID, -1);
+        hospitalId = intent.getIntExtra(ResourceKeys.HOSPITAL_ID, -1);
+        //TODO: scroll to report
 
-        TextView titleView = findViewById(R.id.title_view);
         reportThreadView = findViewById(R.id.report_thread_view);
-        reportCreationButton = findViewById(R.id.reportCreationButton);
+
+        reportForm = findViewById(R.id.reportForm);
+        titleText = findViewById(R.id.report_title);
+        descriptionText = findViewById(R.id.descriptionText);
+
+        List<Integer> states = new ArrayList<>(DeviceState.IDS.length+1);
+        states.add(-1);
+
+        for(int s : DeviceState.IDS) {
+            states.add(s);
+        }
+
+        stateSpinner = findViewById(R.id.stateSpinner);
+        stateSpinner.setAdapter(new StatusArrayAdapter(this, states));
 
         DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -87,15 +109,6 @@ public class ReportInfoActivity extends BaseActivity {
 
         viewModel.getDeviceInfo().observe(this, deviceInfo -> {
             if(deviceInfo != null) {
-                reportCreationButton.setOnClickListener((view) -> {
-                    Intent reportIntent = new Intent(ReportInfoActivity.this, ReportCreationActivity.class);
-                    reportIntent.putExtra(ResourceKeys.HOSPITAL_ID, deviceInfo.getHospital().getId());
-                    reportIntent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
-                    startActivity(reportIntent);
-                });
-
-                titleView.setText(deviceInfo.getDevice().getType());
-
                 List<ReportInfo> reports = deviceInfo.getReports();
                 reports.sort(Comparator.comparingInt(reportInfo -> reportInfo.getReport().getId()));
 
@@ -151,8 +164,8 @@ public class ReportInfoActivity extends BaseActivity {
         if (item.getItemId() == R.id.info) {
             //Build tutorial
             FancyShowCaseQueue tutorialQueue = new FancyShowCaseQueue()
-                    .add(buildTutorialStep(reportThreadView, getString(R.string.device_info_tutorial_report_list), Gravity.TOP))
-                    .add(buildTutorialStep(reportCreationButton, getString(R.string.device_info_tutorial_report_creation), Gravity.CENTER));
+                    .add(buildTutorialStep(reportThreadView, getString(R.string.device_info_tutorial_report_list), Gravity.BOTTOM))
+                    .add(buildTutorialStep(reportForm, getString(R.string.device_info_tutorial_report_creation), Gravity.CENTER));
 
             tutorialQueue.show();
 
@@ -279,6 +292,103 @@ public class ReportInfoActivity extends BaseActivity {
                 titleView.setText(report.getTitle());
                 descriptionView.setText(report.getDescription());
             }
+        }
+    }
+
+    public void createReport(View view) {
+        int newState = (int)stateSpinner.getSelectedItem();
+
+        if(newState >= 0) {
+            SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+
+            String description = descriptionText.getText().toString().trim();
+            String title = titleText.getText().toString().trim();
+
+            if(title.length() > 0) {
+                //ID = 0 means auto-generate ID
+                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, deviceId, hospitalId, newState, description, new Date());
+
+                viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
+
+                stateSpinner.setSelection(0);
+                titleText.getText().clear();
+                descriptionText.getText().clear();
+            } else {
+                titleText.setError(getString(R.string.empty_title));
+            }
+        } else {
+            Toast.makeText(this.getApplicationContext(), getString(R.string.no_state_selected), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Adapter for displaying the device state spinner.
+     */
+    private static class StatusArrayAdapter extends ArrayAdapter<Integer> {
+
+        private StatusArrayAdapter(Context context, List<Integer> values) {
+            super(context, -1, values);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.spinner_status, parent, false);
+            }
+
+            ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
+            TextView statusTextView = convertView.findViewById(R.id.statusTextView);
+
+            int state = getItem(position);
+
+            if(state >= 0) {
+                DeviceStateVisuals visuals = new DeviceStateVisuals(state, this.getContext());
+
+                statusTextView.setText(visuals.getStateString());
+
+                statusImageView.setImageDrawable(visuals.getStateIcon());
+                statusImageView.setBackgroundColor(visuals.getBackgroundColor());
+
+                statusImageView.setVisibility(View.VISIBLE);
+            } else {
+                statusTextView.setText(getContext().getString(R.string.select_state));
+                statusImageView.setVisibility(View.INVISIBLE);
+            }
+
+            return convertView;
+        }
+
+        @Override
+        @NonNull
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) getContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.spinner_status_short, parent, false);
+            }
+
+            ImageView statusImageView = convertView.findViewById(R.id.statusImageView);
+            TextView statusTextView = convertView.findViewById(R.id.statusTextView);
+
+            int state = getItem(position);
+
+            if(state >= 0) {
+                DeviceStateVisuals visuals = new DeviceStateVisuals(state, this.getContext());
+
+                statusImageView.setImageDrawable(visuals.getStateIcon());
+                statusImageView.setBackgroundColor(visuals.getBackgroundColor());
+
+                statusTextView.setVisibility(View.GONE);
+                statusImageView.setVisibility(View.VISIBLE);
+            } else {
+                statusTextView.setText(getContext().getString(R.string.select_state));
+                statusTextView.setVisibility(View.VISIBLE);
+                statusImageView.setVisibility(View.GONE);
+            }
+
+            return convertView;
         }
     }
 }

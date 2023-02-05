@@ -137,13 +137,6 @@
             android:parentActivityName=".gui.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gui.reportCreation.ReportCreationActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="Create report"
-            android:parentActivityName=".gui.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".gui.hospital.HospitalActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="My Hospital"
