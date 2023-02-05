@@ -32,13 +32,22 @@ public abstract class HospitalDao {
     public abstract void save(User user);
 
     @Insert(onConflict = REPLACE)
-    public abstract void save(OrganizationalUnit orgUnit);
+    public abstract void saveUsers(Iterable<User> users);
+
+    @Insert(onConflict = REPLACE)
+    public abstract void saveOrgUnits(Iterable<OrganizationalUnit> orgUnits);
 
     @Insert(onConflict = REPLACE)
     public abstract void save(HospitalDevice device);
 
     @Insert(onConflict = REPLACE)
+    public abstract void saveDevices(Iterable<HospitalDevice> devices);
+
+    @Insert(onConflict = REPLACE)
     public abstract void save(Report report);
+
+    @Insert(onConflict = REPLACE)
+    public abstract void saveReports(Iterable<Report> report);
 
     @Insert(onConflict = REPLACE)
     public abstract void save(Observable observable);
