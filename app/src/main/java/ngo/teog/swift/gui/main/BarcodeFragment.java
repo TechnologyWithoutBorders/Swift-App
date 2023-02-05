@@ -110,8 +110,8 @@ public class BarcodeFragment extends Fragment {
         }
 
         DaggerAppComponent.builder()
-                .appModule(new AppModule(getActivity().getApplication()))
-                .roomModule(new RoomModule(getActivity().getApplication()))
+                .appModule(new AppModule(requireActivity().getApplication()))
+                .roomModule(new RoomModule(requireActivity().getApplication()))
                 .build()
                 .inject(this);
 
