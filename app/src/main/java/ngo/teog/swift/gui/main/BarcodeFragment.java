@@ -172,7 +172,7 @@ public class BarcodeFragment extends Fragment {
             torchIsOn = true;
         } else {
             barcodeScannerView.setTorchOff();
-            torchButton.setColorFilter(this.getResources().getColor(R.color.grey_table_bar, requireContext().getTheme()));
+            torchButton.setColorFilter(this.getResources().getColor(R.color.light_grey, requireContext().getTheme()));
             torchIsOn = false;
         }
 
