@@ -73,6 +73,9 @@ dependencies {
     def fancy_showcase_view_version = "1.3.9"
     implementation "com.github.faruktoptas:FancyShowCaseView:$fancy_showcase_view_version"
 
+    //In-App updates for immediate updates
+    implementation 'com.google.android.play:app-update:2.0.1'
+
     //Some miscellaneous dependencies
 
     //TODO this seems to be not necessary anymore or is it just buggy??
