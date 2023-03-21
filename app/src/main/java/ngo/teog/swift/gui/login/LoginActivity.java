@@ -82,22 +82,11 @@ public class LoginActivity extends BaseActivity {
 
     private AppUpdateManager appUpdateManager;
 
+    private static final int APP_UPDATE_CODE = 4711;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Check whether a new app version is available
-        appUpdateManager = AppUpdateManagerFactory.create(this);
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {//TODO nur zur MainActivity gehen, wenn das abgeschlossen. Außerdem: Nur bei Internet Access
-            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                try {
-                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 4711);
-                } catch (IntentSender.SendIntentException e) {
-                    //TODO
-                }
-            }
-        });
 
         setContentView(R.layout.activity_login);
 
@@ -180,6 +169,27 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        if(checkForInternetConnection()) {
+            //Check whether a new app version is available
+            appUpdateManager = AppUpdateManagerFactory.create(this);
+            Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+            appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+                if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
+                    } catch (IntentSender.SendIntentException e) {
+                        Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    initLoginOptions();
+                }
+            });
+        } else {
+            initLoginOptions();
+        }
+    }
+
+    private void initLoginOptions() {
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
@@ -203,25 +213,25 @@ public class LoginActivity extends BaseActivity {
                 JSONObject jsonRequest = new JSONObject(params);
 
                 JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,//TODO: use get
-                    Defaults.BASE_URL + Defaults.INFO_URL,
-                    jsonRequest,
-                    new BaseResponseListener(this) {
-                        @Override
-                        public void onSuccess(JSONObject response) throws JSONException {
-                            JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
-                            String[] countries = new String[countriesArray.length()];
+                        Request.Method.POST,//TODO: use get
+                        Defaults.BASE_URL + Defaults.INFO_URL,
+                        jsonRequest,
+                        new BaseResponseListener(this) {
+                            @Override
+                            public void onSuccess(JSONObject response) throws JSONException {
+                                JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                                String[] countries = new String[countriesArray.length()];
 
-                            for (int i = 0; i < countriesArray.length(); i++) {
-                                countries[i] = countriesArray.getString(i);
+                                for (int i = 0; i < countriesArray.length(); i++) {
+                                    countries[i] = countriesArray.getString(i);
+                                }
+
+                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                countrySpinner.setAdapter(adapter);
                             }
-
-                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            countrySpinner.setAdapter(adapter);
-                        }
-                    },
-                    new BaseErrorListener(this)
+                        },
+                        new BaseErrorListener(this)
                 );
 
                 VolleyManager.getInstance(this).getRequestQueue().add(request);
@@ -235,14 +245,15 @@ public class LoginActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        //TODO: klappt das mit dem Ablauf?
         appUpdateManager.getAppUpdateInfo().addOnSuccessListener(
             appUpdateInfo -> {
                 if(appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                     // If an in-app update is already running, resume the update.
                     try {
-                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 4711);
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
                     } catch (IntentSender.SendIntentException e) {
-                        //TODO
+                        Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
