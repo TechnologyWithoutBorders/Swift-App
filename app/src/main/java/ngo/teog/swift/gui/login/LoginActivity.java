@@ -3,6 +3,7 @@ package ngo.teog.swift.gui.login;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -31,6 +32,12 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,9 +80,24 @@ public class LoginActivity extends BaseActivity {
     private ImageView imageView;
     private Spinner countrySpinner, hospitalSpinner;
 
+    private AppUpdateManager appUpdateManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Check whether a new app version is available
+        appUpdateManager = AppUpdateManagerFactory.create(this);
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {//TODO nur zur MainActivity gehen, wenn das abgeschlossen. Außerdem: Nur bei Internet Access
+            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 4711);
+                } catch (IntentSender.SendIntentException e) {
+                    //TODO
+                }
+            }
+        });
 
         setContentView(R.layout.activity_login);
 
@@ -208,6 +230,25 @@ public class LoginActivity extends BaseActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(
+            appUpdateInfo -> {
+                if(appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    // If an in-app update is already running, resume the update.
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, 4711);
+                    } catch (IntentSender.SendIntentException e) {
+                        //TODO
+                    }
+                }
+            }
+        );
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
