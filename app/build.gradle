@@ -33,6 +33,16 @@ android {
 }
 
 dependencies {
+    // These constraints prevent a build error. Test if this is still necessary in the future!
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10") {
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10") {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
+
     //OpenCSV for reading/writing CSV-formatted data
     def opencsv_version = "5.7.1"
     implementation "com.opencsv:opencsv:$opencsv_version"
