@@ -31,6 +31,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -170,6 +171,8 @@ public class LoginActivity extends BaseActivity {
         });
 
         if(checkForInternetConnection()) {
+            setLoadingScreen();
+
             //Check whether a new app version is available
             appUpdateManager = AppUpdateManagerFactory.create(this);
             Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
@@ -180,28 +183,38 @@ public class LoginActivity extends BaseActivity {
                     } catch (IntentSender.SendIntentException e) {
                         Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    initLoginOptions();
                 }
+
+                initLoginOptions();
             });
         } else {
             initLoginOptions();
         }
     }
 
+    private void setLoadingScreen() {
+        form.setVisibility(View.GONE);
+
+        RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setInterpolator(new LinearInterpolator());
+        anim.setRepeatCount(Animation.INFINITE);
+        anim.setDuration(700);
+
+        imageView.startAnimation(anim);
+    }
+
+    private void setForm() {
+        imageView.clearAnimation();
+
+        form.setVisibility(View.VISIBLE);
+    }
+
     private void initLoginOptions() {
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
+        setLoadingScreen();
+
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
-            form.setVisibility(View.GONE);
-
-            RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            anim.setInterpolator(new LinearInterpolator());
-            anim.setRepeatCount(Animation.INFINITE);
-            anim.setDuration(700);
-
-            imageView.startAnimation(anim);
-
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
 
@@ -229,14 +242,24 @@ public class LoginActivity extends BaseActivity {
                                 ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
                                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 countrySpinner.setAdapter(adapter);
+
+                                setForm();
                             }
                         },
-                        new BaseErrorListener(this)
+                        new BaseErrorListener(this) {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                super.onErrorResponse(error);
+
+                                setForm();
+                            }
+                        }
                 );
 
                 VolleyManager.getInstance(this).getRequestQueue().add(request);
             } else {
                 Toast.makeText(this, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+                setForm();
             }
         }
     }
