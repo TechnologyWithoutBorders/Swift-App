@@ -269,18 +269,20 @@ public class LoginActivity extends BaseActivity {
         super.onResume();
 
         //TODO: klappt das mit dem Ablauf?
-        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(
-            appUpdateInfo -> {
-                if(appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                    // If an in-app update is already running, resume the update.
-                    try {
-                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
-                    } catch (IntentSender.SendIntentException e) {
-                        Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+        if(appUpdateManager != null) {
+            appUpdateManager.getAppUpdateInfo().addOnSuccessListener(
+                appUpdateInfo -> {
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                        // If an in-app update is already running, resume the update.
+                        try {
+                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
+                        } catch (IntentSender.SendIntentException e) {
+                            Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-            }
-        );
+            );
+        }
     }
 
 
