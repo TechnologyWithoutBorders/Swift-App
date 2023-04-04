@@ -16,9 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -29,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -79,6 +77,7 @@ public class LoginActivity extends BaseActivity {
     private EditText mailField, passwordField;
     private LinearLayout form;
     private ImageView imageView;
+    private AnimationDrawable anim;
     private Spinner countrySpinner, hospitalSpinner;
 
     private AppUpdateManager appUpdateManager;
@@ -101,8 +100,8 @@ public class LoginActivity extends BaseActivity {
         }
 
         imageView = findViewById(R.id.imageView2);
-
         imageView.setBackgroundResource(R.drawable.logo_layer);
+        anim = (AnimationDrawable)imageView.getBackground();
 
         form = findViewById(R.id.form);
 
@@ -195,17 +194,14 @@ public class LoginActivity extends BaseActivity {
     private void setLoadingScreen() {
         form.setVisibility(View.GONE);
 
-        RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(700);
-
-        imageView.startAnimation(anim);
+        imageView.setImageDrawable(null);
+        anim.start();
     }
 
     private void setForm() {
-        imageView.clearAnimation();
+        anim.stop();
 
+        imageView.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_applogo_ohne_kontur_rot1));
         form.setVisibility(View.VISIBLE);
     }
 
@@ -313,7 +309,7 @@ public class LoginActivity extends BaseActivity {
             if(password.length() > 0) {
                 if(country != null && hospital != null) {
                     if (checkForInternetConnection()) {
-                        AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();
+                        AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();//TODO this clashes with the animation above
 
                         JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country, ((Hospital)hospital).getId());
 
