@@ -52,7 +52,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$gson_version"
 
     //Room Persistence Library for easy access of SQLite database
-    def room_version = "2.5.0"
+    def room_version = "2.5.1"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
@@ -89,7 +89,7 @@ dependencies {
     //Some miscellaneous dependencies
 
     //TODO this seems to be not necessary anymore or is it just buggy??
-    def lifecycle_version = "2.6.0"
+    def lifecycle_version = "2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
