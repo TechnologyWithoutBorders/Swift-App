@@ -59,7 +59,10 @@ import ngo.teog.swift.communication.BaseErrorListener;
 import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.ResponseParser;
+import ngo.teog.swift.communication.ServerException;
 import ngo.teog.swift.communication.SwiftResponse;
+import ngo.teog.swift.communication.TransparentServerException;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -67,6 +70,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.filters.HospitalAttribute;
+import ngo.teog.swift.helpers.filters.UserAttribute;
 
 /**
  * Provides login functionality
@@ -241,6 +245,11 @@ public class LoginActivity extends BaseActivity {
 
                                 setForm();
                             }
+
+                            @Override
+                            public void onError() {
+                                setForm();
+                            }
                         },
                         new BaseErrorListener(this) {
                             @Override
@@ -281,7 +290,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -309,14 +317,54 @@ public class LoginActivity extends BaseActivity {
             if(password.length() > 0) {
                 if(country != null && hospital != null) {
                     if (checkForInternetConnection()) {
-                        AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();//TODO this clashes with the animation above
+                        Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.LOGIN_USER, false);
+                        params.put(UserAttribute.MAIL, mailAddress);
+                        params.put(UserAttribute.PASSWORD, getSHA256Hash(password));
+                        //Override country, because the shared preferences contain no country at this point
+                        params.put(Defaults.COUNTRY_KEY, country);
+                        params.put(Defaults.HOSPITAL_KEY, Integer.toString(((Hospital)hospital).getId()));
 
-                        JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country, ((Hospital)hospital).getId());
+                        JSONObject jsonRequest = new JSONObject(params);
 
-                        form.setVisibility(View.GONE);
+                        JsonObjectRequest request = new JsonObjectRequest(
+                            Request.Method.POST,
+                            Defaults.BASE_URL + Defaults.USERS_URL,
+                            jsonRequest,
+                            new BaseResponseListener(LoginActivity.this) {
+                                @Override
+                                public void onSuccess(JSONObject response) throws ServerException, TransparentServerException {
+                                    int id = ResponseParser.parseLoginResponse(response);
 
-                        imageView.setImageDrawable(null);
-                        anim.start();
+                                    SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putInt(Defaults.ID_PREFERENCE, id);
+                                    editor.putString(Defaults.PW_PREFERENCE, password);
+                                    editor.putString(Defaults.COUNTRY_PREFERENCE, country);
+                                    editor.apply();
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    LoginActivity.this.startActivity(intent);
+
+                                    //remove activity from stack
+                                    LoginActivity.this.finish();
+                                }
+
+                                @Override
+                                public void onError() {
+                                    setForm();
+                                }
+                            },
+                            new BaseErrorListener(LoginActivity.this) {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    setForm();
+
+                                    super.onErrorResponse(error);
+                                }
+                            }
+                        );
+
+                        setLoadingScreen();
 
                         Log.v(this.getClass().getName(), "trying to log in user with mail address " + mailAddress);
                         VolleyManager.getInstance(this).getRequestQueue().add(request);

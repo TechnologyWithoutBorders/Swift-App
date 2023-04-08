@@ -108,64 +108,6 @@ public class RequestFactory {
         }, new BaseErrorListener(context));
     }
 
-    public JsonObjectRequest createLoginRequest(Activity context, AnimationDrawable anim, LinearLayout form, String mail, String password, String country, int hospital) {
-        final String url = Defaults.BASE_URL + Defaults.USERS_URL;
-
-        Map<String, String> params = generateParameterMap(context, DataAction.LOGIN_USER, false);
-
-        params.put(UserAttribute.MAIL, mail);
-        params.put(UserAttribute.PASSWORD, password);
-        //Override country, because the shared preferences contain no country at this point
-        params.put(Defaults.COUNTRY_KEY, country);
-        params.put(Defaults.HOSPITAL_KEY, Integer.toString(hospital));
-
-        JSONObject request = new JSONObject(params);
-
-        return new LoginRequest(context, anim, form, url, request, password, country);
-    }
-
-    public static class LoginRequest extends JsonObjectRequest {
-
-        //use activity instead of plain context, because it must be removed from the stack afterwards
-        public LoginRequest(final Activity activity, final AnimationDrawable anim, final LinearLayout form, final String url, JSONObject request, final String password, final String country) {
-            super(Request.Method.POST, url, request, response -> {
-                try {
-                    int id = ResponseParser.parseLoginResponse(response);
-
-                    SharedPreferences preferences = activity.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt(Defaults.ID_PREFERENCE, id);
-                    editor.putString(Defaults.PW_PREFERENCE, password);
-                    editor.putString(Defaults.COUNTRY_PREFERENCE, country);
-                    editor.apply();
-
-                    Intent intent = new Intent(activity, MainActivity.class);
-                    activity.startActivity(intent);
-
-                    //remove activity from stack
-                    activity.finish();
-                } catch(TransparentServerException e) {
-                    //this typically applies if the login data was incorrect
-                    Toast.makeText(activity.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    anim.stop();
-                    form.setVisibility(View.VISIBLE);
-                } catch(ServerException e) {
-                    Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.server_comm_error_message), Toast.LENGTH_SHORT).show();
-                    anim.stop();
-                    form.setVisibility(View.VISIBLE);
-                } catch(Exception e) {
-                    Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-                    anim.stop();
-                    form.setVisibility(View.VISIBLE);
-                }
-            }, error -> {
-                anim.stop();
-                form.setVisibility(View.VISIBLE);
-                Toast.makeText(activity.getApplicationContext(), activity.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-            });
-        }
-    }
-
     public JsonObjectRequest createPasswordResetRequest(Context context, String mail, String country) {
         final String url = Defaults.BASE_URL + Defaults.USERS_URL;
 
