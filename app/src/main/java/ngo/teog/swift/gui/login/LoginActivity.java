@@ -317,9 +317,11 @@ public class LoginActivity extends BaseActivity {
             if(password.length() > 0) {
                 if(country != null && hospital != null) {
                     if (checkForInternetConnection()) {
+                        String hashedPassword = getSHA256Hash(password);
+
                         Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.LOGIN_USER, false);
                         params.put(UserAttribute.MAIL, mailAddress);
-                        params.put(UserAttribute.PASSWORD, getSHA256Hash(password));
+                        params.put(UserAttribute.PASSWORD, hashedPassword);
                         //Override country, because the shared preferences contain no country at this point
                         params.put(Defaults.COUNTRY_KEY, country);
                         params.put(Defaults.HOSPITAL_KEY, Integer.toString(((Hospital)hospital).getId()));
@@ -338,7 +340,7 @@ public class LoginActivity extends BaseActivity {
                                     SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putInt(Defaults.ID_PREFERENCE, id);
-                                    editor.putString(Defaults.PW_PREFERENCE, password);
+                                    editor.putString(Defaults.PW_PREFERENCE, hashedPassword);
                                     editor.putString(Defaults.COUNTRY_PREFERENCE, country);
                                     editor.apply();
 
