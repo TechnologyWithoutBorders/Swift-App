@@ -3,6 +3,7 @@ package ngo.teog.swift.gui.login;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -15,9 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -28,10 +26,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +59,10 @@ import ngo.teog.swift.communication.BaseErrorListener;
 import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.ResponseParser;
+import ngo.teog.swift.communication.ServerException;
 import ngo.teog.swift.communication.SwiftResponse;
+import ngo.teog.swift.communication.TransparentServerException;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -62,6 +70,7 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.filters.HospitalAttribute;
+import ngo.teog.swift.helpers.filters.UserAttribute;
 
 /**
  * Provides login functionality
@@ -72,13 +81,17 @@ public class LoginActivity extends BaseActivity {
     private EditText mailField, passwordField;
     private LinearLayout form;
     private ImageView imageView;
+    private AnimationDrawable anim;
     private Spinner countrySpinner, hospitalSpinner;
+
+    private AppUpdateManager appUpdateManager;
+
+    private static final int APP_UPDATE_CODE = 4711;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_login);
 
         try {
@@ -91,8 +104,8 @@ public class LoginActivity extends BaseActivity {
         }
 
         imageView = findViewById(R.id.imageView2);
-
         imageView.setBackgroundResource(R.drawable.logo_layer);
+        anim = (AnimationDrawable)imageView.getBackground();
 
         form = findViewById(R.id.form);
 
@@ -160,18 +173,48 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        if(checkForInternetConnection()) {
+            setLoadingScreen();
+
+            //Check whether a new app version is available
+            appUpdateManager = AppUpdateManagerFactory.create(this);
+            Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+            appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+                if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
+                    } catch (IntentSender.SendIntentException e) {
+                        Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                initLoginOptions();
+            });
+        } else {
+            initLoginOptions();
+        }
+    }
+
+    private void setLoadingScreen() {
+        form.setVisibility(View.GONE);
+
+        imageView.setImageDrawable(null);
+        anim.start();
+    }
+
+    private void setForm() {
+        anim.stop();
+
+        imageView.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_applogo_ohne_kontur_rot1));
+        form.setVisibility(View.VISIBLE);
+    }
+
+    private void initLoginOptions() {
         SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
 
+        setLoadingScreen();
+
         if(preferences.contains(Defaults.ID_PREFERENCE) && preferences.contains(Defaults.PW_PREFERENCE)) {
-            form.setVisibility(View.GONE);
-
-            RotateAnimation anim = new RotateAnimation(0f, 350f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-            anim.setInterpolator(new LinearInterpolator());
-            anim.setRepeatCount(Animation.INFINITE);
-            anim.setDuration(700);
-
-            imageView.startAnimation(anim);
-
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
 
@@ -183,31 +226,67 @@ public class LoginActivity extends BaseActivity {
                 JSONObject jsonRequest = new JSONObject(params);
 
                 JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,//TODO: use get
-                    Defaults.BASE_URL + Defaults.INFO_URL,
-                    jsonRequest,
-                    new BaseResponseListener(this) {
-                        @Override
-                        public void onSuccess(JSONObject response) throws JSONException {
-                            JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
-                            String[] countries = new String[countriesArray.length()];
+                        Request.Method.POST,//TODO: use get
+                        Defaults.BASE_URL + Defaults.INFO_URL,
+                        jsonRequest,
+                        new BaseResponseListener(this) {
+                            @Override
+                            public void onSuccess(JSONObject response) throws JSONException {
+                                JSONArray countriesArray = response.getJSONArray(SwiftResponse.DATA_FIELD);
+                                String[] countries = new String[countriesArray.length()];
 
-                            for (int i = 0; i < countriesArray.length(); i++) {
-                                countries[i] = countriesArray.getString(i);
+                                for (int i = 0; i < countriesArray.length(); i++) {
+                                    countries[i] = countriesArray.getString(i);
+                                }
+
+                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                countrySpinner.setAdapter(adapter);
+
+                                setForm();
                             }
 
-                            ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            countrySpinner.setAdapter(adapter);
+                            @Override
+                            public void onError() {
+                                setForm();
+                            }
+                        },
+                        new BaseErrorListener(this) {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                super.onErrorResponse(error);
+
+                                setForm();
+                            }
                         }
-                    },
-                    new BaseErrorListener(this)
                 );
 
                 VolleyManager.getInstance(this).getRequestQueue().add(request);
             } else {
                 Toast.makeText(this, R.string.error_internet_connection, Toast.LENGTH_SHORT).show();
+                setForm();
             }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //TODO: klappt das mit dem Ablauf?
+        if(appUpdateManager != null) {
+            appUpdateManager.getAppUpdateInfo().addOnSuccessListener(
+                appUpdateInfo -> {
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                        // If an in-app update is already running, resume the update.
+                        try {
+                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
+                        } catch (IntentSender.SendIntentException e) {
+                            Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            );
         }
     }
 
@@ -238,14 +317,56 @@ public class LoginActivity extends BaseActivity {
             if(password.length() > 0) {
                 if(country != null && hospital != null) {
                     if (checkForInternetConnection()) {
-                        AnimationDrawable anim = (AnimationDrawable) imageView.getBackground();
+                        String hashedPassword = getSHA256Hash(password);
 
-                        JsonObjectRequest request = RequestFactory.getInstance().createLoginRequest(this, anim, form, mailAddress, getSHA256Hash(password), country, ((Hospital)hospital).getId());
+                        Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.LOGIN_USER, false);
+                        params.put(UserAttribute.MAIL, mailAddress);
+                        params.put(UserAttribute.PASSWORD, hashedPassword);
+                        //Override country, because the shared preferences contain no country at this point
+                        params.put(Defaults.COUNTRY_KEY, country);
+                        params.put(Defaults.HOSPITAL_KEY, Integer.toString(((Hospital)hospital).getId()));
 
-                        form.setVisibility(View.GONE);
+                        JSONObject jsonRequest = new JSONObject(params);
 
-                        imageView.setImageDrawable(null);
-                        anim.start();
+                        JsonObjectRequest request = new JsonObjectRequest(
+                            Request.Method.POST,
+                            Defaults.BASE_URL + Defaults.USERS_URL,
+                            jsonRequest,
+                            new BaseResponseListener(LoginActivity.this) {
+                                @Override
+                                public void onSuccess(JSONObject response) throws ServerException, TransparentServerException {
+                                    int id = ResponseParser.parseLoginResponse(response);
+
+                                    SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putInt(Defaults.ID_PREFERENCE, id);
+                                    editor.putString(Defaults.PW_PREFERENCE, hashedPassword);
+                                    editor.putString(Defaults.COUNTRY_PREFERENCE, country);
+                                    editor.apply();
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    LoginActivity.this.startActivity(intent);
+
+                                    //remove activity from stack
+                                    LoginActivity.this.finish();
+                                }
+
+                                @Override
+                                public void onError() {
+                                    setForm();
+                                }
+                            },
+                            new BaseErrorListener(LoginActivity.this) {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    setForm();
+
+                                    super.onErrorResponse(error);
+                                }
+                            }
+                        );
+
+                        setLoadingScreen();
 
                         Log.v(this.getClass().getName(), "trying to log in user with mail address " + mailAddress);
                         VolleyManager.getInstance(this).getRequestQueue().add(request);

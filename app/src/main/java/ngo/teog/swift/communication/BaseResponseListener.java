@@ -54,9 +54,11 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
         } catch(TransparentServerException e) {
             Log.i(this.getClass().getName(), e.toString());
             Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            onError();
         } catch(Exception e) {
             Log.w(this.getClass().getName(), e.toString());
             Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+            onError();
         }
     }
 
@@ -66,4 +68,6 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
      * @throws Exception if parsing the response fails for some reason
      */
     public void onSuccess(JSONObject response) throws Exception {}
+
+    public void onError() {}
 }

@@ -67,8 +67,6 @@ public class ResponseParser {
      * @throws TransparentServerException if user authentication has failed
      */
     public static int parseLoginResponse(JSONObject raw) throws ServerException, TransparentServerException {
-        probeResponseCode(raw);
-
         try {
             return raw.getInt(SwiftResponse.DATA_FIELD);
         } catch(JSONException e) {
