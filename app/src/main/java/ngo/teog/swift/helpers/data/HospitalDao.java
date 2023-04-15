@@ -108,4 +108,16 @@ public abstract class HospitalDao {
         report.setId(maxReportId+1);
         save(report);
     }
+
+    @Query("DELETE FROM devices WHERE valid = 0")
+    public abstract void deleteInvalidDevices();
+
+    @Query("DELETE FROM reports WHERE valid = 0")
+    public abstract void deleteInvalidReports();
+
+    @Transaction
+    public void deleteInvalidDevicesAndReports() {
+        deleteInvalidReports();
+        deleteInvalidDevices();
+    }
 }
