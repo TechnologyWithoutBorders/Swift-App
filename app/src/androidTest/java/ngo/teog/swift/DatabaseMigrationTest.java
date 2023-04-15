@@ -2,7 +2,6 @@ package ngo.teog.swift;
 
 import androidx.room.testing.MigrationTestHelper;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -11,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import ngo.teog.swift.helpers.data.HospitalDatabase;
 import ngo.teog.swift.helpers.data.RoomModule;
@@ -26,8 +24,7 @@ public class DatabaseMigrationTest {
     public DatabaseMigrationTest() {
         helper = new MigrationTestHelper(
                 InstrumentationRegistry.getInstrumentation(),
-                Objects.requireNonNull(HospitalDatabase.class.getCanonicalName()),
-                new FrameworkSQLiteOpenHelperFactory());
+                HospitalDatabase.class);
     }
 
     @Test
