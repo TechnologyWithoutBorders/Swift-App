@@ -130,7 +130,7 @@ public class TodoFragment extends Fragment {
                         long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
                         long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
 
-                        return (int)((firstCreated - secondCreated) / 1000);
+                        return (int)((secondCreated-firstCreated) / 1000);
                     } else {
                         return 0;
                     }
