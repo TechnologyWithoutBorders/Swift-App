@@ -21,10 +21,12 @@ public class HospitalDevice implements Serializable {
     private Integer organizationalUnit;
     private int hospital;
     private int maintenanceInterval;
+
+    private final boolean valid;
     private Date lastUpdate;
     private Date lastSync;
 
-    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, Integer organizationalUnit, int hospital, int maintenanceInterval, Date lastUpdate) {
+    public HospitalDevice(int id, String assetNumber, String type, String serialNumber, String manufacturer, String model, Integer organizationalUnit, int hospital, int maintenanceInterval, boolean valid, Date lastUpdate) {
         this.id = id;
         this.assetNumber = assetNumber;
         this.type = type;
@@ -34,6 +36,7 @@ public class HospitalDevice implements Serializable {
         this.organizationalUnit = organizationalUnit;
         this.hospital = hospital;
         this.maintenanceInterval = maintenanceInterval;
+        this.valid = valid;
         this.lastUpdate = lastUpdate;
         this.lastSync = new Date();
     }
@@ -108,6 +111,10 @@ public class HospitalDevice implements Serializable {
 
     public void setOrganizationalUnit(Integer organizationalUnit) {
         this.organizationalUnit = organizationalUnit;
+    }
+
+    public boolean getValid() {
+        return valid;
     }
 
     public Date getLastUpdate() {

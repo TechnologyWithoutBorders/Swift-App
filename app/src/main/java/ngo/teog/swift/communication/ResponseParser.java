@@ -82,7 +82,7 @@ public class ResponseParser {
      * @throws ServerException if some internal server error has occurred
      * @throws TransparentServerException if some transparent error has happened
      */
-    public static HospitalInfo parseHospital(JSONObject raw) throws ServerException, TransparentServerException {
+    public static HospitalInfo parseHospital(JSONObject raw) throws ServerException, TransparentServerException {//TODO use GSON
         probeResponseCode(raw);
 
         try {
@@ -155,6 +155,7 @@ public class ResponseParser {
 
                 int hospital = deviceObject.getInt(DeviceAttribute.HOSPITAL);
                 int maintenanceInterval = deviceObject.getInt(DeviceAttribute.MAINTENANCE_INTERVAL);
+                boolean valid = deviceObject.getBoolean(DeviceAttribute.VALID);
                 Date lastUpdate = dateFormat.parse(deviceObject.getString(DeviceAttribute.LAST_UPDATE));
 
                 JSONArray reports = deviceObject.getJSONArray(ResourceKeys.REPORTS);
@@ -170,16 +171,17 @@ public class ResponseParser {
                     int reportHospital = reportObject.getInt(ReportAttribute.HOSPITAL);
                     int currentState = reportObject.getInt(ReportAttribute.CURRENT_STATE);
                     String description = reportObject.getString(ReportAttribute.DESCRIPTION);
+                    boolean reportValid = reportObject.getBoolean(ReportAttribute.VALID);
                     Date datetime = dateFormat.parse(reportObject.getString(ReportAttribute.CREATED));
 
-                    Report report = new Report(reportId, author, title, affectedDevice, reportHospital, currentState, description, datetime);
+                    Report report = new Report(reportId, author, title, affectedDevice, reportHospital, currentState, description, reportValid, datetime);
 
                     ReportInfo reportInfo = new ReportInfo(report);
 
                     reportList.add(reportInfo);
                 }
 
-                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, organizationalUnit, hospital, maintenanceInterval, lastUpdate);
+                HospitalDevice device = new HospitalDevice(id, assetNumber, type, serialNumber, manufacturer, model, organizationalUnit, hospital, maintenanceInterval, valid, lastUpdate);
 
                 DeviceInfo deviceInfo = new DeviceInfo(device);
                 deviceInfo.setReports(reportList);
