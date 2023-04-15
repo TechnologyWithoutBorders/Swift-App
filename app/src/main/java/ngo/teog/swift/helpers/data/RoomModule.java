@@ -19,7 +19,7 @@ public class RoomModule {
 
     public RoomModule(Application mApplication) {
         hospitalDatabase = Room.databaseBuilder(mApplication, HospitalDatabase.class, "hospital-db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
                 .build();
     }
 
@@ -156,6 +156,17 @@ public class RoomModule {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE users ADD COLUMN valid INTEGER NOT NULL DEFAULT 1");
+        }
+    };
+
+    /*
+     * valid column was added to tables devices and reports
+     */
+    public static final Migration MIGRATION_10_11 = new Migration(10, 11) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE devices ADD COLUMN valid INTEGER NOT NULL DEFAULT 1");
+            database.execSQL("ALTER TABLE reports ADD COLUMN valid INTEGER NOT NULL DEFAULT 1");
         }
     };
 }

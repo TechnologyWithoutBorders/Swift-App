@@ -11,7 +11,8 @@ public final class ReportAttribute {
     public static final String DEVICE = "device";
     public static final String HOSPITAL = "hospital";
     public static final String DESCRIPTION = "description";
-    public static final String PREVIOUS_STATE = "previousState";
     public static final String CURRENT_STATE = "currentState";
+
+    public static final String VALID = "valid";
     public static final String CREATED = "created";
 }

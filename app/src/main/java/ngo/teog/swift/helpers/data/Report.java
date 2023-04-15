@@ -19,10 +19,12 @@ public class Report implements  Serializable {
     private int hospital;
     private final int currentState;
     private final String description;
+
+    private final boolean valid;
     private final Date created;
     private Date lastSync;
 
-    public Report(int id, int author, String title, int device, int hospital, int currentState, String description, Date created) {
+    public Report(int id, int author, String title, int device, int hospital, int currentState, String description, boolean valid, Date created) {
         this.id = id;
         this.author = author;
         this.title = title;
@@ -30,6 +32,7 @@ public class Report implements  Serializable {
         this.hospital = hospital;
         this.currentState = currentState;
         this.description = description;
+        this.valid = valid;
         this.created = created;
         this.lastSync = new Date();
     }
@@ -68,6 +71,10 @@ public class Report implements  Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean getValid() {
+        return valid;
     }
 
     public Date getCreated() {

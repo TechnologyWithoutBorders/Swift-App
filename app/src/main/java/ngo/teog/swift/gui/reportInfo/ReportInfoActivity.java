@@ -319,7 +319,7 @@ public class ReportInfoActivity extends BaseActivity {
 
             if(title.length() > 0) {
                 //ID = 0 means auto-generate ID
-                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, deviceId, hospitalId, newState, description, new Date());
+                Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, deviceId, hospitalId, newState, description, true, new Date());
 
                 viewModel.createReport(report, preferences.getInt(Defaults.ID_PREFERENCE, -1));
 

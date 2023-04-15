@@ -263,13 +263,17 @@ public class HospitalRepository {
         hospitalDao.deleteOrgUnits();
     }
 
+    public void deleteInvalidDevicesAndReportsSync() {
+        hospitalDao.deleteInvalidDevicesAndReports();
+    }
+
     public void createDevice(HospitalDevice device, int userId) {
         executor.execute(() -> {
             Date lastUpdate = new Date();
 
             String creationText = context.getString(R.string.initial_report_text);
 
-            Report creationReport = new Report(1, userId, creationText, device.getId(), device.getHospital(), 0, creationText, lastUpdate);
+            Report creationReport = new Report(1, userId, creationText, device.getId(), device.getHospital(), 0, creationText, true, lastUpdate);
             device.setLastUpdate(lastUpdate);
 
             hospitalDao.save(device);
@@ -623,6 +627,9 @@ public class HospitalRepository {
 
                     HospitalRepository.this.updateDevicesSync(devices);
                     HospitalRepository.this.updateReportsSync(reports);
+
+                    //delete invalid devices and their reports
+                    HospitalRepository.this.deleteInvalidDevicesAndReportsSync();
 
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();

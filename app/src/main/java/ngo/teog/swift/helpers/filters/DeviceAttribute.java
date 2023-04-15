@@ -14,5 +14,7 @@ public final class DeviceAttribute {
     public static final String ORGANIZATIONAL_UNIT = "organizationalUnit";
     public static final String HOSPITAL = "hospital";
     public static final String MAINTENANCE_INTERVAL = "maintenanceInterval";
+
+    public static final String VALID = "valid";
     public static final String LAST_UPDATE = "lastUpdate";
 }

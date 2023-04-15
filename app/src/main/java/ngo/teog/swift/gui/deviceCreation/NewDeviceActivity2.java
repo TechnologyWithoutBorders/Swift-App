@@ -222,8 +222,18 @@ public class NewDeviceActivity2 extends BaseActivity {
                             progressBar.setVisibility(View.VISIBLE);
 
                             //we actually save the number of weeks, not months
-                            HospitalDevice device = new HospitalDevice(deviceNumber, assetNumber,
-                                    typeField.getText().toString().trim(), serialNumberField.getText().toString().trim(), manufacturerField.getText().toString().trim(), modelField.getText().toString().trim(), null, -1, interval*4, new Date());
+                            HospitalDevice device = new HospitalDevice(
+                                    deviceNumber,
+                                    assetNumber,
+                                    typeField.getText().toString().trim(),
+                                    serialNumberField.getText().toString().trim(),
+                                    manufacturerField.getText().toString().trim(),
+                                    modelField.getText().toString().trim(),
+                                    null,
+                                    -1,
+                                    interval*4,
+                                    true,
+                                    new Date());
 
                             Intent intent = new Intent(NewDeviceActivity2.this, NewDeviceActivity3.class);
                             intent.putExtra(ResourceKeys.DEVICE, device);
