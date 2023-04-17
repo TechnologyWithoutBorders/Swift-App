@@ -78,6 +78,7 @@ dependencies {
     //Image compression library
     //Do not use version 3.x yet!
     def compressor_version = "2.1.1"
+    //noinspection GradleDependency
     implementation "id.zelory:compressor:$compressor_version"
 
     //FancyShowCaseView for tutorial/highlighting features
