@@ -182,7 +182,7 @@ public class PortationActivity extends AppCompatActivity {
                                 //zipOut is actually closed automatically, but stated here explicitly for convenience
                                 zipOut.close();
                             } catch (IOException e) {
-                                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                                Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                             }
                         }
                     });
