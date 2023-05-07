@@ -166,14 +166,14 @@ public class MainActivity extends BaseActivity {
 
                                 startActivity(openIntent);
                             } else {
-                                Toast.makeText(this.getApplicationContext(), getString(R.string.asset_wrong_country), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, getString(R.string.asset_wrong_country), Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(this.getApplicationContext(), getString(R.string.asset_wrong_hospital), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.asset_wrong_hospital), Toast.LENGTH_SHORT).show();
                         }
                     } catch(Exception e) {
                         Log.e(this.getClass().getName(), e.toString(), e);
-                        Toast.makeText(this.getApplicationContext(), getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.invalid_item_link), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -259,9 +259,6 @@ public class MainActivity extends BaseActivity {
      * Logs out the user. Wipes the database and shared preferences and deletes all downloaded device images.
      */
     public void logout() {
-        //cancel background synchronization
-        //WorkManager.getInstance(this.getApplicationContext()).cancelAllWorkByTag(SynchronizeWorker.TAG); TODO activate
-
         //clear database
         ExecutorService executor = Executors.newFixedThreadPool(1);
         executor.execute(() -> database.clearAllTables());

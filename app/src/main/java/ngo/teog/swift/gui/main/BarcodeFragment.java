@@ -147,7 +147,7 @@ public class BarcodeFragment extends Fragment {
                 intent.putExtra(ResourceKeys.DEVICE_ID, deviceInfo.getDevice().getId());
                 BarcodeFragment.this.startActivity(intent);
             } else {
-                Toast.makeText(this.requireContext().getApplicationContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.requireContext(), getString(R.string.device_not_found), Toast.LENGTH_SHORT).show();
             }
 
             searchField.setText(null);
@@ -186,7 +186,7 @@ public class BarcodeFragment extends Fragment {
 
             this.invokeFetch(deviceNumber);
         } catch(NumberFormatException e) {
-            Toast.makeText(this.requireContext().getApplicationContext(), getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.requireContext(), getString(R.string.device_number_invalid), Toast.LENGTH_SHORT).show();
         }
     }
 }

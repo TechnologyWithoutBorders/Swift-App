@@ -371,10 +371,10 @@ public class LoginActivity extends BaseActivity {
                         Log.v(this.getClass().getName(), "trying to log in user with mail address " + mailAddress);
                         VolleyManager.getInstance(this).getRequestQueue().add(request);
                     } else {
-                        Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this.getApplicationContext(), "please select your hospital", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "please select your hospital", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 passwordField.setError(getText(R.string.error_empty_password));
@@ -401,7 +401,7 @@ public class LoginActivity extends BaseActivity {
 
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } else {
-                    Toast.makeText(this.getApplicationContext(), getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getText(R.string.error_internet_connection), Toast.LENGTH_SHORT).show();
                 }
             };
 
