@@ -1,7 +1,6 @@
 package ngo.teog.swift.helpers.data;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
@@ -37,8 +36,8 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    HospitalRepository hospitalRepository(HospitalDao hospitalDao, Context context) {
-        return new HospitalRepository(hospitalDao, context);
+    HospitalRepository hospitalRepository(HospitalDao hospitalDao, Application application) {
+        return new HospitalRepository(hospitalDao, application);
     }
 
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {

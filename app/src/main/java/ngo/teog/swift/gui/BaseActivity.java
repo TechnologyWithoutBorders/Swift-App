@@ -2,7 +2,8 @@ package ngo.teog.swift.gui;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -59,9 +60,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if(cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            Network network = cm.getActiveNetwork();
 
-            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            if(network != null) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+
+                return capabilities != null &&
+                                (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
