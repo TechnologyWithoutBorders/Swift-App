@@ -23,6 +23,8 @@ public final class Defaults {
     /** Key that identifies timestamp of last synchronization with server in shared preferences */
     public static final String LAST_SYNC_PREFERENCE = "LAST_SYNC_PREFERENCE";
 
+    public static final String LAST_RESET_PREFERENCE = "LAST_RESET_PREFERENCE";
+
     //Server URLs
 
     public static final String HOST = "https://teog.virlep.de/";
