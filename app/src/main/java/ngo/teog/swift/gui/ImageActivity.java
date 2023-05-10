@@ -57,10 +57,10 @@ public class ImageActivity extends BaseActivity {
                 imageView = findViewById(R.id.imageView);
                 imageView.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
-                Toast.makeText(this.getApplicationContext(), getText(R.string.file_not_found), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getText(R.string.file_not_found), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this.getApplicationContext(), this.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -125,13 +125,13 @@ public class ImageActivity extends BaseActivity {
 
                     VolleyManager.getInstance(this).getRequestQueue().add(request);
                 } catch(FileNotFoundException e1) {
-                    Toast.makeText(this.getApplicationContext(), getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.file_not_found), Toast.LENGTH_LONG).show();
                 } catch(NoSuchAlgorithmException | IOException e1) {
-                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                     Log.e(this.getClass().getName(), e1.toString(), e1);
                 }
             } else {
-                Toast.makeText(this.getApplicationContext(), getString(R.string.error_internet_connection), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.error_internet_connection), Toast.LENGTH_LONG).show();
             }
 
             return true;

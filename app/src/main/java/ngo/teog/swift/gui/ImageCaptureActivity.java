@@ -172,7 +172,7 @@ public class ImageCaptureActivity extends BaseActivity {
 
                     viewModel.updateDeviceImage(deviceId, userId);
                 } catch(Exception e) {
-                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                 } finally {
                     boolean deleted = compressedImage.delete();
 
@@ -181,7 +181,7 @@ public class ImageCaptureActivity extends BaseActivity {
                     }
                 }
             } catch(IOException e) {
-                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             } finally {
                 boolean deleted = tempFile.delete();
 
@@ -222,7 +222,7 @@ public class ImageCaptureActivity extends BaseActivity {
             }
         } catch(Exception e) {
             Log.e(this.getClass().getName(), "dispatching picture event failed", e);
-            Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
         }
     }
 }

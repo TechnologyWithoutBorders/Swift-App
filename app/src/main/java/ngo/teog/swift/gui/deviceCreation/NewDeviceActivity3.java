@@ -202,7 +202,7 @@ public class NewDeviceActivity3 extends BaseActivity {
 
                     viewModel.createDevice(device, userId);
                 } catch(Exception e) {
-                    Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                 } finally {
                     boolean deleted = compressedImage.delete();
 
@@ -211,7 +211,7 @@ public class NewDeviceActivity3 extends BaseActivity {
                     }
                 }
             } catch(IOException e) {
-                Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             } finally {
                 boolean deleted = tempFile.delete();
 
@@ -250,7 +250,7 @@ public class NewDeviceActivity3 extends BaseActivity {
             }
         } catch(Exception e) {
             Log.e(this.getClass().getName(), "dispatching picture event failed", e);
-            Toast.makeText(this.getApplicationContext(), getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
         }
     }
 }

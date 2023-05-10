@@ -1,12 +1,14 @@
 package ngo.teog.swift.helpers.data;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.util.Base64;
 import android.util.Log;
 
@@ -65,14 +67,14 @@ import ngo.teog.swift.helpers.export.HospitalDump;
 public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
-    private final Context context;
+    private final Application application;
     private final ExecutorService executor = Executors.newCachedThreadPool();//TODO build component that allows controlling order of execution
     private final AtomicBoolean syncOngoing = new AtomicBoolean(false);
 
     @Inject
-    public HospitalRepository(HospitalDao hospitalDao, Context context) {
+    public HospitalRepository(HospitalDao hospitalDao, Application application) {
         this.hospitalDao = hospitalDao;
-        this.context = context;
+        this.application = application;
     }
 
     /**
@@ -271,7 +273,7 @@ public class HospitalRepository {
         executor.execute(() -> {
             Date lastUpdate = new Date();
 
-            String creationText = context.getString(R.string.initial_report_text);
+            String creationText = application.getString(R.string.initial_report_text);
 
             Report creationReport = new Report(1, userId, creationText, device.getId(), device.getHospital(), 0, creationText, true, lastUpdate);
             device.setLastUpdate(lastUpdate);
@@ -307,29 +309,29 @@ public class HospitalRepository {
     private void refreshUserHospitalSync(int userId) {
         //refresh
         if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
-                        SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                        SharedPreferences preferences = application.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
             long now = new Date().getTime();
 
             if(now-lastSync >= 3000) {
-                RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+                RequestQueue queue = VolleyManager.getInstance(application).getRequestQueue();
 
-                File logFile = new File(context.getFilesDir(), "error.log");
+                File logFile = new File(application.getFilesDir(), "error.log");
 
                 if(logFile.exists()) {
-                    queue.add(createLogFileUploadRequest(context, logFile));
+                    queue.add(createLogFileUploadRequest(application, logFile));
 
                     //noinspection ResultOfMethodCallIgnored
                     logFile.delete();
                 }
 
-                HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
+                HospitalRequest hospitalRequest = createHospitalRequest(application, userId, executor);
 
                 if (hospitalRequest != null) {
                     queue.add(hospitalRequest);
                 }
 
-                List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+                List<JsonObjectRequest> uploadRequests = getImageUploadRequests(application, executor);
 
                 for (JsonObjectRequest request : uploadRequests) {
                     queue.add(request);
@@ -344,30 +346,30 @@ public class HospitalRepository {
         executor.execute(() -> {
             //refresh
             if(this.checkForInternetConnection() && syncOngoing.compareAndSet(false, true)) {
-                SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+                SharedPreferences preferences = application.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                 long lastSync = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
                 long now = new Date().getTime();
 
                 if(now-lastSync >= 3000) {
-                    RequestQueue queue = VolleyManager.getInstance(context).getRequestQueue();
+                    RequestQueue queue = VolleyManager.getInstance(application).getRequestQueue();
 
-                    File logFile = new File(context.getFilesDir(), "error.log");
+                    File logFile = new File(application.getFilesDir(), "error.log");
 
                     if(logFile.exists()) {
-                        queue.add(createLogFileUploadRequest(context, logFile));
+                        queue.add(createLogFileUploadRequest(application, logFile));
 
                         //noinspection ResultOfMethodCallIgnored
                         logFile.delete();
                     }
 
-                    HospitalRequest hospitalRequest = createHospitalRequest(context, userId, executor);
+                    HospitalRequest hospitalRequest = createHospitalRequest(application, userId, executor);
 
                     if(hospitalRequest != null) {
                         queue.add(hospitalRequest);
                     }
 
                     //TODO: also check if image uploads are ongoing as those use a lot of data
-                    List<JsonObjectRequest> uploadRequests = getImageUploadRequests(context, executor);
+                    List<JsonObjectRequest> uploadRequests = getImageUploadRequests(application, executor);
 
                     for(JsonObjectRequest request : uploadRequests) {
                         queue.add(request);
@@ -658,13 +660,23 @@ public class HospitalRepository {
         }
     }
 
-    private boolean checkForInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean checkForInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager)application.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if(cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            Network network = cm.getActiveNetwork();
 
-            return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            if(network != null) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+
+                return capabilities != null &&
+                        (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

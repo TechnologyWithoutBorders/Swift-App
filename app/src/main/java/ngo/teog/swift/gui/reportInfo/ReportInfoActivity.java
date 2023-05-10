@@ -330,7 +330,7 @@ public class ReportInfoActivity extends BaseActivity {
                 titleText.setError(getString(R.string.empty_title));
             }
         } else {
-            Toast.makeText(this.getApplicationContext(), getString(R.string.no_state_selected), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.no_state_selected), Toast.LENGTH_LONG).show();
         }
     }
 
