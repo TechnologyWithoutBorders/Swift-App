@@ -36,8 +36,8 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    HospitalRepository hospitalRepository(HospitalDao hospitalDao, Application application) {
-        return new HospitalRepository(hospitalDao, application);
+    HospitalRepository hospitalRepository(HospitalDao hospitalDao, Application application, HospitalDatabase database) {
+        return new HospitalRepository(hospitalDao, application, database);
     }
 
     public static final Migration MIGRATION_1_2 = new Migration(1, 2) {

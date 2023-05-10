@@ -68,13 +68,16 @@ public class HospitalRepository {
 
     private final HospitalDao hospitalDao;
     private final Application application;
+
+    private final HospitalDatabase database;
     private final ExecutorService executor = Executors.newCachedThreadPool();//TODO build component that allows controlling order of execution
     private final AtomicBoolean syncOngoing = new AtomicBoolean(false);
 
     @Inject
-    public HospitalRepository(HospitalDao hospitalDao, Application application) {
+    public HospitalRepository(HospitalDao hospitalDao, Application application, HospitalDatabase database) {
         this.hospitalDao = hospitalDao;
         this.application = application;
+        this.database = database;
     }
 
     /**
@@ -504,16 +507,14 @@ public class HospitalRepository {
 
             SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
             long lastUpdate = preferences.getLong(Defaults.LAST_SYNC_PREFERENCE, 0);
-
-            Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
-            params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(lastUpdate)));
+            long lastReset = preferences.getLong(Defaults.LAST_RESET_PREFERENCE, 0);
 
             JSONArray jsonDevices = new JSONArray();
             JSONArray jsonUsers = new JSONArray();
             JSONArray jsonReports = new JSONArray();
 
             //assure that no dataset with invalid timestamp is synchronized to server
-            long now = new Date().getTime();
+            long now = syncTime.getTime();
 
             List<User> users = HospitalRepository.this.getUserColleagues(userID);
 
@@ -547,17 +548,25 @@ public class HospitalRepository {
                 }
             }
 
-            JSONObject data = new JSONObject();
+            boolean reset = syncTime.getTime() - lastReset > 1000L * 60 * 60 * 24 * 30;
+
+            Map<String, String> params = RequestFactory.generateParameterMap(context, DataAction.SYNC_HOSPITAL_INFO, true);
+            if(reset) {
+                params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(0)));
+            } else {
+                params.put(ResourceKeys.LAST_SYNC, dateFormat.format(new Date(lastUpdate)));
+            }
 
             JSONObject request = new JSONObject(params);
 
+            JSONObject data = new JSONObject();
             data.put(ResourceKeys.DEVICES, jsonDevices);
             data.put(ResourceKeys.USERS, jsonUsers);
             data.put(ResourceKeys.REPORTS, jsonReports);
 
             request.put(ResourceKeys.DATA, data);
 
-            return new HospitalRequest(context, url, request, syncTime, executor);
+            return new HospitalRequest(context, url, request, syncTime, reset, executor);
         } catch(JSONException e) {
             return null;
         }
@@ -566,10 +575,14 @@ public class HospitalRepository {
     private class HospitalRequest extends JsonObjectRequest {
 
         @SuppressLint("ApplySharedPref")
-        private HospitalRequest(final Context context, final String url, JSONObject request, Date syncTime, ExecutorService executor) {
+        private HospitalRequest(final Context context, final String url, JSONObject request, Date syncTime, boolean reset, ExecutorService executor) {
             super(Request.Method.POST, url, request, response -> executor.execute(() -> {
                 try {
                     Log.i(HospitalRepository.this.getClass().getName(), "Server Response:\n" + response.toString(4));
+
+                    if(reset) {
+                        database.clearAllTables();
+                    }
 
                     DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.getDefault());
                     dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
@@ -636,6 +649,9 @@ public class HospitalRepository {
                     SharedPreferences preferences = context.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putLong(Defaults.LAST_SYNC_PREFERENCE, now);
+                    if(reset) {
+                        editor.putLong(Defaults.LAST_RESET_PREFERENCE, now);
+                    }
                     //we use commit() instead of apply() as we are in a separate thread
                     editor.commit();
 
