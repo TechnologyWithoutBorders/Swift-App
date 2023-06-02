@@ -2,10 +2,7 @@ package ngo.teog.swift.communication;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
-
-import androidx.annotation.Nullable;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;

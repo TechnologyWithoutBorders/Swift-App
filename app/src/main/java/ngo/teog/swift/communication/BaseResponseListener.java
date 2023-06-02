@@ -9,8 +9,6 @@ import com.android.volley.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-
 import ngo.teog.swift.R;
 
 /**
