@@ -86,7 +86,7 @@ dependencies {
     implementation "com.github.faruktoptas:FancyShowCaseView:$fancy_showcase_view_version"
 
     //In-App updates for immediate updates
-    implementation 'com.google.android.play:app-update:2.0.1'
+    implementation 'com.google.android.play:app-update:2.1.0'
 
     //Some miscellaneous dependencies
 
