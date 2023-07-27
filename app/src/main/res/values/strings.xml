@@ -8,7 +8,6 @@
     <string name="newdevice_activity_1">Please put a fresh barcode sticker on the device you want to register and scan it with your camera.</string>
     <string name="newdevice_activity_2">Please enter all general data known about the device.</string>
     <string name="newdevice_activity_3">Please take a snapshot of the device, so your colleagues can identify it easily.</string>
-    <string name="reportcreation_activity">Please add a short description about what problems the device has and what you have done in order to solve them.</string>
     <string name="userinfo_activity">You can use this data to contact your colleagues or staff at other hospitals.</string>
     <string name="userprofile_activity">This is your very own user profile. You can add some general information like your telephone number and position here.</string>
     <string name="mainactivity"><![CDATA[
@@ -117,13 +116,11 @@
     <string name="share">share</string>
     <string name="share_link">share link</string>
     <string name="want_to_show">I want to show you this %1$s: %2$s%3$s/%4$s/%5$d/</string>
-    <string name="create">create</string>
     <string name="about">about</string>
     <string name="log_out">log out</string>
     <string name="licenses">licenses</string>
     <string name="my_profile">my profile</string>
     <string name="my_hospital">my hospital</string>
-    <string name="user_management">User Management</string>
     <string name="import_export">Import/Export</string>
     <string name="increment_symbol">+</string>
     <string name="decrement_symbol">-</string>
@@ -151,7 +148,6 @@
     <string name="mail_symbol">write mail</string>
     <string name="captured_image">captured image</string>
     <string name="device_state_icon">device state</string>
-    <string name="previous_state">previous state</string>
     <string name="current_state">current state</string>
     <string name="toggle_light">toggle camera light</string>
     <string name="you_header">You:</string>
