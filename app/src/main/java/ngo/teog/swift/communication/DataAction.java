@@ -35,4 +35,6 @@ public final class DataAction {
     public static final String GET_COUNTRIES = "get_countries";
 
     public static final String GET_HOSPITALS = "get_hospitals";
+
+    public static final String UPLOAD_DOCUMENT = "upload_document";
 }

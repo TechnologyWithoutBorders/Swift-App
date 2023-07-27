@@ -9,8 +9,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -46,6 +48,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -530,6 +534,53 @@ public class DeviceInfoActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void uploadDocument(File file, ArrayAdapter<String> documentAdapter) {//TODO: do in view model
+        byte[] bytes = new byte[(int) file.length()];
+
+        try(FileInputStream inputStream = new FileInputStream(file.getPath())) {
+            inputStream.read(bytes);
+
+            String encodedFile = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+            Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.UPLOAD_DOCUMENT, true);
+            params.put(DeviceAttribute.MANUFACTURER, deviceInfo.getDevice().getManufacturer());
+            params.put(DeviceAttribute.MODEL, deviceInfo.getDevice().getModel());
+            params.put("file_name", file.getName());
+            params.put("file_content", encodedFile);
+            JSONObject jsonRequest = new JSONObject(params);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    Defaults.BASE_URL + Defaults.DOCUMENTS_URL,
+                    jsonRequest,
+                    new BaseResponseListener(this) {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException {
+                            Toast.makeText(getApplicationContext(), "upload successful", Toast.LENGTH_SHORT).show();
+
+                            //The response provides a list of links to matching documents.
+                            JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
+
+                            adapter.clear();
+
+                            for(int i = 0; i < documentList.length(); i++) {
+                                String docLink = documentList.getString(i);
+
+                                documentAdapter.add(docLink);
+                            }
+
+                            adapter.notifyDataSetChanged();
+                        }
+                    },
+                    new BaseErrorListener(this)
+            );
+
+            VolleyManager.getInstance(this).getRequestQueue().add(request);
+        } catch (Exception e) {
+            Log.e(this.getClass().getName(), e.toString(), e);
+        }
+    }
+
     public void searchDocuments(View view) {
         if(this.checkForInternetConnection()) {
             documentButton.setVisibility(View.INVISIBLE);
@@ -604,8 +655,6 @@ public class DeviceInfoActivity extends BaseActivity {
                         }
                     }
             );
-
-            //JsonObjectRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), documentButton, documentProgressBar);
 
             VolleyManager.getInstance(this).getRequestQueue().add(request);
         } else {
