@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.6'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -23,12 +23,14 @@ allprojects {
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs.add("-Xlint:deprecation")
+        tasks.withType(JavaCompile).tap {
+            configureEach {
+                options.compilerArgs.add("-Xlint:deprecation")
+            }
         }
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
