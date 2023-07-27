@@ -48,6 +48,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -63,6 +64,7 @@ import ngo.teog.swift.communication.BaseResponseListener;
 import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.SwiftResponse;
+import ngo.teog.swift.communication.TransparentServerException;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
@@ -551,31 +553,45 @@ public class DeviceInfoActivity extends BaseActivity {
                             //The response provides a list of links to matching documents.
                             JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
-                            builder.setTitle(getString(R.string.documents_overview));
-
-                            final ArrayAdapter<String> adapter = new ArrayAdapter<>(DeviceInfoActivity.this, android.R.layout.select_dialog_singlechoice);
-
-                            builder.setNegativeButton(getString(R.string.dialog_cancel_text), (dialog, i) -> dialog.dismiss());
-
-                            builder.setAdapter(adapter, (dialog, i) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + adapter.getItem(i)))));
-
-                            AlertDialog dialog = builder.create();
+                            ArrayAdapter<String> documentAdapter = new ArrayAdapter<>(DeviceInfoActivity.this, android.R.layout.simple_list_item_1, new ArrayList<>());
 
                             for(int i = 0; i < documentList.length(); i++) {
                                 String docLink = documentList.getString(i);
 
-                                adapter.add(docLink);
+                                documentAdapter.add(docLink);
                             }
 
-                            adapter.notifyDataSetChanged();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
+                            builder.setTitle(getString(R.string.documents_overview))
+                                .setNegativeButton("upload document", (dialogInterface, i) -> dialogInterface.dismiss())
+                                .setPositiveButton("close", (dialogInterface, i) -> dialogInterface.cancel())
+                                .setSingleChoiceItems(documentAdapter, -1, (DialogInterface.OnClickListener) (dialogInterface, i) -> {
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + documentAdapter.getItem(i))));
+                                    dialogInterface.dismiss();
+                                });
+
+                            AlertDialog dialog = builder.create();
+
                             dialog.show();
                         }
 
                         @Override
-                        public void onError() {
+                        public void onError(Exception e) {
                             documentProgressBar.setVisibility(View.INVISIBLE);
                             documentButton.setVisibility(View.VISIBLE);
+
+                            if(e instanceof TransparentServerException) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
+                                builder.setTitle(e.getMessage())
+                                        .setNegativeButton("upload document", (dialogInterface, i) -> dialogInterface.dismiss())
+                                        .setPositiveButton("close", (dialogInterface, i) -> dialogInterface.cancel());
+
+                                AlertDialog dialog = builder.create();
+
+                                dialog.show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     },
                     new BaseErrorListener(this) {
