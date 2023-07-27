@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -35,8 +36,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -45,12 +52,17 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
+import ngo.teog.swift.communication.BaseErrorListener;
+import ngo.teog.swift.communication.BaseResponseListener;
+import ngo.teog.swift.communication.DataAction;
 import ngo.teog.swift.communication.RequestFactory;
+import ngo.teog.swift.communication.SwiftResponse;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.ImageActivity;
@@ -68,6 +80,7 @@ import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
+import ngo.teog.swift.helpers.filters.DeviceAttribute;
 
 /**
  * Shows all available information about a device.
@@ -520,7 +533,63 @@ public class DeviceInfoActivity extends BaseActivity {
             documentButton.setVisibility(View.INVISIBLE);
             documentProgressBar.setVisibility(View.VISIBLE);
 
-            JsonObjectRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), documentButton, documentProgressBar);
+            Map<String, String> params = RequestFactory.generateParameterMap(this, DataAction.GET_COUNTRIES, false);
+            params.put(DeviceAttribute.MANUFACTURER, deviceInfo.getDevice().getManufacturer());
+            params.put(DeviceAttribute.MODEL, deviceInfo.getDevice().getModel());
+            JSONObject jsonRequest = new JSONObject(params);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,//TODO: use get
+                    Defaults.BASE_URL + Defaults.DOCUMENTS_URL,
+                    jsonRequest,
+                    new BaseResponseListener(this) {
+                        @Override
+                        public void onSuccess(JSONObject response) throws JSONException {
+                            documentProgressBar.setVisibility(View.INVISIBLE);
+                            documentButton.setVisibility(View.VISIBLE);
+
+                            //The response provides a list of links to matching documents.
+                            JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
+                            builder.setTitle(getString(R.string.documents_overview));
+
+                            final ArrayAdapter<String> adapter = new ArrayAdapter<>(DeviceInfoActivity.this, android.R.layout.select_dialog_singlechoice);
+
+                            builder.setNegativeButton(getString(R.string.dialog_cancel_text), (dialog, i) -> dialog.dismiss());
+
+                            builder.setAdapter(adapter, (dialog, i) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + adapter.getItem(i)))));
+
+                            AlertDialog dialog = builder.create();
+
+                            for(int i = 0; i < documentList.length(); i++) {
+                                String docLink = documentList.getString(i);
+
+                                adapter.add(docLink);
+                            }
+
+                            adapter.notifyDataSetChanged();
+                            dialog.show();
+                        }
+
+                        @Override
+                        public void onError() {
+                            documentProgressBar.setVisibility(View.INVISIBLE);
+                            documentButton.setVisibility(View.VISIBLE);
+                        }
+                    },
+                    new BaseErrorListener(this) {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            super.onErrorResponse(error);
+
+                            documentProgressBar.setVisibility(View.INVISIBLE);
+                            documentButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+            );
+
+            //JsonObjectRequest request = RequestFactory.getInstance().createDeviceDocumentRequest(this, deviceInfo.getDevice(), documentButton, documentProgressBar);
 
             VolleyManager.getInstance(this).getRequestQueue().add(request);
         } else {

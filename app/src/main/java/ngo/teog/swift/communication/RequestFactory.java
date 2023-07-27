@@ -1,28 +1,22 @@
 package ngo.teog.swift.communication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -34,7 +28,6 @@ import java.util.Map;
 import ngo.teog.swift.R;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.ResourceKeys;
-import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.filters.DeviceAttribute;
 import ngo.teog.swift.helpers.filters.UserAttribute;
 
@@ -164,54 +157,6 @@ public class RequestFactory {
                 } catch(IOException e) {
                     Log.w(this.getClass().getName(), "writing image data failed: " + e);
                 }
-            }
-        }, new BaseErrorListener(context));
-    }
-
-    public JsonObjectRequest createDeviceDocumentRequest(Context context, HospitalDevice device, ImageView button, ProgressBar progressBar) {
-        final String url = Defaults.BASE_URL + Defaults.DOCUMENTS_URL;
-
-        Map<String, String> params = new HashMap<>();
-        params.put(DeviceAttribute.MANUFACTURER, device.getManufacturer());
-        params.put(DeviceAttribute.MODEL, device.getModel());
-
-        JSONObject jsonRequest = new JSONObject(params);
-
-        return new JsonObjectRequest(Request.Method.POST, url, jsonRequest, new BaseResponseListener(context) {
-
-            @Override
-            public  void onResponse(JSONObject response) {
-                super.onResponse(response);
-
-                progressBar.setVisibility(View.INVISIBLE);
-                button.setVisibility(View.VISIBLE);
-            }
-            @Override
-            public void onSuccess(JSONObject response) throws Exception {
-                super.onSuccess(response);
-
-                //The response provides a list of links to matching documents.
-                JSONArray documentList = response.getJSONArray(SwiftResponse.DATA_FIELD);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(context.getString(R.string.documents_overview));
-
-                final ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_singlechoice);
-
-                builder.setNegativeButton(context.getString(R.string.dialog_cancel_text), (dialog, i) -> dialog.dismiss());
-
-                builder.setAdapter(adapter, (dialog, i) -> context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + device.getManufacturer() + "/" + device.getModel() + "/" + adapter.getItem(i)))));
-
-                AlertDialog dialog = builder.create();
-
-                for(int i = 0; i < documentList.length(); i++) {
-                    String docLink = documentList.getString(i);
-
-                    adapter.add(docLink);
-                }
-
-                adapter.notifyDataSetChanged();
-                dialog.show();
             }
         }, new BaseErrorListener(context));
     }
