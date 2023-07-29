@@ -247,7 +247,9 @@ public class LoginActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onError() {
+                            public void onError(Exception e) {
+                                super.onError(e);
+
                                 setForm();
                             }
                         },
@@ -352,16 +354,18 @@ public class LoginActivity extends BaseActivity {
                                 }
 
                                 @Override
-                                public void onError() {
+                                public void onError(Exception e) {
+                                    super.onError(e);
+
                                     setForm();
                                 }
                             },
                             new BaseErrorListener(LoginActivity.this) {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    setForm();
-
                                     super.onErrorResponse(error);
+
+                                    setForm();
                                 }
                             }
                         );

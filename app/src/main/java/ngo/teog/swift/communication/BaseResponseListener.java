@@ -51,12 +51,10 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
             }
         } catch(TransparentServerException e) {
             Log.i(this.getClass().getName(), e.toString());
-            Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            onError();
+            onError(e);
         } catch(Exception e) {
             Log.w(this.getClass().getName(), e.toString());
-            Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
-            onError();
+            onError(e);
         }
     }
 
@@ -67,5 +65,11 @@ public class BaseResponseListener implements Response.Listener<JSONObject> {
      */
     public void onSuccess(JSONObject response) throws Exception {}
 
-    public void onError() {}
+    public void onError(Exception e) {
+        if(e instanceof TransparentServerException) {
+            Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context.getApplicationContext(), context.getText(R.string.generic_error_message), Toast.LENGTH_SHORT).show();
+        }
+    }
 }
