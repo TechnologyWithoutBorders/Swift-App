@@ -7,8 +7,8 @@ android {
         applicationId "ngo.teog.swift"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 116
-        versionName "1.17"
+        versionCode 117
+        versionName "1.18"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
