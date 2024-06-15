@@ -81,7 +81,7 @@ dependencies {
     //Some miscellaneous dependencies
 
     //TODO this seems to be not necessary anymore or is it just buggy??
-    def lifecycle_version = "2.6.1"
+    def lifecycle_version = "2.6.2"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
