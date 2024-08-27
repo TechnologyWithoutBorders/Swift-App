@@ -3,7 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/grey"
     android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:id="@+id/torch_button"
+        android:layout_gravity="end"
+        app:tint="@color/light_grey"
+        app:srcCompat="@drawable/ic_baseline_highlight_24_white"
+        android:contentDescription="@string/toggle_light" />
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeScannerView"
