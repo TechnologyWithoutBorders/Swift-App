@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -30,8 +31,10 @@ import ngo.teog.swift.helpers.ResourceKeys;
  */
 public class NewDeviceActivity extends BaseActivity {
 
+    private ImageView torchButton;
     private DecoratedBarcodeView barcodeScannerView;
     private String lastText;
+    private boolean torchIsOn = false;
 
     private final BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -88,6 +91,9 @@ public class NewDeviceActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
         }
 
+        torchButton = findViewById(R.id.torch_button);
+        torchButton.setOnClickListener(sourceView -> switchTorchState());
+
         barcodeScannerView = findViewById(R.id.barcodeScannerView);
         barcodeScannerView.decodeContinuous(callback);
     }
@@ -107,5 +113,17 @@ public class NewDeviceActivity extends BaseActivity {
         super.onResume();
         barcodeScannerView.resume();
         lastText = null;
+    }
+
+    private void switchTorchState() {
+        if(!torchIsOn){
+            barcodeScannerView.setTorchOn();
+            torchButton.setColorFilter(this.getResources().getColor(R.color.white, this.getTheme()));
+            torchIsOn = true;
+        } else {
+            barcodeScannerView.setTorchOff();
+            torchButton.setColorFilter(this.getResources().getColor(R.color.light_grey, this.getTheme()));
+            torchIsOn = false;
+        }
     }
 }

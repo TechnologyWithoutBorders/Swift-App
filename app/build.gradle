@@ -7,8 +7,8 @@ android {
         applicationId "ngo.teog.swift"
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 118
-        versionName "1.18.1"
+        versionCode 119
+        versionName "1.19"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -48,7 +48,7 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
     //Dagger Android for dependency injection
-    def dagger_version = '2.51.1'
+    def dagger_version = '2.52'
     implementation "com.google.dagger:dagger-android:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
@@ -81,7 +81,7 @@ dependencies {
     //Some miscellaneous dependencies
 
     //TODO this seems to be not necessary anymore or is it just buggy??
-    def lifecycle_version = "2.6.2"
+    def lifecycle_version = "2.8.4"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
@@ -97,6 +97,6 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test:runner:1.6.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }

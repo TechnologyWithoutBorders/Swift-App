@@ -175,7 +175,6 @@ public class BarcodeFragment extends Fragment {
             torchButton.setColorFilter(this.getResources().getColor(R.color.light_grey, requireContext().getTheme()));
             torchIsOn = false;
         }
-
     }
 
     private void search() {

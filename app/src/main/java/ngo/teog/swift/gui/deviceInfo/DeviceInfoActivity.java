@@ -194,8 +194,6 @@ public class DeviceInfoActivity extends BaseActivity {
         manufacturerView = findViewById(R.id.manufacturerView);
         serialNumberView = findViewById(R.id.serialNumberView);
 
-        TextView hospitalView = findViewById(R.id.hospitalView);
-
         orgUnitView = findViewById(R.id.locationView);
 
         intervalView = findViewById(R.id.intervalView);
@@ -246,7 +244,6 @@ public class DeviceInfoActivity extends BaseActivity {
                 modelView.setText(device.getModel());
                 manufacturerView.setText(device.getManufacturer());
                 serialNumberView.setText(device.getSerialNumber());
-                hospitalView.setText(deviceInfo.getHospital().getName());
 
                 OrganizationalUnit orgUnit = deviceInfo.getOrganizationalUnit();
 

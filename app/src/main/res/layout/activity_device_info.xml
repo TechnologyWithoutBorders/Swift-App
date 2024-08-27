@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_asset_number" />
@@ -110,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"/>
+                android:textSize="17sp"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -128,7 +128,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_type" />
@@ -137,7 +137,7 @@
                 android:id="@+id/typeView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -155,7 +155,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_manufacturer" />
@@ -164,7 +164,7 @@
                 android:id="@+id/manufacturerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -182,7 +182,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_model" />
@@ -191,7 +191,7 @@
                 android:id="@+id/modelView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -209,7 +209,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_serial_number" />
@@ -218,7 +218,7 @@
                 android:id="@+id/serialNumberView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -236,26 +236,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:paddingEnd="5dp"
-                android:textStyle="bold"
-                android:text="@string/hospital" />
-
-            <TextView
-                android:id="@+id/hospitalView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="3dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_department" />
@@ -264,7 +245,7 @@
                 android:id="@+id/locationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -282,7 +263,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:text="@string/device_maintenance_interval" />
@@ -291,7 +272,7 @@
                 android:id="@+id/intervalView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -312,7 +293,7 @@
         android:textColor="#FFFFFF"
         android:background="@color/grey_table_bar"
         android:textStyle="bold"
-        android:textSize="15sp"
+        android:textSize="17sp"
         android:padding="3dp" />
 
     <ListView

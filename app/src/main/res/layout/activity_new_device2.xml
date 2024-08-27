@@ -18,15 +18,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/assetIdText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/device_asset_number"
-                android:inputType="text"
-                android:maxLength="20"
-                android:importantForAutofill="no"/>
-
             <AutoCompleteTextView
                 android:id="@+id/typeText"
                 android:layout_width="match_parent"
@@ -35,15 +26,6 @@
                 android:inputType="text"
                 android:maxLength="20"
                 android:completionThreshold="1"/>
-
-            <EditText
-                android:id="@+id/serialIdText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/device_serial_number"
-                android:inputType="text"
-                android:maxLength="20"
-                android:importantForAutofill="no"/>
 
             <AutoCompleteTextView
                 android:id="@+id/manufacturerText"
@@ -63,12 +45,30 @@
                 android:maxLength="20"
                 android:completionThreshold="1"/>
 
+            <EditText
+                android:id="@+id/serialIdText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/device_serial_number"
+                android:inputType="text"
+                android:maxLength="20"
+                android:importantForAutofill="no"/>
+
+            <EditText
+                android:id="@+id/assetIdText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/device_asset_number"
+                android:inputType="text"
+                android:maxLength="20"
+                android:importantForAutofill="no"/>
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 android:text="@string/device_maintenance_interval" />
 
             <LinearLayout
