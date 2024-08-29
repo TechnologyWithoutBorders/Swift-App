@@ -3,17 +3,19 @@ package ngo.teog.swift.gui.userProfile;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.UserInfo;
-import ngo.teog.swift.helpers.export.HospitalDump;
 
 public class UserProfileViewModel extends ViewModel {
     private final HospitalRepository hospitalRepo;
     private LiveData<UserInfo> userProfile;
-    private LiveData<HospitalDump> hospital;
+    private LiveData<List<DeviceInfo>> devices;
 
     @Inject
     public UserProfileViewModel(HospitalRepository hospitalRepo) {
@@ -26,15 +28,15 @@ public class UserProfileViewModel extends ViewModel {
         }
 
         userProfile = hospitalRepo.loadUserProfileInfo(userId, true);
-        hospital = hospitalRepo.loadHospitalDump(userId);
+        devices = hospitalRepo.loadHospitalDevices(userId, false);
     }
 
     public LiveData<UserInfo> getUserProfile() {
         return userProfile;
     }
 
-    public LiveData<HospitalDump> getHospitalDump() {
-        return hospital;
+    public LiveData<List<DeviceInfo>> getHospitalDevices() {
+        return devices;
     }
 
     public void updateUser(User user) {

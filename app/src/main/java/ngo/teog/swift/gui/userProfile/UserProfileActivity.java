@@ -45,10 +45,12 @@ import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
+import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
 import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.Report;
+import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
@@ -246,8 +248,8 @@ public class UserProfileActivity extends BaseActivity {
                     SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
                     int userId = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
-                    viewModel.getHospitalDump().observe(this, hospitalDump -> {
-                        if (hospitalDump != null) {
+                    viewModel.getHospitalDevices().observe(this, deviceInfos -> {
+                        if (deviceInfos != null) {
                             try {
                                 //TODO streams/writers should be closed in "finally"-block
                                 ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(getContentResolver().openOutputStream(fileUri)));
@@ -256,17 +258,22 @@ public class UserProfileActivity extends BaseActivity {
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
-                                csvWriter.writeNext(new String[]{"Device", "Hospital", "Author", "Created", "Title", "Current State", "Description"});
+                                csvWriter.writeNext(new String[]{"Device", "Manufacturer", "Model", "Author", "Created", "Title", "Current State", "Description"});
 
-                                for (DeviceDump deviceDump : hospitalDump.getDeviceDumps()) {
-                                    for (Report report : deviceDump.getReports()) {
-                                        if(report.getAuthor() == userId) {
+                                for (DeviceInfo deviceInfo : deviceInfos) {
+                                    for (ReportInfo reportInfo : deviceInfo.getReports()) {
+                                        User author = reportInfo.getAuthor();
+
+                                        if(author.getId() == userId) {
+                                            HospitalDevice device = deviceInfo.getDevice();
+                                            Report report = reportInfo.getReport();
+
                                             DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
                                             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
                                             dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
 
-                                            csvWriter.writeNext(new String[]{Integer.toString(report.getDevice()), Integer.toString(report.getHospital()), Integer.toString(report.getAuthor()), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
+                                            csvWriter.writeNext(new String[]{device.getType(), device.getManufacturer(), device.getModel(), author.getName(), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
                                         }
                                     }
                                 }
