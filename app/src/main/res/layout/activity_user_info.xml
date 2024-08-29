@@ -223,4 +223,31 @@
 
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Export my reports" />
+
+    <Button style="@style/AppTheme.Button"
+        android:id="@+id/csvButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="export as CSV"
+        android:onClick="exportCSV"/>
+
 </LinearLayout>

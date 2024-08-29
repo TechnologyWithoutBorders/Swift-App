@@ -8,10 +8,12 @@ import javax.inject.Inject;
 import ngo.teog.swift.helpers.data.HospitalRepository;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.UserInfo;
+import ngo.teog.swift.helpers.export.HospitalDump;
 
 public class UserProfileViewModel extends ViewModel {
-    private LiveData<UserInfo> userProfile;
     private final HospitalRepository hospitalRepo;
+    private LiveData<UserInfo> userProfile;
+    private LiveData<HospitalDump> hospital;
 
     @Inject
     public UserProfileViewModel(HospitalRepository hospitalRepo) {
@@ -24,10 +26,15 @@ public class UserProfileViewModel extends ViewModel {
         }
 
         userProfile = hospitalRepo.loadUserProfileInfo(userId, true);
+        hospital = hospitalRepo.loadHospitalDump(userId);
     }
 
     public LiveData<UserInfo> getUserProfile() {
         return userProfile;
+    }
+
+    public LiveData<HospitalDump> getHospitalDump() {
+        return hospital;
     }
 
     public void updateUser(User user) {
