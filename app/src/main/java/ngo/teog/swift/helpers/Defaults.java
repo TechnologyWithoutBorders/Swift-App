@@ -55,6 +55,7 @@ public final class Defaults {
 
     /** File name for dump of hospital data */
     public static final String EXPORT_FILE_NAME = "swift_export.zip";
+    public static final String ACTIVITY_EXPORT_FILE_NAME = "swift_activity_export.zip";
 
     public static final String DATE_PATTERN = "yyyy-MM-dd";
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm";

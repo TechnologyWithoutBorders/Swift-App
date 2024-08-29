@@ -26,7 +26,6 @@ import com.opencsv.CSVWriter;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,7 +39,6 @@ import javax.inject.Inject;
 import me.toptas.fancyshowcase.FancyShowCaseQueue;
 import ngo.teog.swift.R;
 import ngo.teog.swift.gui.BaseActivity;
-import ngo.teog.swift.gui.hospital.PortationViewModel;
 import ngo.teog.swift.helpers.Defaults;
 import ngo.teog.swift.helpers.DeviceStateVisuals;
 import ngo.teog.swift.helpers.data.AppModule;
@@ -48,13 +46,11 @@ import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.Hospital;
 import ngo.teog.swift.helpers.data.HospitalDevice;
-import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.Report;
 import ngo.teog.swift.helpers.data.ReportInfo;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.User;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
-import ngo.teog.swift.helpers.export.DeviceDump;
 
 /**
  * Shows a user's own profile and provides ways of editing personal information.
@@ -231,7 +227,7 @@ public class UserProfileActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("application/zip")
-                .putExtra(Intent.EXTRA_TITLE, Defaults.EXPORT_FILE_NAME);
+                .putExtra(Intent.EXTRA_TITLE, Defaults.ACTIVITY_EXPORT_FILE_NAME);
 
         startActivityForResult(intent, 0);
     }
