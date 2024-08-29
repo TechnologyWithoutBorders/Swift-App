@@ -267,7 +267,7 @@ public class UserProfileActivity extends BaseActivity {
                                             DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
                                             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
-                                            dateFormat.setTimeZone(TimeZone.getTimeZone(Defaults.TIMEZONE_UTC));
+                                            dateFormat.setTimeZone(TimeZone.getDefault());
 
                                             csvWriter.writeNext(new String[]{device.getType(), device.getManufacturer(), device.getModel(), author.getName(), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
                                         }
