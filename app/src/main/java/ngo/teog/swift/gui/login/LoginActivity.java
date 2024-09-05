@@ -3,7 +3,6 @@ package ngo.teog.swift.gui.login;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -25,6 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -35,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.appupdate.AppUpdateOptions;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 
@@ -86,7 +89,7 @@ public class LoginActivity extends BaseActivity {
 
     private AppUpdateManager appUpdateManager;
 
-    private static final int APP_UPDATE_CODE = 4711;
+    private static final int MAX_STALENESS_DAYS = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,15 +179,26 @@ public class LoginActivity extends BaseActivity {
         if(checkForInternetConnection()) {
             setLoadingScreen();
 
+            ActivityResultLauncher<IntentSenderRequest> activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartIntentSenderForResult(),
+                    result -> {
+                        if(result.getResultCode() != RESULT_OK) {
+                            Toast.makeText(this, "update failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
             //Check whether a new app version is available
             appUpdateManager = AppUpdateManagerFactory.create(this);
             Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
             appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
-                if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                    try {
-                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
-                    } catch (IntentSender.SendIntentException e) {
-                        Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
+                if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    Integer stalenessDays = appUpdateInfo.clientVersionStalenessDays();
+
+                    if(stalenessDays != null) {
+                        if(stalenessDays >= MAX_STALENESS_DAYS && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, activityResultLauncher, AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build());
+                        }
                     }
                 }
 
@@ -281,11 +295,15 @@ public class LoginActivity extends BaseActivity {
                 appUpdateInfo -> {
                     if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                         // If an in-app update is already running, resume the update.
-                        try {
-                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, APP_UPDATE_CODE);
-                        } catch (IntentSender.SendIntentException e) {
-                            Toast.makeText(this, R.string.generic_error_message, Toast.LENGTH_SHORT).show();
-                        }
+                        ActivityResultLauncher<IntentSenderRequest> activityResultLauncher = registerForActivityResult(
+                                new ActivityResultContracts.StartIntentSenderForResult(),
+                                result -> {
+                                    if(result.getResultCode() != RESULT_OK) {
+                                        Toast.makeText(this, "update failed", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                        appUpdateManager.startUpdateFlowForResult(appUpdateInfo, activityResultLauncher, AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build());
                     }
                 }
             );
@@ -315,8 +333,8 @@ public class LoginActivity extends BaseActivity {
         String country = (String)countrySpinner.getSelectedItem();
         Object hospital = hospitalSpinner.getSelectedItem();
 
-        if(mailAddress.length() > 0) {
-            if(password.length() > 0) {
+        if(!mailAddress.isEmpty()) {
+            if(!password.isEmpty()) {
                 if(country != null && hospital != null) {
                     if (checkForInternetConnection()) {
                         String hashedPassword = getSHA256Hash(password);
@@ -391,7 +409,7 @@ public class LoginActivity extends BaseActivity {
     public void resetPassword(View view) {
         String mailAddress = mailField.getText().toString();
 
-        if(mailAddress.length() > 0) {
+        if(!mailAddress.isEmpty()) {
             String country = (String)countrySpinner.getSelectedItem();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
