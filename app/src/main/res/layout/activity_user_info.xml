@@ -242,7 +242,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:padding="3dp"
-        android:text="Export my reports" />
+        android:text="Export my activity" />
 
     <Button style="@style/AppTheme.Button"
         android:id="@+id/csvButton"
