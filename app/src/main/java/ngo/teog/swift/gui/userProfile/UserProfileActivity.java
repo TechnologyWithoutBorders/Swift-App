@@ -254,7 +254,7 @@ public class UserProfileActivity extends BaseActivity {
                                 ZipEntry reportEntry = new ZipEntry("reports.csv");
                                 zipOut.putNextEntry(reportEntry);
 
-                                csvWriter.writeNext(new String[]{"Device", "Manufacturer", "Model", "Author", "Created", "Title", "Current State", "Description"});
+                                csvWriter.writeNext(new String[]{"Device", "Manufacturer", "Model", "Serial No.", "Author", "Created", "Title", "Current State", "Description"});
 
                                 for (DeviceInfo deviceInfo : deviceInfos) {
                                     for (ReportInfo reportInfo : deviceInfo.getReports()) {
@@ -269,7 +269,7 @@ public class UserProfileActivity extends BaseActivity {
                                             DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
                                             dateFormat.setTimeZone(TimeZone.getDefault());
 
-                                            csvWriter.writeNext(new String[]{device.getType(), device.getManufacturer(), device.getModel(), author.getName(), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
+                                            csvWriter.writeNext(new String[]{device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber(), author.getName(), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
                                         }
                                     }
                                 }
