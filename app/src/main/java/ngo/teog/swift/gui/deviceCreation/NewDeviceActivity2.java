@@ -202,7 +202,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                 if(modelField.getText().length() > 0) {
                     String assetNumber = assetNumberField.getText().toString().trim();
 
-                    if(assetNumber.length() == 0) {
+                    if(assetNumber.isEmpty()) {
                         assetNumber = Integer.toString(deviceNumber);
                     }
 
