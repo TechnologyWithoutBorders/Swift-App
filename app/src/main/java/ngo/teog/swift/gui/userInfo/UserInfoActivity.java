@@ -53,6 +53,7 @@ public class UserInfoActivity extends BaseActivity {
         findViewById(R.id.edit_position).setVisibility(View.GONE);
         findViewById(R.id.edit_phone).setVisibility(View.GONE);
         findViewById(R.id.edit_mail).setVisibility(View.GONE);
+        findViewById(R.id.export_view).setVisibility(View.GONE);
 
         LinearLayout callLayout = findViewById(R.id.call_layout);
         callLayout.setOnClickListener((view) -> invokeCall());
