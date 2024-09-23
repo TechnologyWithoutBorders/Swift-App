@@ -5,22 +5,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 
 import org.apache.commons.text.WordUtils;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -33,6 +39,7 @@ import ngo.teog.swift.helpers.data.AppModule;
 import ngo.teog.swift.helpers.data.DaggerAppComponent;
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalDevice;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 import ngo.teog.swift.helpers.data.RoomModule;
 import ngo.teog.swift.helpers.data.ViewModelFactory;
 
@@ -51,6 +58,8 @@ public class NewDeviceActivity2 extends BaseActivity {
     private ArrayAdapter<String> typeAdapter, manufacturerAdapter, modelAdapter;
 
     private EditText assetNumberField, serialNumberField, intervalField;
+
+    private Spinner departmentSpinner;
 
     public static final int MIN_MAINT_INTERVAL = 1;
     public static final int DEF_MAINT_INTERVAL = 3;
@@ -84,6 +93,8 @@ public class NewDeviceActivity2 extends BaseActivity {
         modelField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
         modelAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         modelField.setAdapter(modelAdapter);
+
+        departmentSpinner = findViewById(R.id.departmentSpinner);
 
         intervalField = findViewById(R.id.intervalField);
         intervalField.setText(Integer.toString(DEF_MAINT_INTERVAL));
@@ -129,6 +140,15 @@ public class NewDeviceActivity2 extends BaseActivity {
 
         NewDeviceViewModel2 viewModel = new ViewModelProvider(this, viewModelFactory).get(NewDeviceViewModel2.class);
         viewModel.init(id);
+
+        viewModel.getOrgUnits().observe(this, organizationalUnits -> {
+            if(organizationalUnits != null) {
+                organizationalUnits.sort(Comparator.comparing(OrganizationalUnit::getName));
+                organizationalUnits.add(0, null);
+
+                departmentSpinner.setAdapter(new OrgUnitAdapter(this, organizationalUnits));
+            }
+        });
 
         viewModel.getDeviceInfos().observe(this, deviceInfos -> {
             if(deviceInfos != null) {
@@ -221,6 +241,13 @@ public class NewDeviceActivity2 extends BaseActivity {
                             createButton.setVisibility(View.INVISIBLE);
                             progressBar.setVisibility(View.VISIBLE);
 
+                            OrganizationalUnit department = (OrganizationalUnit)departmentSpinner.getSelectedItem();
+                            Integer departmentId = null;
+
+                            if(department != null) {
+                                departmentId = department.getId();
+                            }
+
                             //we actually save the number of weeks, not months
                             HospitalDevice device = new HospitalDevice(
                                     deviceNumber,
@@ -229,7 +256,7 @@ public class NewDeviceActivity2 extends BaseActivity {
                                     serialNumberField.getText().toString().trim(),
                                     manufacturerField.getText().toString().trim(),
                                     modelField.getText().toString().trim(),
-                                    null,
+                                    departmentId,
                                     -1,
                                     interval*4,
                                     true,
@@ -252,6 +279,50 @@ public class NewDeviceActivity2 extends BaseActivity {
             }
         } else {
             typeField.setError(getString(R.string.empty_type));
+        }
+    }
+
+    private static class OrgUnitAdapter extends ArrayAdapter<OrganizationalUnit> {
+        public OrgUnitAdapter(Context context, List<OrganizationalUnit> orgUnits) {
+            super(context, android.R.layout.simple_spinner_item, orgUnits);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            OrganizationalUnit orgUnit = getItem(position);
+
+            if(convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+            }
+
+            TextView textView = convertView.findViewById(android.R.id.text1);
+
+            if(orgUnit != null) {
+                textView.setText(orgUnit.getName());
+            } else {
+                textView.setText("None");
+            }
+
+            return convertView;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            OrganizationalUnit orgUnit = getItem(position);
+
+            if(convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+            }
+
+            TextView textView = convertView.findViewById(android.R.id.text1);
+
+            if(orgUnit != null) {
+                textView.setText(orgUnit.getName());
+            } else {
+                textView.setText("None");
+            }
+
+            return convertView;
         }
     }
 }

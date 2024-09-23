@@ -54,6 +54,17 @@
                 android:maxLength="20"
                 android:importantForAutofill="no"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:text="@string/device_department" />
+
+            <Spinner
+                android:id="@+id/departmentSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <EditText
                 android:id="@+id/assetIdText"
                 android:layout_width="match_parent"

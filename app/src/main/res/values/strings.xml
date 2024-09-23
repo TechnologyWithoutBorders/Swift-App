@@ -7,7 +7,7 @@
     <string name="menu_information">information</string>
     <string name="newdevice_activity_1">Please put a fresh barcode sticker on the device you want to register and scan it with your camera.</string>
     <string name="newdevice_activity_2">Please enter all general data known about the device.</string>
-    <string name="newdevice_activity_3">Please take a snapshot of the device, so your colleagues can identify it easily.</string>
+    <string name="newdevice_activity_3">Please take a picture of the device, so your colleagues can identify it easily.</string>
     <string name="userinfo_activity">You can use this data to contact your colleagues or staff at other hospitals.</string>
     <string name="userprofile_activity">This is your very own user profile. You can add some general information like your telephone number and position here.</string>
     <string name="mainactivity"><![CDATA[
