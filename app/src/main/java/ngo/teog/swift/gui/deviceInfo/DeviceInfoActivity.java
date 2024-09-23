@@ -561,7 +561,7 @@ public class DeviceInfoActivity extends BaseActivity {
                             AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
                             builder.setTitle(getString(R.string.documents_overview))
                                     .setPositiveButton("close", (dialogInterface, i) -> dialogInterface.cancel())
-                                    .setSingleChoiceItems(documentAdapter, -1, (DialogInterface.OnClickListener) (dialogInterface, i) -> {
+                                    .setSingleChoiceItems(documentAdapter, -1, (dialogInterface, i) -> {
                                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + documentAdapter.getItem(i))));
                                         dialogInterface.dismiss();
                                     });
