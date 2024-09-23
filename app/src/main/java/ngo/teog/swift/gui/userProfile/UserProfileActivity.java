@@ -34,8 +34,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.inject.Inject;
 
@@ -269,7 +267,7 @@ public class UserProfileActivity extends BaseActivity {
     public void exportCSV(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("application/zip")
+                .setType("text/csv")
                 .putExtra(Intent.EXTRA_TITLE, Defaults.ACTIVITY_EXPORT_FILE_NAME);
 
         startActivityForResult(intent, 0);
@@ -291,11 +289,7 @@ public class UserProfileActivity extends BaseActivity {
                         if (deviceInfos != null) {
                             try {
                                 //TODO streams/writers should be closed in "finally"-block
-                                ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(getContentResolver().openOutputStream(fileUri)));
-                                CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(zipOut));
-
-                                ZipEntry reportEntry = new ZipEntry("reports.csv");
-                                zipOut.putNextEntry(reportEntry);
+                                CSVWriter csvWriter = new CSVWriter(new OutputStreamWriter(new BufferedOutputStream(getContentResolver().openOutputStream(fileUri))));
 
                                 csvWriter.writeNext(new String[]{"Device", "Manufacturer", "Model", "Serial No.", "Author", "Created", "Title", "Current State", "Description"});
 
@@ -322,11 +316,7 @@ public class UserProfileActivity extends BaseActivity {
                                 }
 
                                 csvWriter.flush();
-                                zipOut.closeEntry();
-
                                 csvWriter.close();
-                                //zipOut is actually closed automatically, but stated here explicitly for convenience
-                                zipOut.close();
                             } catch (IOException e) {
                                 Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                             }
