@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.apache.commons.text.WordUtils;
@@ -300,14 +301,14 @@ public class NewDeviceActivity2 extends BaseActivity {
             if(orgUnit != null) {
                 textView.setText(orgUnit.getName());
             } else {
-                textView.setText("None");
+                textView.setText(getContext().getString(R.string.none));
             }
 
             return convertView;
         }
 
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             OrganizationalUnit orgUnit = getItem(position);
 
             if(convertView == null) {
@@ -319,7 +320,7 @@ public class NewDeviceActivity2 extends BaseActivity {
             if(orgUnit != null) {
                 textView.setText(orgUnit.getName());
             } else {
-                textView.setText("None");
+                textView.setText(getContext().getString(R.string.none));
             }
 
             return convertView;

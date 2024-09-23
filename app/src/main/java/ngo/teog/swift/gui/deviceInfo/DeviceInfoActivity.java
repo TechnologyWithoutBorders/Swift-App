@@ -361,7 +361,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     }
 
                     @Override
-                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
                         OrganizationalUnit orgUnit = getItem(position);
 
                         if(convertView == null) {
@@ -644,7 +644,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 String title = reportInfo.getReport().getTitle();
 
-                if(title.length() > 0) {
+                if(!title.isEmpty()) {
                     titleView.setText(title);
                 } else {
                     titleView.setText(reportInfo.getAuthor().getName());

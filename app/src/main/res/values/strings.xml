@@ -281,6 +281,8 @@
     <string name="e_mail_sent">E-mail has been sent</string>
     <string name="user_created">User has been created</string>
 
+    <string name="none">None</string>
+
     <!-- Symbols -->
     <string name="line_break">%1$s\n%2$s</string>
 
