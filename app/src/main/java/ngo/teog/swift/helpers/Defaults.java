@@ -1,5 +1,7 @@
 package ngo.teog.swift.helpers;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Contains some global system constants/default values.
  * @author nitelow
@@ -85,4 +87,7 @@ public final class Defaults {
 
     /** Observable that indicates when a server synchronization took place recently */
     public static final int SYNC_OBSERVABLE = 1;
+
+    //Date/Time formatters
+    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 }
