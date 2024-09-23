@@ -1,5 +1,7 @@
 package ngo.teog.swift.helpers;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Contains some global system constants/default values.
  * @author nitelow
@@ -55,6 +57,7 @@ public final class Defaults {
 
     /** File name for dump of hospital data */
     public static final String EXPORT_FILE_NAME = "swift_export.zip";
+    public static final String ACTIVITY_EXPORT_FILE_NAME = "swift_activity.csv";
 
     public static final String DATE_PATTERN = "yyyy-MM-dd";
     public static final String DATETIME_PATTERN = "yyyy-MM-dd HH:mm";
@@ -84,4 +87,7 @@ public final class Defaults {
 
     /** Observable that indicates when a server synchronization took place recently */
     public static final int SYNC_OBSERVABLE = 1;
+
+    //Date/Time formatters
+    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 }

@@ -237,6 +237,12 @@
     <string name="user_profile_tutorial_attribute_table">This table shows all of your user data.</string>
     <string name="user_profile_tutorial_edit">Tap the pencil symbols in order to change your information.</string>
     <string name="edit_mail_address_warning">You will need to remember your new mail address in order to log in.</string>
+    <string name="export_my_activity">Export my activity</string>
+    <string name="select_start_date">Select start date</string>
+    <string name="select_end_date">Select end date</string>
+    <string name="start_date">start date</string>
+    <string name="end_date">end date</string>
+    <string name="export_as_csv">Export as CSV</string>
 
     <!-- Portation -->
     <string name="portation_export">Export</string>

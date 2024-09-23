@@ -223,4 +223,82 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/export_view"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="3dp"
+            android:text="@string/export_my_activity" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/start_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="@string/start_date"
+                android:inputType="date"
+                android:importantForAutofill="no"
+                android:enabled="false" />
+
+            <Button style="@style/AppTheme.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_start_date"
+                android:onClick="selectStartDate" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/end_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="@string/end_date"
+                android:inputType="date"
+                android:importantForAutofill="no"
+                android:enabled="false" />
+
+            <Button style="@style/AppTheme.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_end_date"
+                android:onClick="selectEndDate" />
+        </LinearLayout>
+
+        <Button style="@style/AppTheme.Button"
+            android:id="@+id/csvButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/export_as_csv"
+            android:onClick="exportCSV"/>
+    </LinearLayout>
 </LinearLayout>

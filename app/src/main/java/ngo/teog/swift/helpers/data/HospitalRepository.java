@@ -608,7 +608,7 @@ public class HospitalRepository {
                     HospitalRepository.this.updateUsersSync(hospitalInfo.getUsers());
 
                     //remove old units as they change completely
-                    if(hospitalInfo.getOrgUnits().size() > 0) {
+                    if(!hospitalInfo.getOrgUnits().isEmpty()) {
                         HospitalRepository.this.deleteOrgUnitsSync();
                     }
 
