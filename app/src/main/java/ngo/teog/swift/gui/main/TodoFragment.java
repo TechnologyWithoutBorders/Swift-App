@@ -96,7 +96,7 @@ public class TodoFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
         viewModel.getDeviceInfos().observe(this.getViewLifecycleOwner(), dbDeviceInfos -> {
-            if(dbDeviceInfos != null && dbDeviceInfos.size() > 0) {
+            if(dbDeviceInfos != null && !dbDeviceInfos.isEmpty()) {
                 //make copies of device infos as data is shared between the fragments
                 List<DeviceInfo> deviceInfos = new ArrayList<>(dbDeviceInfos);
 
@@ -107,7 +107,7 @@ public class TodoFragment extends Fragment {
 
                 //filter relevant devices
                 for(DeviceInfo deviceInfo : deviceInfos) {
-                    if(deviceInfo.getReports().size() > 0) {
+                    if(!deviceInfo.getReports().isEmpty()) {
                         //copy report list as well and assign it to the device info
                         List<ReportInfo> reversedReportInfos = new ArrayList<>(deviceInfo.getReports());
                         reversedReportInfos.sort((first, second) -> second.getReport().getId() - first.getReport().getId());
@@ -126,7 +126,7 @@ public class TodoFragment extends Fragment {
                     List<ReportInfo> firstReports = first.getReports();
                     List<ReportInfo> secondReports = second.getReports();
 
-                    if(firstReports.size() > 0 && secondReports.size() > 0) {
+                    if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
                         long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
                         long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
 

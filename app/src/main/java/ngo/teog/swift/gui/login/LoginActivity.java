@@ -66,7 +66,6 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.ResponseParser;
 import ngo.teog.swift.communication.ServerException;
 import ngo.teog.swift.communication.SwiftResponse;
-import ngo.teog.swift.communication.TransparentServerException;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -355,7 +354,7 @@ public class LoginActivity extends BaseActivity {
                             jsonRequest,
                             new BaseResponseListener(LoginActivity.this) {
                                 @Override
-                                public void onSuccess(JSONObject response) throws ServerException, TransparentServerException {
+                                public void onSuccess(JSONObject response) throws ServerException {
                                     int id = ResponseParser.parseLoginResponse(response);
 
                                     SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);

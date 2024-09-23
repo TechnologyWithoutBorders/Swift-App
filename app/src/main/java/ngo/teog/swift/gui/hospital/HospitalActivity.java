@@ -568,7 +568,7 @@ public class HospitalActivity extends BaseActivity {
                         nameView.setText(user.getName());
                         positionView.setText(user.getPosition());
 
-                        if(user.getPhone() != null && user.getPhone().length() > 0) {
+                        if(user.getPhone() != null && !user.getPhone().isEmpty()) {
                             phoneView.setVisibility(View.VISIBLE);
                             phoneView.setOnClickListener((view) -> invokeCall(user.getPhone()));
                         }
@@ -603,7 +603,7 @@ public class HospitalActivity extends BaseActivity {
 
                         nameView.setText(device.getType());
 
-                        if(reportInfos.size() > 0) {
+                        if(!reportInfos.isEmpty()) {
                             //reports have been sorted so latest report has index 0
                             Report lastReport = deviceInfo.getReports().get(0).getReport();
 
