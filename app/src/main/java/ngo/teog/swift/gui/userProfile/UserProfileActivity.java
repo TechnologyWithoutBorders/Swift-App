@@ -1,6 +1,7 @@
 package ngo.teog.swift.gui.userProfile;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -60,6 +63,9 @@ public class UserProfileActivity extends BaseActivity {
 
     private TableLayout tableLayout;
     private TextView telephoneView, mailView, hospitalView, positionView, nameView, editPosition;
+    private EditText startDate, endDate;
+
+    private LocalDate start, end;
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -87,6 +93,15 @@ public class UserProfileActivity extends BaseActivity {
         mailView = findViewById(R.id.mailView);
         hospitalView = findViewById(R.id.hospitalView);
         positionView = findViewById(R.id.positionView);
+
+        start = LocalDate.now().minusWeeks(4);
+        end = LocalDate.now();
+
+        startDate = findViewById(R.id.start_date);
+        startDate.setText(Defaults.dateFormatter.format(start));
+
+        endDate = findViewById(R.id.end_date);
+        endDate.setText(Defaults.dateFormatter.format(end));
 
         SharedPreferences preferences = this.getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
@@ -223,6 +238,34 @@ public class UserProfileActivity extends BaseActivity {
         viewModel.updateUser(user);
     }
 
+    public void selectStartDate(View view) {
+        int y = start.getYear();
+        int m = start.getMonthValue()-1;
+        int d = start.getDayOfMonth();
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+            (view1, year, month, day) -> {
+                start = LocalDate.of(year, month+1, day);
+                startDate.setText(Defaults.dateFormatter.format(start));
+            }, y, m, d);
+
+        datePickerDialog.show();
+    }
+
+    public void selectEndDate(View view) {
+        int y = end.getYear();
+        int m = end.getMonthValue()-1;
+        int d = end.getDayOfMonth();
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view1, year, month, day) -> {
+                    end = LocalDate.of(year, month+1, day);
+                    endDate.setText(Defaults.dateFormatter.format(start));
+                }, y, m, d);
+
+        datePickerDialog.show();
+    }
+
     public void exportCSV(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
@@ -264,12 +307,16 @@ public class UserProfileActivity extends BaseActivity {
                                             HospitalDevice device = deviceInfo.getDevice();
                                             Report report = reportInfo.getReport();
 
-                                            DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
+                                            LocalDate creationDate = report.getCreated().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-                                            DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
-                                            dateFormat.setTimeZone(TimeZone.getDefault());
+                                            if((creationDate.isEqual(start) || creationDate.isAfter(start)) && (creationDate.isBefore(end) || creationDate.isEqual(end))) {
+                                                DeviceStateVisuals newVisuals = new DeviceStateVisuals(report.getCurrentState(), this);
 
-                                            csvWriter.writeNext(new String[]{device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber(), author.getName(), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
+                                                DateFormat dateFormat = new SimpleDateFormat(Defaults.DATETIME_PRECISE_PATTERN, Locale.ROOT);
+                                                dateFormat.setTimeZone(TimeZone.getDefault());
+
+                                                csvWriter.writeNext(new String[]{device.getType(), device.getManufacturer(), device.getModel(), device.getSerialNumber(), author.getName(), dateFormat.format(report.getCreated()), report.getTitle(), newVisuals.getStateString(), report.getDescription()});
+                                            }
                                         }
                                     }
                                 }
