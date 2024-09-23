@@ -248,7 +248,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:padding="3dp"
-            android:text="Export my activity" />
+            android:text="@string/export_my_activity" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -266,7 +266,7 @@
             <Button style="@style/AppTheme.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="select start date"
+                android:text="@string/select_start_date"
                 android:onClick="selectStartDate" />
         </LinearLayout>
 
@@ -286,7 +286,7 @@
             <Button style="@style/AppTheme.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="select end date"
+                android:text="@string/select_end_date"
                 android:onClick="selectEndDate" />
         </LinearLayout>
 
@@ -294,7 +294,7 @@
             android:id="@+id/csvButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="export as CSV"
+            android:text="@string/export_as_csv"
             android:onClick="exportCSV"/>
     </LinearLayout>
 </LinearLayout>
