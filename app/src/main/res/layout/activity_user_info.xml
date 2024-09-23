@@ -260,6 +260,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:hint="@string/start_date"
+                android:inputType="date"
                 android:importantForAutofill="no"
                 android:enabled="false" />
 
@@ -280,6 +282,8 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:hint="@string/end_date"
+                android:inputType="date"
                 android:importantForAutofill="no"
                 android:enabled="false" />
 

@@ -240,6 +240,8 @@
     <string name="export_my_activity">Export my activity</string>
     <string name="select_start_date">Select start date</string>
     <string name="select_end_date">Select end date</string>
+    <string name="start_date">start date</string>
+    <string name="end_date">end date</string>
     <string name="export_as_csv">Export as CSV</string>
 
     <!-- Portation -->
