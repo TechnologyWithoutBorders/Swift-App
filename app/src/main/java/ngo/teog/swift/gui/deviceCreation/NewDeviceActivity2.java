@@ -285,7 +285,7 @@ public class NewDeviceActivity2 extends BaseActivity {
 
     private static class OrgUnitAdapter extends ArrayAdapter<OrganizationalUnit> {
         public OrgUnitAdapter(Context context, List<OrganizationalUnit> orgUnits) {
-            super(context, android.R.layout.simple_spinner_item, orgUnits);
+            super(context, R.layout.spinner_default, orgUnits);
         }
 
         @Override
@@ -293,10 +293,10 @@ public class NewDeviceActivity2 extends BaseActivity {
             OrganizationalUnit orgUnit = getItem(position);
 
             if(convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_default, parent, false);
             }
 
-            TextView textView = convertView.findViewById(android.R.id.text1);
+            TextView textView = convertView.findViewById(R.id.text);
 
             if(orgUnit != null) {
                 textView.setText(orgUnit.getName());
@@ -312,10 +312,10 @@ public class NewDeviceActivity2 extends BaseActivity {
             OrganizationalUnit orgUnit = getItem(position);
 
             if(convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_default, parent, false);
             }
 
-            TextView textView = convertView.findViewById(android.R.id.text1);
+            TextView textView = convertView.findViewById(R.id.text);
 
             if(orgUnit != null) {
                 textView.setText(orgUnit.getName());
