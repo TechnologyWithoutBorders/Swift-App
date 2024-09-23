@@ -258,7 +258,7 @@ public class UserProfileActivity extends BaseActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view1, year, month, day) -> {
                     end = LocalDate.of(year, month+1, day);
-                    endDate.setText(Defaults.dateFormatter.format(start));
+                    endDate.setText(Defaults.dateFormatter.format(end));
                 }, y, m, d);
 
         datePickerDialog.show();
