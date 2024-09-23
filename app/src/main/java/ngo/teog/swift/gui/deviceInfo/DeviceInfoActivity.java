@@ -212,6 +212,7 @@ public class DeviceInfoActivity extends BaseActivity {
         viewModel.getOrgUnits().observe(this, orgUnits -> {
             if(orgUnits != null) {
                 orgUnits.sort(Comparator.comparing(OrganizationalUnit::getName));
+                orgUnits.add(0, null);
 
                 this.orgUnits = orgUnits;
             }
@@ -355,7 +356,12 @@ public class DeviceInfoActivity extends BaseActivity {
                         }
 
                         TextView textView = convertView.findViewById(android.R.id.text1);
-                        textView.setText(orgUnit.getName());
+
+                        if(orgUnit != null) {
+                            textView.setText(orgUnit.getName());
+                        } else {
+                            textView.setText(getContext().getString(R.string.none));
+                        }
 
                         return convertView;
                     }
@@ -369,7 +375,12 @@ public class DeviceInfoActivity extends BaseActivity {
                         }
 
                         TextView textView = convertView.findViewById(android.R.id.text1);
-                        textView.setText(orgUnit.getName());
+
+                        if(orgUnit != null) {
+                            textView.setText(orgUnit.getName());
+                        } else {
+                            textView.setText(getContext().getString(R.string.none));
+                        }
 
                         return convertView;
                     }
@@ -383,7 +394,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     for (int i = 0; i < orgUnits.size(); i++) {
                         OrganizationalUnit reference = orgUnits.get(i);
 
-                        if (reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
+                        if (reference != null && reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
                             previousOrgUnit = i;
                             break;
                         }
@@ -456,8 +467,14 @@ public class DeviceInfoActivity extends BaseActivity {
                 case ORG_UNIT:
                     OrganizationalUnit orgUnit = (OrganizationalUnit)(((Spinner) editView).getSelectedItem());
 
-                    orgUnitView.setText(orgUnit.getName());
-                    device.setOrganizationalUnit(orgUnit.getId());
+                    if(orgUnit != null) {
+                        orgUnitView.setText(orgUnit.getName());
+                        device.setOrganizationalUnit(orgUnit.getId());
+                    } else {
+                        orgUnitView.setText("");
+                        device.setOrganizationalUnit(null);
+                    }
+
                     break;
                 case MAINTENANCE_INTERVAL:
                     int interval = ((NumberPicker) editView).getValue();
