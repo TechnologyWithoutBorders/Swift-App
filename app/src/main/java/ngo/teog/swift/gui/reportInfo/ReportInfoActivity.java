@@ -317,7 +317,7 @@ public class ReportInfoActivity extends BaseActivity {
             String description = descriptionText.getText().toString().trim();
             String title = titleText.getText().toString().trim();
 
-            if(title.length() > 0) {
+            if(!title.isEmpty()) {
                 //ID = 0 means auto-generate ID
                 Report report = new Report(0, preferences.getInt(Defaults.ID_PREFERENCE, -1), title, deviceId, hospitalId, newState, description, true, new Date());
 

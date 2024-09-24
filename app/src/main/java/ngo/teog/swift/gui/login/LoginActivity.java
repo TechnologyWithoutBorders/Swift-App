@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -65,7 +66,6 @@ import ngo.teog.swift.communication.RequestFactory;
 import ngo.teog.swift.communication.ResponseParser;
 import ngo.teog.swift.communication.ServerException;
 import ngo.teog.swift.communication.SwiftResponse;
-import ngo.teog.swift.communication.TransparentServerException;
 import ngo.teog.swift.communication.VolleyManager;
 import ngo.teog.swift.gui.BaseActivity;
 import ngo.teog.swift.gui.main.MainActivity;
@@ -354,7 +354,7 @@ public class LoginActivity extends BaseActivity {
                             jsonRequest,
                             new BaseResponseListener(LoginActivity.this) {
                                 @Override
-                                public void onSuccess(JSONObject response) throws ServerException, TransparentServerException {
+                                public void onSuccess(JSONObject response) throws ServerException {
                                     int id = ResponseParser.parseLoginResponse(response);
 
                                     SharedPreferences preferences = getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
@@ -483,7 +483,7 @@ public class LoginActivity extends BaseActivity {
         }
 
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

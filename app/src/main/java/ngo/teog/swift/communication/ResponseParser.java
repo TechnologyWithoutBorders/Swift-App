@@ -64,9 +64,8 @@ public class ResponseParser {
      * @param raw JSON-formatted server response
      * @return ID of user
      * @throws ServerException if some internal server error has occurred
-     * @throws TransparentServerException if user authentication has failed
      */
-    public static int parseLoginResponse(JSONObject raw) throws ServerException, TransparentServerException {
+    public static int parseLoginResponse(JSONObject raw) throws ServerException {
         try {
             return raw.getInt(SwiftResponse.DATA_FIELD);
         } catch(JSONException e) {

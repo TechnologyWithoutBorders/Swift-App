@@ -212,6 +212,7 @@ public class DeviceInfoActivity extends BaseActivity {
         viewModel.getOrgUnits().observe(this, orgUnits -> {
             if(orgUnits != null) {
                 orgUnits.sort(Comparator.comparing(OrganizationalUnit::getName));
+                orgUnits.add(0, null);
 
                 this.orgUnits = orgUnits;
             }
@@ -343,7 +344,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 class OrgUnitAdapter extends ArrayAdapter<OrganizationalUnit> {
                     public OrgUnitAdapter(Context context, List<OrganizationalUnit> orgUnits) {
-                        super(context, android.R.layout.simple_spinner_item, orgUnits);
+                        super(context, R.layout.spinner_default, orgUnits);
                     }
 
                     @Override
@@ -351,25 +352,41 @@ public class DeviceInfoActivity extends BaseActivity {
                         OrganizationalUnit orgUnit = getItem(position);
 
                         if(convertView == null) {
-                            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+                            convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_default, parent, false);
                         }
 
-                        TextView textView = convertView.findViewById(android.R.id.text1);
-                        textView.setText(orgUnit.getName());
+                        TextView textView = convertView.findViewById(R.id.text);
+
+                        if(orgUnit != null) {
+                            textView.setText(orgUnit.getName());
+                        } else {
+                            textView.setText(getContext().getString(R.string.none));
+                        }
 
                         return convertView;
                     }
 
                     @Override
-                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
                         OrganizationalUnit orgUnit = getItem(position);
 
                         if(convertView == null) {
-                            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+                            convertView = LayoutInflater.from(getContext()).inflate(R.layout.spinner_default, parent, false);
                         }
 
-                        TextView textView = convertView.findViewById(android.R.id.text1);
-                        textView.setText(orgUnit.getName());
+                        TextView textView = convertView.findViewById(R.id.text);
+
+                        if(orgUnitSpinner.getSelectedItemPosition() == position) {
+                            textView.setBackgroundColor(Color.LTGRAY);
+                        } else {
+                            textView.setBackgroundColor(Color.WHITE);
+                        }
+
+                        if(orgUnit != null) {
+                            textView.setText(orgUnit.getName());
+                        } else {
+                            textView.setText(getContext().getString(R.string.none));
+                        }
 
                         return convertView;
                     }
@@ -383,7 +400,7 @@ public class DeviceInfoActivity extends BaseActivity {
                     for (int i = 0; i < orgUnits.size(); i++) {
                         OrganizationalUnit reference = orgUnits.get(i);
 
-                        if (reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
+                        if (reference != null && reference.getId() == deviceInfo.getDevice().getOrganizationalUnit()) {
                             previousOrgUnit = i;
                             break;
                         }
@@ -456,8 +473,14 @@ public class DeviceInfoActivity extends BaseActivity {
                 case ORG_UNIT:
                     OrganizationalUnit orgUnit = (OrganizationalUnit)(((Spinner) editView).getSelectedItem());
 
-                    orgUnitView.setText(orgUnit.getName());
-                    device.setOrganizationalUnit(orgUnit.getId());
+                    if(orgUnit != null) {
+                        orgUnitView.setText(orgUnit.getName());
+                        device.setOrganizationalUnit(orgUnit.getId());
+                    } else {
+                        orgUnitView.setText("");
+                        device.setOrganizationalUnit(null);
+                    }
+
                     break;
                 case MAINTENANCE_INTERVAL:
                     int interval = ((NumberPicker) editView).getValue();
@@ -561,7 +584,7 @@ public class DeviceInfoActivity extends BaseActivity {
                             AlertDialog.Builder builder = new AlertDialog.Builder(DeviceInfoActivity.this);
                             builder.setTitle(getString(R.string.documents_overview))
                                     .setPositiveButton("close", (dialogInterface, i) -> dialogInterface.cancel())
-                                    .setSingleChoiceItems(documentAdapter, -1, (DialogInterface.OnClickListener) (dialogInterface, i) -> {
+                                    .setSingleChoiceItems(documentAdapter, -1, (dialogInterface, i) -> {
                                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Defaults.HOST + Defaults.INTERFACE_PATH + Defaults.DOCUMENTS_PATH + deviceInfo.getDevice().getManufacturer() + "/" + deviceInfo.getDevice().getModel() + "/" + documentAdapter.getItem(i))));
                                         dialogInterface.dismiss();
                                     });
@@ -644,7 +667,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
                 String title = reportInfo.getReport().getTitle();
 
-                if(title.length() > 0) {
+                if(!title.isEmpty()) {
                     titleView.setText(title);
                 } else {
                     titleView.setText(reportInfo.getAuthor().getName());

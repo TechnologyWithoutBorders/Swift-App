@@ -9,9 +9,11 @@ import javax.inject.Inject;
 
 import ngo.teog.swift.helpers.data.DeviceInfo;
 import ngo.teog.swift.helpers.data.HospitalRepository;
+import ngo.teog.swift.helpers.data.OrganizationalUnit;
 
 public class NewDeviceViewModel2 extends ViewModel {
     private LiveData<List<DeviceInfo>> deviceInfos;
+    private LiveData<List<OrganizationalUnit>> orgUnits;
     private final HospitalRepository hospitalRepo;
 
     @Inject
@@ -26,6 +28,7 @@ public class NewDeviceViewModel2 extends ViewModel {
 
         //do not sync as data is only used for making suggestions for text fields
         deviceInfos = hospitalRepo.loadHospitalDevices(userId, false);
+        orgUnits = hospitalRepo.loadOrgUnits(userId);
     }
 
     /**
@@ -34,5 +37,9 @@ public class NewDeviceViewModel2 extends ViewModel {
      */
     public LiveData<List<DeviceInfo>> getDeviceInfos() {
         return deviceInfos;
+    }
+
+    public LiveData<List<OrganizationalUnit>> getOrgUnits() {
+        return orgUnits;
     }
 }
