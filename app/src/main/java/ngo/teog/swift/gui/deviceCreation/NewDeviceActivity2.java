@@ -3,6 +3,7 @@ package ngo.teog.swift.gui.deviceCreation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -283,7 +284,7 @@ public class NewDeviceActivity2 extends BaseActivity {
         }
     }
 
-    private static class OrgUnitAdapter extends ArrayAdapter<OrganizationalUnit> {
+    private class OrgUnitAdapter extends ArrayAdapter<OrganizationalUnit> {
         public OrgUnitAdapter(Context context, List<OrganizationalUnit> orgUnits) {
             super(context, R.layout.spinner_default, orgUnits);
         }
@@ -316,6 +317,12 @@ public class NewDeviceActivity2 extends BaseActivity {
             }
 
             TextView textView = convertView.findViewById(R.id.text);
+
+            if(departmentSpinner.getSelectedItemPosition() == position) {
+                textView.setBackgroundColor(Color.LTGRAY);
+            } else {
+                textView.setBackgroundColor(Color.WHITE);
+            }
 
             if(orgUnit != null) {
                 textView.setText(orgUnit.getName());

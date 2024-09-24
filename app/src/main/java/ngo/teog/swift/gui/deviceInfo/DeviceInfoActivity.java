@@ -376,6 +376,12 @@ public class DeviceInfoActivity extends BaseActivity {
 
                         TextView textView = convertView.findViewById(R.id.text);
 
+                        if(orgUnitSpinner.getSelectedItemPosition() == position) {
+                            textView.setBackgroundColor(Color.LTGRAY);
+                        } else {
+                            textView.setBackgroundColor(Color.WHITE);
+                        }
+
                         if(orgUnit != null) {
                             textView.setText(orgUnit.getName());
                         } else {
