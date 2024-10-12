@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -21,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -55,7 +55,7 @@ public class BarcodeFragment extends Fragment {
     private String lastText;
 
     private Button searchButton;
-    private ImageView torchButton;
+    private FloatingActionButton torchButton;
     private EditText searchField;
     private ProgressBar progressBar;
     private boolean torchIsOn = false;
@@ -172,7 +172,7 @@ public class BarcodeFragment extends Fragment {
             torchIsOn = true;
         } else {
             barcodeScannerView.setTorchOff();
-            torchButton.setColorFilter(this.getResources().getColor(R.color.light_grey, requireContext().getTheme()));
+            torchButton.setColorFilter(this.getResources().getColor(R.color.black, requireContext().getTheme()));
             torchIsOn = false;
         }
     }

@@ -6,24 +6,32 @@
     android:background="@color/grey"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="5dp"
-        android:id="@+id/torch_button"
-        android:layout_gravity="end"
-        app:tint="@color/light_grey"
-        app:srcCompat="@drawable/ic_baseline_highlight_24_white"
-        android:contentDescription="@string/toggle_light" />
-
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/barcodeScannerView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        app:zxing_use_texture_view="false"
-        app:zxing_preview_scaling_strategy="centerCrop"
-        android:paddingBottom="10dp"/>
+        android:layout_weight="1">
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcodeScannerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:zxing_use_texture_view="false"
+            app:zxing_preview_scaling_strategy="centerCrop"
+            android:paddingBottom="10dp"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/torch_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:tint="@color/black"
+            app:srcCompat="@drawable/ic_baseline_highlight_24_white"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/toggle_light" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,6 +46,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            android:textColorHint="@color/light_grey"
             android:inputType="number"
             android:importantForAutofill="no"
             android:hint="@string/device_id" />
