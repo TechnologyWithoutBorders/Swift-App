@@ -122,7 +122,7 @@ public class NewDeviceActivity extends BaseActivity {
             torchIsOn = true;
         } else {
             barcodeScannerView.setTorchOff();
-            torchButton.setColorFilter(this.getResources().getColor(R.color.light_grey, this.getTheme()));
+            torchButton.setColorFilter(this.getResources().getColor(R.color.black, this.getTheme()));
             torchIsOn = false;
         }
     }
