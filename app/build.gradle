@@ -9,7 +9,6 @@ android {
         targetSdkVersion 35
         versionCode 121
         versionName "1.21"
-        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
