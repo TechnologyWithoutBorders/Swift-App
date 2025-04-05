@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "ngo.teog.swift"
         minSdkVersion 26
