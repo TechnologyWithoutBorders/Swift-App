@@ -6,7 +6,8 @@
     android:paddingRight="16dp"
     android:orientation="vertical"
     android:paddingTop="20dp"
-    android:paddingBottom="20dp">
+    android:paddingBottom="20dp"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
