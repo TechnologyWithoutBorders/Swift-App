@@ -61,6 +61,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     private HospitalDevice device;
 
     private String imagePath = null;
+    private String backupFile = null;
 
     private boolean deviceCreated = false;
 
@@ -82,7 +83,8 @@ public class NewDeviceActivity3 extends BaseActivity {
         if(savedInstanceState != null) {
             device = (HospitalDevice)savedInstanceState.getSerializable(ResourceKeys.DEVICE);
             imagePath = savedInstanceState.getString(ResourceKeys.IMAGE);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            backupFile = savedInstanceState.getString(ResourceKeys.BACKUP_IMAGE);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(backupFile));
             imageView.setVisibility(View.VISIBLE);
             orientationHint.setVisibility(View.INVISIBLE);
         } else {
@@ -143,7 +145,25 @@ public class NewDeviceActivity3 extends BaseActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if(result.getResultCode() == Activity.RESULT_OK) {
-                    imageView.setImageBitmap(decode(imagePath));
+                    // Immediately back up the image, because some devices clean up taken pictures quickly
+                    File originalFile = new File(imagePath);
+
+                    String targetName = device.getId() + ".jpg";
+                    File backup = new File(getCacheDir(), targetName);
+                    backupFile = backup.getAbsolutePath();
+
+                    try (FileInputStream in = new FileInputStream(originalFile);
+                         FileOutputStream out = new FileOutputStream(backupFile)) {
+
+                        FileChannel inChannel = in.getChannel();
+                        FileChannel outChannel = out.getChannel();
+                        outChannel.transferFrom(inChannel, 0, inChannel.size());
+
+                    } catch (IOException e) {
+                        Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
+                    }
+
+                    imageView.setImageBitmap(decode(backupFile));
                     imageView.setVisibility(View.VISIBLE);
                     orientationHint.setVisibility(View.INVISIBLE);
                 }
@@ -155,6 +175,7 @@ public class NewDeviceActivity3 extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(ResourceKeys.DEVICE, device);
         outState.putString(ResourceKeys.IMAGE, imagePath);
+        outState.putString(ResourceKeys.BACKUP_IMAGE, backupFile);
 
         super.onSaveInstanceState(outState);
     }
@@ -173,17 +194,19 @@ public class NewDeviceActivity3 extends BaseActivity {
     }
 
     public void save(View view) {
-        if(imagePath != null) {
+        if(backupFile != null) {
             nextButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
 
-            File tempFile = new File(imagePath);
+            File tempFile = new File(backupFile);
             String targetName = device.getId() + ".jpg";
 
-            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);//TODO: maybe use cache dir as well?
+            File dir = new File(getFilesDir(), Defaults.DEVICE_IMAGE_PATH);//TODO: maybe use cache dir as well? -> actually redo the whole saving process and use deleteOnExit() for the temp files
             File image = new File(dir, targetName);
 
             try {
+                dir.mkdirs();
+
                 File compressedImage = new Compressor(this)
                         .setMaxWidth(800)
                         .setMaxHeight(600)
@@ -202,6 +225,7 @@ public class NewDeviceActivity3 extends BaseActivity {
 
                     viewModel.createDevice(device, userId);
                 } catch(Exception e) {
+                    Log.e(this.getClass().getName(), e.toString());
                     Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
                 } finally {
                     boolean deleted = compressedImage.delete();
@@ -213,9 +237,10 @@ public class NewDeviceActivity3 extends BaseActivity {
             } catch(IOException e) {
                 Toast.makeText(this, getString(R.string.generic_error_message), Toast.LENGTH_LONG).show();
             } finally {
-                boolean deleted = tempFile.delete();
+                boolean deleted1 = tempFile.delete();
+                boolean deleted2 = new File(imagePath).delete();
 
-                if(!deleted) {
+                if(!deleted1 || !deleted2) {
                     Log.w(this.getClass().getName(), "temporary image has not been deleted");
                 }
             }

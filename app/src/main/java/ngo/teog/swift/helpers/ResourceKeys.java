@@ -41,6 +41,7 @@ public final class ResourceKeys {
 
     /** Identifier for all kinds of images */
     public static final String IMAGE = "image";
+    public static final String BACKUP_IMAGE = "backup_image";
 
     public static final String COUNTRY = "country";
 
