@@ -6,12 +6,12 @@
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/name_view"
+        android:id="@+id/location_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/location_view"
+        android:id="@+id/name_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#666666" />

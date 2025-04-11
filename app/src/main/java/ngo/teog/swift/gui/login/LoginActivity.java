@@ -477,7 +477,7 @@ public class LoginActivity extends BaseActivity {
             }
 
             TextView text = convertView.findViewById(android.R.id.text1);
-            text.setText(getItem(position).getName());
+            text.setText(getItem(position).getLocation());
 
             return convertView;
         }
