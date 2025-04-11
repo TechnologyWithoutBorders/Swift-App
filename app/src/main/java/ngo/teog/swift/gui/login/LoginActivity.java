@@ -52,6 +52,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -159,6 +160,7 @@ public class LoginActivity extends BaseActivity {
                                         hospitals.add(new Hospital(hospitalId, name, hospitalLocation, longitude, latitude, hospitalLastUpdate));
                                     }
 
+                                    hospitals.sort(Comparator.comparing(Hospital::getLocation));
                                     adapter.addAll(hospitals);
                                 }
                             },
