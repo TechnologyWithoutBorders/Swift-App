@@ -1,17 +1,13 @@
 package ngo.teog.swift.gui;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.core.text.HtmlCompat;
-
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
 import ngo.teog.swift.R;
 
@@ -50,15 +46,5 @@ public class AboutActivity extends BaseActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_about, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.licenseItem) {
-            startActivity(new Intent(this, OssLicensesMenuActivity.class));
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

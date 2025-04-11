@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+//apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
     compileSdk 35
