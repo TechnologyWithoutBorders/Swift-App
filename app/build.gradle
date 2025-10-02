@@ -83,6 +83,7 @@ dependencies {
     def lifecycle_version = "2.9.4"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    //Java8 seems to mean "Java 8 and higher" here
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     implementation 'com.google.android.gms:play-services-oss-licenses:17.3.0'
