@@ -123,6 +123,7 @@ public class LoginActivity extends BaseActivity {
         hospitalSpinner.setAdapter(adapter);
 
         countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 adapter.clear();
 
@@ -173,6 +174,7 @@ public class LoginActivity extends BaseActivity {
                 }
             }
 
+            @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 //ignore
             }
