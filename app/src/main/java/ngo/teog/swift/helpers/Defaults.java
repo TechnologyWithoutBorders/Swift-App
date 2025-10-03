@@ -22,6 +22,8 @@ public final class Defaults {
     /** Key that identifies user country in shared preferences */
     public static final String COUNTRY_PREFERENCE = "COUNTRY_PREFERENCE";
 
+    public static final String TODO_LIST_ORDER_PREFERENCE = "TODO_LIST_ORDER_PREFERENCE";
+
     /** Key that identifies timestamp of last synchronization with server in shared preferences */
     public static final String LAST_SYNC_PREFERENCE = "LAST_SYNC_PREFERENCE";
 

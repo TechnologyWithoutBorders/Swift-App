@@ -77,6 +77,9 @@ public class TodoFragment extends Fragment {
 
         ListView listView = view.findViewById(R.id.maintenanceList);
 
+        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+
         adapter = new TodoListAdapter(getContext(), values);
         listView.setAdapter(adapter);
 
@@ -93,6 +96,10 @@ public class TodoFragment extends Fragment {
         orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(Defaults.TODO_LIST_ORDER_PREFERENCE, position);
+                editor.apply();
+
                 switch (position) {
                     case SORT_NEWEST:
                         adapter.sort((first, second) -> {
@@ -174,9 +181,6 @@ public class TodoFragment extends Fragment {
                 .roomModule(new RoomModule(requireActivity().getApplication()))
                 .build()
                 .inject(this);
-
-        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
