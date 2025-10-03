@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +48,11 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class TodoFragment extends Fragment {
 
+    private static final int SORT_NEWEST = 0;
+    private static final int SORT_OLDEST = 1;
+    private static final int SORT_DEPARTMENT = 2;
+    private static final int SORT_TYPE = 3;
+
     private boolean resumed = false;
 
     @Inject
@@ -53,7 +60,9 @@ public class TodoFragment extends Fragment {
 
     private MainViewModel viewModel;
 
-    private CustomSimpleArrayAdapter adapter;
+    private Spinner orderSpinner;
+
+    private TodoListAdapter adapter;
 
     private List<DeviceInfo> values = new ArrayList<>();
 
@@ -64,15 +73,91 @@ public class TodoFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        orderSpinner = view.findViewById(R.id.orderSpinner);
+
         ListView listView = view.findViewById(R.id.maintenanceList);
 
-        adapter = new CustomSimpleArrayAdapter(getContext(), values);
+        adapter = new TodoListAdapter(getContext(), values);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((adapterView, view1, i, l) -> {
             Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
             intent.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)adapterView.getItemAtPosition(i)).getDevice().getId());
             startActivity(intent);
+        });
+
+        ArrayAdapter<CharSequence> sortAttribAdapter = ArrayAdapter.createFromResource(getContext(), R.array.sort_attributes, android.R.layout.simple_spinner_item);
+        sortAttribAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderSpinner.setAdapter(sortAttribAdapter);
+
+        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case SORT_NEWEST:
+                        adapter.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                                long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                                return (int)((secondCreated-firstCreated) / 1000);
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                    case SORT_OLDEST:
+                        adapter.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                                long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                                return (int)((firstCreated-secondCreated) / 1000);
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                    case SORT_DEPARTMENT:
+                        adapter.sort((first, second) -> {
+                            String firstDepartment = first.getOrganizationalUnit().getName();
+                            String secondDepartment = second.getOrganizationalUnit().getName();
+
+                            return firstDepartment.compareTo(secondDepartment);
+                        });
+
+                        break;
+                    case SORT_TYPE:
+                        adapter.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                int firstState = firstReports.get(0).getReport().getCurrentState();
+                                int secondState = secondReports.get(0).getReport().getCurrentState();
+
+                                return secondState-firstState;
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //ignore
+            }
         });
 
         final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
@@ -157,8 +242,17 @@ public class TodoFragment extends Fragment {
         viewModel.refreshHospital();
     }
 
-    private static class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {
-        private CustomSimpleArrayAdapter(Context context, List<DeviceInfo> values) {
+    private void sortTodoList() {
+        adapter.sort((first, second) -> {
+            String firstDepartment = first.getOrganizationalUnit().getName();
+            String secondDepartment = second.getOrganizationalUnit().getName();
+
+            return firstDepartment.compareTo(secondDepartment);
+        });
+    }
+
+    private static class TodoListAdapter extends ArrayAdapter<DeviceInfo> {
+        private TodoListAdapter(Context context, List<DeviceInfo> values) {
             super(context, -1, values);
         }
 
