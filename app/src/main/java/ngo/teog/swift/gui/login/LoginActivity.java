@@ -257,7 +257,7 @@ public class LoginActivity extends BaseActivity {
                                     countries[i] = countriesArray.getString(i);
                                 }
 
-                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_item, countries);
+                                ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(LoginActivity.this, R.layout.spinner_default_large, countries);
                                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 countrySpinner.setAdapter(adapter);
 
@@ -477,10 +477,10 @@ public class LoginActivity extends BaseActivity {
             if(convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) this.getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+                convertView = inflater.inflate(R.layout.spinner_default_large, parent, false);
             }
 
-            TextView text = convertView.findViewById(android.R.id.text1);
+            TextView text = convertView.findViewById(R.id.text);
             text.setText(getItem(position).getLocation());
 
             return convertView;
