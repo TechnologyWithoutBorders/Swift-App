@@ -77,7 +77,7 @@ public class TodoFragment extends Fragment {
 
         SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
         int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
-        int selection = preferences.getInt(Defaults.TODO_LIST_ORDER_PREFERENCE, 0);
+        int selection = preferences.getInt(Defaults.TODO_LIST_ORDER_PREFERENCE, SORT_NEWEST);
 
         adapter = new TodoListAdapter(getContext(), values);
         listView.setAdapter(adapter);
@@ -210,7 +210,7 @@ public class TodoFragment extends Fragment {
                     }
                 }
 
-                int sortOrder = preferences.getInt(Defaults.TODO_LIST_ORDER_PREFERENCE, 0);
+                int sortOrder = preferences.getInt(Defaults.TODO_LIST_ORDER_PREFERENCE, SORT_NEWEST);
 
                 switch (sortOrder) {
                     case SORT_NEWEST:
