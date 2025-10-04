@@ -227,6 +227,12 @@
         <item>Todo</item>
         <item>Calendar</item>
     </string-array>
+    <string-array name="sort_attributes">
+        <item>Newest</item>
+        <item>Oldest</item>
+        <item>By department</item>
+        <item>By type</item>
+    </string-array>
 
     <!-- Calendar -->
     <string name="days_left">days left</string>

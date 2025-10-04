@@ -55,7 +55,9 @@
                 <Spinner
                     android:id="@+id/countrySpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -66,7 +68,9 @@
                 <Spinner
                     android:id="@+id/hospitalSpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"/>
 
                 <EditText
                     android:id="@+id/mailText"

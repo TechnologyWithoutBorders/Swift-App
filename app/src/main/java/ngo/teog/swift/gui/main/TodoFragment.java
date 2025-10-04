@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +48,11 @@ import ngo.teog.swift.helpers.data.ViewModelFactory;
  */
 public class TodoFragment extends Fragment {
 
+    private static final int SORT_NEWEST = 0;
+    private static final int SORT_OLDEST = 1;
+    private static final int SORT_DEPARTMENT = 2;
+    private static final int SORT_TYPE = 3;
+
     private boolean resumed = false;
 
     @Inject
@@ -53,7 +60,7 @@ public class TodoFragment extends Fragment {
 
     private MainViewModel viewModel;
 
-    private CustomSimpleArrayAdapter adapter;
+    private TodoListAdapter adapter;
 
     private List<DeviceInfo> values = new ArrayList<>();
 
@@ -64,15 +71,100 @@ public class TodoFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Spinner orderSpinner = view.findViewById(R.id.orderSpinner);
+
         ListView listView = view.findViewById(R.id.maintenanceList);
 
-        adapter = new CustomSimpleArrayAdapter(getContext(), values);
+        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
+        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
+        int selection = preferences.getInt(Defaults.TODO_LIST_ORDER_PREFERENCE, SORT_NEWEST);
+
+        adapter = new TodoListAdapter(getContext(), values);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((adapterView, view1, i, l) -> {
             Intent intent = new Intent(getContext(), DeviceInfoActivity.class);
             intent.putExtra(ResourceKeys.DEVICE_ID, ((DeviceInfo)adapterView.getItemAtPosition(i)).getDevice().getId());
             startActivity(intent);
+        });
+
+        ArrayAdapter<CharSequence> sortAttribAdapter = ArrayAdapter.createFromResource(getContext(), R.array.sort_attributes, R.layout.spinner_default_large);
+        sortAttribAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        orderSpinner.setAdapter(sortAttribAdapter);
+        orderSpinner.setSelection(selection);
+
+        orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt(Defaults.TODO_LIST_ORDER_PREFERENCE, position);
+                editor.apply();
+
+                switch (position) {
+                    case SORT_NEWEST:
+                        adapter.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                                long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                                return (int)((secondCreated-firstCreated) / 1000);
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                    case SORT_OLDEST:
+                        adapter.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                                long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                                return (int)((firstCreated-secondCreated) / 1000);
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                    case SORT_DEPARTMENT:
+                        adapter.sort((first, second) -> {
+                            String firstDepartment = first.getOrganizationalUnit().getName();
+                            String secondDepartment = second.getOrganizationalUnit().getName();
+
+                            return firstDepartment.compareTo(secondDepartment);
+                        });
+
+                        break;
+                    case SORT_TYPE:
+                        adapter.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                int firstState = firstReports.get(0).getReport().getCurrentState();
+                                int secondState = secondReports.get(0).getReport().getCurrentState();
+
+                                return secondState-firstState;
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //ignore
+            }
         });
 
         final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swiperefresh);
@@ -89,9 +181,6 @@ public class TodoFragment extends Fragment {
                 .roomModule(new RoomModule(requireActivity().getApplication()))
                 .build()
                 .inject(this);
-
-        SharedPreferences preferences = this.requireActivity().getSharedPreferences(Defaults.PREF_FILE_KEY, Context.MODE_PRIVATE);
-        int id = preferences.getInt(Defaults.ID_PREFERENCE, -1);
 
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel.class);
         viewModel.init(id);
@@ -121,20 +210,67 @@ public class TodoFragment extends Fragment {
                     }
                 }
 
-                //sort devices by last change date
-                newDeviceInfos.sort((first, second) -> {
-                    List<ReportInfo> firstReports = first.getReports();
-                    List<ReportInfo> secondReports = second.getReports();
+                int sortOrder = preferences.getInt(Defaults.TODO_LIST_ORDER_PREFERENCE, SORT_NEWEST);
 
-                    if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
-                        long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
-                        long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+                switch (sortOrder) {
+                    case SORT_NEWEST:
+                        newDeviceInfos.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
 
-                        return (int)((secondCreated-firstCreated) / 1000);
-                    } else {
-                        return 0;
-                    }
-                });
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                                long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                                return (int)((secondCreated-firstCreated) / 1000);
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                    case SORT_OLDEST:
+                        newDeviceInfos.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                long firstCreated = firstReports.get(0).getReport().getCreated().getTime();
+                                long secondCreated = secondReports.get(0).getReport().getCreated().getTime();
+
+                                return (int)((firstCreated-secondCreated) / 1000);
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                    case SORT_DEPARTMENT:
+                        newDeviceInfos.sort((first, second) -> {
+                            String firstDepartment = first.getOrganizationalUnit().getName();
+                            String secondDepartment = second.getOrganizationalUnit().getName();
+
+                            return firstDepartment.compareTo(secondDepartment);
+                        });
+
+                        break;
+                    case SORT_TYPE:
+                        newDeviceInfos.sort((first, second) -> {
+                            List<ReportInfo> firstReports = first.getReports();
+                            List<ReportInfo> secondReports = second.getReports();
+
+                            if(!firstReports.isEmpty() && !secondReports.isEmpty()) {
+                                int firstState = firstReports.get(0).getReport().getCurrentState();
+                                int secondState = secondReports.get(0).getReport().getCurrentState();
+
+                                return secondState-firstState;
+                            } else {
+                                return 0;
+                            }
+                        });
+
+                        break;
+                }
 
                 adapter.addAll(newDeviceInfos);
             }
@@ -157,8 +293,8 @@ public class TodoFragment extends Fragment {
         viewModel.refreshHospital();
     }
 
-    private static class CustomSimpleArrayAdapter extends ArrayAdapter<DeviceInfo> {
-        private CustomSimpleArrayAdapter(Context context, List<DeviceInfo> values) {
+    private static class TodoListAdapter extends ArrayAdapter<DeviceInfo> {
+        private TodoListAdapter(Context context, List<DeviceInfo> values) {
             super(context, -1, values);
         }
 
