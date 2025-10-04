@@ -233,6 +233,7 @@
         <item>By department</item>
         <item>By type</item>
     </string-array>
+    <string name="sort_header">Sort:</string>
 
     <!-- Calendar -->
     <string name="days_left">days left</string>
