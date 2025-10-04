@@ -89,7 +89,7 @@ public class TodoFragment extends Fragment {
             startActivity(intent);
         });
 
-        ArrayAdapter<CharSequence> sortAttribAdapter = ArrayAdapter.createFromResource(getContext(), R.array.sort_attributes, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> sortAttribAdapter = ArrayAdapter.createFromResource(getContext(), R.array.sort_attributes, R.layout.spinner_default_large);
         sortAttribAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         orderSpinner.setAdapter(sortAttribAdapter);
 
