@@ -176,7 +176,7 @@ public class RequestFactory {
 
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            parameterMap.put(Defaults.VERSION_CODE_KEY, Integer.toString(pInfo.versionCode));
+            parameterMap.put(Defaults.VERSION_CODE_KEY, Integer.toString((int)pInfo.getLongVersionCode()));
         } catch(PackageManager.NameNotFoundException e) {
             parameterMap.put(Defaults.VERSION_CODE_KEY, Integer.toString(-1));
         }
