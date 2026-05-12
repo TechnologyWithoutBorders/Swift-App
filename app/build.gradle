@@ -37,7 +37,7 @@ dependencies {
     implementation "com.opencsv:opencsv:$opencsv_version"
 
     //GSON for serializing/deserializing objects using JSON representation
-    def gson_version = '2.13.2'
+    def gson_version = '2.14.0'
     implementation "com.google.code.gson:gson:$gson_version"
 
     //Room Persistence Library for easy access of SQLite database
@@ -91,7 +91,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
 
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
 
