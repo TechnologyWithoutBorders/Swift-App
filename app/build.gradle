@@ -47,7 +47,7 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
     //Dagger Android for dependency injection
-    def dagger_version = '2.57.2'
+    def dagger_version = '2.59.2'
     implementation "com.google.dagger:dagger-android:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
@@ -80,13 +80,13 @@ dependencies {
     //Some miscellaneous dependencies
 
     //TODO this seems to be not necessary anymore or is it just buggy??
-    def lifecycle_version = "2.9.4"
+    def lifecycle_version = "2.10.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     //Java8 seems to mean "Java 8 and higher" here
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
-    implementation 'com.google.android.gms:play-services-oss-licenses:17.3.0'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.5.1'
 
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
