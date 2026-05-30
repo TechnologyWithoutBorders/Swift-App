@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import androidx.core.text.HtmlCompat;
 
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity;
 
 import ngo.teog.swift.R;
 
@@ -30,7 +30,8 @@ public class AboutActivity extends BaseActivity {
 
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
-            versionString = String.format("%s %s v%s-%s", getString(R.string.organization_name), getString(R.string.app_name), pInfo.versionName, pInfo.versionCode);
+            int versionCode = (int) pInfo.getLongVersionCode();
+            versionString = String.format("%s %s v%s-%s", getString(R.string.organization_name), getString(R.string.app_name), pInfo.versionName, versionCode);
         } catch(PackageManager.NameNotFoundException e) {
             //ignore
         }
